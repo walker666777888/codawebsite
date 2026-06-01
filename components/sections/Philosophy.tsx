@@ -324,6 +324,7 @@ export default function Philosophy() {
       style={{ background: "#F4F0E8" }}
     >
       {/* ── background ──────────────────────────────────── */}
+      {/* glows */}
       <motion.div
         style={reduced ? {} : { y: bgY }}
         className="absolute inset-0 pointer-events-none"
@@ -463,59 +464,6 @@ export default function Philosophy() {
         </div>
       </div>
 
-      {/* ── scroll divider ───────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          className="h-px rounded-full origin-left"
-          style={{ background: "linear-gradient(90deg, #FF5C00 0%, rgba(255,92,0,0.08) 60%, transparent 100%)" }}
-          initial={{ scaleX: 0, opacity: 0 }}
-          whileInView={{ scaleX: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.3, ease: e }}
-        />
-      </div>
-
-      {/* ── principles accordion ─────────────────────────── */}
-      <div className="relative max-w-7xl mx-auto px-0 pt-4 pb-32">
-        {/* label */}
-        <motion.div
-          className="flex items-center gap-4 px-6 mb-0 mt-6"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-        >
-          <div className="h-px w-8 bg-[#FF5C00] opacity-60" />
-          <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[#9A9488]">
-            Core principles — hover to expand
-          </span>
-        </motion.div>
-
-        <div className="mt-2">
-          {PRINCIPLES.map((p, i) => (
-            <PrincipleRow
-              key={p.num}
-              p={p}
-              index={i}
-              reduced={!!reduced}
-            />
-          ))}
-        </div>
-
-        {/* bottom fade accent */}
-        <motion.div
-          className="mt-16 mx-6 flex items-center gap-5"
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4, ease: e }}
-        >
-          <div className="h-px flex-1 bg-gradient-to-r from-[#FF5C00]/40 via-[#0D0D0B]/10 to-transparent rounded-full" />
-          <span className="font-mono text-[9px] uppercase tracking-[0.28em] text-[#9A9488] whitespace-nowrap">
-            {PRINCIPLES.length} principles
-          </span>
-        </motion.div>
-      </div>
     </section>
   );
 }
