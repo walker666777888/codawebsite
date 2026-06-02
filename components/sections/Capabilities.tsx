@@ -41,7 +41,7 @@ const cards = [
   },
 ];
 
-function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
+function TiltCard({ card, index, animateEntrance = true }: { card: typeof cards[0]; index: number; animateEntrance?: boolean }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const rectRef = useRef<DOMRect | null>(null);
   const [hovered, setHovered] = useState(false);
@@ -80,10 +80,10 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.9, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
+      initial={animateEntrance ? { opacity: 0, y: 50 } : false}
+      whileInView={animateEntrance ? { opacity: 1, y: 0 } : undefined}
+      viewport={animateEntrance ? { once: true, margin: "-60px" } : undefined}
+      transition={animateEntrance ? { duration: 0.9, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] } : undefined}
       style={{ perspective: 1000 }}
       className="h-full flex flex-col"
     >
@@ -317,7 +317,7 @@ export default function Capabilities() {
                   ease: [0.16, 1, 0.3, 1],
                 }}
               >
-                <TiltCard card={card} index={i} />
+                <TiltCard card={card} index={i} animateEntrance={false} />
               </motion.div>
             ))}
           </div>
