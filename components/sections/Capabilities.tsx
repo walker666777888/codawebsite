@@ -98,9 +98,9 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
         }}
         className="group relative rounded-2xl overflow-hidden cursor-default"
       >
-        {/* Gradient border — desktop hover only */}
+        {/* Gradient border */}
         <div
-          className="absolute inset-0 rounded-2xl pointer-events-none z-[1] hidden md:block animate-border-rotate"
+          className="absolute inset-0 rounded-2xl pointer-events-none z-[1] animate-border-rotate"
           style={{
             opacity: hovered ? 1 : 0,
             transition: "opacity 0.4s ease",
@@ -178,6 +178,8 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
                 className="relative rounded-2xl overflow-hidden p-4"
                 style={{
                   background: "rgba(255,255,255,0.45)",
+                  backdropFilter: "blur(14px)",
+                  WebkitBackdropFilter: "blur(14px)",
                   border: "1px solid rgba(255,255,255,0.6)",
                 }}
               >
@@ -221,9 +223,9 @@ export default function Capabilities() {
       {/* Top line */}
       <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#0D0D0B]/15 to-transparent" />
 
-      {/* Ambient — desktop only */}
+      {/* Ambient */}
       <div
-        className="hidden md:block absolute top-[-20%] left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full blur-[130px] opacity-[0.07] pointer-events-none animate-glow-pulse"
+        className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full blur-[130px] opacity-[0.07] pointer-events-none animate-glow-pulse"
         style={{ background: "radial-gradient(ellipse, #FF5C00 0%, transparent 70%)" }}
       />
 

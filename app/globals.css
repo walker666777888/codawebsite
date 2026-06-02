@@ -170,46 +170,15 @@
    * content-visibility: auto — browser skips layout + paint for off-screen
    * sections entirely. Only the visible section and ~1 ahead are rendered.
    * This is the single biggest mobile scroll perf win.
+   * CSS animations are NOT killed here — they run on the GPU compositor
+   * thread, completely separate from scroll, and don't cause stutter.
    */
   main > section {
     content-visibility: auto;
-    /* contain-intrinsic-size prevents layout shift when section is skipped */
     contain-intrinsic-size: 0 600px;
   }
-
-  /*
-   * Kill heavy ambient animations on mobile — these run on the main thread
-   * and are a primary cause of dropped frames during scroll.
-   */
-  .animate-float-a,
-  .animate-float-b,
-  .animate-orb-drift,
-  .animate-orb-drift-b {
-    animation: none !important;
-    transform: none !important;
-  }
-
-  /*
-   * Kill all other CPU-heavy CSS animations on mobile.
-   * These run continuously and steal frames from scroll.
-   */
-  .animate-chromatic,
-  .animate-glow-pulse,
-  .animate-border-rotate,
-  .animate-ping-expand,
-  .animate-scan-line {
-    animation: none !important;
-  }
-
-  /*
-   * Reset will-change on mobile — too many compositor layers exhaust
-   * mobile GPU memory and cause jank. Let browser decide.
-   */
-  .gpu,
-  [style*="will-change"] {
-    will-change: auto !important;
-  }
 }
+
 
 @layer utilities {
   .graph-paper-grid {
