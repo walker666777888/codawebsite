@@ -301,7 +301,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
 
   const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim()) return;
+    if (!name.trim() || !email.trim() || !phone.trim()) return;
     setStatus("submitting");
     
     try {
@@ -528,7 +528,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
 
                         {/* phone */}
                         <FadeUp delay={0.31}>
-                          <Field id="phone" label="Phone — optional" type="tel" value={phone}
+                          <Field id="phone" label="Phone" type="tel" value={phone} required
                             onChange={(val) => setPhone(val.replace(/[^\+0-9]/g, ''))} 
                             placeholder="+14150000000" 
                             pattern="^\+[0-9]{7,20}$"
@@ -589,7 +589,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                         <FadeUp delay={0.51}>
                           <motion.button
                             type="submit"
-                            disabled={status === "submitting" || !name.trim() || !email.trim()}
+                            disabled={status === "submitting" || !name.trim() || !email.trim() || !phone.trim()}
                             whileHover={{ scale: status === "idle" ? 1.012 : 1 }}
                             whileTap={{ scale: status === "idle" ? 0.978 : 1 }}
                             transition={{ type: "spring", stiffness: 360, damping: 26 }}
