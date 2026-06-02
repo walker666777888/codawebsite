@@ -355,22 +355,7 @@ export default function WorkShowcase() {
       </div>
 
       {/* ── Infinite drag carousel ── */}
-      <motion.div
-        className="max-w-7xl mx-auto px-6 relative overflow-hidden cursor-grab active:cursor-grabbing select-none"
-        onPanStart={() => {
-          isDragging.current = true;
-          dragStartMV.current = x.get();
-        }}
-        onPan={(_, info) => {
-          if (!isDragging.current) return;
-          x.set(dragStartMV.current + info.offset.x);
-        }}
-        onPanEnd={() => {
-          isDragging.current = false;
-          normalise();
-        }}
-        style={{ touchAction: "pan-y" }}
-      >
+      <div className="max-w-7xl mx-auto px-6 relative overflow-hidden select-none">
         {/* Left fade — desktop only */}
         <div
           className="hidden md:block absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
@@ -384,8 +369,18 @@ export default function WorkShowcase() {
 
         <motion.div
           ref={trackRef}
-          className="flex gap-6 w-max"
-          style={{ x }}
+          className="flex gap-6 w-max cursor-grab active:cursor-grabbing"
+          style={{ x, touchAction: "pan-y" }}
+          drag="x"
+          dragElastic={0}
+          dragConstraints={{ left: -999999, right: 999999 }}
+          onDragStart={() => {
+            isDragging.current = true;
+          }}
+          onDragEnd={() => {
+            isDragging.current = false;
+            normalise();
+          }}
         >
           {looped.map((project, i) => (
             <ProjectCard
@@ -395,7 +390,7 @@ export default function WorkShowcase() {
             />
           ))}
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* Dot indicators */}
       <div className="flex items-center justify-center gap-2.5 mt-8">
