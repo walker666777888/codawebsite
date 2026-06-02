@@ -60,7 +60,7 @@ export default function CallToAction() {
       </div>
 
       {/* ── Mouse-tracked blobs ───────────────────────────── */}
-      <motion.div className="absolute inset-0 pointer-events-none" style={{ x: bgX, y: bgY }}>
+      <motion.div className="hidden md:block absolute inset-0 pointer-events-none" style={{ x: bgX, y: bgY }}>
         <div
           className="absolute -top-1/3 -left-1/4 w-[900px] h-[900px] rounded-full blur-[180px] opacity-35"
           style={{ background: "#FF7A2F" }}
