@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useMotionValue, useSpring } from "motion/react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { Code2, PenTool, TrendingUp } from "lucide-react";
 
@@ -218,6 +218,36 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
 }
 
 export default function Capabilities() {
+  const [activeCard, setActiveCard] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Track active dot via IntersectionObserver on each card
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const cardEls = Array.from(container.children) as HTMLElement[];
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveCard(cardEls.indexOf(entry.target as HTMLElement));
+          }
+        });
+      },
+      { root: container, threshold: 0.55 }
+    );
+    cardEls.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  const scrollTo = (i: number) => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const card = container.children[i] as HTMLElement;
+    card?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  };
+
   return (
     <section id="capabilities" className="relative py-16 sm:py-24 lg:py-32 px-4 sm:px-6" style={{ background: "#F4F0E8" }}>
       {/* Top line */}
@@ -259,8 +289,62 @@ export default function Capabilities() {
           </motion.p>
         </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {/* ── Mobile: horizontal snap-scroll carousel ── */}
+        <div className="block md:hidden">
+          {/* Snap container — full bleed, negative margin to escape section padding */}
+          <div
+            ref={scrollRef}
+            className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4"
+            style={{
+              scrollSnapType: "x mandatory",
+              WebkitOverflowScrolling: "touch",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
+            {cards.map((card, i) => (
+              <motion.div
+                key={i}
+                className="shrink-0 w-[85vw]"
+                style={{ scrollSnapAlign: "center" }}
+                initial={{ opacity: 0, x: 40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-10%" }}
+                transition={{
+                  duration: 0.55,
+                  delay: i * 0.08,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+              >
+                <TiltCard card={card} index={i} />
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Dot indicators */}
+          <div className="flex items-center justify-center gap-2.5 mt-5">
+            {cards.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => scrollTo(i)}
+                aria-label={`Go to card ${i + 1}`}
+                style={{
+                  width: activeCard === i ? "24px" : "7px",
+                  height: "7px",
+                  borderRadius: "99px",
+                  background: activeCard === i ? "#FF5C00" : "rgba(13,13,11,0.2)",
+                  transition: "all 0.35s cubic-bezier(0.16,1,0.3,1)",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* ── Desktop: 3-column grid ── */}
+        <div className="hidden md:grid grid-cols-3 gap-5">
           {cards.map((card, i) => (
             <TiltCard key={i} card={card} index={i} />
           ))}
