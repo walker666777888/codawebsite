@@ -43,6 +43,7 @@ function Field({
   placeholder?: string; required?: boolean;
   inputRef?: React.RefObject<HTMLInputElement | null>;
   textarea?: boolean; maxLength?: number;
+  pattern?: string; title?: string;
 }) {
   const fMv  = useMotionValue(0);
   const fSpr = useSpring(fMv, { stiffness: 260, damping: 28 });
@@ -87,6 +88,8 @@ function Field({
         ) : (
           <input ref={inputRef} id={id} type={type} value={value} required={required}
             placeholder={placeholder}
+            pattern={pattern}
+            title={title}
             onChange={e => onChange(e.target.value)}
             className={inputClass} {...sharedEvents} />
         )}
@@ -516,14 +519,20 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                             <Field id="name" label="Your name" required value={name}
                               onChange={setName} placeholder="Alex Chen" inputRef={nameRef} />
                             <Field id="email" label="Work email" type="email" required
-                              value={email} onChange={setEmail} placeholder="alex@company.com" />
+                              value={email} onChange={setEmail} placeholder="alex@company.com" 
+                              pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
+                              title="Please enter a valid email address (e.g. name@domain.com)"
+                            />
                           </div>
                         </FadeUp>
 
                         {/* phone */}
                         <FadeUp delay={0.31}>
                           <Field id="phone" label="Phone — optional" type="tel" value={phone}
-                            onChange={setPhone} placeholder="+1 415 000 0000" />
+                            onChange={setPhone} placeholder="+1 415 000 0000" 
+                            pattern="^\+[0-9]{1,4}[0-9\s\-]{6,15}$"
+                            title="Please start with a + and your country code, followed by your phone number"
+                          />
                         </FadeUp>
 
                         {/* project type */}
