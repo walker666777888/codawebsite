@@ -458,7 +458,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                       ))}
                     </div>
                     <FadeUp delay={0.74}>
-                      <a href="mailto:Connect@citizenofdigitalage.com"
+                      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
                         target="_blank" rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 mt-10 font-mono text-[9px] uppercase tracking-[0.2em] text-white/20 hover:text-white/50 transition-colors duration-300">
                         Connect@citizenofdigitalage.com <ArrowRight size={9} />

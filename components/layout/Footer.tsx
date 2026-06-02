@@ -140,7 +140,7 @@ export default function Footer() {
               Engineering high-performance digital ecosystems. Dominate the Digital Age.
             </p>
             <motion.a
-              href="mailto:Connect@citizenofdigitalage.com"
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 mt-6 font-mono text-[11px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em]"
