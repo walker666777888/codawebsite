@@ -27,6 +27,11 @@ export default function ParticleCanvas({
   const canvasSize   = useRef({ w: 0, h: 0 });
   const dpr          = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
 
+  // Skip canvas animation entirely on touch/mobile — RAF loop is too costly
+  if (typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0)) {
+    return <div ref={containerRef} className={className} aria-hidden="true" />;
+  }
+
   useEffect(() => {
     const canvas    = canvasRef.current;
     const container = containerRef.current;

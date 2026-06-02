@@ -188,6 +188,27 @@
     animation: none !important;
     transform: none !important;
   }
+
+  /*
+   * Kill all other CPU-heavy CSS animations on mobile.
+   * These run continuously and steal frames from scroll.
+   */
+  .animate-chromatic,
+  .animate-glow-pulse,
+  .animate-border-rotate,
+  .animate-ping-expand,
+  .animate-scan-line {
+    animation: none !important;
+  }
+
+  /*
+   * Reset will-change on mobile — too many compositor layers exhaust
+   * mobile GPU memory and cause jank. Let browser decide.
+   */
+  .gpu,
+  [style*="will-change"] {
+    will-change: auto !important;
+  }
 }
 
 @layer utilities {

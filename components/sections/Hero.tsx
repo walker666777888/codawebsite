@@ -7,7 +7,7 @@ import {
   useMotionValue,
   useSpring,
 } from "motion/react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import AnimatedCounter from "@/components/ui/AnimatedCounter";
 import { useFormModal } from "@/components/providers/FormModalProvider";
@@ -23,13 +23,19 @@ export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { open: openForm } = useFormModal();
 
-  /* ── Scroll parallax ─────────────────────────────────── */
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y    = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const fade = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "8%"]);
+  // Detect touch device — disable all JS-driven parallax on mobile
+  const [isTouch, setIsTouch] = useState(false);
+  useEffect(() => {
+    setIsTouch("ontouchstart" in window || navigator.maxTouchPoints > 0);
+  }, []);
 
-  /* ── Mouse parallax ──────────────────────────────────── */
+  /* ── Scroll parallax (desktop only) ──────────────────── */
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const y    = useTransform(scrollYProgress, [0, 1], isTouch ? ["0%", "0%"] : ["0%", "20%"]);
+  const fade = useTransform(scrollYProgress, [0, 0.55], isTouch ? [1, 1] : [1, 0]);
+  const textY = useTransform(scrollYProgress, [0, 1], isTouch ? ["0%", "0%"] : ["0%", "8%"]);
+
+  /* ── Mouse parallax (desktop only) ───────────────────── */
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -44,6 +50,7 @@ export default function Hero() {
   const orb2Y = useTransform(smoothY, [-500, 500], [-32, 32]);
 
   useEffect(() => {
+    if (isTouch) return; // skip mouse tracking on mobile entirely
     const section = ref.current;
     if (!section) return;
     const heroRect = { current: section.getBoundingClientRect() };
@@ -56,7 +63,7 @@ export default function Hero() {
     window.addEventListener("resize", onResize, { passive: true });
     section.addEventListener("mousemove", onMove, { passive: true });
     return () => { section.removeEventListener("mousemove", onMove); window.removeEventListener("resize", onResize); };
-  }, [mouseX, mouseY]);
+  }, [mouseX, mouseY, isTouch]);
 
   const headlineWords = [
     { text: "Dominate", white: true },

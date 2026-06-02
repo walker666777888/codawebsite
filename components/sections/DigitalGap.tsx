@@ -293,6 +293,12 @@ export default function DigitalGap() {
   const progressRef  = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
+    // Skip heavy GSAP pin+scrub on mobile — use native scroll instead
+    const isTouchDevice =
+      typeof window !== "undefined" &&
+      ("ontouchstart" in window || navigator.maxTouchPoints > 0);
+    if (isTouchDevice) return;
+
     const ctx = gsap.context(() => {
       if (!containerRef.current || !textRef.current || !visualsRef.current) return;
 
@@ -343,7 +349,7 @@ export default function DigitalGap() {
   return (
     <section
       ref={containerRef}
-      className="h-screen bg-[#F4F0E8] text-[#0D0D0B] overflow-hidden border-b border-[#E6E1DA] relative"
+      className="min-h-screen bg-[#F4F0E8] text-[#0D0D0B] overflow-hidden border-b border-[#E6E1DA] relative"
     >
       <div className="absolute inset-0 pointer-events-none" style={{
         backgroundImage: "linear-gradient(to right,#E6E1DA 1px,transparent 1px),linear-gradient(to bottom,#E6E1DA 1px,transparent 1px)",
@@ -354,10 +360,10 @@ export default function DigitalGap() {
         <div ref={progressRef} className="absolute inset-0 bg-[#FF5C00] origin-left" style={{ transform: "scaleX(0)" }} />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 h-full flex flex-col justify-center">
+      <div className="max-w-7xl mx-auto px-6 py-16 md:py-0 md:h-full md:flex md:flex-col md:justify-center">
         <SectionLabel
           index={1}
-          className="mb-12 inline-flex w-fit px-3 py-1.5 rounded-full"
+          className="mb-8 md:mb-12 inline-flex w-fit px-3 py-1.5 rounded-full"
           style={{
             background: "rgba(244,240,232,0.92)",
             backdropFilter: "blur(8px)",
@@ -367,7 +373,27 @@ export default function DigitalGap() {
           }}
         >The Digital Gap</SectionLabel>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
+        {/* Mobile: static stacked — no GSAP, pure native scroll */}
+        <div className="block md:hidden space-y-10">
+          {[
+            { pre: "Most businesses are", em: "digitally fragile.", visual: <VisualFragility key="frag" /> },
+            { pre: "Disconnected tools create", em: "chaos.", visual: <VisualChaos key="chaos" /> },
+            { pre: "We engineer", em: "ecosystems.", visual: <VisualEcosystem key="eco" /> },
+          ].map(({ pre, em, visual }, i) => (
+            <div key={i} className="space-y-5">
+              <h2 className="font-instrument leading-[1.1] tracking-[-0.03em]"
+                style={{ fontSize: "clamp(28px, 7vw, 44px)" }}>
+                {pre}{" "}<span className="italic text-[#FF5C00]">{em}</span>
+              </h2>
+              <div className="relative h-[220px] w-full rounded-2xl border border-[#E6E1DA] bg-white overflow-hidden p-5">
+                {visual}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop: GSAP scroll-jacked */}
+        <div className="hidden md:grid grid-cols-2 gap-20 items-center">
           <div ref={textRef} className="space-y-10">
             {[
               { pre: "Most businesses are", em: "digitally fragile." },
@@ -380,8 +406,7 @@ export default function DigitalGap() {
               </h2>
             ))}
           </div>
-
-          <div ref={visualsRef} className="relative h-[260px] sm:h-[320px] md:h-[360px] w-full">
+          <div ref={visualsRef} className="relative h-[360px] w-full">
             {[<VisualFragility key="frag" />, <VisualChaos key="chaos" />, <VisualEcosystem key="eco" />].map((v, i) => (
               <div key={i} className="absolute inset-0 rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6">
                 {v}
