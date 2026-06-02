@@ -84,6 +84,7 @@ function Field({
           <textarea id={id} value={value} rows={5} placeholder={placeholder}
             maxLength={maxLength}
             onChange={e => onChange(e.target.value)}
+            style={{ outline: "none", boxShadow: "none", border: "none" }}
             className={inputClass} {...sharedEvents} />
         ) : (
           <input ref={inputRef} id={id} type={type} value={value} required={required}
@@ -91,6 +92,7 @@ function Field({
             pattern={pattern}
             title={title}
             onChange={e => onChange(e.target.value)}
+            style={{ outline: "none", boxShadow: "none", border: "none" }}
             className={inputClass} {...sharedEvents} />
         )}
       </motion.div>
