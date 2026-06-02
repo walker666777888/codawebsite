@@ -444,9 +444,9 @@ function EcommerceGraphic({ active }: { active: boolean }) {
     { label: "Leather Wallet Slim",  rank: "#3", old: "#11", delay: 0.28 },
   ];
   return (
-    <div className="w-full h-full flex flex-col justify-center gap-2.5 px-1">
+    <div className="w-full h-full flex flex-col justify-center gap-[6px] px-1">
       {/* Header — static once active */}
-      <div className="flex items-center justify-between mb-0.5">
+      <div className="flex items-center justify-between">
         <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.4)", letterSpacing: "0.12em", textTransform: "uppercase" }}>Marketplace Rankings</span>
         <motion.span style={{ fontFamily: "monospace", fontSize: "8px", color: ORANGE, letterSpacing: "0.1em" }}
           animate={active ? { opacity: [0.4, 1, 0.4] } : { opacity: 0 }}
@@ -456,7 +456,7 @@ function EcommerceGraphic({ active }: { active: boolean }) {
       {products.map((p, i) => (
         /* Card appears once and stays */
         <motion.div key={i} className="flex items-center gap-3"
-          style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,92,0,0.14)", borderRadius: "10px", padding: "7px 10px" }}
+          style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,92,0,0.14)", borderRadius: "10px", padding: "5px 10px" }}
           animate={active ? { opacity: 1, x: 0 } : { opacity: 0, x: -14 }}
           transition={{ duration: 0.55, delay: p.delay, ease: [0.16, 1, 0.3, 1] }}
         >
@@ -477,7 +477,7 @@ function EcommerceGraphic({ active }: { active: boolean }) {
         </motion.div>
       ))}
 
-      <div className="flex items-center justify-between mt-0.5 pt-2" style={{ borderTop: "1px solid rgba(255,92,0,0.12)" }}>
+      <div className="flex items-center justify-between pt-1.5" style={{ borderTop: "1px solid rgba(255,92,0,0.12)" }}>
         <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.4)", textTransform: "uppercase", letterSpacing: "0.1em" }}>Avg. CVR lift</span>
         <span style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: ORANGE }}>+34%</span>
       </div>
@@ -1192,7 +1192,7 @@ function DisciplineSpread() {
   }
 
   return (
-    <div ref={trackRef} className="relative h-[240vh]">
+    <div ref={trackRef} className="relative z-10 h-[240vh]">
       <div className="sticky top-0 h-[100svh] flex items-center pt-[72px] pb-6 overflow-hidden">
 
         {/* ── Parallax warm-glow backdrop ───────────────────── */}
@@ -1644,7 +1644,7 @@ function HeaderBlock({
   const sRightY = useSpring(rightY, sp);
 
   return (
-    <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 lg:pt-32 pb-12 sm:pb-20 relative">
+    <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 lg:pt-32 pb-12 sm:pb-20 relative z-10">
 
       {/* ── Two-column layout ──────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center overflow-visible">
@@ -1732,6 +1732,53 @@ function HeaderBlock({
 }
 
 /* ═══════════════════════════════════════════════════════════
+   MOBILE STICKY STACK
+═══════════════════════════════════════════════════════════ */
+
+function MobileDisciplineStack() {
+  const allCards = [
+    ...DISCIPLINES,
+    ...LANDSCAPE_TILES.map(t => ({
+      num: t.num,
+      title: t.title,
+      subtitle: t.subtitle,
+      description: t.tagline,
+      capabilities: t.capabilities as unknown as string[],
+      tags: t.tags as unknown as string[],
+      Graphic: t.Graphic,
+      accentColor: "#FF5C00",
+      accentRgb: "255,92,0",
+      borderColor: "rgba(255,92,0,0.15)"
+    }))
+  ];
+
+  return (
+    <div className="lg:hidden max-w-7xl mx-auto px-5 pb-8 flex flex-col relative z-10" style={{ gap: "35vh" }}>
+      {allCards.map((d, i) => (
+        <motion.div
+          key={d.num}
+          className="sticky"
+          style={{
+            top: `calc(8vh + ${i * 12}px)`, // Tighter offset so 5 cards fit elegantly at the top
+            zIndex: i,
+          }}
+          initial={{ opacity: 0, y: 100, scale: 0.9 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {/* We wrap DisciplineCardBody in a div with a fixed viewport height to guarantee 
+              all 5 cards are exactly the same height, completely hiding the cards behind them. */}
+          <div className="shadow-[0_-20px_40px_rgba(0,0,0,0.05)] rounded-[28px] h-[78vh] min-h-[540px] w-full">
+            <DisciplineCardBody d={d as any} active />
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
    SECTION
 ═══════════════════════════════════════════════════════════ */
 
@@ -1767,27 +1814,15 @@ export default function Statement() {
       <HeaderBlock lineW={lineW} scrollYProgress={scrollYProgress} />
 
       {/* ── Discipline cards ─────────────────────────────────────
-          Mobile / tablet: vertical stack, each expands in on scroll.
+          Mobile / tablet: Premium sticky stack effect
           Desktop (lg+): pinned fan-out — cards spread centre → row. */}
-      <div className="lg:hidden max-w-7xl mx-auto px-6 pb-10 flex flex-col gap-5">
-        {DISCIPLINES.map((d, i) => (
-          <motion.div
-            key={d.num}
-            initial={{ opacity: 0, y: 60, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.85, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <DisciplineCardBody d={d} active />
-          </motion.div>
-        ))}
-      </div>
+      <MobileDisciplineStack />
       <div className="hidden lg:block">
         <DisciplineSpread />
       </div>
 
       {/* ── Landscape tiles ─────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-6 pb-10">
+      <div className="hidden lg:block max-w-7xl mx-auto px-6 pb-10 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
           {LANDSCAPE_TILES.map((tile, i) => (
             <LandscapeTile key={tile.num} tile={tile} index={i} />
@@ -1796,7 +1831,7 @@ export default function Statement() {
       </div>
 
       {/* ── Bottom tagline ───────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-7xl mx-auto px-6 pt-8 pb-16 lg:py-16 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}

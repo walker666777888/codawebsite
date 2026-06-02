@@ -333,7 +333,7 @@ export default function WorkShowcase() {
       />
 
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-6 relative mb-14">
+      <div className="max-w-7xl mx-auto px-6 relative z-10 mb-14">
         <motion.div
           style={{ y: headingY }}
           initial={{ opacity: 0, y: 32 }}
@@ -355,7 +355,7 @@ export default function WorkShowcase() {
       </div>
 
       {/* ── Infinite drag carousel ── */}
-      <div className="max-w-7xl mx-auto px-6 relative overflow-hidden select-none">
+      <div className="max-w-7xl mx-auto px-6 relative z-10 overflow-hidden select-none">
         {/* Left fade — desktop only */}
         <div
           className="hidden md:block absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none"

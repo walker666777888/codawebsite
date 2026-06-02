@@ -351,7 +351,7 @@ export default function Philosophy() {
       />
 
       {/* ── hero top ────────────────────────────────────── */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 md:pt-36 pb-12 sm:pb-16 md:pb-24">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 md:pt-36 pb-12 sm:pb-16 md:pb-24">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-16 lg:gap-8 items-end">
 
           {/* LEFT — label + headline */}
