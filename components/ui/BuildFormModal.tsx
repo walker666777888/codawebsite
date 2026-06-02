@@ -63,7 +63,7 @@ function Field({
     onBlur:  () => fMv.set(0),
   };
   const inputClass =
-    "w-full bg-transparent rounded-[14px] px-4 py-4 text-white text-[15px] font-sans outline-none border-0 placeholder-white/20 resize-none leading-relaxed";
+    "w-full bg-transparent rounded-[14px] px-4 py-4 text-white text-[15px] font-sans outline-none focus:outline-none focus:ring-0 border-0 placeholder-white/20 resize-none leading-relaxed";
 
   const charsLeft = maxLength !== undefined ? maxLength - value.length : null;
 
