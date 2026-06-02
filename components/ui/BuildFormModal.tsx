@@ -63,7 +63,7 @@ function Field({
     onBlur:  () => fMv.set(0),
   };
   const inputClass =
-    "w-full bg-transparent rounded-[14px] px-4 py-4 text-white text-[15px] font-sans outline-none focus:outline-none focus:ring-0 border-0 placeholder-white/20 resize-none leading-relaxed";
+    "w-full bg-transparent rounded-[14px] px-4 py-4 text-white text-[16px] font-sans outline-none focus:outline-none focus:ring-0 border-0 placeholder-white/20 resize-none leading-relaxed";
 
   const charsLeft = maxLength !== undefined ? maxLength - value.length : null;
 
@@ -358,17 +358,15 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
           <motion.div
             key="panel"
             role="dialog" aria-modal="true" aria-label="Start a project"
-            className="fixed inset-0 z-[201]"
+            className="fixed inset-x-0 bottom-0 top-[24px] z-[201] rounded-t-[24px] md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[90vw] md:max-w-[1000px] md:h-[85vh] md:max-h-[800px] md:rounded-[24px] shadow-2xl"
             style={{
-              height: "100dvh",
               background: "#0C0C0A",
-              borderRadius: 0,
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
             }}
-            initial={{ y: reduced ? 0 : "100%" }}
-            animate={{ y: 0 }}
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", transition: exitSpring }}
             transition={reduced ? { duration: 0 } : panelSpring}
           >
@@ -388,8 +386,8 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
             />
 
             {/* handle */}
-            <div className="flex justify-center pt-3 shrink-0 relative z-10">
-              <div className="w-9 h-[3px] rounded-full bg-white/10" />
+            <div className="flex justify-center pt-3 shrink-0 relative z-10 md:hidden">
+              <div className="w-10 h-[4px] rounded-full bg-white/15" />
             </div>
 
             {/* close btn */}
