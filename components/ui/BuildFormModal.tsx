@@ -116,11 +116,15 @@ function Dropdown({
 
   /* close on outside click */
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
+    const handler = (e: MouseEvent | TouchEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
     document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("touchstart", handler);
+    };
   }, []);
 
   return (
@@ -174,12 +178,13 @@ function Dropdown({
           <motion.div
             initial={{ opacity: 0, y: -8, scaleY: 0.88 }}
             animate={{ opacity: 1, y: 0, scaleY: 1 }}
-            exit={{ opacity: 0, y: -10, scaleY: 0.85, transition: { duration: 0.18, ease: [0.4, 0, 1, 0.6] } }}
+            exit={{ opacity: 0, y: -5, transition: { duration: 0.12, ease: "easeOut" } }}
             transition={{ type: "spring", stiffness: 360, damping: 28 }}
             style={{
               transformOrigin: "top",
+              willChange: "transform, opacity",
               background: "#161614",
-              boxShadow: "0 0 0 1px rgba(255,255,255,0.09), 0 16px 48px rgba(0,0,0,0.6), 0 0 0 0 rgba(255,92,0,0)",
+              boxShadow: "0 12px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06)",
               borderRadius: "14px",
               overflow: "hidden",
             }}
