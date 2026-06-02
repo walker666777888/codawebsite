@@ -20,14 +20,15 @@ const METRICS = [
   { value: 12, suffix: "+", label: "Systems Built" },
 ];
 
-const PARTICLES = Array.from({ length: 35 }).map((_, i) => ({
+const PARTICLES = Array.from({ length: 90 }).map((_, i) => ({
   id: i,
-  left: `${(i * 13) % 100}%`,
-  duration: 6 + (i % 8),
-  delay: (i * 0.5) % 5,
-  size: i % 4 === 0 ? 3 : 1.5,
-  isOrange: i % 3 === 0,
-  xOffset: (i % 2 === 0 ? 1 : -1) * (10 + (i * 3) % 40)
+  left: `${(i * 17.3) % 100}%`,
+  duration: 10 + (i % 15),
+  delay: (i * 0.3) % 10,
+  size: i % 5 === 0 ? 3.5 : (i % 3 === 0 ? 2 : 1),
+  isOrange: i % 4 === 0,
+  xOffset: (i % 2 === 0 ? 1 : -1) * (20 + (i * 7) % 70),
+  yOffset: -(110 + (i % 40))
 }));
 
 function DataParticles() {
@@ -36,14 +37,15 @@ function DataParticles() {
       {PARTICLES.map((p) => (
         <motion.div
           key={p.id}
-          className={`absolute rounded-full ${p.isOrange ? 'bg-[#FF5C00] shadow-[0_0_8px_rgba(255,92,0,0.8)]' : 'bg-[#0D0D0B] opacity-30'}`}
-          style={{ left: p.left, width: p.size, height: p.size, bottom: "-5%" }}
+          className={`absolute rounded-full ${p.isOrange ? 'bg-[#FF5C00] shadow-[0_0_12px_rgba(255,92,0,1)]' : 'bg-[#0D0D0B] shadow-[0_0_8px_rgba(13,13,11,0.5)]'}`}
+          style={{ left: p.left, width: p.size, height: p.size, bottom: "-10%", willChange: "transform, opacity" }}
           animate={{ 
-            y: ["0vh", "-110vh"],
-            x: [0, p.xOffset],
-            opacity: [0, p.isOrange ? 0.7 : 0.3, 0] 
+            y: ["0vh", `${p.yOffset}vh`],
+            x: [0, p.xOffset, -p.xOffset * 0.4, 0],
+            opacity: [0, p.isOrange ? 0.9 : 0.35, 0.1, p.isOrange ? 0.7 : 0.25, 0],
+            scale: [0.5, p.isOrange ? 1.4 : 1.1, 0.8, p.isOrange ? 1.2 : 1, 0.5]
           }}
-          transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: "linear" }}
+          transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: "easeInOut" }}
         />
       ))}
     </div>
