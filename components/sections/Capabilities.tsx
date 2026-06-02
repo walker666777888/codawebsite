@@ -85,6 +85,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.9, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
       style={{ perspective: 1000 }}
+      className="h-full flex flex-col"
     >
       <motion.div
         ref={cardRef}
@@ -96,7 +97,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
           rotateY: springRotY,
           transformStyle: "flat",
         }}
-        className="group relative rounded-2xl overflow-hidden cursor-default"
+        className="group relative rounded-2xl overflow-hidden cursor-default h-full flex flex-col flex-1"
       >
         {/* Gradient border */}
         <div
@@ -111,7 +112,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
 
         {/* Base card */}
         <div
-          className="relative rounded-2xl border border-[#0D0D0B]/[0.1] overflow-hidden"
+          className="relative rounded-2xl border border-[#0D0D0B]/[0.1] overflow-hidden h-full flex flex-col flex-1"
           style={{ background: "rgba(255,255,255,0.96)" }}
         >
           {/* Top accent line */}
@@ -151,7 +152,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
           </div>
 
           {/* Content */}
-          <div className="relative z-[10] p-5 sm:p-8 flex flex-col min-h-[300px] sm:min-h-[360px] justify-between">
+          <div className="relative z-[10] p-5 sm:p-8 flex flex-col flex-1 min-h-[300px] sm:min-h-[360px] justify-between">
             <div>
               {/* Header row */}
               <div className="flex items-center justify-between mb-6 sm:mb-10">
@@ -305,7 +306,7 @@ export default function Capabilities() {
             {cards.map((card, i) => (
               <motion.div
                 key={i}
-                className="shrink-0 w-[85vw]"
+                className="shrink-0 w-[85vw] h-auto flex flex-col"
                 style={{ scrollSnapAlign: "center" }}
                 initial={{ opacity: 0, x: 40 }}
                 whileInView={{ opacity: 1, x: 0 }}
