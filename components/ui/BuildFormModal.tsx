@@ -358,7 +358,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
           <motion.div
             key="panel"
             role="dialog" aria-modal="true" aria-label="Start a project"
-            className="fixed inset-x-0 bottom-0 top-[24px] z-[201] rounded-t-[24px] md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[90vw] md:max-w-[1000px] md:h-[85vh] md:max-h-[800px] md:rounded-[24px] shadow-2xl"
+            className="fixed inset-x-0 bottom-0 top-[24px] z-[201] rounded-t-[24px] md:inset-0 md:rounded-none"
             style={{
               background: "#0C0C0A",
               display: "flex",
@@ -386,8 +386,8 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
             />
 
             {/* handle */}
-            <div className="flex justify-center pt-3 shrink-0 relative z-10 md:hidden">
-              <div className="w-10 h-[4px] rounded-full bg-white/15" />
+            <div className="flex justify-center pt-3 shrink-0 relative z-10">
+              <div className="w-9 h-[3px] rounded-full bg-white/10" />
             </div>
 
             {/* close btn */}
