@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
+import { useRef, useState, useEffect, useCallback } from "react";
+import { motion, useScroll, useTransform, useMotionValue, useSpring, animate } from "motion/react";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { ArrowUpRight } from "lucide-react";
 
@@ -39,9 +39,6 @@ const projects = [
     tags: ["IoT", "Enterprise", "Ops"],
   },
 ];
-
-/* duplicate for seamless loop */
-const loopedProjects = [...projects, ...projects];
 
 function ProjectCard({
   project,
@@ -129,7 +126,7 @@ function ProjectCard({
           {/* Number label */}
           <div className="absolute top-5 left-5">
             <span className="font-mono text-[10px] text-white/30 tracking-[0.15em]">
-              {String((index % projects.length) + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
+              {String(index + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
             </span>
           </div>
 
@@ -181,8 +178,69 @@ function ProjectCard({
 
 export default function WorkShowcase() {
   const sectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const headingY = useTransform(scrollYProgress, [0, 1], ["-4%", "4%"]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const x = useMotionValue(0);
+
+  // Card width + gap — recalculated on mount/resize
+  const cardW = useRef(0);
+  const GAP = 24; // gap-6 = 24px
+
+  const getCardWidth = useCallback(() => {
+    const first = trackRef.current?.children[0] as HTMLElement | undefined;
+    return first ? first.offsetWidth + GAP : 0;
+  }, []);
+
+  const snapTo = useCallback((index: number, instant = false) => {
+    const w = getCardWidth();
+    if (!w) return;
+    const clamped = Math.max(0, Math.min(index, projects.length - 1));
+    setActiveIndex(clamped);
+    animate(x, -clamped * w, {
+      duration: instant ? 0 : 0.55,
+      ease: [0.16, 1, 0.3, 1],
+    });
+  }, [x, getCardWidth]);
+
+  // Auto-advance
+  const startAuto = useCallback(() => {
+    autoRef.current = setInterval(() => {
+      setActiveIndex((prev) => {
+        const next = (prev + 1) % projects.length;
+        const w = getCardWidth();
+        if (w) animate(x, -next * w, { duration: 0.7, ease: [0.16, 1, 0.3, 1] });
+        return next;
+      });
+    }, 3200);
+  }, [x, getCardWidth]);
+
+  const stopAuto = useCallback(() => {
+    if (autoRef.current) clearInterval(autoRef.current);
+  }, []);
+
+  useEffect(() => {
+    cardW.current = getCardWidth();
+    startAuto();
+    return () => stopAuto();
+  }, [startAuto, stopAuto, getCardWidth]);
+
+  // Snap to nearest card on drag end
+  const onDragEnd = useCallback(() => {
+    setIsDragging(false);
+    const w = getCardWidth();
+    if (!w) return;
+    const cur = -x.get();
+    const nearest = Math.round(cur / w);
+    snapTo(Math.max(0, Math.min(nearest, projects.length - 1)));
+    startAuto();
+  }, [x, getCardWidth, snapTo, startAuto]);
+
+  const totalW = useCallback(() => getCardWidth() * projects.length, [getCardWidth]);
 
   return (
     <section ref={sectionRef} id="work"
@@ -208,8 +266,12 @@ export default function WorkShowcase() {
         </motion.div>
       </div>
 
-      {/* Infinite marquee track — constrained like the rest of the site */}
-      <div className="max-w-7xl mx-auto px-6 relative overflow-hidden">
+      {/* Drag carousel */}
+      <div
+        className="max-w-7xl mx-auto px-6 relative overflow-hidden cursor-grab active:cursor-grabbing select-none"
+        onMouseEnter={stopAuto}
+        onMouseLeave={() => { if (!isDragging) startAuto(); }}
+      >
         {/* Left fade — desktop only */}
         <div className="hidden md:block absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
           style={{ background: "linear-gradient(to right,#F4F0E8,transparent)" }} />
@@ -217,29 +279,82 @@ export default function WorkShowcase() {
         <div className="hidden md:block absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
           style={{ background: "linear-gradient(to left,#F4F0E8,transparent)" }} />
 
-        {/* Scrolling strip — CSS animation for butter-smooth loop */}
-        <div
+        <motion.div
+          ref={trackRef}
           className="flex gap-6 w-max"
-          style={{
-            animation: `marquee-work ${projects.length * 7}s linear infinite`,
-            animationPlayState: "running",
-          }}
-          onMouseEnter={e => (e.currentTarget.style.animationPlayState = "paused")}
-          onMouseLeave={e => (e.currentTarget.style.animationPlayState = "running")}
+          style={{ x }}
+          drag="x"
+          dragConstraints={{ left: -(totalW() - getCardWidth()), right: 0 }}
+          dragElastic={0.12}
+          dragMomentum={false}
+          onDragStart={() => { setIsDragging(true); stopAuto(); }}
+          onDragEnd={onDragEnd}
+          whileTap={{ cursor: "grabbing" }}
         >
-          {loopedProjects.map((project, i) => (
+          {projects.map((project, i) => (
             <ProjectCard key={i} project={project} index={i} />
           ))}
-        </div>
+        </motion.div>
       </div>
 
-      {/* Inject keyframe */}
-      <style>{`
-        @keyframes marquee-work {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
+      {/* Dot indicators */}
+      <div className="flex items-center justify-center gap-2.5 mt-8">
+        {projects.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => { stopAuto(); snapTo(i); startAuto(); }}
+            aria-label={`Go to project ${i + 1}`}
+            style={{
+              width: activeIndex === i ? "24px" : "7px",
+              height: "7px",
+              borderRadius: "99px",
+              background: activeIndex === i ? "#FF5C00" : "rgba(13,13,11,0.2)",
+              transition: "all 0.35s cubic-bezier(0.16,1,0.3,1)",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+            }}
+          />
+        ))}
+      </div>
     </section>
   );
 }
+
+
+const projects = [
+  {
+    title: "Atreya.ai",
+    category: "AI Platform",
+    gradient: "from-[#06061a] via-[#0a1030] to-[#0c1848]",
+    accent: "#4F8EF7",
+    year: "2024",
+    tags: ["AI", "SaaS", "Dashboard"],
+  },
+  {
+    title: "Homer",
+    category: "PropTech App",
+    gradient: "from-[#060e06] via-[#091809] to-[#112611]",
+    accent: "#5FCF5F",
+    year: "2024",
+    tags: ["Mobile", "Maps", "PropTech"],
+  },
+  {
+    title: "Florapark",
+    category: "E-commerce System",
+    gradient: "from-[#0e060e] via-[#1a0a1a] to-[#280d35]",
+    accent: "#B87FFF",
+    year: "2023",
+    tags: ["E-comm", "Brand", "Growth"],
+  },
+  {
+    title: "DMP Drone Fleet",
+    category: "Enterprise Dashboard",
+    gradient: "from-[#0e0900] via-[#1a1200] to-[#2a1c00]",
+    accent: "#FF9A3C",
+    year: "2023",
+    tags: ["IoT", "Enterprise", "Ops"],
+  },
+];
+
+
