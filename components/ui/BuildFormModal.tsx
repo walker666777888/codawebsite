@@ -529,9 +529,10 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                         {/* phone */}
                         <FadeUp delay={0.31}>
                           <Field id="phone" label="Phone — optional" type="tel" value={phone}
-                            onChange={setPhone} placeholder="+1 (415) 000-0000" 
-                            pattern="^\+[0-9\s\-\(\).]{7,25}$"
-                            title="Please start with a + and your country code, followed by your phone number"
+                            onChange={(val) => setPhone(val.replace(/[^\+0-9]/g, ''))} 
+                            placeholder="+14150000000" 
+                            pattern="^\+[0-9]{7,20}$"
+                            title="Please start with a + followed by numbers only"
                           />
                         </FadeUp>
 
