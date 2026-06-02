@@ -141,6 +141,8 @@ export default function Footer() {
             </p>
             <motion.a
               href="mailto:Connect@citizenofdigitalage.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 mt-6 font-mono text-[11px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em]"
               whileHover={{ x: 4 }}
               transition={{ duration: 0.25 }}
