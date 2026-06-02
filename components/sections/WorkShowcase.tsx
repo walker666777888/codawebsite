@@ -313,25 +313,7 @@ export default function WorkShowcase() {
     x.set(cur);
   };
 
-  // ── Pointer event handlers (mouse + touch, no Framer drag prop) ─
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    e.currentTarget.setPointerCapture(e.pointerId);
-    isDragging.current = true;
-    dragStartX.current = e.clientX;
-    dragStartMV.current = x.get();
-  };
-
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging.current) return;
-    const delta = e.clientX - dragStartX.current;
-    x.set(dragStartMV.current + delta);
-  };
-
-  const onPointerUp = () => {
-    if (!isDragging.current) return;
-    isDragging.current = false;
-    normalise();
-  };
+  // ── Pan event handlers via Framer Motion ─
 
   return (
     <section
@@ -373,12 +355,20 @@ export default function WorkShowcase() {
       </div>
 
       {/* ── Infinite drag carousel ── */}
-      <div
+      <motion.div
         className="max-w-7xl mx-auto px-6 relative overflow-hidden cursor-grab active:cursor-grabbing select-none"
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
+        onPanStart={() => {
+          isDragging.current = true;
+          dragStartMV.current = x.get();
+        }}
+        onPan={(_, info) => {
+          if (!isDragging.current) return;
+          x.set(dragStartMV.current + info.offset.x);
+        }}
+        onPanEnd={() => {
+          isDragging.current = false;
+          normalise();
+        }}
         style={{ touchAction: "pan-y" }}
       >
         {/* Left fade — desktop only */}
@@ -405,7 +395,7 @@ export default function WorkShowcase() {
             />
           ))}
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* Dot indicators */}
       <div className="flex items-center justify-center gap-2.5 mt-8">
