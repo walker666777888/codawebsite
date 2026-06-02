@@ -1755,24 +1755,20 @@ function MobileDisciplineStack() {
   return (
     <div className="lg:hidden max-w-7xl mx-auto px-5 pb-8 flex flex-col relative z-10" style={{ gap: "35vh" }}>
       {allCards.map((d, i) => (
-        <motion.div
+        <div
           key={d.num}
           className="sticky"
           style={{
             top: `calc(8vh + ${i * 12}px)`, // Tighter offset so 5 cards fit elegantly at the top
             zIndex: i,
           }}
-          initial={{ opacity: 0, y: 100, scale: 0.9 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           {/* We wrap DisciplineCardBody in a div with a fixed viewport height to guarantee 
               all 5 cards are exactly the same height, completely hiding the cards behind them. */}
-          <div className="shadow-[0_-20px_40px_rgba(0,0,0,0.05)] rounded-[28px] h-[78vh] min-h-[540px] w-full">
+          <div className="shadow-[0_-4px_16px_rgba(0,0,0,0.04)] rounded-[28px] h-[78vh] min-h-[540px] w-full bg-[#FFFCF9]">
             <DisciplineCardBody d={d as any} active />
           </div>
-        </motion.div>
+        </div>
       ))}
     </div>
   );
@@ -1797,8 +1793,8 @@ export default function Statement() {
 
       {/* Decorative layers — clipped here so blur/grid can't cause overflow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Ambient parallax orbs */}
-        <motion.div style={{ y: bgY }} className="absolute inset-0">
+        {/* Ambient parallax orbs — disabled on mobile to preserve scroll framerate */}
+        <motion.div style={{ y: bgY }} className="absolute inset-0 hidden md:block">
           <div className="absolute top-[-20%] right-[-5%] w-[700px] h-[700px] rounded-full blur-[160px] opacity-[0.045] animate-glow-pulse"
             style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 65%)" }} />
           <div className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] rounded-full blur-[130px] opacity-[0.03]"
