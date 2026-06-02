@@ -94,7 +94,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
         style={{
           rotateX: springRotX,
           rotateY: springRotY,
-          transformStyle: "preserve-3d",
+          transformStyle: "flat",
         }}
         className="group relative rounded-2xl overflow-hidden cursor-default"
       >
@@ -151,7 +151,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
           </div>
 
           {/* Content */}
-          <div className="relative z-[10] p-5 sm:p-8 flex flex-col min-h-[300px] sm:min-h-[360px] justify-between" style={{ transform: "translateZ(20px)" }}>
+          <div className="relative z-[10] p-5 sm:p-8 flex flex-col min-h-[300px] sm:min-h-[360px] justify-between">
             <div>
               {/* Header row */}
               <div className="flex items-center justify-between mb-6 sm:mb-10">
