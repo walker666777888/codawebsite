@@ -478,9 +478,9 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                         <motion.button onClick={onClose}
                           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                           transition={{ delay: 1.1 }}
-                          className="mt-4 font-mono text-[9px] uppercase tracking-[0.22em] text-white/20 hover:text-white/50 transition-colors duration-300 cursor-pointer"
+                          className="mt-6 font-sans font-medium text-[13px] tracking-wide text-white/80 hover:text-white hover:bg-white/10 border border-white/20 rounded-full px-8 py-2.5 transition-all duration-300 cursor-pointer"
                         >
-                          Close ×
+                          Close Modal
                         </motion.button>
                       </motion.div>
 
