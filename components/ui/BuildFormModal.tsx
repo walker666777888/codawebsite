@@ -100,11 +100,11 @@ function Dropdown({
   options, value, onChange,
 }: {
   options: { id: string; label: string; sub?: string }[];
-  value: string; onChange: (id: string) => void;
+  value: string[]; onChange: (ids: string[]) => void;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const selected = options.find(o => o.id === value);
+  const selectedOptions = options.filter(o => value.includes(o.id));
 
   /* close on outside click */
   useEffect(() => {
@@ -134,15 +134,17 @@ function Dropdown({
         }}
       >
         <div className="flex flex-col gap-0.5 min-w-0">
-          {selected ? (
+          {selectedOptions.length > 0 ? (
             <>
-              <span className="font-sans text-[13px] font-medium text-white leading-tight">{selected.label}</span>
-              {selected.sub && (
-                <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-[#FF5C00]/60">{selected.sub}</span>
-              )}
+              <span className="font-sans text-[13px] font-medium text-white leading-tight truncate">
+                {selectedOptions.map(o => o.label).join(", ")}
+              </span>
+              <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-[#FF5C00]/60">
+                {selectedOptions.length} Selected
+              </span>
             </>
           ) : (
-            <span className="font-sans text-[13px] text-white/35">Select a project type…</span>
+            <span className="font-sans text-[13px] text-white/35">Select project types…</span>
           )}
         </div>
 
@@ -179,12 +181,18 @@ function Dropdown({
             <div className="h-px w-full" style={{ background: "linear-gradient(90deg,transparent,rgba(255,92,0,0.5) 50%,transparent)" }} />
 
             {options.map((opt, i) => {
-              const on = value === opt.id;
+              const on = value.includes(opt.id);
               return (
                 <motion.button
                   key={opt.id}
                   type="button"
-                  onClick={() => { onChange(on ? "" : opt.id); setOpen(false); }}
+                  onClick={() => {
+                    if (on) {
+                      onChange(value.filter(v => v !== opt.id));
+                    } else {
+                      onChange([...value, opt.id]);
+                    }
+                  }}
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.22, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
@@ -263,7 +271,8 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
   const [email,  setEmail]  = useState("");
   const [phone,  setPhone]  = useState("");
   const [brief,  setBrief]  = useState("");
-  const [ptype,  setPtype]  = useState("");
+  const [ptype,  setPtype]  = useState<string[]>([]);
+  const [otherPtype, setOtherPtype] = useState("");
   const nameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -277,7 +286,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
     if (isOpen) return;
     const t = setTimeout(() => {
       setStatus("idle");
-      setName(""); setEmail(""); setPhone(""); setBrief(""); setPtype("");
+      setName(""); setEmail(""); setPhone(""); setBrief(""); setPtype([]); setOtherPtype("");
     }, 600);
     return () => clearTimeout(t);
   }, [isOpen]);
@@ -288,7 +297,11 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
     setStatus("submitting");
     
     try {
-      const typeLabel = PROJECT_TYPES.find((p) => p.id === ptype)?.label || "Not specified";
+      const typeLabels = PROJECT_TYPES.filter((p) => ptype.includes(p.id)).map(p => p.label);
+      let typeLabel = typeLabels.length > 0 ? typeLabels.join(", ") : "Not specified";
+      if (ptype.includes("other") && otherPtype.trim()) {
+        typeLabel += ` (Other: ${otherPtype.trim()})`;
+      }
       
       const response = await fetch("https://formsubmit.co/ajax/Connect@citizenofdigitalage.com", {
         method: "POST",
@@ -312,7 +325,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
       setStatus("idle");
       alert("Something went wrong. Please try emailing us directly.");
     }
-  }, [name, email, phone, ptype, brief]);
+  }, [name, email, phone, ptype, otherPtype, brief]);
 
   const panelSpring = { type: "spring" as const, stiffness: 260, damping: 34, mass: 1.0 };
   const exitSpring  = { type: "spring" as const, stiffness: 400, damping: 44 };
@@ -510,11 +523,26 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
 
                         {/* project type */}
                         <FadeUp delay={0.37}>
-                          <div>
-                            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/50 mb-2.5">
-                              What are we building?
-                            </p>
-                            <Dropdown options={PROJECT_TYPES} value={ptype} onChange={setPtype} />
+                          <div className="flex flex-col gap-3">
+                            <div>
+                              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/50 mb-2.5">
+                                What are we building?
+                              </p>
+                              <Dropdown options={PROJECT_TYPES} value={ptype} onChange={setPtype} />
+                            </div>
+                            <AnimatePresence>
+                              {ptype.includes("other") && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0, marginTop: -12 }}
+                                  animate={{ opacity: 1, height: "auto", marginTop: 0 }}
+                                  exit={{ opacity: 0, height: 0, marginTop: -12 }}
+                                  transition={{ duration: 0.3, ease: E }}
+                                >
+                                  <Field id="otherPtype" label="Please specify" value={otherPtype}
+                                    onChange={setOtherPtype} placeholder="e.g. Custom CRM" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
                           </div>
                         </FadeUp>
 
