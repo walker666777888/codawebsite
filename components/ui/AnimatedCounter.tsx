@@ -15,6 +15,7 @@ interface AnimatedCounterProps {
   prefix?: string;
   className?: string;
   duration?: number;
+  startImmediately?: boolean;
 }
 
 export default function AnimatedCounter({
@@ -23,6 +24,7 @@ export default function AnimatedCounter({
   prefix = "",
   className,
   duration = 2,
+  startImmediately = false,
 }: AnimatedCounterProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(0);
@@ -34,10 +36,10 @@ export default function AnimatedCounter({
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   useEffect(() => {
-    if (isInView) {
+    if (isInView || startImmediately) {
       motionValue.set(value);
     }
-  }, [isInView, value, motionValue]);
+  }, [isInView, startImmediately, value, motionValue]);
 
   useEffect(() => {
     return springValue.on("change", (latest) => {

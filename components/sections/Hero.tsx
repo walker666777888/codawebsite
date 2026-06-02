@@ -6,6 +6,7 @@ import {
   useTransform,
   useMotionValue,
   useSpring,
+  AnimatePresence,
 } from "motion/react";
 import { useRef, useEffect, useState } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
@@ -18,6 +19,48 @@ const METRICS = [
   { value: 3,  suffix: "×", label: "Faster Launch" },
   { value: 12, suffix: "+", label: "Systems Built" },
 ];
+
+function MobileMetricsCarousel() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex(prev => (prev + 1) % METRICS.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="md:hidden relative h-[90px] w-full border-t border-[#0D0D0B]/[0.1] overflow-hidden flex items-center justify-center bg-[#F4F0E8]">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, y: 15, filter: "blur(4px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          exit={{ opacity: 0, y: -15, filter: "blur(4px)" }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col items-center justify-center absolute inset-0"
+        >
+          <span className="font-instrument leading-none mb-1 tabular-nums text-[#0D0D0B]" style={{ fontSize: "clamp(36px, 10vw, 42px)" }}>
+            <AnimatedCounter value={METRICS[index].value} suffix={METRICS[index].suffix} startImmediately={true} />
+          </span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#6F6A60]">
+            {METRICS[index].label}
+          </span>
+        </motion.div>
+      </AnimatePresence>
+      <div className="absolute bottom-0 left-0 h-[2px] bg-[#0D0D0B]/5 w-full">
+         <motion.div 
+            key={index + "bar"}
+            className="h-full bg-[#FF5C00]"
+            initial={{ width: "0%" }}
+            animate={{ width: "100%" }}
+            transition={{ duration: 3.5, ease: "linear" }}
+         />
+      </div>
+    </div>
+  );
+}
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -154,7 +197,7 @@ export default function Hero() {
       {/* ── Main content ─────────────────────────────────── */}
       <motion.div
         style={{ y: textY, opacity: fade }}
-        className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pt-20"
+        className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6"
       >
 
         {/* Brand name */}
@@ -226,9 +269,10 @@ export default function Hero() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 2.6, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 grid grid-cols-2 md:grid-cols-4 border-t border-[#0D0D0B]/[0.1] overflow-hidden"
+        className="relative z-10 w-full"
       >
-        {METRICS.map((m, i) => (
+        <div className="hidden md:grid grid-cols-4 border-t border-[#0D0D0B]/[0.1] overflow-hidden">
+          {METRICS.map((m, i) => (
           <motion.div
             key={i}
             className={`relative group flex flex-col items-center justify-center py-7 cursor-default overflow-hidden ${
@@ -296,11 +340,13 @@ export default function Hero() {
             />
           </motion.div>
         ))}
+        </div>
+        <MobileMetricsCarousel />
       </motion.div>
 
       {/* ── Scroll indicator ─────────────────────────────── */}
       <motion.div
-        className="absolute left-1/2 -translate-x-1/2 bottom-[86px] flex flex-col items-center gap-2 z-10"
+        className="absolute left-1/2 -translate-x-1/2 bottom-[110px] flex flex-col items-center gap-2 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 3.4, duration: 1.2 }}
