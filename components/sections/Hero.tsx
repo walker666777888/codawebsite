@@ -10,6 +10,7 @@ import {
 import { useRef, useEffect } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import AnimatedCounter from "@/components/ui/AnimatedCounter";
+import { useFormModal } from "@/components/providers/FormModalProvider";
 
 const METRICS = [
   { value: 45, suffix: "%", label: "Visibility Lift" },
@@ -20,6 +21,7 @@ const METRICS = [
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const { open: openForm } = useFormModal();
 
   /* ── Scroll parallax ─────────────────────────────────── */
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -193,7 +195,7 @@ export default function Hero() {
           transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
           className="font-sans text-[15px] sm:text-[17px] text-[#4A463F] max-w-[480px] leading-[1.7] sm:leading-[1.75] mb-8 sm:mb-12"
         >
-          Engineering high-performance digital ecosystems for businesses ready to lead their category.
+          We don&apos;t just build products. We architect the unfair advantage your competitors can&apos;t copy.
         </motion.p>
 
         {/* CTAs */}
@@ -203,7 +205,7 @@ export default function Hero() {
           transition={{ duration: 0.9, delay: 2.4, ease: [0.16, 1, 0.3, 1] }}
           className="flex items-center gap-5"
         >
-          <MagneticButton variant="primary">
+          <MagneticButton variant="primary" onClick={openForm}>
             <span className="flex items-center gap-2 font-sans font-semibold text-[14px] px-8 py-3.5 tracking-[-0.01em]">
               Start a project
               <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>

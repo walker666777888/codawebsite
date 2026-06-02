@@ -11,6 +11,7 @@ const NAV_ANCHOR_LINKS = [
   { label: "Work",         href: "#work" },
   { label: "Capabilities", href: "#capabilities" },
   { label: "Philosophy",   href: "#philosophy" },
+  { label: "Contact",      href: "#contact" },
 ];
 
 export default function Navbar() {
@@ -83,18 +84,6 @@ export default function Navbar() {
                 </Link>
               </motion.div>
             ))}
-            {/* Contact — opens form modal */}
-            <motion.div
-              initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.9 + NAV_ANCHOR_LINKS.length * 0.07, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <button onClick={openForm}
-                className="relative group px-3 py-1.5 rounded-lg transition-colors duration-200 text-[#6F6A60] hover:text-[#14130F] hover:bg-[#0D0D0B]/[0.04] cursor-pointer font-[inherit] text-[13px]"
-              >
-                Contact
-                <span className="absolute inset-x-3 bottom-0.5 h-[1.5px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-full bg-[#FF5C00]" />
-              </button>
-            </motion.div>
           </nav>
 
           {/* CTA */}
@@ -176,7 +165,7 @@ export default function Navbar() {
             />
 
             <nav className="relative flex flex-col items-center gap-0">
-              {[...NAV_ANCHOR_LINKS, { label: "Contact", href: null }].map((link, i) => (
+              {NAV_ANCHOR_LINKS.map((link, i) => (
                 <motion.div key={link.label}
                   initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.15 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}

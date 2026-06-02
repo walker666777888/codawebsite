@@ -17,10 +17,13 @@ interface Props { isOpen: boolean; onClose: () => void; }
 
 /* ── data ───────────────────────────────────────────────── */
 const PROJECT_TYPES = [
-  { id: "web",    label: "Web Platform",   sub: "Sites & apps" },
-  { id: "ai",     label: "AI Integration", sub: "LLM & automation" },
-  { id: "design", label: "Design System",  sub: "Brand & UI kit" },
-  { id: "full",   label: "Full System",    sub: "End-to-end" },
+  { id: "web",      label: "Web Platform",        sub: "Sites & apps" },
+  { id: "ai",       label: "AI Integration",      sub: "LLM & automation" },
+  { id: "design",   label: "Design System",       sub: "Brand & UI kit" },
+  { id: "full",     label: "Full System",         sub: "End-to-end" },
+  { id: "ecom",     label: "Ecommerce",           sub: "Store & growth" },
+  { id: "marketing",label: "Performance Marketing", sub: "Ads & funnels" },
+  { id: "other",    label: "Other",               sub: "Tell us more" },
 ];
 const NEXT_STEPS = [
   { n: "01", text: "We review your brief within 24 hours." },
@@ -92,48 +95,131 @@ function Field({
   );
 }
 
-/* ── pill selector ──────────────────────────────────────── */
-function Pills({
+/* ── premium dropdown selector ──────────────────────────── */
+function Dropdown({
   options, value, onChange,
 }: {
   options: { id: string; label: string; sub?: string }[];
   value: string; onChange: (id: string) => void;
 }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const selected = options.find(o => o.id === value);
+
+  /* close on outside click */
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
   return (
-    <div className="grid grid-cols-2 gap-2">
-      {options.map(opt => {
-        const on = value === opt.id;
-        return (
-          <motion.button key={opt.id} type="button" onClick={() => onChange(on ? "" : opt.id)}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 400, damping: 28 }}
-            className="relative flex flex-col gap-1 rounded-[14px] px-4 py-3.5 text-left cursor-pointer outline-none overflow-hidden"
+    <div ref={ref} className="relative">
+      {/* trigger */}
+      <motion.button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        whileTap={{ scale: 0.99 }}
+        className="w-full flex items-center justify-between gap-3 rounded-[14px] px-4 py-3.5 cursor-pointer outline-none text-left"
+        style={{
+          background: open || selected ? "rgba(255,92,0,0.07)" : "rgba(255,255,255,0.035)",
+          boxShadow: open
+            ? "0 0 0 1px rgba(255,92,0,0.6), 0 0 28px rgba(255,92,0,0.10), inset 0 1px 0 rgba(255,255,255,0.06)"
+            : selected
+              ? "0 0 0 1px rgba(255,92,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04)"
+              : "0 0 0 1px rgba(255,255,255,0.09), inset 0 1px 0 rgba(255,255,255,0.04)",
+          transition: "background 0.2s, box-shadow 0.2s",
+        }}
+      >
+        <div className="flex flex-col gap-0.5 min-w-0">
+          {selected ? (
+            <>
+              <span className="font-sans text-[13px] font-medium text-white leading-tight">{selected.label}</span>
+              {selected.sub && (
+                <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-[#FF5C00]/60">{selected.sub}</span>
+              )}
+            </>
+          ) : (
+            <span className="font-sans text-[13px] text-white/35">Select a project type…</span>
+          )}
+        </div>
+
+        {/* chevron */}
+        <motion.span
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ type: "spring", stiffness: 320, damping: 24 }}
+          className="shrink-0 text-white/40"
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2.5 5l4.5 4 4.5-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </motion.span>
+      </motion.button>
+
+      {/* dropdown list */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -8, scaleY: 0.88 }}
+            animate={{ opacity: 1, y: 0, scaleY: 1 }}
+            exit={{ opacity: 0, y: -10, scaleY: 0.85, transition: { duration: 0.18, ease: [0.4, 0, 1, 0.6] } }}
+            transition={{ type: "spring", stiffness: 360, damping: 28 }}
             style={{
-              background: on ? "rgba(255,92,0,0.10)" : "rgba(255,255,255,0.035)",
-              boxShadow: on
-                ? "0 0 0 1px rgba(255,92,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06)"
-                : "0 0 0 1px rgba(255,255,255,0.09), inset 0 1px 0 rgba(255,255,255,0.04)",
-              transition: "background 0.18s, box-shadow 0.18s",
+              transformOrigin: "top",
+              background: "#161614",
+              boxShadow: "0 0 0 1px rgba(255,255,255,0.09), 0 16px 48px rgba(0,0,0,0.6), 0 0 0 0 rgba(255,92,0,0)",
+              borderRadius: "14px",
+              overflow: "hidden",
             }}
+            className="absolute inset-x-0 top-[calc(100%+6px)] z-50"
           >
-            {/* left accent bar */}
-            <motion.span
-              className="absolute left-0 top-3 bottom-3 w-[2px] rounded-full bg-[#FF5C00]"
-              initial={false}
-              animate={{ opacity: on ? 1 : 0, scaleY: on ? 1 : 0.4 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
-            />
-            <span className={`font-sans text-[13px] font-medium leading-tight transition-colors duration-150 ${on ? "text-white" : "text-white/70"}`}>
-              {opt.label}
-            </span>
-            {opt.sub && (
-              <span className={`font-mono text-[9px] uppercase tracking-[0.16em] transition-colors duration-150 ${on ? "text-[#FF5C00]/70" : "text-white/25"}`}>
-                {opt.sub}
-              </span>
-            )}
-          </motion.button>
-        );
-      })}
+            {/* top orange hairline */}
+            <div className="h-px w-full" style={{ background: "linear-gradient(90deg,transparent,rgba(255,92,0,0.5) 50%,transparent)" }} />
+
+            {options.map((opt, i) => {
+              const on = value === opt.id;
+              return (
+                <motion.button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => { onChange(on ? "" : opt.id); setOpen(false); }}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.22, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                  whileHover={{ background: "rgba(255,92,0,0.07)" }}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left cursor-pointer relative"
+                  style={{ background: on ? "rgba(255,92,0,0.10)" : "transparent" }}
+                >
+                  {/* active dot */}
+                  <motion.span
+                    className="w-1.5 h-1.5 rounded-full bg-[#FF5C00] shrink-0"
+                    animate={{ opacity: on ? 1 : 0, scale: on ? 1 : 0.4 }}
+                    transition={{ duration: 0.15 }}
+                  />
+                  <div className="flex flex-col gap-0.5 flex-1 min-w-0">
+                    <span className={`font-sans text-[13px] font-medium leading-tight ${on ? "text-white" : "text-white/65"}`}>
+                      {opt.label}
+                    </span>
+                    {opt.sub && (
+                      <span className={`font-mono text-[9px] uppercase tracking-[0.16em] ${on ? "text-[#FF5C00]/60" : "text-white/22"}`}>
+                        {opt.sub}
+                      </span>
+                    )}
+                  </div>
+                  {on && (
+                    <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                      width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
+                      <path d="M2.5 7l3.5 3.5 5.5-6" stroke="#FF5C00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </motion.svg>
+                  )}
+                </motion.button>
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -225,11 +311,11 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
           <motion.div
             key="panel"
             role="dialog" aria-modal="true" aria-label="Start a project"
-            className="fixed inset-x-0 bottom-0 z-[201]"
+            className="fixed inset-0 z-[201]"
             style={{
-              height: "92dvh",
+              height: "100dvh",
               background: "#0C0C0A",
-              borderRadius: "24px 24px 0 0",
+              borderRadius: 0,
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
@@ -273,7 +359,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
 
             {/* scrollable body */}
             <div
-              className="flex-1 overflow-y-auto relative z-10"
+              className="flex-1 overflow-y-auto relative z-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               data-lenis-prevent
               style={{ overscrollBehavior: "contain" }}
             >
@@ -404,7 +490,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                             <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/50 mb-2.5">
                               What are we building?
                             </p>
-                            <Pills options={PROJECT_TYPES} value={ptype} onChange={setPtype} />
+                            <Dropdown options={PROJECT_TYPES} value={ptype} onChange={setPtype} />
                           </div>
                         </FadeUp>
 

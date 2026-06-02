@@ -9,10 +9,10 @@ const cards = [
   {
     num: "01",
     icon: Code2,
-    title: "Technology",
-    subtitle: "Solutions",
-    desc: "High-performance architectures, web applications, and digital platforms engineered for scale.",
-    tags: ["Full-Stack", "APIs", "AI", "Performance"],
+    title: "Build Fast.",
+    subtitle: "Ship Faster.",
+    desc: "From zero to production in weeks, not months. We cut the bloat, ship clean code, and architect systems your team can actually own long-term.",
+    tags: ["Next.js", "Node.js", "AI / ML", "TypeScript"],
     glow: "rgba(96,165,250,0.14)",
     accent: "rgba(96,165,250,0.5)",
     shimmer: "rgba(147,197,253,0.08)",
@@ -20,10 +20,10 @@ const cards = [
   {
     num: "02",
     icon: PenTool,
-    title: "Design &",
-    subtitle: "Brand Systems",
-    desc: "Cohesive visual identities and UI/UX systems that command attention, build trust, and convert.",
-    tags: ["UI/UX", "Identity", "Motion", "Systems"],
+    title: "Look Premium.",
+    subtitle: "Convert Better.",
+    desc: "Design that makes people stop scrolling. Every pixel earns its place — from your first impression to your checkout flow.",
+    tags: ["Brand", "Motion", "UI Systems", "Figma"],
     glow: "rgba(255,92,0,0.14)",
     accent: "rgba(255,92,0,0.6)",
     shimmer: "rgba(255,92,0,0.06)",
@@ -31,10 +31,10 @@ const cards = [
   {
     num: "03",
     icon: TrendingUp,
-    title: "Growth",
-    subtitle: "Engineering",
-    desc: "Data-driven funnels, automation, and acquisition strategies that compound and dominate markets.",
-    tags: ["SEO", "Funnels", "Analytics", "Automation"],
+    title: "Grow Smarter.",
+    subtitle: "Scale Harder.",
+    desc: "We don't run campaigns. We build acquisition machines — funnels, SEO, and paid systems engineered to compound month over month.",
+    tags: ["Paid Ads", "SEO", "CRO", "Funnels"],
     glow: "rgba(167,139,250,0.14)",
     accent: "rgba(167,139,250,0.5)",
     shimmer: "rgba(167,139,250,0.07)",
@@ -238,14 +238,14 @@ export default function Capabilities() {
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <SectionLabel index={3} className="mb-4">Capabilities</SectionLabel>
+            <SectionLabel index={4} className="mb-4">Capabilities</SectionLabel>
             <h2
               className="font-instrument text-[#0D0D0B] tracking-[-0.03em] leading-[1.05]"
               style={{ fontSize: "clamp(36px, 4.5vw, 60px)" }}
             >
-              Three disciplines.
+              Your stack.
               <br />
-              <span className="italic text-[#FF5C00]">One system.</span>
+              <span className="italic text-[#FF5C00]">Rebuilt right.</span>
             </h2>
           </motion.div>
           <motion.p
@@ -255,7 +255,7 @@ export default function Capabilities() {
             transition={{ duration: 0.7, delay: 0.15 }}
             className="font-sans text-[15px] text-[#4A463F] leading-[1.7] max-w-xs"
           >
-            Every engagement touches all three. That&apos;s how systems compound.
+            No bloat, no fluff. Just the three pillars that actually move the needle.
           </motion.p>
         </div>
 

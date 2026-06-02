@@ -68,9 +68,11 @@ interface TileProps {
   effect: CanvasEffect;
 }
 
+const FLOAT_DELAY = [0, 0.6, 1.2, 1.8]; // stagger idle floats per tile
+
 function SpotlightTile({ stat, index, className = "", large = false, depth = 26, effect }: TileProps) {
   const tileRef = useRef<HTMLDivElement>(null);
-  const rectRef = useRef<DOMRect | null>(null); // cache rect — avoid getBCR on every pointermove
+  const rectRef = useRef<DOMRect | null>(null);
   const reduced = useReducedMotion();
   const [hovered, setHovered] = useState(false);
 
@@ -147,10 +149,10 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
   return (
     <motion.div
       ref={tileRef}
-      className={`group relative overflow-hidden rounded-2xl cursor-default select-none transition-shadow duration-500 ${className}`}
+      className={`group relative overflow-hidden rounded-2xl cursor-default select-none ${className}`}
       style={
         reduced
-          ? { boxShadow: "0 0 32px 6px rgba(255,92,0,0.18), 0 8px 32px rgba(0,0,0,0.10)" }
+          ? { boxShadow: "0 20px 60px -10px rgba(0,0,0,0.15), 0 0 0 1px rgba(13,13,11,0.07)" }
           : {
               opacity: revealOpacity,
               y: revealY,
@@ -159,9 +161,17 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
               rotateY: tiltY,
               transformPerspective: 900,
               willChange: "transform, opacity",
-              boxShadow: "0 0 32px 6px rgba(255,92,0,0.18), 0 8px 32px rgba(0,0,0,0.10)",
             }
       }
+      animate={reduced ? {} : {
+        y: [0, -5, 0],
+        boxShadow: "0 24px 60px -10px rgba(210, 120, 80, 0.25), 0 0 0 1px rgba(13,13,11,0.07)",
+      }}
+      transition={hovered ? { duration: 0.3, ease: [0.16, 1, 0.3, 1] } : {
+        y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: FLOAT_DELAY[index] },
+        boxShadow: { duration: 0.4, ease: "easeOut" },
+      }}
+
       onPointerMove={onPointerMove}
       onPointerEnter={onPointerEnter}
       onPointerLeave={onPointerLeave}
@@ -303,7 +313,7 @@ export default function BentoMetrics() {
         </motion.div>
 
         {/* Bento grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 auto-rows-[minmax(220px,auto)] gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 auto-rows-[minmax(220px,auto)] gap-4">
           <SpotlightTile stat={stats[0]} index={0} className="lg:col-span-3 lg:row-span-2" large depth={16} effect="matrix" />
           <SpotlightTile stat={stats[1]} index={1} className="lg:col-span-9" depth={34} effect="spheres" />
           <SpotlightTile stat={stats[2]} index={2} className="lg:col-span-6" depth={28} effect="network" />

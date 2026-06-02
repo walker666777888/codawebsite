@@ -431,6 +431,258 @@ function GrowthGraphic({ active }: { active: boolean }) {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   LANDSCAPE TILE GRAPHICS
+═══════════════════════════════════════════════════════════ */
+
+function EcommerceGraphic({ active }: { active: boolean }) {
+  const ORANGE = "#FF5C00";
+  const CYCLE  = 3.2;
+  const REPEAT = 1.4;
+  const products = [
+    { label: "Wireless Earbuds Pro", rank: "#1", old: "#4",  delay: 0    },
+    { label: "Minimal Desk Lamp",    rank: "#2", old: "#7",  delay: 0.14 },
+    { label: "Leather Wallet Slim",  rank: "#3", old: "#11", delay: 0.28 },
+  ];
+  return (
+    <div className="w-full h-full flex flex-col justify-center gap-2.5 px-1">
+      {/* Header — static once active */}
+      <div className="flex items-center justify-between mb-0.5">
+        <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.4)", letterSpacing: "0.12em", textTransform: "uppercase" }}>Marketplace Rankings</span>
+        <motion.span style={{ fontFamily: "monospace", fontSize: "8px", color: ORANGE, letterSpacing: "0.1em" }}
+          animate={active ? { opacity: [0.4, 1, 0.4] } : { opacity: 0 }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>● LIVE</motion.span>
+      </div>
+
+      {products.map((p, i) => (
+        /* Card appears once and stays */
+        <motion.div key={i} className="flex items-center gap-3"
+          style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,92,0,0.14)", borderRadius: "10px", padding: "7px 10px" }}
+          animate={active ? { opacity: 1, x: 0 } : { opacity: 0, x: -14 }}
+          transition={{ duration: 0.55, delay: p.delay, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span style={{ fontFamily: "monospace", fontSize: "10px", fontWeight: 700, color: ORANGE, minWidth: "28px", textAlign: "center" }}>{p.rank}</span>
+          <div className="flex-1 min-w-0">
+            <div style={{ fontFamily: "sans-serif", fontSize: "10px", fontWeight: 600, color: "#14130F", marginBottom: "4px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.label}</div>
+            {/* Only the bar fill loops */}
+            <div style={{ height: "3px", background: "rgba(255,92,0,0.12)", borderRadius: "99px", overflow: "hidden" }}>
+              <motion.div style={{ height: "100%", borderRadius: "99px", background: `linear-gradient(90deg,${ORANGE},#FF9A3C)`, transformOrigin: "left" }}
+                animate={active ? { scaleX: [0, 1, 1, 0] } : { scaleX: 0 }}
+                transition={{ duration: CYCLE, times: [0, 0.28, 0.75, 0.97], delay: p.delay + 0.3, repeat: Infinity, repeatDelay: REPEAT, ease: [0.16, 1, 0.3, 1] }} />
+            </div>
+          </div>
+          <div className="flex items-center gap-1 shrink-0">
+            <span style={{ color: "#22C55E", fontSize: "9px", fontWeight: 700 }}>↑</span>
+            <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.35)", textDecoration: "line-through" }}>{p.old}</span>
+          </div>
+        </motion.div>
+      ))}
+
+      <div className="flex items-center justify-between mt-0.5 pt-2" style={{ borderTop: "1px solid rgba(255,92,0,0.12)" }}>
+        <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.4)", textTransform: "uppercase", letterSpacing: "0.1em" }}>Avg. CVR lift</span>
+        <span style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: ORANGE }}>+34%</span>
+      </div>
+    </div>
+  );
+}
+
+function PerformanceGraphic({ active }: { active: boolean }) {
+  const ORANGE = "#FF5C00";
+  const CYCLE  = 3.5;
+  const REPEAT = 1.2;
+  const stages = [
+    { label: "Awareness",     value: "12,400", color: "rgba(255,92,0,0.22)", scaleX: 1.0,  delay: 0    },
+    { label: "Interest",      value: "6,820",  color: "rgba(255,92,0,0.32)", scaleX: 0.76, delay: 0.12 },
+    { label: "Consideration", value: "3,110",  color: "rgba(255,92,0,0.44)", scaleX: 0.56, delay: 0.24 },
+    { label: "Conversion",    value: "1,240",  color: ORANGE,                scaleX: 0.36, delay: 0.36 },
+  ];
+  const kpis = [
+    { label: "ROAS", value: "4.2×"  },
+    { label: "CPL",  value: "↓38%" },
+    { label: "ROI",  value: "+210%"},
+  ];
+  return (
+    <div className="w-full h-full flex flex-col justify-center gap-2 px-1">
+      {/* KPI cards — appear once and stay */}
+      <div className="grid grid-cols-3 gap-2 mb-1">
+        {kpis.map((k, i) => (
+          <motion.div key={k.label}
+            style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,92,0,0.18)", borderRadius: "8px", padding: "6px 8px", textAlign: "center" }}
+            animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: -6 }}
+            transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}>
+            <div style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.4)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "2px" }}>{k.label}</div>
+            <div style={{ fontFamily: "monospace", fontSize: "12px", fontWeight: 700, color: ORANGE }}>{k.value}</div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Label — static */}
+      <div style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.4)", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: "2px" }}>Conversion Funnel</div>
+
+      {/* Funnel rows — labels static, only bar fills loop */}
+      <div className="flex flex-col gap-1.5">
+        {stages.map((s, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <div style={{ fontFamily: "monospace", fontSize: "7.5px", color: "rgba(13,13,11,0.45)", width: "68px", flexShrink: 0 }}>{s.label}</div>
+            <div style={{ flex: 1, height: "18px", background: "rgba(255,92,0,0.06)", borderRadius: "6px", overflow: "hidden" }}>
+              <motion.div style={{ height: "100%", width: `${s.scaleX * 100}%`, borderRadius: "6px", background: s.color, display: "flex", alignItems: "center", paddingLeft: "6px", transformOrigin: "left" }}
+                animate={active ? { scaleX: [0, 1, 1, 0] } : { scaleX: 0 }}
+                transition={{ duration: CYCLE, times: [0, 0.25, 0.75, 0.97], delay: s.delay + 0.2, repeat: Infinity, repeatDelay: REPEAT, ease: [0.16, 1, 0.3, 1] }}>
+                <motion.span style={{ fontFamily: "monospace", fontSize: "8px", fontWeight: 700, color: i === 3 ? "#fff" : "#14130F", whiteSpace: "nowrap" }}
+                  animate={active ? { opacity: [0, 0, 1, 1, 0] } : { opacity: 0 }}
+                  transition={{ duration: CYCLE, times: [0, 0.28, 0.38, 0.75, 0.96], delay: s.delay + 0.2, repeat: Infinity, repeatDelay: REPEAT }}>
+                  {s.value}
+                </motion.span>
+              </motion.div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const LANDSCAPE_TILES = [
+  {
+    num: "04",
+    title: "Ecommerce Growth",
+    subtitle: "& Management",
+    tagline: "We optimize ecommerce for performance, not just presence.",
+    capabilities: [
+      "Product Listing Optimization",
+      "Keyword Research & Marketplace SEO",
+      "Catalog & Inventory Structuring",
+      "Conversion Rate Optimization",
+    ],
+    tags: ["Amazon", "Shopify", "Flipkart", "CRO"],
+    Graphic: EcommerceGraphic,
+  },
+  {
+    num: "05",
+    title: "Performance &",
+    subtitle: "Growth Systems",
+    tagline: "Built for performance, optimized for scale, driven by measurable ROI.",
+    capabilities: [
+      "Marketing Consultancy & Strategy",
+      "Performance Marketing",
+      "Lead Generation & Funnel Design",
+      "SEO & Organic Growth",
+      "Marketing Automation & Social Media",
+    ],
+    tags: ["Meta Ads", "Google Ads", "SEO", "Funnels"],
+    Graphic: PerformanceGraphic,
+  },
+] as const;
+
+function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; index: number }) {
+  const ORANGE      = "#FF5C00";
+  const ORANGE_SOFT = "rgba(255,92,0,0.25)";
+  const ORANGE_DIM  = "rgba(255,92,0,0.08)";
+
+  const cardRef  = useRef<HTMLDivElement>(null);
+  const rectRef  = useRef<DOMRect | null>(null);
+  const isInView = useInView(cardRef, { once: true, margin: "-80px" });
+  const [hovered, setHovered] = useState(false);
+
+  const rotX = useMotionValue(0);
+  const rotY = useMotionValue(0);
+  const glowX = useMotionValue(50);
+  const glowY = useMotionValue(50);
+  const springRotX = useSpring(rotX, { stiffness: 140, damping: 28 });
+  const springRotY = useSpring(rotY, { stiffness: 140, damping: 28 });
+
+  const onMouseEnter = () => { rectRef.current = cardRef.current?.getBoundingClientRect() ?? null; setHovered(true); };
+  const onMouseMove  = (e: React.MouseEvent) => {
+    const r = rectRef.current; if (!r) return;
+    const cx = (e.clientX - r.left) / r.width;
+    const cy = (e.clientY - r.top)  / r.height;
+    rotX.set(-(cy - 0.5) * 8); rotY.set((cx - 0.5) * 8);
+    glowX.set(cx * 100); glowY.set(cy * 100);
+  };
+  const onMouseLeave = () => { rotX.set(0); rotY.set(0); glowX.set(50); glowY.set(50); setHovered(false); };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.85, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      style={{ perspective: 1000 }}
+      className="h-full"
+    >
+      <motion.div
+        ref={cardRef}
+        onMouseEnter={onMouseEnter} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}
+        style={{
+          rotateX: springRotX, rotateY: springRotY, transformStyle: "preserve-3d",
+          background: "linear-gradient(160deg,#FFFFFF 0%,#FFFCF9 60%,#FFF8F4 100%)",
+          border: `1px solid ${ORANGE_SOFT}`,
+          boxShadow: `0 1px 0 rgba(255,255,255,1) inset,0 12px 40px -12px rgba(255,92,0,0.18),0 4px 16px -4px rgba(43,33,20,0.10),0 1px 3px rgba(43,33,20,0.06)`,
+        }}
+        className="group/card relative rounded-[28px] overflow-hidden cursor-default transition-shadow duration-500 h-full"
+      >
+        <div className="absolute top-0 inset-x-0 h-[2.5px] z-10"
+          style={{ background: `linear-gradient(90deg,transparent 0%,${ORANGE} 30%,${ORANGE} 70%,transparent 100%)` }} />
+        <motion.div className="absolute inset-0 pointer-events-none z-[2] rounded-[28px]"
+          style={{ opacity: hovered ? 1 : 0, background: `radial-gradient(circle at ${glowX}% ${glowY}%,rgba(255,92,0,0.08) 0%,transparent 60%)`, transition: "opacity 0.5s ease" }} />
+        <div className="absolute -top-16 -left-16 w-48 h-48 rounded-full blur-[60px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 pointer-events-none"
+          style={{ background: "radial-gradient(circle,rgba(255,92,0,0.22),transparent 70%)" }} />
+
+        <div className="relative z-[10] p-5 xl:p-6 grid grid-cols-1 md:grid-cols-[1fr_1.15fr] gap-5 h-full items-stretch" style={{ transform: "translateZ(18px)" }}>
+          {/* LEFT */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[11px] tracking-[0.25em] text-[#9A9488]">{tile.num}</span>
+              <span className="font-mono text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 rounded-full"
+                style={{ color: ORANGE, border: `1px solid ${ORANGE_SOFT}`, background: ORANGE_DIM }}>{tile.tags[0]}</span>
+            </div>
+            <h3 className="font-instrument tracking-[-0.03em] leading-[1.04] text-[#14130F]" style={{ fontSize: "clamp(24px,1.9vw,36px)" }}>
+              {tile.title}<br /><span className="italic" style={{ color: ORANGE }}>{tile.subtitle}</span>
+            </h3>
+            <p className="font-sans text-[12.5px] text-[#4A463F] leading-[1.65]">{tile.tagline}</p>
+            <div className="space-y-1.5">
+              {tile.capabilities.map((cap, ci) => (
+                <motion.div key={cap} className="flex items-center gap-2.5"
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -12 }}
+                  transition={{ duration: 0.5, delay: 0.3 + ci * 0.07, ease: [0.16, 1, 0.3, 1] }}>
+                  <motion.span className="w-3 h-[1.5px] shrink-0 rounded-full" style={{ background: ORANGE }}
+                    initial={{ scaleX: 0 }} animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+                    transition={{ duration: 0.4, delay: 0.35 + ci * 0.07 }} />
+                  <span className="font-sans text-[12px] text-[#4A463F]">{cap}</span>
+                </motion.div>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2 mt-auto pt-1">
+              {tile.tags.map((tag, ti) => (
+                <motion.span key={tag}
+                  className="font-mono text-[9.5px] font-medium uppercase tracking-[0.12em] rounded-full px-3.5 py-1.5"
+                  style={{ color: ORANGE, border: "1.5px solid rgba(255,92,0,0.45)", background: ORANGE_DIM }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.4, delay: 0.6 + ti * 0.06, ease: [0.34, 1.56, 0.64, 1] }}
+                  whileHover={{ scale: 1.06, borderColor: "rgba(255,92,0,0.7)" }}>{tag}</motion.span>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT — graphic */}
+          <div className="relative rounded-2xl overflow-hidden flex items-center justify-center p-4 h-full min-h-[200px]"
+            style={{ border: `1px solid ${ORANGE_SOFT}`, background: ORANGE_DIM }}>
+            {([[8,8],[8,"auto"],["auto",8],["auto","auto"]] as const).map(([t,l], i) => (
+              <motion.div key={i} className="absolute w-1 h-1 rounded-full"
+                style={{ top: typeof t==="number"?t:undefined, bottom: typeof t==="string"?8:undefined, left: typeof l==="number"?l:undefined, right: typeof l==="string"?8:undefined, background: "rgba(255,92,0,0.35)" }}
+                initial={{ opacity: 0, scale: 0 }} animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 + i * 0.06, ease: [0.34, 1.56, 0.64, 1] }} />
+            ))}
+            <div className="w-full h-full"><tile.Graphic active={isInView} /></div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
    DISCIPLINE DATA
 ═══════════════════════════════════════════════════════════ */
 
@@ -1001,19 +1253,9 @@ function DisciplineSpread() {
             />
           </div>
 
-          {/* Discipline names under the bar */}
-          <motion.div
-            className="mt-3 grid grid-cols-3 gap-5"
-            style={{ opacity: useTransform(progress, [0.15, 0.55], [0, 1]) }}
-          >
-            {DISCIPLINES.map((d) => (
-              <span key={d.num} className="font-mono text-[9px] text-[#9A9488] uppercase tracking-[0.2em] text-center">
-                {d.title} {d.subtitle}
-              </span>
-            ))}
-          </motion.div>
         </div>
       </div>
+
     </div>
   );
 }
@@ -1344,7 +1586,7 @@ function HeadlineBlock({
       </div>
 
       {/* Line 2 — rotating word */}
-      <div className="overflow-visible pl-0">
+      <div className="overflow-visible pl-0 pr-4">
         <motion.span
           className="block font-instrument italic text-[#FF5C00] leading-[1.0]"
           style={{ fontSize: `calc(${FS} * 1.08)`, letterSpacing: "-0.05em", ...(reduced ? {} : { y: line2Y }) }}
@@ -1405,10 +1647,10 @@ function HeaderBlock({
     <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 lg:pt-32 pb-12 sm:pb-20 relative">
 
       {/* ── Two-column layout ──────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center overflow-visible">
 
         {/* LEFT — label + headline + copy + stats */}
-        <div>
+        <div className="overflow-visible">
           {/* Label */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
@@ -1444,7 +1686,7 @@ function HeaderBlock({
             initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.9, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
             className="mt-10 font-sans text-[14.5px] text-[#4A463F] max-w-full sm:max-w-[380px] leading-[1.9]">
-            Three disciplines — Technology, Design, and Growth — unified into one
+            Three disciplines Technology, Design, and Growth.  unified into one
             system that compounds over time and gives our clients an unfair advantage.
           </motion.p>
 
@@ -1542,6 +1784,15 @@ export default function Statement() {
       </div>
       <div className="hidden lg:block">
         <DisciplineSpread />
+      </div>
+
+      {/* ── Landscape tiles ─────────────────────────────────── */}
+      <div className="max-w-7xl mx-auto px-6 pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
+          {LANDSCAPE_TILES.map((tile, i) => (
+            <LandscapeTile key={tile.num} tile={tile} index={i} />
+          ))}
+        </div>
       </div>
 
       {/* ── Bottom tagline ───────────────────────────────────── */}

@@ -65,6 +65,7 @@ const LINKS = [
   { label: "Work",         href: "#work" },
   { label: "Capabilities", href: "#capabilities" },
   { label: "Philosophy",   href: "#philosophy" },
+  { label: "Contact",      href: "#contact" },
 ];
 
 const LEGAL = [
@@ -111,7 +112,7 @@ export default function Footer() {
   const ref = useRef<HTMLElement>(null);
 
   return (
-    <footer ref={ref} className="relative bg-[#0A0A09] text-white overflow-hidden">
+    <footer id="contact" ref={ref} className="relative bg-[#0A0A09] text-white overflow-hidden">
 
       {/* ── Nav content ─────────────────────────────────── */}
       <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-16">

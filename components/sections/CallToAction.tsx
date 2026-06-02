@@ -134,7 +134,7 @@ export default function CallToAction() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="font-sans text-[17px] text-white/60 max-w-md leading-[1.7]"
           >
-            Let&apos;s build a system that compounds — every quarter, every year.
+            Most agencies build features. We build systems that outlast them.
           </motion.p>
 
           {/* CTAs */}
