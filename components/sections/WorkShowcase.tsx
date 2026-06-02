@@ -380,14 +380,14 @@ export default function WorkShowcase() {
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
       >
-        {/* Left fade */}
+        {/* Left fade — desktop only */}
         <div
-          className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
+          className="hidden md:block absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
           style={{ background: "linear-gradient(to right,#F4F0E8,transparent)" }}
         />
-        {/* Right fade */}
+        {/* Right fade — desktop only */}
         <div
-          className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
+          className="hidden md:block absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
           style={{ background: "linear-gradient(to left,#F4F0E8,transparent)" }}
         />
 
