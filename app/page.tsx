@@ -17,7 +17,7 @@ export default function Home() {
       <BentoMetrics />
       <DigitalGap />
       <Philosophy />
-      <Capabilities />
+      {/* <Capabilities /> */}
       <WorkShowcase />
       <CallToAction />
     </>
