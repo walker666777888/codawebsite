@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useMotionValue, useSpring } from "motion/react";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { Code2, PenTool, TrendingUp } from "lucide-react";
 
@@ -41,7 +41,7 @@ const cards = [
   },
 ];
 
-function TiltCard({ card, index, animateEntrance = true }: { card: typeof cards[0]; index: number; animateEntrance?: boolean }) {
+function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const rectRef = useRef<DOMRect | null>(null);
   const [hovered, setHovered] = useState(false);
@@ -80,10 +80,10 @@ function TiltCard({ card, index, animateEntrance = true }: { card: typeof cards[
 
   return (
     <motion.div
-      initial={animateEntrance ? { opacity: 0, y: 50 } : false}
-      whileInView={animateEntrance ? { opacity: 1, y: 0 } : undefined}
-      viewport={animateEntrance ? { once: true, margin: "-60px" } : undefined}
-      transition={animateEntrance ? { duration: 0.9, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] } : undefined}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.9, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
       style={{ perspective: 1000 }}
       className="h-full flex flex-col"
     >
@@ -219,35 +219,6 @@ function TiltCard({ card, index, animateEntrance = true }: { card: typeof cards[
 }
 
 export default function Capabilities() {
-  const [activeCard, setActiveCard] = useState(0);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  // Track active dot via IntersectionObserver on each card
-  useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-    const cardEls = Array.from(container.children) as HTMLElement[];
-
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveCard(cardEls.indexOf(entry.target as HTMLElement));
-          }
-        });
-      },
-      { root: container, threshold: 0.55 }
-    );
-    cardEls.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-
-  const scrollTo = (i: number) => {
-    const container = scrollRef.current;
-    if (!container) return;
-    const card = container.children[i] as HTMLElement;
-    card?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-  };
 
   return (
     <section id="capabilities" className="relative py-16 sm:py-24 lg:py-32 px-4 sm:px-6" style={{ background: "#F4F0E8" }}>
@@ -290,54 +261,8 @@ export default function Capabilities() {
           </motion.p>
         </div>
 
-        {/* ── Mobile: horizontal snap-scroll carousel ── */}
-        <div className="block md:hidden">
-          {/* Snap container — full bleed, negative margin to escape section padding */}
-          <div
-            ref={scrollRef}
-            className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4"
-            style={{
-              scrollSnapType: "x mandatory",
-              WebkitOverflowScrolling: "touch",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-            }}
-          >
-            {cards.map((card, i) => (
-              <motion.div
-                key={i}
-                className="shrink-0 w-[85vw] h-auto flex flex-col"
-                style={{ scrollSnapAlign: "center" }}
-              >
-                <TiltCard card={card} index={i} />
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Dot indicators */}
-          <div className="flex items-center justify-center gap-2.5 mt-5">
-            {cards.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => scrollTo(i)}
-                aria-label={`Go to card ${i + 1}`}
-                style={{
-                  width: activeCard === i ? "24px" : "7px",
-                  height: "7px",
-                  borderRadius: "99px",
-                  background: activeCard === i ? "#FF5C00" : "rgba(13,13,11,0.2)",
-                  transition: "all 0.35s cubic-bezier(0.16,1,0.3,1)",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: 0,
-                }}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* ── Desktop: 3-column grid ── */}
-        <div className="hidden md:grid grid-cols-3 gap-5">
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {cards.map((card, i) => (
             <TiltCard key={i} card={card} index={i} />
           ))}
