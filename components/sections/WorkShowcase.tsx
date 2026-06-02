@@ -379,6 +379,7 @@ export default function WorkShowcase() {
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
+        style={{ touchAction: "pan-y" }}
       >
         {/* Left fade — desktop only */}
         <div
