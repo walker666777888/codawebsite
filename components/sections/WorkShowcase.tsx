@@ -102,7 +102,7 @@ function ProjectCard({
         >
           {/* Noise */}
           <div
-            className="absolute inset-[-8%] opacity-[0.055] mix-blend-overlay pointer-events-none"
+            className="hidden md:block absolute inset-[-8%] opacity-[0.055] mix-blend-overlay pointer-events-none"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
               backgroundSize: "180px 180px",
@@ -182,7 +182,7 @@ function ProjectCard({
             <motion.div
               animate={{ scale: hovered ? 1 : 0.6, y: hovered ? 0 : 14 }}
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center"
+              className="w-16 h-16 rounded-full bg-black/20 md:bg-white/10 md:backdrop-blur-md border border-white/20 flex items-center justify-center"
             >
               <ArrowUpRight className="w-6 h-6 text-white" />
             </motion.div>
@@ -198,7 +198,7 @@ function ProjectCard({
             {project.tags.map((tag) => (
               <span
                 key={tag}
-                className="font-mono text-[9px] uppercase tracking-widest text-white/45 border border-white/12 rounded-full px-3 py-1 backdrop-blur-sm"
+                className="font-mono text-[9px] uppercase tracking-widest text-white/45 border border-white/12 rounded-full px-3 py-1 bg-black/20 md:bg-transparent md:backdrop-blur-sm"
               >
                 {tag}
               </span>
@@ -370,7 +370,7 @@ export default function WorkShowcase() {
         <motion.div
           ref={trackRef}
           className="flex gap-6 w-max cursor-grab active:cursor-grabbing"
-          style={{ x, touchAction: "pan-y" }}
+          style={{ x, touchAction: "pan-y", willChange: "transform" }}
           drag="x"
           dragElastic={0}
           dragConstraints={{ left: -999999, right: 999999 }}
