@@ -97,14 +97,17 @@ function Field({
 
 /* ── premium dropdown selector ──────────────────────────── */
 function Dropdown({
-  options, value, onChange,
+  options, value, onChange, renderAfterOption,
 }: {
   options: { id: string; label: string; sub?: string }[];
   value: string[]; onChange: (ids: string[]) => void;
+  renderAfterOption?: (id: string, selected: boolean) => React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const selectedOptions = options.filter(o => value.includes(o.id));
+
+  const hasSelected = selectedOptions.length > 0;
 
   /* close on outside click */
   useEffect(() => {
@@ -124,10 +127,10 @@ function Dropdown({
         whileTap={{ scale: 0.99 }}
         className="w-full flex items-center justify-between gap-3 rounded-[14px] px-4 py-3.5 cursor-pointer outline-none text-left"
         style={{
-          background: open || selected ? "rgba(255,92,0,0.07)" : "rgba(255,255,255,0.035)",
+          background: open || hasSelected ? "rgba(255,92,0,0.07)" : "rgba(255,255,255,0.035)",
           boxShadow: open
             ? "0 0 0 1px rgba(255,92,0,0.6), 0 0 28px rgba(255,92,0,0.10), inset 0 1px 0 rgba(255,255,255,0.06)"
-            : selected
+            : hasSelected
               ? "0 0 0 1px rgba(255,92,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04)"
               : "0 0 0 1px rgba(255,255,255,0.09), inset 0 1px 0 rgba(255,255,255,0.04)",
           transition: "background 0.2s, box-shadow 0.2s",
@@ -183,46 +186,48 @@ function Dropdown({
             {options.map((opt, i) => {
               const on = value.includes(opt.id);
               return (
-                <motion.button
-                  key={opt.id}
-                  type="button"
-                  onClick={() => {
-                    if (on) {
-                      onChange(value.filter(v => v !== opt.id));
-                    } else {
-                      onChange([...value, opt.id]);
-                    }
-                  }}
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.22, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                  whileHover={{ background: "rgba(255,92,0,0.07)" }}
-                  className="w-full flex items-center gap-3 px-4 py-3 text-left cursor-pointer relative"
-                  style={{ background: on ? "rgba(255,92,0,0.10)" : "transparent" }}
-                >
-                  {/* active dot */}
-                  <motion.span
-                    className="w-1.5 h-1.5 rounded-full bg-[#FF5C00] shrink-0"
-                    animate={{ opacity: on ? 1 : 0, scale: on ? 1 : 0.4 }}
-                    transition={{ duration: 0.15 }}
-                  />
-                  <div className="flex flex-col gap-0.5 flex-1 min-w-0">
-                    <span className={`font-sans text-[13px] font-medium leading-tight ${on ? "text-white" : "text-white/65"}`}>
-                      {opt.label}
-                    </span>
-                    {opt.sub && (
-                      <span className={`font-mono text-[9px] uppercase tracking-[0.16em] ${on ? "text-[#FF5C00]/60" : "text-white/22"}`}>
-                        {opt.sub}
+                <div key={opt.id}>
+                  <motion.button
+                    type="button"
+                    onClick={() => {
+                      if (on) {
+                        onChange(value.filter(v => v !== opt.id));
+                      } else {
+                        onChange([...value, opt.id]);
+                      }
+                    }}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.22, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                    whileHover={{ background: "rgba(255,92,0,0.07)" }}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-left cursor-pointer relative"
+                    style={{ background: on ? "rgba(255,92,0,0.10)" : "transparent" }}
+                  >
+                    {/* active dot */}
+                    <motion.span
+                      className="w-1.5 h-1.5 rounded-full bg-[#FF5C00] shrink-0"
+                      animate={{ opacity: on ? 1 : 0, scale: on ? 1 : 0.4 }}
+                      transition={{ duration: 0.15 }}
+                    />
+                    <div className="flex flex-col gap-0.5 flex-1 min-w-0">
+                      <span className={`font-sans text-[13px] font-medium leading-tight ${on ? "text-white" : "text-white/65"}`}>
+                        {opt.label}
                       </span>
+                      {opt.sub && (
+                        <span className={`font-mono text-[9px] uppercase tracking-[0.16em] ${on ? "text-[#FF5C00]/60" : "text-white/22"}`}>
+                          {opt.sub}
+                        </span>
+                      )}
+                    </div>
+                    {on && (
+                      <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                        width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
+                        <path d="M2.5 7l3.5 3.5 5.5-6" stroke="#FF5C00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </motion.svg>
                     )}
-                  </div>
-                  {on && (
-                    <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                      width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
-                      <path d="M2.5 7l3.5 3.5 5.5-6" stroke="#FF5C00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </motion.svg>
-                  )}
-                </motion.button>
+                  </motion.button>
+                  {renderAfterOption?.(opt.id, on)}
+                </div>
               );
             })}
           </motion.div>
@@ -528,21 +533,37 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                               <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/50 mb-2.5">
                                 What are we building?
                               </p>
-                              <Dropdown options={PROJECT_TYPES} value={ptype} onChange={setPtype} />
+                              <Dropdown 
+                                options={PROJECT_TYPES} 
+                                value={ptype} 
+                                onChange={setPtype}
+                                renderAfterOption={(id, selected) => {
+                                  if (id !== "other") return null;
+                                  return (
+                                    <AnimatePresence>
+                                      {selected && (
+                                        <motion.div
+                                          initial={{ opacity: 0, height: 0 }}
+                                          animate={{ opacity: 1, height: "auto" }}
+                                          exit={{ opacity: 0, height: 0 }}
+                                          transition={{ duration: 0.2, ease: E }}
+                                          className="px-4 pb-3"
+                                        >
+                                          <input 
+                                            type="text" 
+                                            value={otherPtype}
+                                            onChange={(e) => setOtherPtype(e.target.value)}
+                                            placeholder="Please specify..."
+                                            className="w-full bg-black/20 rounded-[10px] px-3 py-2 text-white text-[13px] font-sans outline-none border border-white/10 focus:border-[#FF5C00]/50 placeholder-white/20"
+                                            autoFocus
+                                          />
+                                        </motion.div>
+                                      )}
+                                    </AnimatePresence>
+                                  );
+                                }}
+                              />
                             </div>
-                            <AnimatePresence>
-                              {ptype.includes("other") && (
-                                <motion.div
-                                  initial={{ opacity: 0, height: 0, marginTop: -12 }}
-                                  animate={{ opacity: 1, height: "auto", marginTop: 0 }}
-                                  exit={{ opacity: 0, height: 0, marginTop: -12 }}
-                                  transition={{ duration: 0.3, ease: E }}
-                                >
-                                  <Field id="otherPtype" label="Please specify" value={otherPtype}
-                                    onChange={setOtherPtype} placeholder="e.g. Custom CRM" />
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
                           </div>
                         </FadeUp>
 
