@@ -308,16 +308,8 @@ export default function Capabilities() {
                 key={i}
                 className="shrink-0 w-[85vw] h-auto flex flex-col"
                 style={{ scrollSnapAlign: "center" }}
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-10%" }}
-                transition={{
-                  duration: 0.55,
-                  delay: i * 0.08,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
               >
-                <TiltCard card={card} index={i} animateEntrance={false} />
+                <TiltCard card={card} index={i} />
               </motion.div>
             ))}
           </div>
