@@ -36,7 +36,7 @@ const E = [0.16, 1, 0.3, 1] as const;
 /* ── field ──────────────────────────────────────────────── */
 function Field({
   id, label, type = "text", value, onChange, placeholder, required,
-  inputRef, textarea, maxLength,
+  inputRef, textarea, maxLength, pattern, title,
 }: {
   id: string; label: string; type?: string;
   value: string; onChange: (v: string) => void;
