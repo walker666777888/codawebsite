@@ -134,10 +134,10 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* iOS native momentum-scroll fallback (pre-Lenis hydration) */
-    -webkit-overflow-scrolling: touch;
     /* Prevent overscroll rubber-band causing content shift on iOS */
     overscroll-behavior: none;
+    /* Eliminate 300ms tap delay on mobile */
+    touch-action: manipulation;
   }
 
   /* Lenis smooth scroll specific */
@@ -163,6 +163,32 @@
 
 }
 
+
+/* ── Mobile scroll performance ─────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /*
+   * content-visibility: auto — browser skips layout + paint for off-screen
+   * sections entirely. Only the visible section and ~1 ahead are rendered.
+   * This is the single biggest mobile scroll perf win.
+   */
+  main > section {
+    content-visibility: auto;
+    /* contain-intrinsic-size prevents layout shift when section is skipped */
+    contain-intrinsic-size: 0 600px;
+  }
+
+  /*
+   * Kill heavy ambient animations on mobile — these run on the main thread
+   * and are a primary cause of dropped frames during scroll.
+   */
+  .animate-float-a,
+  .animate-float-b,
+  .animate-orb-drift,
+  .animate-orb-drift-b {
+    animation: none !important;
+    transform: none !important;
+  }
+}
 
 @layer utilities {
   .graph-paper-grid {
