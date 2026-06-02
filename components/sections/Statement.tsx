@@ -1000,12 +1000,7 @@ function DisciplineCardBody({
       style={{
         background: "linear-gradient(160deg,#FFFFFF 0%,#FFFCF9 60%,#FFF8F4 100%)",
         border: `1px solid ${ORANGE_SOFT}`,
-        boxShadow: `
-          0 1px 0 rgba(255,255,255,1) inset,
-          0 12px 40px -12px rgba(255,92,0,0.18),
-          0 4px 16px -4px rgba(43,33,20,0.10),
-          0 1px 3px rgba(43,33,20,0.06)
-        `,
+        boxShadow: `0 1px 0 rgba(255,255,255,1) inset`,
       }}
     >
       {/* Top accent bar — orange, full width */}
@@ -1765,7 +1760,7 @@ function MobileDisciplineStack() {
         >
           {/* We wrap DisciplineCardBody in a div with a fixed viewport height to guarantee 
               all 5 cards are exactly the same height, completely hiding the cards behind them. */}
-          <div className="shadow-[0_-4px_16px_rgba(0,0,0,0.04)] rounded-[28px] h-[78vh] min-h-[540px] w-full bg-[#FFFCF9]">
+          <div className="rounded-[28px] h-[78vh] min-h-[540px] w-full bg-[#FFFCF9]">
             <DisciplineCardBody d={d as any} active />
           </div>
         </div>

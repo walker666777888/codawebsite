@@ -293,11 +293,10 @@ export default function DigitalGap() {
   const progressRef  = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
-    // Skip heavy GSAP pin+scrub on mobile — use native scroll instead
-    const isTouchDevice =
-      typeof window !== "undefined" &&
-      ("ontouchstart" in window || navigator.maxTouchPoints > 0);
-    if (isTouchDevice) return;
+    // Skip heavy GSAP pin+scrub on mobile widths instead of touch detection
+    // because many Windows laptops have touch screens and we want the desktop animation.
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    if (isMobile) return;
 
     const ctx = gsap.context(() => {
       if (!containerRef.current || !textRef.current || !visualsRef.current) return;
@@ -360,7 +359,7 @@ export default function DigitalGap() {
         <div ref={progressRef} className="absolute inset-0 bg-[#FF5C00] origin-left" style={{ transform: "scaleX(0)" }} />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-16 md:py-0 md:h-full md:flex md:flex-col md:justify-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 md:py-0 md:h-full md:flex md:flex-col md:justify-center">
         <SectionLabel
           index={1}
           className="mb-8 md:mb-12 inline-flex w-fit px-3 py-1.5 rounded-full"

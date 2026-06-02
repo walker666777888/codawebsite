@@ -20,6 +20,81 @@ const METRICS = [
   { value: 12, suffix: "+", label: "Systems Built" },
 ];
 
+const PARTICLES = Array.from({ length: 35 }).map((_, i) => ({
+  id: i,
+  left: `${(i * 13) % 100}%`,
+  duration: 6 + (i % 8),
+  delay: (i * 0.5) % 5,
+  size: i % 4 === 0 ? 3 : 1.5,
+  isOrange: i % 3 === 0,
+  xOffset: (i % 2 === 0 ? 1 : -1) * (10 + (i * 3) % 40)
+}));
+
+function DataParticles() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1] md:hidden">
+      {PARTICLES.map((p) => (
+        <motion.div
+          key={p.id}
+          className={`absolute rounded-full ${p.isOrange ? 'bg-[#FF5C00] shadow-[0_0_8px_rgba(255,92,0,0.8)]' : 'bg-[#0D0D0B] opacity-30'}`}
+          style={{ left: p.left, width: p.size, height: p.size, bottom: "-5%" }}
+          animate={{ 
+            y: ["0vh", "-110vh"],
+            x: [0, p.xOffset],
+            opacity: [0, p.isOrange ? 0.7 : 0.3, 0] 
+          }}
+          transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: "linear" }}
+        />
+      ))}
+    </div>
+  );
+}
+
+
+
+function LaserScan() {
+  return (
+    <motion.div
+      className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#FF5C00] to-transparent z-[15] pointer-events-none opacity-40 mix-blend-screen md:hidden"
+      style={{ boxShadow: "0 0 30px 2px rgba(255,92,0,0.5)" }}
+      animate={{ top: ["-10%", "110%"] }}
+      transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+    />
+  );
+}
+
+function TechnicalOverlay({ 
+  className = "top-24 right-6 text-right", 
+  title = "SYS.CORE.INIT", 
+  subtitle = "V 1.0.9" 
+}: { 
+  className?: string; 
+  title?: string; 
+  subtitle?: string; 
+}) {
+  const [text, setText] = useState("0x00000000");
+  
+  useEffect(() => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#@%&*";
+    const interval = setInterval(() => {
+      let result = "";
+      for (let i = 0; i < 12; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      setText(result);
+    }, 80);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className={`absolute z-20 text-[#0D0D0B]/40 font-mono text-[10px] tracking-widest block md:hidden ${className}`}>
+      <div>{title}</div>
+      <div className="text-[#FF5C00]">{text}</div>
+      <div>{subtitle}</div>
+    </div>
+  );
+}
+
 function MobileMetricsCarousel() {
   const [index, setIndex] = useState(0);
 
@@ -143,6 +218,43 @@ export default function Hero() {
         />
       </motion.div>
 
+
+
+      <TechnicalOverlay />
+      <TechnicalOverlay 
+        className="bottom-32 left-6 text-left" 
+        title="DATA.STREAM.SYNC" 
+        subtitle="LATENCY: 12ms" 
+      />
+
+
+      <DataParticles />
+      <LaserScan />
+
+      {/* ── Dynamic Kinetic Mobile Orb (Massive motion for mobile) ── */}
+      <div className="md:hidden absolute inset-0 pointer-events-none z-[2] opacity-60">
+        <motion.div
+          className="absolute w-[180vw] h-[180vw] rounded-full mix-blend-multiply"
+          style={{ background: "radial-gradient(circle, rgba(255,92,0,0.2) 0%, transparent 65%)" }}
+          animate={{
+            x: ["-30%", "20%", "-10%", "-30%"],
+            y: ["-20%", "40%", "10%", "-20%"],
+            scale: [1, 1.2, 0.9, 1],
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute top-[40%] right-[-50%] w-[150vw] h-[150vw] rounded-full mix-blend-multiply"
+          style={{ background: "radial-gradient(circle, rgba(255,138,61,0.25) 0%, transparent 65%)" }}
+          animate={{
+            x: ["10%", "-40%", "20%", "10%"],
+            y: ["10%", "-30%", "30%", "10%"],
+            scale: [1, 1.3, 0.8, 1],
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+
       {/* ── Fine dot grid ────────────────────────────────── */}
       <div
         className="absolute inset-0 pointer-events-none z-[2] opacity-[0.4]"
@@ -210,14 +322,28 @@ export default function Hero() {
               key={wi}
               className={["inline-block mr-[0.2em] last:mr-0", wi === 2 ? "block mt-1" : ""].join(" ")}
             >
-              <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.05em]">
+              <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.05em] relative">
                 <motion.span
-                  className={["inline-block", wi === 2 ? "italic text-[#FF5C00] animate-chromatic" : "text-[#0D0D0B]"].join(" ")}
+                  className={["inline-block relative", wi === 2 ? "italic text-[#FF5C00] animate-chromatic" : "text-[#0D0D0B]"].join(" ")}
                   initial={{ y: "108%", skewY: 4 }}
                   animate={{ y: "0%", skewY: 0 }}
                   transition={{ duration: 1.05, delay: 1.6 + wi * 0.13, ease: [0.16, 1, 0.3, 1] }}
                 >
                   {word}
+                  {wi === 2 && (
+                    <div className="md:hidden">
+                      <motion.span 
+                        className="absolute inset-0 text-[#00E5FF] mix-blend-multiply opacity-0 pointer-events-none"
+                        animate={{ opacity: [0, 0.9, 0, 0], x: [0, -4, 0, 0], skewX: [0, -12, 0, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "linear", times: [0, 0.04, 0.08, 1] }}
+                      >{word}</motion.span>
+                      <motion.span 
+                        className="absolute inset-0 text-[#FF0055] mix-blend-multiply opacity-0 pointer-events-none"
+                        animate={{ opacity: [0, 0.9, 0, 0], x: [0, 4, 0, 0], skewX: [0, 12, 0, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 0.03, times: [0, 0.04, 0.08, 1] }}
+                      >{word}</motion.span>
+                    </div>
+                  )}
                 </motion.span>
               </div>
             </span>

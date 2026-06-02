@@ -342,8 +342,8 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
     }
   }, [name, email, phone, ptype, otherPtype, brief]);
 
-  const panelSpring = { type: "spring" as const, stiffness: 260, damping: 34, mass: 1.0 };
-  const exitSpring  = { type: "spring" as const, stiffness: 400, damping: 44 };
+  const panelSpring = { type: "spring" as const, stiffness: 350, damping: 35, mass: 0.8 };
+  const exitSpring  = { type: "spring" as const, stiffness: 300, damping: 35, mass: 0.8 };
 
   return (
     <AnimatePresence>
@@ -369,6 +369,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
+              willChange: "transform, opacity",
             }}
             initial={{ y: "100%", opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}

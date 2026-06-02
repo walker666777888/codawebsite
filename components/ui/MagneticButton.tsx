@@ -91,15 +91,14 @@ export default function MagneticButton({ children, variant = "primary", classNam
       className={cn(baseStyles, variantStyles[variant], className)}
       onClick={onClick}
     >
-      {/* Soft sheen sweep on hover */}
+      {/* Soft sheen sweep - continuous loop for premium aesthetic */}
       <motion.span
-        key={shimmerKey}
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none"
         initial={{ x: "-120%", skewX: "-18deg" }}
-        animate={hovered ? { x: "220%" } : { x: "-120%" }}
-        transition={{ duration: 0.65, ease: "easeInOut" }}
-        style={{ background: sheen, width: "55%" }}
+        animate={{ x: "220%" }}
+        transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3.5, ease: "easeInOut" }}
+        style={{ background: sheen, width: "60%" }}
       />
 
       <motion.span style={{ x: lx, y: ly }} className="relative block pointer-events-none">
