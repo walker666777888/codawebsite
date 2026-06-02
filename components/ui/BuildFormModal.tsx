@@ -286,9 +286,33 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
     e.preventDefault();
     if (!name.trim() || !email.trim()) return;
     setStatus("submitting");
-    await new Promise(r => setTimeout(r, 1800));
-    setStatus("success");
-  }, [name, email]);
+    
+    try {
+      const typeLabel = PROJECT_TYPES.find((p) => p.id === ptype)?.label || "Not specified";
+      
+      const response = await fetch("https://formsubmit.co/ajax/Connect@citizenofdigitalage.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          phone: phone || "Not provided",
+          project_type: typeLabel,
+          project_brief: brief,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Submission failed");
+      setStatus("success");
+    } catch (err) {
+      console.error(err);
+      setStatus("idle");
+      alert("Something went wrong. Please try emailing us directly.");
+    }
+  }, [name, email, phone, ptype, brief]);
 
   const panelSpring = { type: "spring" as const, stiffness: 260, damping: 34, mass: 1.0 };
   const exitSpring  = { type: "spring" as const, stiffness: 400, damping: 44 };
@@ -408,9 +432,9 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                       ))}
                     </div>
                     <FadeUp delay={0.74}>
-                      <a href="mailto:infocoda@gmail.com"
+                      <a href="mailto:Connect@citizenofdigitalage.com"
                         className="inline-flex items-center gap-2 mt-10 font-mono text-[9px] uppercase tracking-[0.2em] text-white/20 hover:text-white/50 transition-colors duration-300">
-                        infocoda@gmail.com <ArrowRight size={9} />
+                        Connect@citizenofdigitalage.com <ArrowRight size={9} />
                       </a>
                     </FadeUp>
                   </div>

@@ -140,12 +140,12 @@ export default function Footer() {
               Engineering high-performance digital ecosystems. Dominate the Digital Age.
             </p>
             <motion.a
-              href="mailto:infocoda@gmail.com"
+              href="mailto:Connect@citizenofdigitalage.com"
               className="group inline-flex items-center gap-2 mt-6 font-mono text-[11px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em]"
               whileHover={{ x: 4 }}
               transition={{ duration: 0.25 }}
             >
-              infocoda@gmail.com
+              Connect@citizenofdigitalage.com
               <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
             </motion.a>
           </motion.div>
