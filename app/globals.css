@@ -116,6 +116,10 @@
   html {
     overflow-x: clip;
     scrollbar-width: none;
+    /* Smooth native scrolling for anchor links / JS scroll calls */
+    scroll-behavior: smooth;
+    /* Prevent overscroll glow/bounce bleed on Chrome Android */
+    overscroll-behavior: none;
   }
 
   html::-webkit-scrollbar {
@@ -130,6 +134,10 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* iOS native momentum-scroll fallback (pre-Lenis hydration) */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent overscroll rubber-band causing content shift on iOS */
+    overscroll-behavior: none;
   }
 
   /* Lenis smooth scroll specific */
@@ -152,7 +160,9 @@
   .lenis.lenis-scrolling iframe {
     pointer-events: none;
   }
+
 }
+
 
 @layer utilities {
   .graph-paper-grid {

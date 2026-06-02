@@ -72,9 +72,9 @@ export default function MarqueeStrip() {
       {/* Bottom border line */}
       <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-[#0D0D0B]/[0.12] to-transparent" />
 
-      {/* Left/right fade */}
-      <div className="absolute inset-y-0 left-0 w-36 bg-gradient-to-r from-[#F4F0E8] to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-36 bg-gradient-to-l from-[#F4F0E8] to-transparent z-10 pointer-events-none" />
+      {/* Left/right fade — desktop only */}
+      <div className="hidden md:block absolute inset-y-0 left-0 w-36 bg-gradient-to-r from-[#F4F0E8] to-transparent z-10 pointer-events-none" />
+      <div className="hidden md:block absolute inset-y-0 right-0 w-36 bg-gradient-to-l from-[#F4F0E8] to-transparent z-10 pointer-events-none" />
 
       {/* Pause indicator */}
       <motion.div

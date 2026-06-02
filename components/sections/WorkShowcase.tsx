@@ -210,11 +210,11 @@ export default function WorkShowcase() {
 
       {/* Infinite marquee track — constrained like the rest of the site */}
       <div className="max-w-7xl mx-auto px-6 relative overflow-hidden">
-        {/* Left fade */}
-        <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
+        {/* Left fade — desktop only */}
+        <div className="hidden md:block absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
           style={{ background: "linear-gradient(to right,#F4F0E8,transparent)" }} />
-        {/* Right fade */}
-        <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
+        {/* Right fade — desktop only */}
+        <div className="hidden md:block absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
           style={{ background: "linear-gradient(to left,#F4F0E8,transparent)" }} />
 
         {/* Scrolling strip — CSS animation for butter-smooth loop */}
