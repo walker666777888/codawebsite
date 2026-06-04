@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
 import { motion } from "motion/react";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { ArrowUpRight } from "lucide-react";
@@ -49,11 +48,10 @@ function ProjectCard({
   index: number;
 }) {
   return (
-    /* snap-start + shrink-0 = native snap target */
-    <div className="snap-start shrink-0 w-[82vw] sm:w-[60vw] md:w-[44vw] lg:w-[36vw] group">
+    <div className="shrink-0 w-[78vw] sm:w-[55vw] md:w-[42vw] lg:w-[34vw] group">
       {/* Card image */}
       <div
-        className={`aspect-[4/3] bg-gradient-to-br ${project.gradient} rounded-2xl mb-5 relative overflow-hidden cursor-pointer`}
+        className={`aspect-[4/3] bg-gradient-to-br ${project.gradient} rounded-2xl mb-5 relative overflow-hidden`}
       >
         {/* Grid */}
         <div
@@ -65,7 +63,7 @@ function ProjectCard({
           }}
         />
 
-        {/* Accent glow — static on mobile (no hover JS) */}
+        {/* Accent glow */}
         <div
           className="absolute top-1/4 left-1/4 w-[200px] h-[200px] rounded-full pointer-events-none opacity-[0.08]"
           style={{ background: project.accent, filter: "blur(80px)" }}
@@ -81,7 +79,7 @@ function ProjectCard({
         <div className="absolute inset-0 flex items-center justify-center select-none pointer-events-none">
           <span
             className="font-instrument text-white leading-none tracking-[-0.04em] opacity-[0.04]"
-            style={{ fontSize: "clamp(32px, 5vw, 64px)" }}
+            style={{ fontSize: "clamp(28px, 4vw, 56px)" }}
           >
             {project.title}
           </span>
@@ -130,9 +128,7 @@ function ProjectCard({
           </h3>
           <p className="font-sans text-[13px] text-[#9A9287] mt-0.5">{project.category}</p>
         </div>
-        <div className="flex flex-col items-end gap-1">
-          <span className="font-mono text-[11px] tracking-[0.1em] text-[#B0AA9F]">{project.year}</span>
-        </div>
+        <span className="font-mono text-[11px] tracking-[0.1em] text-[#B0AA9F]">{project.year}</span>
       </div>
     </div>
   );
@@ -140,63 +136,30 @@ function ProjectCard({
 
 /* ── WorkShowcase ─────────────────────────────────────────────── */
 export default function WorkShowcase() {
-  const trackRef    = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const isPaused    = useRef(false);
-  const currentIdx  = useRef(0);
-
-  /* Update dots on scroll */
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const onScroll = () => {
-      const cardW = track.scrollWidth / projects.length;
-      const idx = Math.round(track.scrollLeft / cardW) % projects.length;
-      currentIdx.current = idx;
-      setActiveIndex(idx);
-    };
-    track.addEventListener("scroll", onScroll, { passive: true });
-    return () => track.removeEventListener("scroll", onScroll);
-  }, []);
-
-  /* Auto-loop — pauses on touch, resumes after 3s of inactivity */
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    const advance = () => {
-      if (isPaused.current) return;
-      const next = (currentIdx.current + 1) % projects.length;
-      const cardW = track.scrollWidth / projects.length;
-      track.scrollTo({ left: cardW * next, behavior: "smooth" });
-    };
-
-    const interval = setInterval(advance, 3200);
-
-    let resumeTimer: ReturnType<typeof setTimeout>;
-    const pause  = () => { isPaused.current = true;  clearTimeout(resumeTimer); };
-    const resume = () => { resumeTimer = setTimeout(() => { isPaused.current = false; }, 3000); };
-
-    track.addEventListener("touchstart", pause,  { passive: true });
-    track.addEventListener("touchend",   resume, { passive: true });
-    track.addEventListener("mousedown",  pause);
-    track.addEventListener("mouseup",    resume);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(resumeTimer);
-      track.removeEventListener("touchstart", pause);
-      track.removeEventListener("touchend",   resume);
-      track.removeEventListener("mousedown",  pause);
-      track.removeEventListener("mouseup",    resume);
-    };
-  }, []);
-
   return (
     <section
       id="work"
       className="py-16 sm:py-24 lg:py-36 bg-[#F4F0E8] overflow-hidden relative"
     >
+      <style>{`
+        @keyframes wk-scroll {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+        .wk-track {
+          display: flex;
+          gap: 20px;
+          width: max-content;
+          animation: wk-scroll 32s linear infinite;
+          will-change: transform;
+        }
+        /* Pause on hover/touch */
+        .wk-wrap:hover .wk-track,
+        .wk-wrap.paused .wk-track {
+          animation-play-state: paused;
+        }
+      `}</style>
+
       {/* Separators */}
       <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#D6D1CB] to-transparent" />
       <div
@@ -229,59 +192,34 @@ export default function WorkShowcase() {
         </motion.div>
       </div>
 
-      {/* ── Native scroll carousel — zero JS, buttery smooth ── */}
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      {/* ── Infinite marquee — pure CSS @keyframes, zero JS ── */}
+      <div className="relative">
+        {/* Fade masks on edges */}
         <div
-          ref={trackRef}
-          className="flex gap-5 overflow-x-auto pb-2"
-          style={{
-            /* Native CSS scroll snapping — browser handles at 60fps natively */
-            scrollSnapType: "x mandatory",
-            WebkitOverflowScrolling: "touch",
-            scrollBehavior: "smooth",
-            /* Hide scrollbar on all browsers */
-            msOverflowStyle: "none",
-            scrollbarWidth: "none",
-          }}
+          className="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
+          style={{ background: "linear-gradient(to right, #F4F0E8 20%, transparent)" }}
+        />
+        <div
+          className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
+          style={{ background: "linear-gradient(to left, #F4F0E8 20%, transparent)" }}
+        />
+
+        <div
+          className="wk-wrap overflow-hidden"
+          onTouchStart={e => e.currentTarget.classList.add("paused")}
+          onTouchEnd={e => e.currentTarget.classList.remove("paused")}
         >
-          <style>{`
-            .work-track::-webkit-scrollbar { display: none; }
-          `}</style>
-          <div
-            className="work-track flex gap-5"
-            style={{ display: "contents" }}
-          >
+          <div className="wk-track pb-2">
+            {/* Original set */}
             {projects.map((project, i) => (
-              <ProjectCard key={i} project={project} index={i} />
+              <ProjectCard key={`a-${i}`} project={project} index={i} />
+            ))}
+            {/* Duplicate — seamless loop */}
+            {projects.map((project, i) => (
+              <ProjectCard key={`b-${i}`} project={project} index={i} />
             ))}
           </div>
         </div>
-      </div>
-
-      {/* Dot indicators */}
-      <div className="flex items-center justify-center gap-2.5 mt-8">
-        {projects.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => {
-              const track = trackRef.current;
-              if (!track) return;
-              const cardW = track.scrollWidth / projects.length;
-              track.scrollTo({ left: cardW * i, behavior: "smooth" });
-            }}
-            style={{
-              width: activeIndex === i ? "24px" : "7px",
-              height: "7px",
-              borderRadius: "99px",
-              background: activeIndex === i ? "#FF5C00" : "rgba(13,13,11,0.2)",
-              transition: "all 0.35s cubic-bezier(0.16,1,0.3,1)",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-            }}
-            aria-label={`Go to project ${i + 1}`}
-          />
-        ))}
       </div>
     </section>
   );
