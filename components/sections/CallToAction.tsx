@@ -89,17 +89,16 @@ export default function CallToAction() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 rounded-3xl px-6 sm:px-10 py-10 sm:py-14 shadow-[0_0_80px_rgba(0,0,0,0.45)]"
+          className="w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 rounded-3xl px-6 sm:px-10 py-10 sm:py-14 shadow-[0_0_80px_rgba(0,0,0,0.45)] gpu"
           style={{
             background: "#1a0d00",
             border: "1px solid rgba(255,255,255,0.07)",
-            willChange: "transform, opacity",
           }}
         >
           {/* Eyebrow */}
           <div className="inline-flex items-center gap-3 border border-white/10 bg-white/[0.05] rounded-full px-5 py-2.5">
             <motion.span
-              className="w-1.5 h-1.5 rounded-full bg-[#FF5C00]"
+              className="w-1.5 h-1.5 rounded-full bg-[#FF5C00] gpu"
               animate={{ opacity: [1, 0.3, 1], scale: [1, 0.6, 1] }}
               transition={{ duration: 2.5, repeat: Infinity }}
             />
@@ -117,7 +116,7 @@ export default function CallToAction() {
                   whileInView={{ y: "0%" }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.9, delay: 0.1 + li * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-instrument tracking-[-0.04em] leading-[1.0] ${li === 1 ? "italic text-[#FF5C00]" : "text-white"}`}
+                  className={`font-instrument tracking-[-0.04em] leading-[1.0] gpu ${li === 1 ? "italic text-[#FF5C00]" : "text-white"}`}
                   style={{ fontSize: "clamp(40px, 10vw, 130px)" }}
                 >
                   {line}
@@ -132,7 +131,7 @@ export default function CallToAction() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="font-sans text-[17px] text-white/60 max-w-md leading-[1.7]"
+            className="font-sans text-[17px] text-white/60 max-w-md leading-[1.7] gpu"
           >
             Most agencies build features. We build systems that outlast them.
           </motion.p>
@@ -143,7 +142,7 @@ export default function CallToAction() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="flex flex-col items-center gap-4"
+            className="flex flex-col items-center gap-4 gpu"
           >
             <MagneticButton variant="accent" onClick={openForm}>
               <span className="flex items-center gap-3 bg-[#FF5C00] text-white px-9 py-4 rounded-xl font-sans font-semibold text-[15px] shadow-[0_12px_40px_rgba(255,92,0,0.45)] tracking-[-0.01em]">
@@ -160,7 +159,7 @@ export default function CallToAction() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7, delay: 0.5 }}
-            className="flex items-center gap-4 font-mono text-[10px] text-white/30 tracking-widest uppercase"
+            className="flex items-center gap-4 font-mono text-[10px] text-white/30 tracking-widest uppercase gpu"
           >
             <span>No retainers</span>
             <span className="w-1 h-1 rounded-full bg-white/20" />

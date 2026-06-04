@@ -369,8 +369,8 @@ export default function WorkShowcase() {
 
         <motion.div
           ref={trackRef}
-          className="flex gap-6 w-max cursor-grab active:cursor-grabbing"
-          style={{ x, touchAction: "pan-y", willChange: "transform" }}
+          className="flex gap-6 w-max cursor-grab active:cursor-grabbing gpu"
+          style={{ x, touchAction: "pan-y" }}
           drag="x"
           dragElastic={0}
           dragConstraints={{ left: -999999, right: 999999 }}

@@ -149,7 +149,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
   return (
     <motion.div
       ref={tileRef}
-      className={`group relative overflow-hidden rounded-2xl cursor-default select-none ${className}`}
+      className={`group relative overflow-hidden rounded-2xl cursor-default select-none gpu ${className}`}
       style={
         reduced
           ? { boxShadow: "0 20px 60px -10px rgba(0,0,0,0.15), 0 0 0 1px rgba(13,13,11,0.07)" }
@@ -160,7 +160,6 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
               rotateX: tiltX,
               rotateY: tiltY,
               transformPerspective: 900,
-              willChange: "transform, opacity",
             }
       }
       animate={reduced ? {} : {
