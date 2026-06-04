@@ -140,20 +140,56 @@ function ProjectCard({
 
 /* ── WorkShowcase ─────────────────────────────────────────────── */
 export default function WorkShowcase() {
-  const trackRef = useRef<HTMLDivElement>(null);
+  const trackRef    = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const isPaused    = useRef(false);
+  const currentIdx  = useRef(0);
 
-  /* Track scroll position to update dots — passive listener, no JS animation */
+  /* Update dots on scroll */
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
     const onScroll = () => {
       const cardW = track.scrollWidth / projects.length;
       const idx = Math.round(track.scrollLeft / cardW) % projects.length;
+      currentIdx.current = idx;
       setActiveIndex(idx);
     };
     track.addEventListener("scroll", onScroll, { passive: true });
     return () => track.removeEventListener("scroll", onScroll);
+  }, []);
+
+  /* Auto-loop — pauses on touch, resumes after 3s of inactivity */
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const advance = () => {
+      if (isPaused.current) return;
+      const next = (currentIdx.current + 1) % projects.length;
+      const cardW = track.scrollWidth / projects.length;
+      track.scrollTo({ left: cardW * next, behavior: "smooth" });
+    };
+
+    const interval = setInterval(advance, 3200);
+
+    let resumeTimer: ReturnType<typeof setTimeout>;
+    const pause  = () => { isPaused.current = true;  clearTimeout(resumeTimer); };
+    const resume = () => { resumeTimer = setTimeout(() => { isPaused.current = false; }, 3000); };
+
+    track.addEventListener("touchstart", pause,  { passive: true });
+    track.addEventListener("touchend",   resume, { passive: true });
+    track.addEventListener("mousedown",  pause);
+    track.addEventListener("mouseup",    resume);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(resumeTimer);
+      track.removeEventListener("touchstart", pause);
+      track.removeEventListener("touchend",   resume);
+      track.removeEventListener("mousedown",  pause);
+      track.removeEventListener("mouseup",    resume);
+    };
   }, []);
 
   return (
