@@ -378,7 +378,7 @@ export default function Philosophy() {
               {/* line 1 */}
               <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.04em]">
                 <motion.span
-                  className="block text-[#0D0D0B]"
+                  className="block text-[#0D0D0B] gpu"
                   initial={{ y: "108%" }}
                   animate={heroInView ? { y: "0%" } : {}}
                   transition={{ duration: 1.05, ease: e }}
@@ -389,7 +389,7 @@ export default function Philosophy() {
               {/* line 2 — orange italic */}
               <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.04em]">
                 <motion.span
-                  className="block italic text-[#FF5C00]"
+                  className="block italic text-[#FF5C00] gpu"
                   initial={{ y: "108%" }}
                   animate={heroInView ? { y: "0%" } : {}}
                   transition={{ duration: 1.05, delay: 0.09, ease: e }}
@@ -400,7 +400,7 @@ export default function Philosophy() {
               {/* line 3 — muted, smaller */}
               <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.04em]">
                 <motion.span
-                  className="block text-[#B0AA9E]"
+                  className="block text-[#B0AA9E] gpu"
                   style={{ fontSize: "clamp(36px, 5.5vw, 76px)" }}
                   initial={{ y: "108%" }}
                   animate={heroInView ? { y: "0%" } : {}}
@@ -421,7 +421,7 @@ export default function Philosophy() {
               {("Every system we build is designed to outlast a trend, compound over time, and give our clients an unfair advantage not just for this quarter, but every one after it.").split(" ").map((word, i) => (
                 <span key={i} className="overflow-hidden inline-block" style={{ paddingBottom: "0.08em" }}>
                   <motion.span
-                    className="inline-block"
+                    className="inline-block gpu"
                     initial={{ y: "110%", opacity: 0 }}
                     animate={heroInView ? { y: "0%", opacity: 1 } : {}}
                     transition={{ duration: 0.65, delay: 0.28 + i * 0.028, ease: e }}
