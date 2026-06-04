@@ -39,7 +39,7 @@ export default function CallToAction() {
       {/* Clip only the bg layer — not the text */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* ── Pulsing rings ─────────────────────────────────── */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div className="hidden md:flex absolute inset-0 items-center justify-center pointer-events-none">
         {RINGS.map((i) => (
           <motion.div
             key={i}
@@ -95,7 +95,7 @@ export default function CallToAction() {
               transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], staggerChildren: 0.15, delayChildren: 0.1 } 
             }
           }}
-          className="w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 rounded-3xl px-6 sm:px-10 py-10 sm:py-14 shadow-[0_0_80px_rgba(0,0,0,0.45)] gpu"
+          className="w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 rounded-3xl px-6 sm:px-10 py-10 sm:py-14 shadow-[0_0_30px_rgba(0,0,0,0.3)] md:shadow-[0_0_80px_rgba(0,0,0,0.45)] gpu"
           style={{
             background: "#1a0d00",
             border: "1px solid rgba(255,255,255,0.07)",
