@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "motion/react";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { ArrowUpRight } from "lucide-react";
@@ -136,6 +137,48 @@ function ProjectCard({
 
 /* ── WorkShowcase ─────────────────────────────────────────────── */
 export default function WorkShowcase() {
+  const trackRef  = useRef<HTMLDivElement>(null);
+  const dragStart = useRef<number | null>(null);
+  const dragBase  = useRef(0);   // translateX at drag start
+  const animOffset= useRef(0);   // current CSS-animated translateX snapshot
+
+  /* Read the browser's current animated translateX */
+  const getAnimX = () => {
+    const el = trackRef.current;
+    if (!el) return 0;
+    const m = new DOMMatrix(getComputedStyle(el).transform);
+    return m.m41; // translateX in px
+  };
+
+  /* Pause animation, lock at current position, begin dragging */
+  const onDragStart = (clientX: number) => {
+    const el = trackRef.current;
+    if (!el) return;
+    animOffset.current = getAnimX();
+    el.style.animationPlayState = "paused";
+    el.style.transform = `translateX(${animOffset.current}px)`;
+    dragBase.current  = animOffset.current;
+    dragStart.current = clientX;
+  };
+
+  const onDragMove = (clientX: number) => {
+    if (dragStart.current === null) return;
+    const el = trackRef.current;
+    if (!el) return;
+    const dx = clientX - dragStart.current;
+    el.style.transform = `translateX(${dragBase.current + dx}px)`;
+  };
+
+  const onDragEnd = () => {
+    if (dragStart.current === null) return;
+    const el = trackRef.current;
+    if (!el) return;
+    dragStart.current = null;
+    // Resume animation — browser picks up from current transform
+    el.style.animationPlayState = "running";
+    el.style.transform = "";
+  };
+
   return (
     <section
       id="work"
@@ -152,11 +195,12 @@ export default function WorkShowcase() {
           width: max-content;
           animation: wk-scroll 32s linear infinite;
           will-change: transform;
+          cursor: grab;
         }
-        /* Pause on hover/touch */
-        .wk-wrap:hover .wk-track,
-        .wk-wrap.paused .wk-track {
-          animation-play-state: paused;
+        .wk-track:active { cursor: grabbing; }
+        /* Desktop hover pause */
+        @media (hover: hover) {
+          .wk-wrap:hover .wk-track { animation-play-state: paused; }
         }
       `}</style>
 
@@ -192,29 +236,35 @@ export default function WorkShowcase() {
         </motion.div>
       </div>
 
-      {/* ── Infinite marquee — aligned with site content ── */}
+      {/* ── Infinite marquee ── */}
       <div className="max-w-7xl mx-auto px-6 relative">
-        {/* Fade masks on edges */}
+        {/* Fade masks — desktop only */}
         <div
-          className="absolute left-6 top-0 bottom-0 w-12 z-10 pointer-events-none"
+          className="absolute left-6 top-0 bottom-0 w-12 z-10 pointer-events-none hidden md:block"
           style={{ background: "linear-gradient(to right, #F4F0E8 10%, transparent)" }}
         />
         <div
-          className="absolute right-6 top-0 bottom-0 w-12 z-10 pointer-events-none"
+          className="absolute right-6 top-0 bottom-0 w-12 z-10 pointer-events-none hidden md:block"
           style={{ background: "linear-gradient(to left, #F4F0E8 10%, transparent)" }}
         />
 
-        <div
-          className="wk-wrap overflow-hidden rounded-2xl"
-          onTouchStart={e => e.currentTarget.classList.add("paused")}
-          onTouchEnd={e => e.currentTarget.classList.remove("paused")}
-        >
-          <div className="wk-track pb-2">
-            {/* Original set */}
+        <div className="wk-wrap overflow-hidden rounded-2xl">
+          <div
+            ref={trackRef}
+            className="wk-track pb-2"
+            /* Touch (mobile) */
+            onTouchStart={e => onDragStart(e.touches[0].clientX)}
+            onTouchMove={e => onDragMove(e.touches[0].clientX)}
+            onTouchEnd={onDragEnd}
+            /* Mouse (desktop) */
+            onMouseDown={e => onDragStart(e.clientX)}
+            onMouseMove={e => onDragMove(e.clientX)}
+            onMouseUp={onDragEnd}
+            onMouseLeave={onDragEnd}
+          >
             {projects.map((project, i) => (
               <ProjectCard key={`a-${i}`} project={project} index={i} />
             ))}
-            {/* Duplicate — seamless loop */}
             {projects.map((project, i) => (
               <ProjectCard key={`b-${i}`} project={project} index={i} />
             ))}
