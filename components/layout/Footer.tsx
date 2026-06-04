@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { useRef, useEffect } from "react";
 import ScrambleText from "@/components/ui/ScrambleText";
+import { useInView } from "motion/react";
 
 /* ── Fit-text: waits for font load then fills container exactly ── */
 function useFitText() {
@@ -76,15 +77,20 @@ const LEGAL = [
 function VideoText() {
   const TEXT = "CITIZEN OF DIGITAL AGE";
   const { wrapRef, textRef } = useFitText();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: "600px" });
 
   return (
-    <div className="relative overflow-hidden select-none">
+    <div ref={containerRef} className="relative overflow-hidden select-none">
       {/* Video layer */}
-      <video
-        autoPlay muted loop playsInline aria-hidden
-        className="absolute inset-0 w-full h-full object-cover"
-        src="/footervid/hero.mp4"
-      />
+      {isInView && (
+        <video
+          autoPlay muted loop playsInline aria-hidden
+          preload="none"
+          className="absolute inset-0 w-full h-full object-cover"
+          src="/footervid/hero.mp4"
+        />
+      )}
 
       {/* Multiply blend: black bg + white text = video shows inside letters */}
       <div style={{ background: "#0A0A09", mixBlendMode: "multiply" }}>
