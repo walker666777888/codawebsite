@@ -78,8 +78,8 @@ function useCountUp(target: number | null, inView: boolean, delay: number) {
 }
 
 /* ─── stat pill ─────────────────────────────────────────── */
-function StatPill({ value, label, delay, triggered, index }: {
-  value: string; label: string; delay: number; triggered: boolean; index: number;
+function StatPill({ value, label, delay, triggered, index, dark = false }: {
+  value: string; label: string; delay: number; triggered: boolean; index: number; dark?: boolean;
 }) {
   const reduced = useReducedMotion();
   const [hovered, setHovered] = useState(false);
@@ -95,35 +95,26 @@ function StatPill({ value, label, delay, triggered, index }: {
       ? `${numericTarget}${numericSuffix}`
       : `${count}${numericSuffix}`;
 
-  const numFontSize = "clamp(28px, 6.5vw, 72px)";
-
   return (
-    <div
-      className="relative flex flex-col cursor-default px-4 py-5 sm:px-7 sm:py-8"
-      style={{ minHeight: "clamp(120px, 20vw, 188px)" }}
-    >
-      <span className="font-mono text-[9px] tracking-[0.28em] text-[#C8C2B8] self-start">
-        {String(index + 1).padStart(2, "0")}
+    <div className="flex flex-col items-center gap-1 w-full">
+      {/* Big number */}
+      <motion.span
+        className="font-instrument leading-none tracking-[-0.03em] tabular-nums"
+        style={{ fontSize: "clamp(28px, 7vw, 64px)", color: dark ? "#FFFFFF" : "#14130F" }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        animate={{ color: hovered ? "#FF5C00" : dark ? "#FFFFFF" : "#14130F" }}
+        transition={{ duration: 0.25 }}
+      >
+        {displayValue}
+      </motion.span>
+      {/* Label */}
+      <span
+        className="font-mono uppercase tracking-[0.18em] leading-tight block text-center"
+        style={{ fontSize: "clamp(7px, 1.8vw, 9px)", color: dark ? "rgba(255,255,255,0.35)" : "#6F6A60" }}
+      >
+        {label}
       </span>
-
-      <div className="flex items-center" style={{ height: "clamp(50px, 10vw, 90px)", marginTop: 6 }}>
-        <motion.span
-          className="font-instrument leading-none tracking-[-0.03em] tabular-nums block"
-          style={{ fontSize: numFontSize }}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          animate={{ color: hovered ? "#FF5C00" : "#14130F" }}
-          transition={{ duration: 0.25, ease: "easeOut" }}
-        >
-          {displayValue}
-        </motion.span>
-      </div>
-
-      <div className="mt-3 pt-3 sm:mt-5 sm:pt-4 border-t" style={{ borderColor: "rgba(255,92,0,0.2)" }}>
-        <span className="font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.18em] sm:tracking-[0.28em] text-[#6F6A60] leading-tight block">
-          {label}
-        </span>
-      </div>
     </div>
   );
 }
@@ -404,28 +395,36 @@ export default function Philosophy() {
                 Every system we build is designed to outlast a trend, compound over time, and give our clients an unfair advantage not just for this quarter, but every one after it.
               </p>
 
-              {/* Stats */}
+              {/* Stats — premium dark card */}
               <div
                 className={`phil-stats${visible ? " in" : ""} relative rounded-2xl overflow-hidden`}
                 style={{
-                  border: "1px solid rgba(13,13,11,0.07)",
-                  background: "linear-gradient(150deg, #FEFCF8 0%, #F5F1E9 100%)",
-                  boxShadow: "0 12px 56px -16px rgba(43,33,20,0.18), 0 2px 8px rgba(43,33,20,0.05), inset 0 1px 0 rgba(255,255,255,1)",
+                  background: "linear-gradient(135deg, #0D0D0B 0%, #1a1410 100%)",
+                  border: "1px solid rgba(255,92,0,0.15)",
+                  boxShadow: "0 20px 60px -12px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04) inset",
                 }}
               >
+                {/* Top orange hairline */}
                 <div
-                  className="absolute inset-x-0 top-0 h-px"
-                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,92,0,0.7) 50%, transparent)" }}
+                  className="absolute inset-x-0 top-0 h-[1.5px]"
+                  style={{ background: "linear-gradient(90deg, transparent 0%, #FF5C00 40%, #FF9A3C 60%, transparent 100%)" }}
                 />
-                <div className="grid grid-cols-3">
+                {/* Ambient glow */}
+                <div
+                  className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-32 rounded-full blur-[60px] opacity-20 pointer-events-none"
+                  style={{ background: "#FF5C00" }}
+                />
+
+                <div className="relative grid grid-cols-3 divide-x divide-white/[0.06]">
                   {STATS.map((s, i) => (
-                    <div key={s.label} className="relative">
-                      {i > 0 && (
-                        <div className="absolute left-0 top-6 bottom-6 w-px hidden sm:block"
-                          style={{ background: "linear-gradient(to bottom, transparent, rgba(13,13,11,0.09) 30%, rgba(13,13,11,0.09) 70%, transparent)" }}
-                        />
-                      )}
-                      <StatPill value={s.value} label={s.label} delay={0.5 + i * 0.12} triggered={visible} index={i} />
+                    <div key={s.label} className="flex flex-col items-center justify-center px-3 py-7 gap-2 text-center">
+                      {/* Orange accent dot */}
+                      <div
+                        className="w-1 h-1 rounded-full mb-1"
+                        style={{ background: "#FF5C00", boxShadow: "0 0 6px #FF5C00" }}
+                      />
+                      {/* Big number */}
+                      <StatPill value={s.value} label={s.label} delay={0.5 + i * 0.12} triggered={visible} index={i} dark />
                     </div>
                   ))}
                 </div>
