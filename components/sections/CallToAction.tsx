@@ -1,173 +1,180 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
+import { motion } from "motion/react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { ArrowRight } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
 
-const RINGS = [0, 1, 2, 3];
-
 export default function CallToAction() {
-  const ref = useRef<HTMLElement>(null);
   const { open: openForm } = useFormModal();
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(false);
 
-  const rectRef = useRef<DOMRect | null>(null);
-  const smoothX = useSpring(mouseX, { stiffness: 25, damping: 28 });
-  const smoothY = useSpring(mouseY, { stiffness: 25, damping: 28 });
-  const bgX = useTransform(smoothX, [-600, 600], [-20, 20]);
-  const bgY = useTransform(smoothY, [-400, 400], [-15, 15]);
-
-  const onMouseEnter = () => { rectRef.current = ref.current?.getBoundingClientRect() ?? null; };
-  const onMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = rectRef.current;
-    if (!rect) return;
-    mouseX.set(e.clientX - rect.left - rect.width / 2);
-    mouseY.set(e.clientY - rect.top - rect.height / 2);
-  };
+  /* Single IntersectionObserver — no JS animation loop, no framer scroll tracking */
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { rootMargin: "-60px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <section
-      ref={ref}
-      onMouseEnter={onMouseEnter}
-      onMouseMove={onMouseMove}
-      className="relative py-40 px-6 [&_*::selection]:bg-[#39FF14] [&_*::selection]:text-[#0D0D0B] [&::selection]:bg-[#39FF14] [&::selection]:text-[#0D0D0B]"
-      style={{ background: "#FF5C00" }}
-    >
-      {/* Clip only the bg layer — not the text */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* ── Pulsing rings ─────────────────────────────────── */}
-      <div className="hidden md:flex absolute inset-0 items-center justify-center pointer-events-none">
-        {RINGS.map((i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full border border-[#0D0D0B]/[0.07] gpu"
-            style={{ width: 900, height: 900 }}
-            animate={{
-              scale: [0.13, 1],
-              opacity: [0.45, 0],
-            }}
-            transition={{
-              duration: 4,
-              delay: i * 1,
-              repeat: Infinity,
-              ease: "easeOut",
-            }}
-          />
-        ))}
-      </div>
+    <>
+      <style>{`
+        @keyframes cta-rise {
+          from { opacity: 0; transform: translateY(48px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes cta-fade {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes cta-slide-up {
+          from { transform: translateY(105%); }
+          to   { transform: translateY(0%); }
+        }
+        @keyframes cta-ring {
+          0%   { transform: scale(0.13); opacity: 0.45; }
+          100% { transform: scale(1);    opacity: 0; }
+        }
 
-      {/* ── Mouse-tracked blobs ───────────────────────────── */}
-      <motion.div className="hidden md:block absolute inset-0 pointer-events-none" style={{ x: bgX, y: bgY }}>
-        <div
-          className="absolute -top-1/3 -left-1/4 w-[900px] h-[900px] rounded-full blur-[180px] opacity-35"
-          style={{ background: "#FF7A2F" }}
-        />
-        <div
-          className="absolute -bottom-1/3 -right-1/4 w-[800px] h-[800px] rounded-full blur-[160px] opacity-45"
-          style={{ background: "#E84000" }}
-        />
-      </motion.div>
+        .cta-card { opacity: 0; }
+        .cta-card.in { animation: cta-rise 0.75s cubic-bezier(0.16,1,0.3,1) 0.05s forwards; }
 
-      {/* ── Grid ─────────────────────────────────────────── */}
-      <div
-        className="absolute inset-0 opacity-[0.07] pointer-events-none"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right,#0D0D0B 1px,transparent 1px),linear-gradient(to bottom,#0D0D0B 1px,transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
-      </div>{/* end bg clip wrapper */}
+        .cta-eyebrow { opacity: 0; }
+        .cta-eyebrow.in { animation: cta-fade 0.6s ease 0.2s forwards; }
 
-      <div className="relative z-10 w-full flex flex-col items-center">
-        {/* Card — opacity+translateY only, no scale, no backdrop-blur (both kill scroll perf) */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={{
-            hidden: { opacity: 0, y: 48 },
-            visible: { 
-              opacity: 1, y: 0, 
-              transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], staggerChildren: 0.15, delayChildren: 0.1 } 
-            }
-          }}
-          className="w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 rounded-3xl px-6 sm:px-10 py-10 sm:py-14 shadow-[0_0_30px_rgba(0,0,0,0.3)] md:shadow-[0_0_80px_rgba(0,0,0,0.45)] gpu"
-          style={{
-            background: "#1a0d00",
-            border: "1px solid rgba(255,255,255,0.07)",
-          }}
-        >
-          {/* Eyebrow */}
-          <motion.div 
-            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.6 } } }}
-            className="inline-flex items-center gap-3 border border-white/10 bg-white/[0.05] rounded-full px-5 py-2.5"
-          >
-            <motion.span
-              className="w-1.5 h-1.5 rounded-full bg-[#FF5C00] gpu"
-              animate={{ opacity: [1, 0.3, 1], scale: [1, 0.6, 1] }}
-              transition={{ duration: 2.5, repeat: Infinity }}
-            />
-            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/50">
-              Ready when you are
-            </p>
-          </motion.div>
+        .cta-line-wrap { overflow: hidden; padding-bottom: 0.3em; }
+        .cta-line { display: block; transform: translateY(105%); will-change: transform; }
+        .cta-line.in-0 { animation: cta-slide-up 0.85s cubic-bezier(0.16,1,0.3,1) 0.25s forwards; }
+        .cta-line.in-1 { animation: cta-slide-up 0.85s cubic-bezier(0.16,1,0.3,1) 0.36s forwards; }
 
-          {/* Headline — single parent drives both lines, no per-line scroll observers */}
-          <div>
-            {["Ready to", "Dominate?"].map((line, li) => (
-              <div key={li} className="overflow-hidden -mx-8 px-8" style={{ paddingBottom: "0.45em", paddingTop: "0.08em" }}>
-                <motion.div
-                  variants={{ 
-                    hidden: { y: "105%" }, 
-                    visible: { y: "0%", transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } } 
-                  }}
-                  className={`font-instrument tracking-[-0.04em] leading-[1.0] gpu ${li === 1 ? "italic text-[#FF5C00]" : "text-white"}`}
-                  style={{ fontSize: "clamp(40px, 10vw, 130px)" }}
-                >
-                  {line}
-                </motion.div>
-              </div>
+        .cta-sub { opacity: 0; }
+        .cta-sub.in { animation: cta-fade 0.7s ease 0.48s forwards; }
+
+        .cta-btn { opacity: 0; }
+        .cta-btn.in { animation: cta-fade 0.7s ease 0.58s forwards; }
+
+        .cta-note { opacity: 0; }
+        .cta-note.in { animation: cta-fade 0.7s ease 0.68s forwards; }
+
+        @media (min-width: 768px) {
+          .cta-ring {
+            position: absolute;
+            width: 900px;
+            height: 900px;
+            border-radius: 9999px;
+            border: 1px solid rgba(13,13,11,0.07);
+            animation: cta-ring 4s ease-out infinite;
+          }
+        }
+      `}</style>
+
+      <section
+        ref={sectionRef}
+        className="relative py-28 sm:py-40 px-6 [&_*::selection]:bg-[#39FF14] [&_*::selection]:text-[#0D0D0B]"
+        style={{ background: "#FF5C00" }}
+      >
+        {/* Background — desktop only decorations, zero mobile cost */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="hidden md:flex absolute inset-0 items-center justify-center">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="cta-ring" style={{ animationDelay: `${i}s` }} />
             ))}
           </div>
+          <div
+            className="absolute inset-0 opacity-[0.07]"
+            style={{
+              backgroundImage:
+                "linear-gradient(to right,#0D0D0B 1px,transparent 1px),linear-gradient(to bottom,#0D0D0B 1px,transparent 1px)",
+              backgroundSize: "40px 40px",
+            }}
+          />
+        </div>
 
-          {/* Sub-copy */}
-          <motion.p
-            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.7 } } }}
-            className="font-sans text-[17px] text-white/60 max-w-md leading-[1.7] gpu"
+        <div className="relative z-10 w-full flex flex-col items-center">
+          {/* Card — CSS animated, GPU composited */}
+          <div
+            className={`cta-card${visible ? " in" : ""} w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 rounded-3xl px-6 sm:px-10 py-10 sm:py-14`}
+            style={{
+              background: "#1a0d00",
+              border: "1px solid rgba(255,255,255,0.07)",
+              boxShadow: "0 8px 40px rgba(0,0,0,0.35)",
+            }}
           >
-            Most agencies build features. We build systems that outlast them.
-          </motion.p>
+            {/* Eyebrow */}
+            <div
+              className={`cta-eyebrow${visible ? " in" : ""} inline-flex items-center gap-3 border border-white/10 bg-white/[0.05] rounded-full px-5 py-2.5`}
+            >
+              <motion.span
+                className="w-1.5 h-1.5 rounded-full bg-[#FF5C00]"
+                animate={{ opacity: [1, 0.3, 1], scale: [1, 0.6, 1] }}
+                transition={{ duration: 2.5, repeat: Infinity }}
+              />
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/50">
+                Ready when you are
+              </p>
+            </div>
 
-          {/* CTAs */}
-          <motion.div
-            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.7 } } }}
-            className="flex flex-col items-center gap-4 gpu"
-          >
-            <MagneticButton variant="accent" onClick={openForm}>
-              <span className="flex items-center gap-3 bg-[#FF5C00] text-white px-9 py-4 rounded-xl font-sans font-semibold text-[15px] shadow-[0_12px_40px_rgba(255,92,0,0.45)] tracking-[-0.01em]">
-                Start a project
-                <ArrowRight className="w-4 h-4" />
-              </span>
-            </MagneticButton>
-          </motion.div>
+            {/* Headline — pure CSS transform, no JS per-frame cost */}
+            <div>
+              {["Ready to", "Dominate?"].map((line, li) => (
+                <div key={li} className="cta-line-wrap">
+                  <span
+                    className={`cta-line${visible ? ` in-${li}` : ""} font-instrument tracking-[-0.04em] leading-[1.0] ${
+                      li === 1 ? "italic text-[#FF5C00]" : "text-white"
+                    }`}
+                    style={{ fontSize: "clamp(40px, 10vw, 130px)" }}
+                  >
+                    {line}
+                  </span>
+                </div>
+              ))}
+            </div>
 
-          {/* Footer note */}
-          <motion.div
-            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.7 } } }}
-            className="flex items-center gap-4 font-mono text-[10px] text-white/30 tracking-widest uppercase gpu"
-          >
-            <span>No retainers</span>
-            <span className="w-1 h-1 rounded-full bg-white/20" />
-            <span>No bloat</span>
-            <span className="w-1 h-1 rounded-full bg-white/20" />
-            <span>Just results</span>
-          </motion.div>
-        </motion.div>
-      </div>
-    </section>
+            {/* Sub-copy */}
+            <p
+              className={`cta-sub${visible ? " in" : ""} font-sans text-[17px] text-white/60 max-w-md leading-[1.7]`}
+            >
+              Most agencies build features. We build systems that outlast them.
+            </p>
+
+            {/* CTA button */}
+            <div className={`cta-btn${visible ? " in" : ""} flex flex-col items-center gap-4`}>
+              <MagneticButton variant="accent" onClick={openForm}>
+                <span
+                  className="flex items-center gap-3 bg-[#FF5C00] text-white px-9 py-4 rounded-xl font-sans font-semibold text-[15px] tracking-[-0.01em]"
+                  style={{ boxShadow: "0 8px 24px rgba(255,92,0,0.4)" }}
+                >
+                  Start a project
+                  <ArrowRight className="w-4 h-4" />
+                </span>
+              </MagneticButton>
+            </div>
+
+            {/* Footer note */}
+            <div
+              className={`cta-note${visible ? " in" : ""} flex items-center gap-4 font-mono text-[10px] text-white/30 tracking-widest uppercase`}
+            >
+              <span>No retainers</span>
+              <span className="w-1 h-1 rounded-full bg-white/20" />
+              <span>No bloat</span>
+              <span className="w-1 h-1 rounded-full bg-white/20" />
+              <span>Just results</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
