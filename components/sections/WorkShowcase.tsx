@@ -192,20 +192,20 @@ export default function WorkShowcase() {
         </motion.div>
       </div>
 
-      {/* ── Infinite marquee — pure CSS @keyframes, zero JS ── */}
-      <div className="relative">
+      {/* ── Infinite marquee — aligned with site content ── */}
+      <div className="max-w-7xl mx-auto px-6 relative">
         {/* Fade masks on edges */}
         <div
-          className="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
-          style={{ background: "linear-gradient(to right, #F4F0E8 20%, transparent)" }}
+          className="absolute left-6 top-0 bottom-0 w-12 z-10 pointer-events-none"
+          style={{ background: "linear-gradient(to right, #F4F0E8 10%, transparent)" }}
         />
         <div
-          className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
-          style={{ background: "linear-gradient(to left, #F4F0E8 20%, transparent)" }}
+          className="absolute right-6 top-0 bottom-0 w-12 z-10 pointer-events-none"
+          style={{ background: "linear-gradient(to left, #F4F0E8 10%, transparent)" }}
         />
 
         <div
-          className="wk-wrap overflow-hidden"
+          className="wk-wrap overflow-hidden rounded-2xl"
           onTouchStart={e => e.currentTarget.classList.add("paused")}
           onTouchEnd={e => e.currentTarget.classList.remove("paused")}
         >
