@@ -74,16 +74,14 @@ const LEGAL = [
   { label: "Terms of Service", href: "#" },
 ];
 
-function VideoText() {
+function VideoText({ shouldLoad }: { shouldLoad: boolean }) {
   const TEXT = "CITIZEN OF DIGITAL AGE";
   const { wrapRef, textRef } = useFitText();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { once: true, margin: "600px" });
 
   return (
-    <div ref={containerRef} className="relative overflow-hidden select-none">
+    <div className="relative overflow-hidden select-none">
       {/* Video layer */}
-      {isInView && (
+      {shouldLoad && (
         <video
           autoPlay muted loop playsInline aria-hidden
           preload="none"
@@ -116,6 +114,7 @@ function VideoText() {
 
 export default function Footer() {
   const ref = useRef<HTMLElement>(null);
+  const footerInView = useInView(ref, { once: true, margin: "200px" });
 
   return (
     <footer id="contact" ref={ref} className="relative bg-[#0A0A09] text-white overflow-hidden">
@@ -230,7 +229,7 @@ export default function Footer() {
       </div>
 
       {/* ── Video-inside-text — true edge to edge, all caps ── */}
-      <VideoText />
+      <VideoText shouldLoad={footerInView} />
 
     </footer>
   );
