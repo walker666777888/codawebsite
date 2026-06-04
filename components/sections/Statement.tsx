@@ -1152,8 +1152,11 @@ function SpreadCard({
 }
 
 function DisciplineSpread() {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const reduced  = useReducedMotion();
+  const trackRef    = useRef<HTMLDivElement>(null);
+  const barRef      = useRef<HTMLDivElement>(null);
+  const railFillRef = useRef<HTMLDivElement>(null);
+  const dotRef      = useRef<HTMLDivElement>(null);
+  const reduced     = useReducedMotion();
 
   const { scrollYProgress: progress } = useScroll({
     target: trackRef,
@@ -1161,7 +1164,16 @@ function DisciplineSpread() {
   });
   const inView = useInView(trackRef, { margin: "-120px" });
 
-  // Direct progress — CSS transition handles smoothing natively (no JS spring loop)
+  /* Direct DOM writes — zero React re-renders, zero JS frame budget */
+  useEffect(() => {
+    return progress.on("change", (v) => {
+      if (barRef.current)      barRef.current.style.transform      = `scaleX(${v})`;
+      if (railFillRef.current) railFillRef.current.style.transform  = `scaleY(${v})`;
+      if (dotRef.current)      dotRef.current.style.top             = `${v * 100}%`;
+    });
+  }, [progress]);
+
+  // Keep dotY for any remaining useTransform uses
   const dotY = useTransform(progress, [0, 1], ["0%", "100%"]);
 
   // Parallax layer behind cards — drifts opposite to scroll
@@ -1218,13 +1230,15 @@ function DisciplineSpread() {
 
         {/* ── Vertical scroll-progress rail (right edge) ────── */}
         <div className="absolute right-6 top-1/2 -translate-y-1/2 h-32 w-[1px] bg-[#0D0D0B]/10 z-20">
-          <motion.div
+          <div
+            ref={railFillRef}
             className="absolute left-0 top-0 w-full bg-[#FF5C00] origin-top rounded-full"
-            style={{ scaleY: progress, transformOrigin: "top", transition: "transform 80ms linear" }}
+            style={{ transform: "scaleY(0)", height: "100%", willChange: "transform" }}
           />
-          <motion.div
+          <div
+            ref={dotRef}
             className="absolute -left-[3px] w-[7px] h-[7px] rounded-full bg-[#FF5C00]"
-            style={{ top: dotY, transition: "top 80ms linear" }}
+            style={{ top: "0%", willChange: "top" }}
           />
         </div>
 
@@ -1241,9 +1255,10 @@ function DisciplineSpread() {
 
           {/* ── Scroll-driven progress bar under the grid ───── */}
           <div className="mt-5 h-[2px] bg-[#0D0D0B]/[0.08] relative overflow-hidden rounded-full">
-            <motion.div
-              className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#FF5C00] to-[#FF9A3C] rounded-full origin-left"
-              style={{ scaleX: progress, transformOrigin: "left" }}
+            <div
+              ref={barRef}
+              className="absolute inset-y-0 left-0 right-0 bg-gradient-to-r from-[#FF5C00] to-[#FF9A3C] rounded-full origin-left"
+              style={{ transform: "scaleX(0)", willChange: "transform" }}
             />
           </div>
 
@@ -1684,16 +1699,37 @@ function HeaderBlock({
             system that compounds over time and gives our clients an unfair advantage.
           </motion.p>
 
-          {/* Stats */}
-          <div className="mt-10 flex gap-9">
-            {[{ n: "3", label: "Disciplines" }, { n: "1", label: "System" }, { n: "∞", label: "Compounds" }].map(({ n, label }, i) => (
-              <motion.div key={label} className="flex flex-col gap-1.5"
-                initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.5 + i * 0.09, ease: [0.16, 1, 0.3, 1] }}>
-                <span className="font-instrument text-[40px] text-[#FF5C00] leading-none tracking-[-0.04em]">{n}</span>
-                <span className="font-mono text-[9px] text-[#9A9488] uppercase tracking-[0.22em]">{label}</span>
-              </motion.div>
-            ))}
+          {/* Stats — premium dark card (same style as Philosophy) */}
+          <div
+            className="mt-10 relative rounded-2xl overflow-hidden"
+            style={{
+              background: "linear-gradient(135deg, #0D0D0B 0%, #1a1410 100%)",
+              border: "1px solid rgba(255,92,0,0.15)",
+              boxShadow: "0 20px 60px -12px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04) inset",
+            }}
+          >
+            {/* Top orange hairline */}
+            <div
+              className="absolute inset-x-0 top-0 h-[1.5px]"
+              style={{ background: "linear-gradient(90deg, transparent 0%, #FF5C00 40%, #FF9A3C 60%, transparent 100%)" }}
+            />
+            {/* Ambient glow */}
+            <div
+              className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-32 rounded-full blur-[60px] opacity-20 pointer-events-none"
+              style={{ background: "#FF5C00" }}
+            />
+            <div className="relative grid grid-cols-3 divide-x divide-white/[0.06]">
+              {[{ n: "3", label: "Disciplines" }, { n: "1", label: "System" }, { n: "∞", label: "Compounds" }].map(({ n, label }, i) => (
+                <div key={label} className="flex flex-col items-center justify-center px-3 py-6 gap-2 text-center">
+                  <div
+                    className="w-1 h-1 rounded-full mb-1"
+                    style={{ background: "#FF5C00", boxShadow: "0 0 6px #FF5C00" }}
+                  />
+                  <span className="font-instrument text-[clamp(26px,7vw,42px)] text-white leading-none tracking-[-0.04em]">{n}</span>
+                  <span className="font-mono text-[9px] text-white/35 uppercase tracking-[0.2em]">{label}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
