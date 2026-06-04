@@ -1161,9 +1161,8 @@ function DisciplineSpread() {
   });
   const inView = useInView(trackRef, { margin: "-120px" });
 
-  // Smooth spring for the progress indicator dot
-  const dotProgress = useSpring(progress, { stiffness: 80, damping: 22 });
-  const dotY = useTransform(dotProgress, [0, 1], ["0%", "100%"]);
+  // Direct progress — CSS transition handles smoothing natively (no JS spring loop)
+  const dotY = useTransform(progress, [0, 1], ["0%", "100%"]);
 
   // Parallax layer behind cards — drifts opposite to scroll
   const bgY = useTransform(progress, [0, 1], ["-8%", "8%"]);
@@ -1221,11 +1220,11 @@ function DisciplineSpread() {
         <div className="absolute right-6 top-1/2 -translate-y-1/2 h-32 w-[1px] bg-[#0D0D0B]/10 z-20">
           <motion.div
             className="absolute left-0 top-0 w-full bg-[#FF5C00] origin-top rounded-full"
-            style={{ scaleY: dotProgress, transformOrigin: "top" }}
+            style={{ scaleY: progress, transformOrigin: "top", transition: "transform 80ms linear" }}
           />
           <motion.div
             className="absolute -left-[3px] w-[7px] h-[7px] rounded-full bg-[#FF5C00]"
-            style={{ top: dotY }}
+            style={{ top: dotY, transition: "top 80ms linear" }}
           />
         </div>
 
@@ -1241,10 +1240,10 @@ function DisciplineSpread() {
           </div>
 
           {/* ── Scroll-driven progress bar under the grid ───── */}
-          <div className="mt-5 h-px bg-[#0D0D0B]/[0.08] relative overflow-hidden rounded-full">
+          <div className="mt-5 h-[2px] bg-[#0D0D0B]/[0.08] relative overflow-hidden rounded-full">
             <motion.div
               className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#FF5C00] to-[#FF9A3C] rounded-full origin-left"
-              style={{ scaleX: dotProgress, transformOrigin: "left" }}
+              style={{ scaleX: progress, transformOrigin: "left" }}
             />
           </div>
 
