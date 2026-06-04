@@ -85,10 +85,16 @@ export default function CallToAction() {
       <div className="relative z-10 w-full flex flex-col items-center">
         {/* Card — opacity+translateY only, no scale, no backdrop-blur (both kill scroll perf) */}
         <motion.div
-          initial={{ opacity: 0, y: 48 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          variants={{
+            hidden: { opacity: 0, y: 48 },
+            visible: { 
+              opacity: 1, y: 0, 
+              transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], staggerChildren: 0.15, delayChildren: 0.1 } 
+            }
+          }}
           className="w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 rounded-3xl px-6 sm:px-10 py-10 sm:py-14 shadow-[0_0_80px_rgba(0,0,0,0.45)] gpu"
           style={{
             background: "#1a0d00",
@@ -96,7 +102,10 @@ export default function CallToAction() {
           }}
         >
           {/* Eyebrow */}
-          <div className="inline-flex items-center gap-3 border border-white/10 bg-white/[0.05] rounded-full px-5 py-2.5">
+          <motion.div 
+            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.6 } } }}
+            className="inline-flex items-center gap-3 border border-white/10 bg-white/[0.05] rounded-full px-5 py-2.5"
+          >
             <motion.span
               className="w-1.5 h-1.5 rounded-full bg-[#FF5C00] gpu"
               animate={{ opacity: [1, 0.3, 1], scale: [1, 0.6, 1] }}
@@ -105,17 +114,17 @@ export default function CallToAction() {
             <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/50">
               Ready when you are
             </p>
-          </div>
+          </motion.div>
 
           {/* Headline — single parent drives both lines, no per-line scroll observers */}
           <div>
             {["Ready to", "Dominate?"].map((line, li) => (
               <div key={li} className="overflow-hidden -mx-8 px-8" style={{ paddingBottom: "0.45em", paddingTop: "0.08em" }}>
                 <motion.div
-                  initial={{ y: "105%" }}
-                  whileInView={{ y: "0%" }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.9, delay: 0.1 + li * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  variants={{ 
+                    hidden: { y: "105%" }, 
+                    visible: { y: "0%", transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } } 
+                  }}
                   className={`font-instrument tracking-[-0.04em] leading-[1.0] gpu ${li === 1 ? "italic text-[#FF5C00]" : "text-white"}`}
                   style={{ fontSize: "clamp(40px, 10vw, 130px)" }}
                 >
@@ -127,10 +136,7 @@ export default function CallToAction() {
 
           {/* Sub-copy */}
           <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.7, delay: 0.3 }}
+            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.7 } } }}
             className="font-sans text-[17px] text-white/60 max-w-md leading-[1.7] gpu"
           >
             Most agencies build features. We build systems that outlast them.
@@ -138,10 +144,7 @@ export default function CallToAction() {
 
           {/* CTAs */}
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.7, delay: 0.4 }}
+            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.7 } } }}
             className="flex flex-col items-center gap-4 gpu"
           >
             <MagneticButton variant="accent" onClick={openForm}>
@@ -150,15 +153,11 @@ export default function CallToAction() {
                 <ArrowRight className="w-4 h-4" />
               </span>
             </MagneticButton>
-            
           </motion.div>
 
           {/* Footer note */}
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.7, delay: 0.5 }}
+            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.7 } } }}
             className="flex items-center gap-4 font-mono text-[10px] text-white/30 tracking-widest uppercase gpu"
           >
             <span>No retainers</span>
