@@ -3,11 +3,10 @@
 import {
   motion,
   AnimatePresence,
-  useScroll,
-  useTransform,
-  useSpring,
-  useInView,
   useMotionValue,
+  useSpring,
+  useTransform,
+  useInView,
   useReducedMotion,
 } from "motion/react";
 import { useRef, useState, useCallback, useEffect } from "react";
@@ -85,7 +84,6 @@ function StatPill({ value, label, delay, triggered, index }: {
   const reduced = useReducedMotion();
   const [hovered, setHovered] = useState(false);
 
-  /* count-up */
   const numMatch = value.match(/^(\d+)/);
   const numericTarget = numMatch ? parseInt(numMatch[1]) : null;
   const numericSuffix = numericTarget !== null ? value.slice(numMatch![0].length) : null;
@@ -104,12 +102,10 @@ function StatPill({ value, label, delay, triggered, index }: {
       className="relative flex flex-col cursor-default px-4 py-5 sm:px-7 sm:py-8"
       style={{ minHeight: "clamp(120px, 20vw, 188px)" }}
     >
-      {/* index tag */}
       <span className="font-mono text-[9px] tracking-[0.28em] text-[#C8C2B8] self-start">
         {String(index + 1).padStart(2, "0")}
       </span>
 
-      {/* number wrapper — fixed height so all 3 cells stay vertically even */}
       <div className="flex items-center" style={{ height: "clamp(50px, 10vw, 90px)", marginTop: 6 }}>
         <motion.span
           className="font-instrument leading-none tracking-[-0.03em] tabular-nums block"
@@ -123,7 +119,6 @@ function StatPill({ value, label, delay, triggered, index }: {
         </motion.span>
       </div>
 
-      {/* orange hairline + label — pinned consistently below number area */}
       <div className="mt-3 pt-3 sm:mt-5 sm:pt-4 border-t" style={{ borderColor: "rgba(255,92,0,0.2)" }}>
         <span className="font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.18em] sm:tracking-[0.28em] text-[#6F6A60] leading-tight block">
           {label}
@@ -133,11 +128,7 @@ function StatPill({ value, label, delay, triggered, index }: {
   );
 }
 
-/* ─── principle row ─────────────────────────────────────────
-   Height: CSS grid 0fr→1fr (smooth, doesn't touch siblings)
-   Content: AnimatePresence springs (tag badge + body stagger)
-   Hover:   motion values only — zero React re-renders
-──────────────────────────────────────────────────────────── */
+/* ─── principle row ─────────────────────────────────────── */
 function PrincipleRow({
   p, index, reduced,
 }: {
@@ -149,12 +140,10 @@ function PrincipleRow({
   const inView = useInView(ref, { once: true, margin: "-30px" });
   const [open, setOpen] = useState(false);
 
-  /* ── spring configs ── */
   const MED    = { stiffness: 150, damping: 22, mass: 0.5 } as const;
   const SOFT   = { stiffness: 80,  damping: 18, mass: 0.6 } as const;
   const SNAPPY = { stiffness: 260, damping: 24, mass: 0.4 } as const;
 
-  /* ── hover motion values — all micro-interactions, zero re-renders ── */
   const hMv         = useMotionValue(0);
   const washOpacity = useSpring(useTransform(hMv, [0, 1], [0, 1]),        MED);
   const barScaleY   = useSpring(useTransform(hMv, [0, 1], [0, 1]),        MED);
@@ -182,7 +171,6 @@ function PrincipleRow({
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay: index * 0.07, ease }}
     >
-      {/* hover wash — motion value opacity, compositor-only */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -191,7 +179,6 @@ function PrincipleRow({
         }}
       />
 
-      {/* left accent bar — spring scaleY from top */}
       <motion.div
         className="absolute left-0 top-0 bottom-0 w-[2px] rounded-full origin-top"
         style={{
@@ -202,8 +189,6 @@ function PrincipleRow({
       />
 
       <div className="relative flex items-start gap-3 md:gap-10 py-6 md:py-9 px-4 md:px-8">
-
-        {/* index number */}
         <motion.span
           className="font-mono text-[11px] tracking-[0.25em] shrink-0 w-7 mt-2 text-[#FF5C00]"
           style={{ opacity: numOpacity }}
@@ -227,7 +212,6 @@ function PrincipleRow({
             </motion.span>
           </div>
 
-          {/* CSS grid reveal */}
           <div
             style={{
               display: "grid",
@@ -271,7 +255,6 @@ function PrincipleRow({
           </div>
         </div>
 
-        {/* glyph circle — hidden on mobile to save space */}
         <motion.div
           className="relative shrink-0 w-12 h-12 md:w-16 md:h-16 items-center justify-center rounded-full mt-1 hidden md:flex"
           style={{ background: glyphBg, scale: glyphScale }}
@@ -284,7 +267,6 @@ function PrincipleRow({
           </motion.span>
         </motion.div>
 
-        {/* + → × indicator */}
         <div className="shrink-0 w-7 h-7 rounded-full border border-[#0D0D0B]/15 flex items-center justify-center mt-2 overflow-hidden">
           <motion.div
             animate={{ rotate: open ? 45 : 0 }}
@@ -306,169 +288,153 @@ export default function Philosophy() {
   const sectionRef = useRef<HTMLElement>(null);
   const heroRef    = useRef<HTMLDivElement>(null);
   const reduced    = useReducedMotion();
-  const heroInView = useInView(heroRef, { once: true, margin: "-60px" });
+  const [visible, setVisible] = useState(false);
 
-  const [isTouch, setIsTouch] = useState(false);
+  /* Single IntersectionObserver — replaces useInView + useScroll + useSpring chain */
   useEffect(() => {
-    setIsTouch("ontouchstart" in window || navigator.maxTouchPoints > 0);
+    const el = heroRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { rootMargin: "-40px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const springProg = useSpring(scrollYProgress, { stiffness: 30, damping: 25 });
-  const bgY        = useTransform(springProg, [0, 1], isTouch ? ["0%", "0%"] : ["0%", "12%"]);
-  const headlineY  = useTransform(springProg, [0, 1], isTouch ? ["0%", "0%"] : ["3%", "-3%"]);
-  const sideY      = useTransform(springProg, [0, 1], isTouch ? ["0%", "0%"] : ["-2%", "2%"]);
-
-  const e = [0.16, 1, 0.3, 1] as const;
-
   return (
-    <section
-      id="philosophy"
-      ref={sectionRef}
-      className="relative overflow-hidden"
-      style={{ background: "#F4F0E8" }}
-    >
-      {/* ── background ──────────────────────────────────── */}
-      {/* glows */}
-      <motion.div
-        style={reduced ? {} : { y: bgY }}
-        className="absolute inset-0 pointer-events-none"
+    <>
+      <style>{`
+        @keyframes phil-fade-up {
+          from { opacity: 0; transform: translateY(28px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes phil-slide-up {
+          from { transform: translateY(108%); }
+          to   { transform: translateY(0%); }
+        }
+        @keyframes phil-fade {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+
+        .phil-label { opacity: 0; }
+        .phil-label.in { animation: phil-fade-up 0.6s cubic-bezier(0.16,1,0.3,1) 0s forwards; }
+
+        .phil-line-wrap { overflow: hidden; padding-bottom: 0.2em; }
+        .phil-line { display: block; transform: translateY(108%); will-change: transform; }
+        .phil-line.in-0 { animation: phil-slide-up 1s cubic-bezier(0.16,1,0.3,1) 0.1s forwards; }
+        .phil-line.in-1 { animation: phil-slide-up 1s cubic-bezier(0.16,1,0.3,1) 0.19s forwards; }
+        .phil-line.in-2 { animation: phil-slide-up 1s cubic-bezier(0.16,1,0.3,1) 0.28s forwards; }
+
+        .phil-para { opacity: 0; }
+        .phil-para.in { animation: phil-fade 0.8s ease 0.35s forwards; }
+
+        .phil-stats { opacity: 0; }
+        .phil-stats.in { animation: phil-fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.45s forwards; }
+      `}</style>
+
+      <section
+        id="philosophy"
+        ref={sectionRef}
+        className="relative overflow-hidden"
+        style={{ background: "#F4F0E8" }}
       >
-        {/* warm right glow */}
-        <div
-          className="absolute -right-[10%] top-[20%] w-[700px] h-[700px] rounded-full blur-[160px] opacity-[0.11]"
-          style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 65%)" }}
-        />
-        {/* cool top-left glow */}
-        <div
-          className="absolute -left-[5%] -top-[5%] w-[500px] h-[500px] rounded-full blur-[130px] opacity-[0.05]"
-          style={{ background: "radial-gradient(circle, #FF9040 0%, transparent 65%)" }}
-        />
-      </motion.div>
-
-      {/* fine grid */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.02]"
-        style={{
-          backgroundImage: "linear-gradient(to right,#0D0D0B 1px,transparent 1px),linear-gradient(to bottom,#0D0D0B 1px,transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-
-      {/* ── hero top ────────────────────────────────────── */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 md:pt-36 pb-12 sm:pb-16 md:pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-16 lg:gap-8 items-end">
-
-          {/* LEFT — label + headline */}
-          <motion.div ref={heroRef} style={reduced ? {} : { y: headlineY }}>
-            <motion.div
-              className="mb-14"
-              initial={{ opacity: 0, x: -18 }}
-              animate={heroInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.65, ease: e }}
-            >
-              <SectionLabel index={2}>Our Philosophy</SectionLabel>
-            </motion.div>
-
-            <h2
-              className="font-instrument leading-[1.0] tracking-[-0.04em]"
-              style={{ fontSize: "clamp(50px, 7.5vw, 104px)" }}
-              aria-label="We build systems, not just assets."
-            >
-              {/* line 1 */}
-              <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.04em]">
-                <motion.span
-                  className="block text-[#0D0D0B] gpu"
-                  initial={{ y: "108%" }}
-                  animate={heroInView ? { y: "0%" } : {}}
-                  transition={{ duration: 1.05, ease: e }}
-                >
-                  We build
-                </motion.span>
-              </div>
-              {/* line 2 — orange italic */}
-              <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.04em]">
-                <motion.span
-                  className="block italic text-[#FF5C00] gpu"
-                  initial={{ y: "108%" }}
-                  animate={heroInView ? { y: "0%" } : {}}
-                  transition={{ duration: 1.05, delay: 0.09, ease: e }}
-                >
-                  systems,
-                </motion.span>
-              </div>
-              {/* line 3 — muted, smaller */}
-              <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.04em]">
-                <motion.span
-                  className="block text-[#B0AA9E] gpu"
-                  style={{ fontSize: "clamp(36px, 5.5vw, 76px)" }}
-                  initial={{ y: "108%" }}
-                  animate={heroInView ? { y: "0%" } : {}}
-                  transition={{ duration: 1.05, delay: 0.18, ease: e }}
-                >
-                  not just assets.
-                </motion.span>
-              </div>
-            </h2>
-          </motion.div>
-
-          {/* RIGHT — copy + stats */}
-          <motion.div
-            style={reduced ? {} : { y: sideY }}
-            className="flex flex-col gap-12"
-          >
-            <p className="font-sans text-[16px] md:text-[17px] text-[#4A463F] leading-[2.0] max-w-full sm:max-w-md tracking-[0.005em] flex flex-wrap gap-x-[0.28em]">
-              {("Every system we build is designed to outlast a trend, compound over time, and give our clients an unfair advantage not just for this quarter, but every one after it.").split(" ").map((word, i) => (
-                <span key={i} className="overflow-hidden inline-block" style={{ paddingBottom: "0.08em" }}>
-                  <motion.span
-                    className="inline-block gpu"
-                    initial={{ y: "110%", opacity: 0 }}
-                    animate={heroInView ? { y: "0%", opacity: 1 } : {}}
-                    transition={{ duration: 0.65, delay: 0.28 + i * 0.028, ease: e }}
-                  >
-                    {word}
-                  </motion.span>
-                </span>
-              ))}
-            </p>
-
-            {/* stats */}
-            <motion.div
-              className="relative rounded-2xl overflow-hidden"
-              style={{
-                border: "1px solid rgba(13,13,11,0.07)",
-                background: "linear-gradient(150deg, #FEFCF8 0%, #F5F1E9 100%)",
-                boxShadow: "0 12px 56px -16px rgba(43,33,20,0.18), 0 2px 8px rgba(43,33,20,0.05), inset 0 1px 0 rgba(255,255,255,1)",
-              }}
-              initial={{ opacity: 0, y: 28, scale: 0.97 }}
-              animate={heroInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-              transition={{ duration: 1.0, delay: 0.45, ease: e }}
-            >
-              {/* top orange line draws in */}
-              <motion.div
-                className="absolute inset-x-0 top-0 h-px origin-center"
-                style={{ background: "linear-gradient(90deg, transparent, rgba(255,92,0,0.7) 50%, transparent)" }}
-                initial={{ scaleX: 0 }} animate={heroInView ? { scaleX: 1 } : {}}
-                transition={{ duration: 1.0, delay: 0.7, ease: e }}
-              />
-
-              <div className="grid grid-cols-3">
-                {STATS.map((s, i) => (
-                  <div key={s.label} className="relative">
-                    {i > 0 && (
-                      <div className="absolute left-0 top-6 bottom-6 w-px hidden sm:block"
-                        style={{ background: "linear-gradient(to bottom, transparent, rgba(13,13,11,0.09) 30%, rgba(13,13,11,0.09) 70%, transparent)" }}
-                      />
-                    )}
-                    <StatPill value={s.value} label={s.label} delay={0.5 + i * 0.12} triggered={heroInView} index={i} />
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
+        {/* Static background glows — no parallax on mobile */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div
+            className="absolute -right-[10%] top-[20%] w-[700px] h-[700px] rounded-full blur-[160px] opacity-[0.11]"
+            style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 65%)" }}
+          />
+          <div
+            className="absolute -left-[5%] -top-[5%] w-[500px] h-[500px] rounded-full blur-[130px] opacity-[0.05]"
+            style={{ background: "radial-gradient(circle, #FF9040 0%, transparent 65%)" }}
+          />
         </div>
-      </div>
 
-    </section>
+        {/* Fine grid */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.02]"
+          style={{
+            backgroundImage: "linear-gradient(to right,#0D0D0B 1px,transparent 1px),linear-gradient(to bottom,#0D0D0B 1px,transparent 1px)",
+            backgroundSize: "60px 60px",
+          }}
+        />
+
+        {/* ── Hero top ── */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 md:pt-36 pb-12 sm:pb-16 md:pb-24">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-16 lg:gap-8 items-end">
+
+            {/* LEFT — label + headline — pure CSS animations */}
+            <div ref={heroRef}>
+              <div className={`phil-label${visible ? " in" : ""} mb-14`}>
+                <SectionLabel index={2}>Our Philosophy</SectionLabel>
+              </div>
+
+              <h2
+                className="font-instrument leading-[1.0] tracking-[-0.04em]"
+                style={{ fontSize: "clamp(50px, 7.5vw, 104px)" }}
+                aria-label="We build systems, not just assets."
+              >
+                <div className="phil-line-wrap">
+                  <span className={`phil-line${visible ? " in-0" : ""} text-[#0D0D0B]`}>
+                    We build
+                  </span>
+                </div>
+                <div className="phil-line-wrap">
+                  <span className={`phil-line${visible ? " in-1" : ""} italic text-[#FF5C00]`}>
+                    systems,
+                  </span>
+                </div>
+                <div className="phil-line-wrap">
+                  <span
+                    className={`phil-line${visible ? " in-2" : ""} text-[#B0AA9E]`}
+                    style={{ fontSize: "clamp(36px, 5.5vw, 76px)" }}
+                  >
+                    not just assets.
+                  </span>
+                </div>
+              </h2>
+            </div>
+
+            {/* RIGHT — copy + stats */}
+            <div className="flex flex-col gap-12">
+              {/* Paragraph — single CSS fade, not 27 individual word animations */}
+              <p className={`phil-para${visible ? " in" : ""} font-sans text-[16px] md:text-[17px] text-[#4A463F] leading-[2.0] max-w-full sm:max-w-md tracking-[0.005em]`}>
+                Every system we build is designed to outlast a trend, compound over time, and give our clients an unfair advantage not just for this quarter, but every one after it.
+              </p>
+
+              {/* Stats */}
+              <div
+                className={`phil-stats${visible ? " in" : ""} relative rounded-2xl overflow-hidden`}
+                style={{
+                  border: "1px solid rgba(13,13,11,0.07)",
+                  background: "linear-gradient(150deg, #FEFCF8 0%, #F5F1E9 100%)",
+                  boxShadow: "0 12px 56px -16px rgba(43,33,20,0.18), 0 2px 8px rgba(43,33,20,0.05), inset 0 1px 0 rgba(255,255,255,1)",
+                }}
+              >
+                <div
+                  className="absolute inset-x-0 top-0 h-px"
+                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,92,0,0.7) 50%, transparent)" }}
+                />
+                <div className="grid grid-cols-3">
+                  {STATS.map((s, i) => (
+                    <div key={s.label} className="relative">
+                      {i > 0 && (
+                        <div className="absolute left-0 top-6 bottom-6 w-px hidden sm:block"
+                          style={{ background: "linear-gradient(to bottom, transparent, rgba(13,13,11,0.09) 30%, rgba(13,13,11,0.09) 70%, transparent)" }}
+                        />
+                      )}
+                      <StatPill value={s.value} label={s.label} delay={0.5 + i * 0.12} triggered={visible} index={i} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </>
   );
 }
