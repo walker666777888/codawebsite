@@ -308,11 +308,16 @@ export default function Philosophy() {
   const reduced    = useReducedMotion();
   const heroInView = useInView(heroRef, { once: true, margin: "-60px" });
 
+  const [isTouch, setIsTouch] = useState(false);
+  useEffect(() => {
+    setIsTouch("ontouchstart" in window || navigator.maxTouchPoints > 0);
+  }, []);
+
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const springProg = useSpring(scrollYProgress, { stiffness: 30, damping: 25 });
-  const bgY        = useTransform(springProg, [0, 1], ["0%", "12%"]);
-  const headlineY  = useTransform(springProg, [0, 1], ["3%", "-3%"]);
-  const sideY      = useTransform(springProg, [0, 1], ["-2%", "2%"]);
+  const bgY        = useTransform(springProg, [0, 1], isTouch ? ["0%", "0%"] : ["0%", "12%"]);
+  const headlineY  = useTransform(springProg, [0, 1], isTouch ? ["0%", "0%"] : ["3%", "-3%"]);
+  const sideY      = useTransform(springProg, [0, 1], isTouch ? ["0%", "0%"] : ["-2%", "2%"]);
 
   const e = [0.16, 1, 0.3, 1] as const;
 
