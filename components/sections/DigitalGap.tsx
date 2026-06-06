@@ -389,7 +389,7 @@ export default function DigitalGap() {
                 style={{ fontSize: "clamp(28px, 7vw, 44px)" }}>
                 {pre}{" "}<span className="italic text-[#FF5C00]">{em}</span>
               </h2>
-              <div className="relative h-[220px] w-full rounded-2xl border border-[#E6E1DA] bg-white overflow-hidden p-5">
+              <div className="relative w-full rounded-2xl border border-[#E6E1DA] bg-white overflow-hidden" style={{ aspectRatio: "420/290" }}>
                 {visual}
               </div>
             </div>
