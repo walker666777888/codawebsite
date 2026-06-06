@@ -189,7 +189,8 @@ function VisualEcosystem() {
     (1 - t) ** 2 * p0 + 2 * (1 - t) * t * pc + t ** 2 * p1;
 
   return (
-    <svg className="w-full h-full" viewBox={`0 0 ${W} ${H}`} fill="none">
+    <div className="relative w-full h-full">
+    <svg className="absolute inset-0 w-full h-full" viewBox={`0 0 ${W} ${H}`} fill="none">
       <defs>
         <radialGradient id="eco-g" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#FF8A30" />
@@ -276,6 +277,7 @@ function VisualEcosystem() {
         </motion.g>
       ))}
     </svg>
+    </div>
   );
 }
 
