@@ -390,7 +390,9 @@ export default function DigitalGap() {
                 {pre}{" "}<span className="italic text-[#FF5C00]">{em}</span>
               </h2>
               <div className="relative w-full rounded-2xl border border-[#E6E1DA] bg-white overflow-hidden" style={{ aspectRatio: "420/290" }}>
-                {visual}
+                <div className="absolute inset-0">
+                  {visual}
+                </div>
               </div>
             </div>
           ))}
