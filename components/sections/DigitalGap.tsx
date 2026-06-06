@@ -180,108 +180,102 @@ function VisualEcosystem() {
     return { x: hcx + hr * Math.cos(a), y: hcy + hr * Math.sin(a), label, delay: i * 0.1 };
   });
 
-  // Control point: pull midpoint 30% toward hub for gentle inward arc
   const ctrl = (nx: number, ny: number) => ({
     x: (hcx + nx) / 2 + (hcx - (hcx + nx) / 2) * 0.3,
     y: (hcy + ny) / 2 + (hcy - (hcy + ny) / 2) * 0.3,
   });
 
-  // Sample quadratic bezier at t
   const bz = (t: number, p0: number, pc: number, p1: number) =>
     (1 - t) ** 2 * p0 + 2 * (1 - t) * t * pc + t ** 2 * p1;
 
   return (
-    <div className="relative w-full h-full">
-      <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox={`0 0 ${W} ${H}`} fill="none">
-        <defs>
-          <radialGradient id="eco-g" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#FF8A30" />
-            <stop offset="100%" stopColor="#FF5C00" />
-          </radialGradient>
-          <filter id="eco-f" x="-80%" y="-80%" width="260%" height="260%">
-            <feGaussianBlur stdDeviation="9" result="b" />
-            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-          </filter>
-        </defs>
+    <svg className="w-full h-full" viewBox={`0 0 ${W} ${H}`} fill="none">
+      <defs>
+        <radialGradient id="eco-g" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#FF8A30" />
+          <stop offset="100%" stopColor="#FF5C00" />
+        </radialGradient>
+        <filter id="eco-f" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="9" result="b" />
+          <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+      </defs>
 
-        {/* Curved spokes */}
-        {nodes.map((n, i) => {
-          const c = ctrl(n.x, n.y);
-          return (
-            <g key={`sp${i}`}>
-              <motion.path
-                d={`M ${hcx} ${hcy} Q ${c.x} ${c.y} ${n.x} ${n.y}`}
-                stroke="#FF5C00" strokeWidth="1.2" fill="none" opacity="0.25"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ duration: 0.9, delay: 0.2 + i * 0.1 }}
-              />
-              {/* Data packet — bezier keyframe approach */}
-              <motion.circle r="3.5" fill="#FF5C00"
-                animate={{
-                  cx: [hcx, bz(0.25, hcx, c.x, n.x), bz(0.5, hcx, c.x, n.x), bz(0.75, hcx, c.x, n.x), n.x,
-                       bz(0.75, hcx, c.x, n.x), bz(0.5, hcx, c.x, n.x), bz(0.25, hcx, c.x, n.x), hcx],
-                  cy: [hcy, bz(0.25, hcy, c.y, n.y), bz(0.5, hcy, c.y, n.y), bz(0.75, hcy, c.y, n.y), n.y,
-                       bz(0.75, hcy, c.y, n.y), bz(0.5, hcy, c.y, n.y), bz(0.25, hcy, c.y, n.y), hcy],
-                  opacity: [0, 0.7, 1, 0.8, 0.5, 0.4, 0.6, 0.3, 0],
-                }}
-                transition={{ duration: 3.2, delay: i * 0.53, repeat: Infinity, ease: "linear" }}
-              />
-            </g>
-          );
-        })}
-
-        {/* Hex ring between outer nodes */}
-        {nodes.map((n, i) => {
-          const nx = nodes[(i + 1) % 6];
-          return (
-            <motion.line key={`rg${i}`}
-              x1={n.x} y1={n.y} x2={nx.x} y2={nx.y}
-              stroke="#C8C3BB" strokeWidth="0.7" strokeDasharray="2 5"
-              initial={{ opacity: 0 }} animate={{ opacity: 0.4 }}
-              transition={{ duration: 0.5, delay: 0.9 + i * 0.08 }}
+      {/* Curved spokes + data packets */}
+      {nodes.map((n, i) => {
+        const c = ctrl(n.x, n.y);
+        return (
+          <g key={`sp${i}`}>
+            <motion.path
+              d={`M ${hcx} ${hcy} Q ${c.x} ${c.y} ${n.x} ${n.y}`}
+              stroke="#FF5C00" strokeWidth="1.2" fill="none" opacity="0.25"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 0.9, delay: 0.2 + i * 0.1 }}
             />
-          );
-        })}
+            <motion.circle r="3.5" fill="#FF5C00"
+              animate={{
+                cx: [hcx, bz(0.25,hcx,c.x,n.x), bz(0.5,hcx,c.x,n.x), bz(0.75,hcx,c.x,n.x), n.x,
+                     bz(0.75,hcx,c.x,n.x), bz(0.5,hcx,c.x,n.x), bz(0.25,hcx,c.x,n.x), hcx],
+                cy: [hcy, bz(0.25,hcy,c.y,n.y), bz(0.5,hcy,c.y,n.y), bz(0.75,hcy,c.y,n.y), n.y,
+                     bz(0.75,hcy,c.y,n.y), bz(0.5,hcy,c.y,n.y), bz(0.25,hcy,c.y,n.y), hcy],
+                opacity: [0, 0.7, 1, 0.8, 0.5, 0.4, 0.6, 0.3, 0],
+              }}
+              transition={{ duration: 3.2, delay: i * 0.53, repeat: Infinity, ease: "linear" }}
+            />
+          </g>
+        );
+      })}
 
-        {/* Hub glow */}
-        {[50, 34].map((rg, i) => (
-          <motion.circle key={i} cx={hcx} cy={hcy} r={rg} fill="#FF5C00"
-            animate={{ opacity: [0.05, 0.16, 0.05] }}
-            transition={{ duration: 2.2, delay: i * 0.7, repeat: Infinity }}
+      {/* Hex ring */}
+      {nodes.map((n, i) => {
+        const nx = nodes[(i + 1) % 6];
+        return (
+          <motion.line key={`rg${i}`}
+            x1={n.x} y1={n.y} x2={nx.x} y2={nx.y}
+            stroke="#C8C3BB" strokeWidth="0.7" strokeDasharray="2 5"
+            initial={{ opacity: 0 }} animate={{ opacity: 0.4 }}
+            transition={{ duration: 0.5, delay: 0.9 + i * 0.08 }}
           />
-        ))}
-        <circle cx={hcx} cy={hcy} r="28" fill="url(#eco-g)" filter="url(#eco-f)" />
-        <text x={hcx} y={hcy + 4} textAnchor="middle" fill="white"
-          fontSize="9.5" fontFamily="'DM Mono', monospace" fontWeight="700" letterSpacing="1.5">
-          CODA
-        </text>
-      </svg>
+        );
+      })}
 
-      {/* Outer nodes */}
+      {/* Hub glow */}
+      {[50, 34].map((rg, i) => (
+        <motion.circle key={i} cx={hcx} cy={hcy} r={rg} fill="#FF5C00"
+          animate={{ opacity: [0.05, 0.16, 0.05] }}
+          transition={{ duration: 2.2, delay: i * 0.7, repeat: Infinity }}
+        />
+      ))}
+      <circle cx={hcx} cy={hcy} r="28" fill="url(#eco-g)" filter="url(#eco-f)" />
+      <text x={hcx} y={hcy + 4} textAnchor="middle" fill="white"
+        fontSize="9.5" fontFamily="'DM Mono', monospace" fontWeight="700" letterSpacing="1.5">
+        CODA
+      </text>
+
+      {/* Outer nodes — pure SVG, no HTML overlay */}
       {nodes.map((n, i) => (
-        <motion.div key={i}
-          className="absolute -translate-x-1/2 -translate-y-1/2"
-          style={{ left: `${(n.x / W) * 100}%`, top: `${(n.y / H) * 100}%` }}
+        <motion.g key={`nd${i}`}
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
+          style={{ originX: n.x, originY: n.y } as React.CSSProperties}
           transition={{ duration: 0.55, delay: 0.35 + n.delay, type: "spring", stiffness: 200 }}
         >
-          <motion.div
-            className="relative w-16 h-16 rounded-full bg-[#FEFCF8] border border-[#FF5C00]/25 shadow-[0_2px_18px_rgba(13,13,11,0.09)] flex items-center justify-center"
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ duration: 2.4, delay: i * 0.38, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <motion.div
-              className="absolute inset-0 rounded-full border border-[#FF5C00]/25"
-              animate={{ scale: [1, 1.28, 1], opacity: [0.5, 0, 0.5] }}
-              transition={{ duration: 2.4, delay: i * 0.38, repeat: Infinity }}
-            />
-            <span className="font-mono text-[8px] font-semibold tracking-[1.5px] text-[#0D0D0B]">{n.label}</span>
-          </motion.div>
-        </motion.div>
+          {/* Pulse ring */}
+          <motion.circle cx={n.x} cy={n.y} r="22" fill="none" stroke="#FF5C00" strokeWidth="0.8"
+            animate={{ r: [22, 28, 22], opacity: [0.5, 0, 0.5] }}
+            transition={{ duration: 2.4, delay: i * 0.38, repeat: Infinity }}
+          />
+          {/* Node circle */}
+          <circle cx={n.x} cy={n.y} r="20" fill="#FEFCF8" stroke="rgba(255,92,0,0.25)" strokeWidth="1" />
+          {/* Label */}
+          <text x={n.x} y={n.y + 3.5} textAnchor="middle" fill="#0D0D0B"
+            fontSize="7" fontFamily="'DM Mono', monospace" fontWeight="600" letterSpacing="1.5">
+            {n.label}
+          </text>
+        </motion.g>
       ))}
-    </div>
+    </svg>
   );
 }
 
@@ -389,10 +383,8 @@ export default function DigitalGap() {
                 style={{ fontSize: "clamp(28px, 7vw, 44px)" }}>
                 {pre}{" "}<span className="italic text-[#FF5C00]">{em}</span>
               </h2>
-              <div className="relative w-full rounded-2xl border border-[#E6E1DA] bg-white overflow-hidden" style={{ aspectRatio: "420/290" }}>
-                <div className="absolute inset-0">
-                  {visual}
-                </div>
+              <div className="w-full rounded-2xl border border-[#E6E1DA] bg-white overflow-hidden p-4">
+                {visual}
               </div>
             </div>
           ))}
