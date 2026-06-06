@@ -383,7 +383,7 @@ export default function DigitalGap() {
                 style={{ fontSize: "clamp(28px, 7vw, 44px)" }}>
                 {pre}{" "}<span className="italic text-[#FF5C00]">{em}</span>
               </h2>
-              <div className="w-full rounded-2xl border border-[#E6E1DA] bg-white overflow-hidden p-4">
+              <div className="w-full h-[240px] rounded-2xl border border-[#E6E1DA] bg-white overflow-hidden">
                 {visual}
               </div>
             </div>
