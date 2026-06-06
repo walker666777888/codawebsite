@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -292,7 +292,7 @@ export default function DigitalGap() {
   const visualsRef   = useRef<HTMLDivElement>(null);
   const progressRef  = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     // Skip heavy GSAP pin+scrub on mobile widths instead of touch detection
     // because many Windows laptops have touch screens and we want the desktop animation.
     const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
@@ -305,10 +305,11 @@ export default function DigitalGap() {
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "+=210%",
+          end: "+=150%",
           pin: true,
           pinSpacing: true,
-          scrub: 1.4,
+          pinType: "transform", // use CSS transform instead of position:fixed — avoids jump with Lenis smooth scroll
+          scrub: 1.2,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -323,23 +324,27 @@ export default function DigitalGap() {
       const visuals = visualsRef.current.children;
 
       gsap.set([...Array.from(texts), ...Array.from(visuals)], {
-        willChange: "transform, opacity, filter",
+        willChange: "transform, opacity",
         transform: "translateZ(0)",
       });
-      gsap.set(texts,      { opacity: 0.12, y: 0, filter: "blur(4px)" });
-      gsap.set(visuals,    { opacity: 0, y: 50, scale: 0.94, filter: "blur(8px)" });
-      gsap.set(visuals[0], { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" });
-      gsap.set(texts[0],   { opacity: 1, filter: "blur(0px)" });
+      gsap.set(texts,      { opacity: 0.15, y: 0 });
+      gsap.set(visuals,    { opacity: 0, y: 40, scale: 0.95 });
+      gsap.set(visuals[0], { opacity: 1, y: 0, scale: 1 });
+      gsap.set(texts[0],   { opacity: 1 });
 
       tl
-        .to(texts[0],   { opacity: 0.12, filter: "blur(4px)", duration: 1 })
-        .to(visuals[0], { opacity: 0, y: -50, scale: 0.94, filter: "blur(8px)", duration: 1 }, "<")
-        .to(texts[1],   { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 }, "<")
-        .to(visuals[1], { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 1 }, "<")
-        .to(texts[1],   { opacity: 0.12, filter: "blur(4px)", duration: 1 })
-        .to(visuals[1], { opacity: 0, y: -50, scale: 0.94, filter: "blur(8px)", duration: 1 }, "<")
-        .to(texts[2],   { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 }, "<")
-        .to(visuals[2], { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 1 }, "<");
+        .to(texts[0],   { opacity: 0.15, duration: 1 })
+        .to(visuals[0], { opacity: 0, y: -40, scale: 0.95, duration: 1 }, "<")
+        .to(texts[1],   { opacity: 1, y: 0, duration: 1 }, "<")
+        .to(visuals[1], { opacity: 1, y: 0, scale: 1, duration: 1 }, "<")
+        .to(texts[1],   { opacity: 0.15, duration: 1 })
+        .to(visuals[1], { opacity: 0, y: -40, scale: 0.95, duration: 1 }, "<")
+        .to(texts[2],   { opacity: 1, y: 0, duration: 1 }, "<")
+        .to(visuals[2], { opacity: 1, y: 0, scale: 1, duration: 1 }, "<");
+
+      // Defer refresh so Lenis has time to initialise before ScrollTrigger
+      // locks in its scroll-position measurements.
+      gsap.delayedCall(0.15, () => ScrollTrigger.refresh());
     }, containerRef);
 
     return () => ctx.revert();
@@ -348,7 +353,7 @@ export default function DigitalGap() {
   return (
     <section
       ref={containerRef}
-      className="min-h-screen bg-[#F4F0E8] text-[#0D0D0B] overflow-hidden border-b border-[#E6E1DA] relative"
+      className="h-screen bg-[#F4F0E8] text-[#0D0D0B] overflow-hidden border-b border-[#E6E1DA] relative"
     >
       <div className="absolute inset-0 pointer-events-none" style={{
         backgroundImage: "linear-gradient(to right,#E6E1DA 1px,transparent 1px),linear-gradient(to bottom,#E6E1DA 1px,transparent 1px)",
@@ -359,7 +364,7 @@ export default function DigitalGap() {
         <div ref={progressRef} className="absolute inset-0 bg-[#FF5C00] origin-left" style={{ transform: "scaleX(0)" }} />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 md:py-0 md:h-full md:flex md:flex-col md:justify-center">
+      <div className="relative z-10 h-full max-w-7xl mx-auto px-6 py-16 md:py-0 md:flex md:flex-col md:justify-center">
         <SectionLabel
           index={1}
           className="mb-8 md:mb-12 inline-flex w-fit px-3 py-1.5 rounded-full"
@@ -413,10 +418,11 @@ export default function DigitalGap() {
             ))}
           </div>
         </div>
+      </div>
 
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block">
-          <span className="font-mono text-[9px] text-[#0D0D0B]/25 uppercase tracking-[0.25em]">Scroll to explore</span>
-        </div>
+      {/* Anchored to section bottom — stays visible throughout the entire pinned scroll */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 hidden md:block">
+        <span className="font-mono text-[11px] text-[#0D0D0B]/55 uppercase tracking-[0.3em]">Scroll to explore</span>
       </div>
     </section>
   );

@@ -2,7 +2,6 @@
 
 import {
   motion,
-  AnimatePresence,
   useMotionValue,
   useSpring,
   useTransform,
@@ -12,47 +11,302 @@ import {
 import { useRef, useState, useCallback, useEffect } from "react";
 import SectionLabel from "@/components/ui/SectionLabel";
 
-/* ─── data ──────────────────────────────────────────────── */
-const PRINCIPLES = [
-  {
-    num: "01",
-    title: "System-first,",
-    accent: "always.",
-    body: "We never build features in isolation. Every touchpoint code, design, copy, acquisition is engineered as a single compounding system. That's what separates durable growth from one-off wins.",
-    glyph: "∑",
-    tag: "Foundation",
-  },
-  {
-    num: "02",
-    title: "Obsess over",
-    accent: "leverage.",
-    body: "One great system beats ten mediocre executions. We ruthlessly identify the highest-leverage moves and go all-in so our clients gain unfair advantages that multiply over time.",
-    glyph: "×",
-    tag: "Strategy",
-  },
-  {
-    num: "03",
-    title: "Ship with",
-    accent: "precision.",
-    body: "Speed without craft is noise. We move fast and finish clean every pixel, every API response, every sentence deliberate. Quality is the only thing that compounds.",
-    glyph: "◎",
-    tag: "Craft",
-  },
-  {
-    num: "04",
-    title: "Truth over",
-    accent: "comfort.",
-    body: "We say the hard thing. If a strategy won't work, you'll hear it from us first. That honesty is what makes the relationship valuable and what keeps clients coming back.",
-    glyph: "→",
-    tag: "Integrity",
-  },
-];
-
+/* ─── stats data ──────────────────────────────────────────── */
 const STATS = [
   { value: "7+", label: "Years operating" },
   { value: "100%", label: "Systems approach" },
   { value: "∞", label: "Compounding" },
 ];
+
+/* ─── draggable card data ─────────────────────────────────── */
+const CARDS = [
+  {
+    id: 0,
+    category: "FOUNDATION",
+    dot: "#FF5C00",
+    title: "System-first,",
+    accent: "always.",
+    body: "We never build features in isolation. Every touchpoint — code, design, copy, acquisition — is engineered as one compounding system.",
+    tags: "SYSTEMS / THINKING / SCALE",
+    bg: "#FEFCF2",
+    border: "rgba(220,200,140,0.5)",
+    shadow: "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.9) inset",
+    rotation: -3,
+    x: 52,
+    y: 48,
+    pin: true,
+    pinColor: "#C4973A",
+    width: 268,
+  },
+  {
+    id: 1,
+    category: "STRATEGY",
+    dot: "#3A8A4A",
+    title: "Obsess over",
+    accent: "leverage.",
+    body: "One great system beats ten mediocre executions. We find the highest-leverage moves and go all-in — advantages compound over time.",
+    tags: "LEVERAGE / FOCUS / ROI",
+    bg: "#F2FAF4",
+    border: "rgba(140,200,155,0.45)",
+    shadow: "0 8px 40px rgba(0,0,0,0.09), 0 1px 0 rgba(255,255,255,0.9) inset",
+    rotation: 2.2,
+    x: 396,
+    y: 18,
+    pin: true,
+    pinColor: "#4A8A5A",
+    width: 255,
+  },
+  {
+    id: 2,
+    category: "CRAFT",
+    dot: "#FF5C00",
+    title: "Ship with",
+    accent: "precision.",
+    body: "Speed without craft is noise. We move fast and finish clean — every pixel, every API response, every sentence deliberate.",
+    tags: "QUALITY / SPEED / DETAIL",
+    bg: "#FEFCF8",
+    border: "rgba(200,190,170,0.4)",
+    shadow: "0 6px 32px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.85) inset",
+    rotation: -1.4,
+    x: 728,
+    y: 58,
+    pin: true,
+    pinColor: "#8A7A5A",
+    width: 270,
+  },
+  {
+    id: 3,
+    category: "INTEGRITY",
+    dot: "#4A72C8",
+    title: "Truth over",
+    accent: "comfort.",
+    body: "We say the hard thing. If a strategy won't work, you'll hear it from us first. That honesty is what makes the relationship last.",
+    tags: "TRUST / CLARITY / HONESTY",
+    bg: "#F2F4FC",
+    border: "rgba(140,160,220,0.4)",
+    shadow: "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.9) inset",
+    rotation: 2.8,
+    x: 1020,
+    y: 30,
+    pin: true,
+    pinColor: "#4A72C8",
+    width: 248,
+  },
+  {
+    id: 4,
+    category: "VISION",
+    dot: "#FF5C00",
+    title: "Digital",
+    accent: "ecosystems.",
+    body: "We architect interconnected systems where every part amplifies every other — so the whole is always greater than the sum.",
+    tags: "ECOSYSTEM / GROWTH / FUTURE",
+    bg: "#FFF8F2",
+    border: "rgba(255,140,80,0.3)",
+    shadow: "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.9) inset",
+    rotation: -2.1,
+    x: 188,
+    y: 348,
+    pin: true,
+    pinColor: "#E05A00",
+    width: 262,
+  },
+  {
+    id: 5,
+    category: "GROWTH",
+    dot: "#8A5AC8",
+    title: "Compound",
+    accent: "everything.",
+    body: "Every system we build is designed to outlast trends and compound month over month — giving clients an unfair, permanent advantage.",
+    tags: "COMPOUNDING / RETURNS / EDGE",
+    bg: "#FAF2FC",
+    border: "rgba(170,130,210,0.4)",
+    shadow: "0 8px 40px rgba(0,0,0,0.09), 0 1px 0 rgba(255,255,255,0.9) inset",
+    rotation: 1.6,
+    x: 548,
+    y: 318,
+    pin: true,
+    pinColor: "#8A5AC8",
+    width: 258,
+  },
+];
+
+/* ─── Pushpin SVG ─────────────────────────────────────────── */
+function Pushpin({ color }: { color: string }) {
+  return (
+    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10 drop-shadow-md">
+      <svg width="22" height="28" viewBox="0 0 22 28" fill="none">
+        <circle cx="11" cy="10" r="9" fill={color} />
+        <circle cx="11" cy="10" r="6" fill="rgba(255,255,255,0.22)" />
+        <circle cx="8.5" cy="7.5" r="2.5" fill="rgba(255,255,255,0.45)" />
+        <rect x="10" y="18" width="2.2" height="9" rx="1.1" fill={color} opacity="0.65" />
+      </svg>
+    </div>
+  );
+}
+
+/* ─── Single draggable card ───────────────────────────────── */
+function DraggableCard({
+  card,
+  zIndex,
+  onDragStart,
+}: {
+  card: typeof CARDS[0];
+  zIndex: number;
+  onDragStart: () => void;
+}) {
+  return (
+    <motion.div
+      drag
+      dragMomentum={false}
+      dragElastic={0}
+      dragConstraints={false}
+      dragTransition={{ power: 0, timeConstant: 0 }}
+      onDragStart={onDragStart}
+      className="absolute select-none"
+      style={{
+        left: card.x,
+        top: card.y,
+        width: card.width,
+        zIndex,
+        rotate: card.rotation,
+        cursor: "grab",
+      }}
+      whileDrag={{ scale: 1.06, cursor: "grabbing" }}
+      whileHover={{ scale: 1.02 }}
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ scale: { type: "spring", stiffness: 300, damping: 24 }, opacity: { duration: 0.3 } }}
+    >
+      {/* Paper card */}
+      <div
+        className="relative rounded-2xl overflow-visible"
+        style={{
+          background: card.bg,
+          border: `1px solid ${card.border}`,
+          boxShadow: card.shadow,
+          padding: "28px 24px 22px",
+        }}
+      >
+        {card.pin && <Pushpin color={card.pinColor} />}
+
+        {/* Category */}
+        <div className="flex items-center gap-2 mb-3">
+          <div
+            className="w-1.5 h-1.5 rounded-full shrink-0"
+            style={{ background: card.dot, boxShadow: `0 0 5px ${card.dot}` }}
+          />
+          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#6F6A60]">
+            {card.category}
+          </span>
+        </div>
+
+        {/* Title */}
+        <h3
+          className="font-instrument tracking-[-0.03em] leading-[1.05] text-[#0D0D0B] mb-3"
+          style={{ fontSize: "clamp(22px, 2.2vw, 28px)" }}
+        >
+          {card.title}{" "}
+          <span className="italic text-[#FF5C00]">{card.accent}</span>
+        </h3>
+
+        {/* Body */}
+        <p className="font-sans text-[13px] text-[#4A463F] leading-[1.75] mb-5">
+          {card.body}
+        </p>
+
+        {/* Divider + tags */}
+        <div
+          className="border-t pt-3"
+          style={{ borderColor: "rgba(13,13,11,0.08)" }}
+        >
+          <span className="font-mono text-[8.5px] tracking-[0.18em] text-[#9A9488] uppercase">
+            {card.tags}
+          </span>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─── Draggable board (desktop only) ─────────────────────── */
+function DraggableBoard() {
+  const [order, setOrder] = useState(CARDS.map((c) => c.id));
+  const bringToFront = useCallback(
+    (id: number) => setOrder((prev) => [...prev.filter((x) => x !== id), id]),
+    []
+  );
+
+  return (
+    <div className="hidden lg:block relative">
+      {/* Board */}
+      <div
+        className="relative w-full overflow-hidden rounded-3xl"
+        style={{
+          height: 640,
+          background: "#F4F0E8",
+          backgroundImage:
+            "linear-gradient(to right,rgba(13,13,11,0.05) 1px,transparent 1px), linear-gradient(to bottom,rgba(13,13,11,0.05) 1px,transparent 1px)",
+          backgroundSize: "48px 48px",
+          border: "1px solid rgba(13,13,11,0.08)",
+          boxShadow: "0 2px 0 rgba(255,255,255,0.6) inset, 0 24px 80px rgba(0,0,0,0.07)",
+        }}
+      >
+        {/* Subtle grid overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right,rgba(13,13,11,0.04) 1px,transparent 1px), linear-gradient(to bottom,rgba(13,13,11,0.04) 1px,transparent 1px)",
+            backgroundSize: "48px 48px",
+          }}
+        />
+
+        {/* Corner crosshairs */}
+        {[[24, 24], [24, "auto"], ["auto", 24], ["auto", "auto"]].map(([t, l], i) => (
+          <div
+            key={i}
+            className="absolute pointer-events-none opacity-20"
+            style={{
+              top: typeof t === "number" ? t : undefined,
+              bottom: t === "auto" ? 24 : undefined,
+              left: typeof l === "number" ? l : undefined,
+              right: l === "auto" ? 24 : undefined,
+            }}
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <line x1="6" y1="0" x2="6" y2="12" stroke="#0D0D0B" strokeWidth="0.8" />
+              <line x1="0" y1="6" x2="12" y2="6" stroke="#0D0D0B" strokeWidth="0.8" />
+            </svg>
+          </div>
+        ))}
+
+        {/* Cards */}
+        {CARDS.map((card) => (
+          <DraggableCard
+            key={card.id}
+            card={card}
+            zIndex={order.indexOf(card.id) + 1}
+            onDragStart={() => bringToFront(card.id)}
+          />
+        ))}
+
+        {/* Drag hint */}
+        <div
+          className="absolute bottom-5 right-6 flex items-center gap-2 pointer-events-none"
+          style={{ opacity: 0.35 }}
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1v12M1 7h12" stroke="#0D0D0B" strokeWidth="1.2" strokeLinecap="round" />
+            <path d="M4 4l-3 3 3 3M10 4l3 3-3 3" stroke="#0D0D0B" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#0D0D0B]">
+            Drag the cards
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /* ─── count-up hook ─────────────────────────────────────── */
 function useCountUp(target: number | null, inView: boolean, delay: number) {
@@ -78,199 +332,35 @@ function useCountUp(target: number | null, inView: boolean, delay: number) {
 }
 
 /* ─── stat pill ─────────────────────────────────────────── */
-function StatPill({ value, label, delay, triggered, index, dark = false }: {
-  value: string; label: string; delay: number; triggered: boolean; index: number; dark?: boolean;
+function StatPill({ value, label, delay, triggered, index }: {
+  value: string; label: string; delay: number; triggered: boolean; index: number;
 }) {
   const reduced = useReducedMotion();
   const [hovered, setHovered] = useState(false);
-
   const numMatch = value.match(/^(\d+)/);
   const numericTarget = numMatch ? parseInt(numMatch[1]) : null;
   const numericSuffix = numericTarget !== null ? value.slice(numMatch![0].length) : null;
   const isSymbol = numericTarget === null;
   const count = useCountUp(reduced ? null : numericTarget, triggered, delay);
-  const displayValue = isSymbol
-    ? value
-    : reduced
-      ? `${numericTarget}${numericSuffix}`
-      : `${count}${numericSuffix}`;
+  const displayValue = isSymbol ? value : reduced ? `${numericTarget}${numericSuffix}` : `${count}${numericSuffix}`;
 
   return (
     <div className="flex flex-col items-center gap-1 w-full">
-      {/* Big number */}
       <motion.span
-        className="font-instrument leading-none tracking-[-0.03em] tabular-nums"
-        style={{ fontSize: "clamp(28px, 7vw, 64px)", color: dark ? "#FFFFFF" : "#14130F" }}
+        className="font-instrument leading-none tracking-[-0.03em] tabular-nums text-white"
+        style={{ fontSize: "clamp(28px, 7vw, 64px)" }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        animate={{ color: hovered ? "#FF5C00" : dark ? "#FFFFFF" : "#14130F" }}
+        animate={{ color: hovered ? "#FF5C00" : "#FFFFFF" }}
         transition={{ duration: 0.25 }}
       >
         {displayValue}
       </motion.span>
-      {/* Label */}
-      <span
-        className="font-mono uppercase tracking-[0.18em] leading-tight block text-center"
-        style={{ fontSize: "clamp(7px, 1.8vw, 9px)", color: dark ? "rgba(255,255,255,0.35)" : "#6F6A60" }}
-      >
+      <span className="font-mono uppercase tracking-[0.18em] leading-tight block text-center text-white/35"
+        style={{ fontSize: "clamp(7px, 1.8vw, 9px)" }}>
         {label}
       </span>
     </div>
-  );
-}
-
-/* ─── principle row ─────────────────────────────────────── */
-function PrincipleRow({
-  p, index, reduced,
-}: {
-  p: (typeof PRINCIPLES)[number];
-  index: number;
-  reduced: boolean;
-}) {
-  const ref    = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-30px" });
-  const [open, setOpen] = useState(false);
-
-  const MED    = { stiffness: 150, damping: 22, mass: 0.5 } as const;
-  const SOFT   = { stiffness: 80,  damping: 18, mass: 0.6 } as const;
-  const SNAPPY = { stiffness: 260, damping: 24, mass: 0.4 } as const;
-
-  const hMv         = useMotionValue(0);
-  const washOpacity = useSpring(useTransform(hMv, [0, 1], [0, 1]),        MED);
-  const barScaleY   = useSpring(useTransform(hMv, [0, 1], [0, 1]),        MED);
-  const barOpacity  = useSpring(useTransform(hMv, [0, 1], [0, 1]),        MED);
-  const accentX     = useSpring(useTransform(hMv, [0, 1], [0, 9]),        SNAPPY);
-  const glyphBgMv   = useSpring(useTransform(hMv, [0, 1], [0.05, 0.13]), MED);
-  const glyphScale  = useSpring(useTransform(hMv, [0, 1], [1, 1.12]),     SNAPPY);
-  const glyphRot    = useSpring(useTransform(hMv, [0, 1], [0, 22]),       SOFT);
-  const numOpacity  = useSpring(useTransform(hMv, [0, 1], [0.3, 1]),      MED);
-
-  const glyphBg = useTransform(glyphBgMv, (a) => `rgba(255,92,0,${a.toFixed(3)})`);
-
-  const onEnter = useCallback(() => { hMv.set(1); setOpen(true);  }, [hMv]);
-  const onLeave = useCallback(() => { hMv.set(0); setOpen(false); }, [hMv]);
-
-  const ease = [0.16, 1, 0.3, 1] as const;
-
-  return (
-    <motion.div
-      ref={ref}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-      className="relative border-b border-[#0D0D0B]/[0.07] cursor-default"
-      initial={{ opacity: 0, y: 36 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay: index * 0.07, ease }}
-    >
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "linear-gradient(90deg,rgba(255,92,0,0.06) 0%,transparent 70%)",
-          opacity: washOpacity,
-        }}
-      />
-
-      <motion.div
-        className="absolute left-0 top-0 bottom-0 w-[2px] rounded-full origin-top"
-        style={{
-          background: "linear-gradient(to bottom,#FF5C00,rgba(255,92,0,0.15))",
-          scaleY: barScaleY,
-          opacity: barOpacity,
-        }}
-      />
-
-      <div className="relative flex items-start gap-3 md:gap-10 py-6 md:py-9 px-4 md:px-8">
-        <motion.span
-          className="font-mono text-[11px] tracking-[0.25em] shrink-0 w-7 mt-2 text-[#FF5C00]"
-          style={{ opacity: numOpacity }}
-        >
-          {p.num}
-        </motion.span>
-
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-baseline gap-x-2 pt-1">
-            <span
-              className="font-instrument text-[#0D0D0B] leading-[1.05] tracking-[-0.03em]"
-              style={{ fontSize: "clamp(22px, 3.5vw, 52px)" }}
-            >
-              {p.title}
-            </span>
-            <motion.span
-              className="font-instrument italic text-[#FF5C00] leading-[1.05] tracking-[-0.03em]"
-              style={{ fontSize: "clamp(22px, 3.5vw, 52px)", x: accentX }}
-            >
-              {p.accent}
-            </motion.span>
-          </div>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateRows: open ? "1fr" : "0fr",
-              transition: reduced ? "none" : "grid-template-rows 460ms cubic-bezier(0.16, 1, 0.3, 1)",
-            }}
-          >
-            <div className="overflow-hidden">
-              <AnimatePresence initial={false}>
-                {open && (
-                  <motion.div
-                    key="body"
-                    className="flex flex-col sm:flex-row items-start gap-3 sm:gap-6 mt-4 mb-1"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 6, transition: { duration: 0.14, ease: [0.4, 0, 1, 0.6] } }}
-                    transition={{ opacity: { duration: 0.25, ease }, y: { type: "spring", stiffness: 400, damping: 32 } }}
-                  >
-                    <motion.span
-                      className="shrink-0 font-mono text-[8px] uppercase tracking-[0.22em] text-[#FF5C00] border border-[rgba(255,92,0,0.3)] rounded-full px-2.5 py-1"
-                      initial={{ opacity: 0, scale: 0.75, x: -8 }}
-                      animate={{ opacity: 1, scale: 1, x: 0 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ type: "spring", stiffness: 360, damping: 24, delay: 0.06 }}
-                    >
-                      {p.tag}
-                    </motion.span>
-                    <motion.p
-                      className="font-sans text-[13px] md:text-[15px] text-[#4A463F] leading-[1.8] max-w-lg"
-                      initial={{ opacity: 0, x: -8 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ type: "spring", stiffness: 320, damping: 28, delay: 0.1 }}
-                    >
-                      {p.body}
-                    </motion.p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
-
-        <motion.div
-          className="relative shrink-0 w-12 h-12 md:w-16 md:h-16 items-center justify-center rounded-full mt-1 hidden md:flex"
-          style={{ background: glyphBg, scale: glyphScale }}
-        >
-          <motion.span
-            className="font-instrument text-[#FF5C00] select-none leading-none"
-            style={{ fontSize: "clamp(18px, 2vw, 28px)", rotate: glyphRot }}
-          >
-            {p.glyph}
-          </motion.span>
-        </motion.div>
-
-        <div className="shrink-0 w-7 h-7 rounded-full border border-[#0D0D0B]/15 flex items-center justify-center mt-2 overflow-hidden">
-          <motion.div
-            animate={{ rotate: open ? 45 : 0 }}
-            transition={{ type: "spring", stiffness: 340, damping: 24 }}
-          >
-            <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-              <line x1="5.5" y1="0" x2="5.5" y2="11" stroke="#0D0D0B" strokeWidth="1.2" strokeLinecap="round" />
-              <line x1="0" y1="5.5" x2="11" y2="5.5" stroke="#0D0D0B" strokeWidth="1.2" strokeLinecap="round" />
-            </svg>
-          </motion.div>
-        </div>
-      </div>
-    </motion.div>
   );
 }
 
@@ -281,7 +371,6 @@ export default function Philosophy() {
   const reduced    = useReducedMotion();
   const [visible, setVisible] = useState(false);
 
-  /* Single IntersectionObserver — replaces useInView + useScroll + useSpring chain */
   useEffect(() => {
     const el = heroRef.current;
     if (!el) return;
@@ -308,19 +397,15 @@ export default function Philosophy() {
           from { opacity: 0; }
           to   { opacity: 1; }
         }
-
         .phil-label { opacity: 0; }
         .phil-label.in { animation: phil-fade-up 0.6s cubic-bezier(0.16,1,0.3,1) 0s forwards; }
-
         .phil-line-wrap { overflow: hidden; padding-bottom: 0.2em; }
         .phil-line { display: block; transform: translateY(108%); will-change: transform; }
         .phil-line.in-0 { animation: phil-slide-up 1s cubic-bezier(0.16,1,0.3,1) 0.1s forwards; }
         .phil-line.in-1 { animation: phil-slide-up 1s cubic-bezier(0.16,1,0.3,1) 0.19s forwards; }
         .phil-line.in-2 { animation: phil-slide-up 1s cubic-bezier(0.16,1,0.3,1) 0.28s forwards; }
-
         .phil-para { opacity: 0; }
         .phil-para.in { animation: phil-fade 0.8s ease 0.35s forwards; }
-
         .phil-stats { opacity: 0; }
         .phil-stats.in { animation: phil-fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.45s forwards; }
       `}</style>
@@ -331,108 +416,52 @@ export default function Philosophy() {
         className="relative overflow-hidden"
         style={{ background: "#F4F0E8" }}
       >
-        {/* Static background glows — no parallax on mobile */}
+        {/* Background glows */}
         <div className="absolute inset-0 pointer-events-none">
-          <div
-            className="absolute -right-[10%] top-[20%] w-[700px] h-[700px] rounded-full blur-[160px] opacity-[0.11]"
-            style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 65%)" }}
-          />
-          <div
-            className="absolute -left-[5%] -top-[5%] w-[500px] h-[500px] rounded-full blur-[130px] opacity-[0.05]"
-            style={{ background: "radial-gradient(circle, #FF9040 0%, transparent 65%)" }}
-          />
+          <div className="absolute -right-[10%] top-[20%] w-[700px] h-[700px] rounded-full blur-[160px] opacity-[0.11]"
+            style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 65%)" }} />
+          <div className="absolute -left-[5%] -top-[5%] w-[500px] h-[500px] rounded-full blur-[130px] opacity-[0.05]"
+            style={{ background: "radial-gradient(circle, #FF9040 0%, transparent 65%)" }} />
         </div>
 
         {/* Fine grid */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.02]"
+        <div className="absolute inset-0 pointer-events-none opacity-[0.02]"
           style={{
             backgroundImage: "linear-gradient(to right,#0D0D0B 1px,transparent 1px),linear-gradient(to bottom,#0D0D0B 1px,transparent 1px)",
             backgroundSize: "60px 60px",
-          }}
-        />
+          }} />
 
-        {/* ── Hero top ── */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 md:pt-36 pb-12 sm:pb-16 md:pb-24">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-16 lg:gap-8 items-end">
-
-            {/* LEFT — label + headline — pure CSS animations */}
-            <div ref={heroRef}>
-              <div className={`phil-label${visible ? " in" : ""} mb-14`}>
-                <SectionLabel index={2}>Our Philosophy</SectionLabel>
-              </div>
-
-              <h2
-                className="font-instrument leading-[1.0] tracking-[-0.04em]"
-                style={{ fontSize: "clamp(50px, 7.5vw, 104px)" }}
-                aria-label="We build systems, not just assets."
-              >
-                <div className="phil-line-wrap">
-                  <span className={`phil-line${visible ? " in-0" : ""} text-[#0D0D0B]`}>
-                    We build
-                  </span>
-                </div>
-                <div className="phil-line-wrap">
-                  <span className={`phil-line${visible ? " in-1" : ""} italic text-[#FF5C00]`}>
-                    systems,
-                  </span>
-                </div>
-                <div className="phil-line-wrap">
-                  <span
-                    className={`phil-line${visible ? " in-2" : ""} text-[#B0AA9E]`}
-                    style={{ fontSize: "clamp(36px, 5.5vw, 76px)" }}
-                  >
-                    not just assets.
-                  </span>
-                </div>
-              </h2>
-            </div>
-
-            {/* RIGHT — copy + stats */}
-            <div className="flex flex-col gap-12">
-              {/* Paragraph — single CSS fade, not 27 individual word animations */}
-              <p className={`phil-para${visible ? " in" : ""} font-sans text-[16px] md:text-[17px] text-[#4A463F] leading-[2.0] max-w-full sm:max-w-md tracking-[0.005em]`}>
-                Every system we build is designed to outlast a trend, compound over time, and give our clients an unfair advantage not just for this quarter, but every one after it.
-              </p>
-
-              {/* Stats — premium dark card */}
-              <div
-                className={`phil-stats${visible ? " in" : ""} relative rounded-2xl overflow-hidden`}
-                style={{
-                  background: "linear-gradient(135deg, #0D0D0B 0%, #1a1410 100%)",
-                  border: "1px solid rgba(255,92,0,0.15)",
-                  boxShadow: "0 20px 60px -12px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04) inset",
-                }}
-              >
-                {/* Top orange hairline */}
-                <div
-                  className="absolute inset-x-0 top-0 h-[1.5px]"
-                  style={{ background: "linear-gradient(90deg, transparent 0%, #FF5C00 40%, #FF9A3C 60%, transparent 100%)" }}
-                />
-                {/* Ambient glow */}
-                <div
-                  className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-32 rounded-full blur-[60px] opacity-20 pointer-events-none"
-                  style={{ background: "#FF5C00" }}
-                />
-
-                <div className="relative grid grid-cols-3 divide-x divide-white/[0.06]">
-                  {STATS.map((s, i) => (
-                    <div key={s.label} className="flex flex-col items-center justify-center px-3 py-7 gap-2 text-center">
-                      {/* Orange accent dot */}
-                      <div
-                        className="w-1 h-1 rounded-full mb-1"
-                        style={{ background: "#FF5C00", boxShadow: "0 0 6px #FF5C00" }}
-                      />
-                      {/* Big number */}
-                      <StatPill value={s.value} label={s.label} delay={0.5 + i * 0.12} triggered={visible} index={i} dark />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+        {/* Section label */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 md:pt-28 pb-10">
+          <div ref={heroRef} className={`phil-label${visible ? " in" : ""}`}>
+            <SectionLabel index={2}>Our Philosophy</SectionLabel>
           </div>
         </div>
 
+        {/* ── Draggable board (desktop only) ── */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pb-20 md:pb-28">
+          <DraggableBoard />
+
+          {/* Mobile fallback — simple stacked cards */}
+          <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {CARDS.map((card) => (
+              <div key={card.id} className="rounded-2xl p-6"
+                style={{ background: card.bg, border: `1px solid ${card.border}`, boxShadow: card.shadow }}>
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: card.dot }} />
+                  <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#6F6A60]">{card.category}</span>
+                </div>
+                <h3 className="font-instrument text-[22px] tracking-[-0.03em] text-[#0D0D0B] mb-2">
+                  {card.title} <span className="italic text-[#FF5C00]">{card.accent}</span>
+                </h3>
+                <p className="font-sans text-[13px] text-[#4A463F] leading-[1.75] mb-4">{card.body}</p>
+                <div className="border-t pt-3" style={{ borderColor: "rgba(13,13,11,0.08)" }}>
+                  <span className="font-mono text-[8.5px] tracking-[0.18em] text-[#9A9488] uppercase">{card.tags}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
     </>
   );

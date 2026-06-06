@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { motion } from "motion/react";
+import { motion, useInView } from "motion/react";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { ArrowUpRight } from "lucide-react";
+import { useVideoPreload } from "@/components/providers/VideoPreloadProvider";
 
 const projects = [
   {
@@ -94,12 +95,20 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
 /* ── WorkShowcase ─────────────────────────────────────────────── */
 export default function WorkShowcase() {
   const trackRef   = useRef<HTMLDivElement>(null);
-  const offsetRef  = useRef(0);       // current translateX in px (negative = scrolled right)
-  const halfW      = useRef(0);       // half the track width (one set of cards)
+  const sectionRef = useRef<HTMLElement>(null);
+  const offsetRef  = useRef(0);
+  const halfW      = useRef(0);
   const isDragging = useRef(false);
   const lastX      = useRef(0);
   const rafId      = useRef<number>(0);
-  const speed      = 0.6;            // px per frame at 60fps — adjust for faster/slower
+  const speed      = 0.6;
+
+  /* Trigger footer video preload as soon as this section is visible */
+  const { triggerLoad } = useVideoPreload();
+  const sectionInView = useInView(sectionRef, { once: true, margin: "0px" });
+  useEffect(() => {
+    if (sectionInView) triggerLoad();
+  }, [sectionInView, triggerLoad]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -145,7 +154,7 @@ export default function WorkShowcase() {
   const onPointerUp = () => { isDragging.current = false; };
 
   return (
-    <section id="work" className="py-16 sm:py-24 lg:py-36 bg-[#F4F0E8] overflow-hidden relative">
+    <section id="work" ref={sectionRef} className="py-16 sm:py-24 lg:py-36 bg-[#F4F0E8] overflow-hidden relative">
       {/* Separators */}
       <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#D6D1CB] to-transparent" />
       <div className="absolute inset-0 pointer-events-none opacity-[0.35]"

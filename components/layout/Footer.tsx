@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import ScrambleText from "@/components/ui/ScrambleText";
-import { useInView } from "motion/react";
+import { useVideoPreload } from "@/components/providers/VideoPreloadProvider";
 
 /* ── Fit-text: waits for font load then fills container exactly ── */
 function useFitText() {
@@ -39,20 +39,23 @@ function useFitText() {
   return { wrapRef, textRef };
 }
 
-function AnimLink({ href, children }: { href: string; children: string }) {
+function scrollToSection(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
+  if (!href.startsWith("#")) return;
+  e.preventDefault();
+  const el = document.getElementById(href.replace("#", ""));
+  if (el) el.scrollIntoView({ behavior: "smooth" });
+}
+
+function AnimLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <motion.a
       href={href}
-      className="relative inline-block font-sans text-sm text-white/40 hover:text-white transition-colors duration-300 group"
-      whileHover="hover"
+      onClick={(e) => scrollToSection(e, href)}
+      className="inline-block font-sans text-sm text-white/40 no-underline"
+      whileHover={{ color: "#FF5C00" }}
+      transition={{ duration: 0.25 }}
     >
       {children}
-      <motion.span
-        className="absolute inset-x-0 -bottom-px h-[1px] bg-[#FF5C00] origin-left"
-        initial={{ scaleX: 0 }}
-        variants={{ hover: { scaleX: 1 } }}
-        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      />
     </motion.a>
   );
 }
@@ -64,7 +67,6 @@ const SOCIAL = [
 
 const LINKS = [
   { label: "Work",         href: "#work" },
-  { label: "Capabilities", href: "#capabilities" },
   { label: "Philosophy",   href: "#philosophy" },
   { label: "Contact",      href: "#contact" },
 ];
@@ -84,7 +86,7 @@ function VideoText({ shouldLoad }: { shouldLoad: boolean }) {
       {shouldLoad && (
         <video
           autoPlay muted loop playsInline aria-hidden
-          preload="none"
+          preload="auto"
           className="absolute inset-0 w-full h-full object-cover"
           src="/footervid/hero.mp4"
         />
@@ -98,10 +100,11 @@ function VideoText({ shouldLoad }: { shouldLoad: boolean }) {
             className="block whitespace-nowrap text-white uppercase"
             style={{
               fontFamily: "var(--font-unbounded)",
-              fontSize: "6vw",          /* fallback until JS kicks in — Unbounded is wide so needs less */
+              fontSize: "6vw",
               lineHeight: 0.88,
               letterSpacing: "-0.02em",
               display: "block",
+              textAlign: "center",
             }}
           >
             {TEXT}
@@ -114,7 +117,7 @@ function VideoText({ shouldLoad }: { shouldLoad: boolean }) {
 
 export default function Footer() {
   const ref = useRef<HTMLElement>(null);
-  const footerInView = useInView(ref, { once: true, margin: "200px" });
+  const { shouldLoad } = useVideoPreload();
 
   return (
     <footer id="contact" ref={ref} className="relative bg-[#0A0A09] text-white overflow-hidden">
@@ -132,11 +135,11 @@ export default function Footer() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="flex items-baseline gap-[2px] mb-5">
-              <span className="font-instrument text-[32px] text-white tracking-[-0.04em] leading-none">
+              <span className="font-instrument text-[48px] text-white tracking-[-0.04em] leading-none">
                 <ScrambleText text="CODA" delay={0.3} />
               </span>
               <motion.span
-                className="font-mono text-[#FF5C00] text-[32px] leading-none"
+                className="font-mono text-[#FF5C00] text-[48px] leading-none"
                 animate={{ opacity: [1, 0.25, 1] }}
                 transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
               >.</motion.span>
@@ -152,7 +155,7 @@ export default function Footer() {
               whileHover={{ x: 4 }}
               transition={{ duration: 0.25 }}
             >
-              Connect@citizenofdigitalage.com
+              <ScrambleText text="Connect@citizenofdigitalage.com" delay={0.8} speed={0.48} />
               <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
             </motion.a>
           </motion.div>
@@ -164,11 +167,13 @@ export default function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
           >
-            <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white/25 mb-6">Navigation</p>
+            <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white mb-6">
+              <ScrambleText text="Navigation" delay={0.1} speed={0.5} />
+            </p>
             <ul className="space-y-4">
               {LINKS.map(({ label, href }, i) => (
                 <motion.li key={label} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.15 + i * 0.07 }}>
-                  <AnimLink href={href}>{label}</AnimLink>
+                  <AnimLink href={href}><ScrambleText text={label} delay={0.2 + i * 0.08} speed={0.42} /></AnimLink>
                 </motion.li>
               ))}
             </ul>
@@ -181,36 +186,18 @@ export default function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
           >
-            <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white/25 mb-6">Social</p>
+            <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white mb-6">
+              <ScrambleText text="Social" delay={0.15} speed={0.5} />
+            </p>
             <ul className="space-y-4">
               {SOCIAL.map(({ label, href }, i) => (
                 <motion.li key={label} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 + i * 0.07 }}>
-                  <AnimLink href={href}>{label}</AnimLink>
+                  <AnimLink href={href}><ScrambleText text={label} delay={0.28 + i * 0.09} speed={0.42} /></AnimLink>
                 </motion.li>
               ))}
             </ul>
           </motion.div>
 
-          {/* Status */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="flex flex-col justify-end"
-          >
-            <div className="inline-flex items-center gap-2.5 border border-white/10 bg-white/[0.04] rounded-full px-4 py-2.5 self-start">
-              <div className="relative flex items-center justify-center">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#39FF14]" />
-                <motion.span
-                  className="absolute w-1.5 h-1.5 rounded-full bg-[#39FF14]"
-                  animate={{ scale: [1, 2.8, 1], opacity: [0.6, 0, 0.6] }}
-                  transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut" }}
-                />
-              </div>
-              <span className="font-mono text-[10px] text-white/40 uppercase tracking-[0.18em]">Available</span>
-            </div>
-          </motion.div>
         </div>
 
         {/* Bottom bar */}
@@ -229,7 +216,7 @@ export default function Footer() {
       </div>
 
       {/* ── Video-inside-text — true edge to edge, all caps ── */}
-      <VideoText shouldLoad={footerInView} />
+      <VideoText shouldLoad={shouldLoad} />
 
     </footer>
   );

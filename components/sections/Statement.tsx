@@ -297,134 +297,74 @@ function DesignGraphic({ active }: { active: boolean }) {
   );
 }
 
-/** Growth — premium HTML/CSS bar chart (guaranteed scaleY from bottom) */
-function GrowthGraphic({ active }: { active: boolean }) {
-  const bars = [
-    { pct: 34,  label: "Q1",  val: "48%",  now: false },
-    { pct: 52,  label: "Q2",  val: "68%",  now: false },
-    { pct: 70,  label: "Q3",  val: "82%",  now: false },
-    { pct: 86,  label: "Q4",  val: "93%",  now: false },
-    { pct: 100, label: "Now", val: "+45%", now: true  },
-  ];
+/** Digital Strategy — roadmap phase tracker */
+function StrategyGraphic({ active }: { active: boolean }) {
+  const AMBER  = "#F59E0B";
+  const CYCLE  = 3.8;
+  const REPEAT = 1.2;
 
   const kpis = [
-    { label: "ROI", val: "3.2×" },
-    { label: "CVR", val: "+40%" },
-    { label: "Rank", val: "#1"  },
+    { label: "Clarity",  value: "97%" },
+    { label: "Fit Score", value: "92" },
+    { label: "Velocity", value: "↑84" },
+  ];
+
+  const phases = [
+    { label: "Discovery",  pct: 1.0,  done: true,  active: false, delay: 0    },
+    { label: "Strategy",   pct: 1.0,  done: true,  active: false, delay: 0.12 },
+    { label: "Activation", pct: 0.65, done: false, active: true,  delay: 0.24 },
+    { label: "Scale",      pct: 0.18, done: false, active: false, delay: 0.36 },
   ];
 
   return (
-    <div className="flex flex-col gap-2 w-full h-full">
-      {/* KPI row */}
-      <div className="flex gap-1.5">
+    <div className="w-full h-full flex flex-col gap-[5px] px-1 justify-center">
+
+      {/* KPI cards */}
+      <div className="grid grid-cols-3 gap-1">
         {kpis.map((k, i) => (
-          <motion.div
-            key={i}
-            className="flex-1 flex flex-col items-center py-1.5 rounded-lg"
-            style={{ background: "rgba(52,211,153,0.07)", border: "1px solid rgba(52,211,153,0.22)" }}
-            initial={{ opacity: 0, y: -8 }}
-            animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: -8 }}
-            transition={{ duration: 0.5, delay: 0.05 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <span style={{ color: "rgba(52,211,153,0.5)", fontSize: "7px", fontFamily: "monospace", textTransform: "uppercase", letterSpacing: "1.5px" }}>{k.label}</span>
-            <span style={{ color: "#34D399", fontSize: "13px", fontFamily: "monospace", fontWeight: 700, lineHeight: 1.2 }}>{k.val}</span>
+          <motion.div key={k.label}
+            style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(245,158,11,0.18)", borderRadius: "7px", padding: "3px 4px", textAlign: "center" }}
+            animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: -5 }}
+            transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}>
+            <div style={{ fontFamily: "monospace", fontSize: "6.5px", color: "rgba(13,13,11,0.4)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "1px" }}>{k.label}</div>
+            <div style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: AMBER }}>{k.value}</div>
           </motion.div>
         ))}
       </div>
 
-      {/* Bar chart */}
-      <div className="flex-1 flex flex-col min-h-0">
-        {/* Bars + labels */}
-        <div className="flex-1 flex items-end gap-1.5 px-1 relative">
-          {/* Grid lines */}
-          {[25, 50, 75].map((p) => (
-            <div
-              key={p}
-              className="absolute left-0 right-0 pointer-events-none"
-              style={{ bottom: `${p}%`, borderTop: "1px dashed rgba(52,211,153,0.15)" }}
-            />
-          ))}
+      {/* Phase rows */}
+      <div className="flex flex-col gap-[4px]">
+        {phases.map((p, i) => (
+          <motion.div key={i}
+            className="flex items-center gap-2"
+            style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(245,158,11,0.14)", borderRadius: "7px", padding: "4px 7px" }}
+            animate={active ? { opacity: 1, x: 0 } : { opacity: 0, x: -12 }}
+            transition={{ duration: 0.5, delay: p.delay, ease: [0.16, 1, 0.3, 1] }}>
 
-          {bars.map((b, i) => {
-            // Total cycle: 0.9s grow → 1.4s hold → 0.7s shrink → 1s pause = 4s
-            const CYCLE = 4;
-            const DELAY = 0.28 + i * 0.13;
-            const REPEAT_DELAY = 1.2;
-            return (
-              <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1 h-full">
-                {/* Value label — appears as bar peaks, disappears as bar falls */}
-                <motion.span
-                  style={{
-                    fontSize: b.now ? "9px" : "7.5px",
-                    fontFamily: "monospace",
-                    color: b.now ? "#34D399" : "rgba(52,211,153,0.65)",
-                    fontWeight: b.now ? 700 : 400,
-                    lineHeight: 1,
-                  }}
-                  animate={active
-                    ? { opacity: [0, 0, 1, 1, 0], y: [4, 4, 0, 0, 4] }
-                    : { opacity: 0 }}
-                  transition={{
-                    duration: CYCLE,
-                    times: [0, 0.2, 0.28, 0.68, 0.82],
-                    delay: DELAY,
-                    repeat: Infinity,
-                    repeatDelay: REPEAT_DELAY,
-                    ease: "easeOut",
-                  }}
-                >
-                  {b.val}
-                </motion.span>
+            {/* Status dot */}
+            <div style={{
+              width: "7px", height: "7px", borderRadius: "50%", flexShrink: 0,
+              background: p.done ? AMBER : "transparent",
+              border: p.done ? "none" : p.active ? `1.5px solid ${AMBER}` : "1.5px solid rgba(245,158,11,0.3)",
+              boxShadow: p.active ? `0 0 5px rgba(245,158,11,0.5)` : "none",
+            }} />
 
-                {/* Bar — grow → hold → shrink → pause → repeat */}
-                <motion.div
-                  style={{
-                    height: `${b.pct}%`,
-                    width: "100%",
-                    borderRadius: "4px 4px 2px 2px",
-                    background: b.now
-                      ? "linear-gradient(to top, #059669, #34D399)"
-                      : "linear-gradient(to top, rgba(52,211,153,0.15), rgba(52,211,153,0.45))",
-                    boxShadow: b.now
-                      ? "0 0 16px rgba(52,211,153,0.45), 0 0 6px rgba(52,211,153,0.3)"
-                      : "none",
-                    transformOrigin: "bottom",
-                  }}
-                  animate={active
-                    ? { scaleY: [0, 1, 1, 0] }
-                    : { scaleY: 0 }}
-                  transition={{
-                    duration: CYCLE,
-                    times: [0, 0.22, 0.72, 0.95],
-                    delay: DELAY,
-                    repeat: Infinity,
-                    repeatDelay: REPEAT_DELAY,
-                    ease: [0.34, 1.1, 0.64, 1],
-                  }}
-                />
-              </div>
-            );
-          })}
-        </div>
+            {/* Label */}
+            <span style={{ fontFamily: "sans-serif", fontSize: "9px", fontWeight: p.active ? 700 : 500, color: p.done || p.active ? "#14130F" : "rgba(13,13,11,0.4)", minWidth: "58px", flexShrink: 0 }}>{p.label}</span>
 
-        {/* Baseline + quarter labels */}
-        <div className="h-px w-full mt-1" style={{ background: "rgba(13,13,11,0.12)" }} />
-        <div className="flex gap-1.5 px-1 mt-1">
-          {bars.map((b, i) => (
-            <motion.div key={i} className="flex-1 flex justify-center"
-              initial={{ opacity: 0 }}
-              animate={active ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.3, delay: 0.55 + i * 0.09 }}
-            >
-              <span style={{
-                fontSize: "8px",
-                fontFamily: "monospace",
-                color: b.now ? "#34D399" : "rgba(13,13,11,0.4)",
-                fontWeight: b.now ? 700 : 400,
-              }}>{b.label}</span>
-            </motion.div>
-          ))}
-        </div>
+            {/* Progress bar */}
+            <div style={{ flex: 1, height: "3px", background: "rgba(245,158,11,0.12)", borderRadius: "99px", overflow: "hidden" }}>
+              <motion.div style={{ height: "100%", borderRadius: "99px", transformOrigin: "left", background: `linear-gradient(90deg,${AMBER},#FCD34D)` }}
+                animate={active ? { scaleX: [0, p.pct, p.pct, 0] } : { scaleX: 0 }}
+                transition={{ duration: CYCLE, times: [0, 0.25, 0.75, 0.97], delay: p.delay + 0.28, repeat: Infinity, repeatDelay: REPEAT, ease: [0.16, 1, 0.3, 1] }} />
+            </div>
+
+            {/* Status label */}
+            <span style={{ fontFamily: "monospace", fontSize: "8px", fontWeight: 600, color: p.done ? AMBER : "rgba(13,13,11,0.3)", flexShrink: 0, minWidth: "22px", textAlign: "right" }}>
+              {p.done ? "✓" : `${Math.round(p.pct * 100)}%`}
+            </span>
+          </motion.div>
+        ))}
       </div>
     </div>
   );
@@ -689,24 +629,6 @@ function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; 
 const DISCIPLINES = [
   {
     num: "01",
-    title: "Technology",
-    subtitle: "Solutions",
-    description:
-      "High-performance architectures, AI-native platforms, and production-grade web applications built for scale and longevity.",
-    capabilities: [
-      "Full-stack development",
-      "AI & LLM integrations",
-      "API design & backends",
-      "Performance architecture",
-    ],
-    tags: ["React", "Next.js", "Node.js", "TypeScript", "AI / ML"],
-    Graphic: TechGraphic,
-    accentColor: "#4F8EF7",
-    accentRgb: "96,165,250",
-    borderColor: "rgba(96,165,250,0.15)",
-  },
-  {
-    num: "02",
     title: "Design &",
     subtitle: "Brand Systems",
     description:
@@ -724,22 +646,40 @@ const DISCIPLINES = [
     borderColor: "rgba(255,92,0,0.15)",
   },
   {
-    num: "03",
-    title: "Growth",
-    subtitle: "Engineering",
+    num: "02",
+    title: "Technology",
+    subtitle: "Solutions",
     description:
-      "Data-driven funnels, acquisition automation, and compounding strategies that give our clients an unfair market advantage.",
+      "High-performance architectures, AI-native platforms, and production-grade web applications built for scale and longevity.",
     capabilities: [
-      "SEO & paid acquisition",
-      "Conversion funnels & CRO",
-      "Analytics & attribution",
-      "Marketing automation",
+      "Full-stack development",
+      "AI & LLM integrations",
+      "API design & backends",
+      "Performance architecture",
     ],
-    tags: ["SEO", "Analytics", "CRO", "Funnels", "Automation"],
-    Graphic: GrowthGraphic,
-    accentColor: "#34D399",
-    accentRgb: "52,211,153",
-    borderColor: "rgba(52,211,153,0.15)",
+    tags: ["React", "Next.js", "Node.js", "TypeScript", "AI / ML"],
+    Graphic: TechGraphic,
+    accentColor: "#4F8EF7",
+    accentRgb: "96,165,250",
+    borderColor: "rgba(96,165,250,0.15)",
+  },
+  {
+    num: "03",
+    title: "Digital",
+    subtitle: "Strategy",
+    description:
+      "Clarity before execution. We map your market, architect your positioning, and build a compounding roadmap before a single pixel is designed.",
+    capabilities: [
+      "Market research & positioning",
+      "Digital ecosystem architecture",
+      "Go-to-market planning",
+      "Systems audit & roadmapping",
+    ],
+    tags: ["Strategy", "Consulting", "Roadmap", "GTM", "Systems"],
+    Graphic: StrategyGraphic,
+    accentColor: "#F59E0B",
+    accentRgb: "245,158,11",
+    borderColor: "rgba(245,158,11,0.15)",
   },
 ] as const;
 
@@ -759,11 +699,9 @@ function DisciplineStrip({
   const prefersReduced = useReducedMotion();
   const [hovered, setHovered] = useState(false);
 
-  // Mouse-track for the graphic glow
+  // Mouse-track for hover glow (position only, no spring needed)
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
-  const smoothX = useSpring(mouseX, { stiffness: 80, damping: 30 });
-  const smoothY = useSpring(mouseY, { stiffness: 80, damping: 30 });
 
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const r = stripRef.current?.getBoundingClientRect();
@@ -772,25 +710,11 @@ function DisciplineStrip({
     mouseY.set((e.clientY - r.top) / r.height);
   };
 
-  /* ── Scroll-linked "expand into place" reveal ────────────────
-     Each card scales up + rises + sharpens as it scrolls into view,
-     scrubbed by scroll and smoothed with a spring for a fluid feel. */
-  const { scrollYProgress: revealRaw } = useScroll({
-    target: stripRef,
-    offset: ["start 0.95", "start 0.45"],
-  });
-  const reveal = useSpring(revealRaw, { stiffness: 120, damping: 26, mass: 0.4 });
-  const revealOpacity = useTransform(reveal, [0, 0.5], [0.25, 1]);
-  const revealY = useTransform(reveal, [0, 1], [110, 0]);
-  const revealScale = useTransform(reveal, [0, 1], [0.85, 1]);
-  const graphicY = useTransform(reveal, [0, 1], [56, 0]);
 
-  // Accent bar fills top→bottom as you scroll through the strip.
-  const { scrollYProgress: barRaw } = useScroll({
-    target: stripRef,
-    offset: ["start 0.8", "end 0.5"],
-  });
-  const barScaleY = useSpring(barRaw, { stiffness: 120, damping: 40, mass: 0.5 });
+  /* ── Replaced useScroll+useSpring chains with a simple intersection-triggered
+     animation. Each strip had 2 useScroll + 4 useSpring hooks = 6 scroll
+     event listeners firing during scroll. With 3 strips that's 18 listeners
+     constantly updating. Now it's 0 — all handled by CSS on the compositor. */
 
   return (
     <motion.div
@@ -804,27 +728,30 @@ function DisciplineStrip({
           ? { background: "linear-gradient(180deg, var(--coda-surface-2) 0%, var(--coda-surface) 100%)" }
           : {
               background: "linear-gradient(180deg, var(--coda-surface-2) 0%, var(--coda-surface) 100%)",
-              opacity: revealOpacity,
-              y: revealY,
-              scale: revealScale,
-              willChange: "transform, opacity",
+              opacity: isInView ? 1 : 0,
+              transform: isInView ? "translateY(0px) scale(1)" : "translateY(60px) scale(0.97)",
+              transition: "opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)",
             }
       }
     >
+
       {/* Hover background tint */}
-      <motion.div
+      <div
         className="absolute inset-0 pointer-events-none"
-        animate={{ opacity: hovered ? 1 : 0 }}
-        transition={{ duration: 0.5 }}
-        style={{ background: `radial-gradient(ellipse 70% 100% at 50% 50%, rgba(${d.accentRgb},0.04) 0%, transparent 70%)` }}
+        style={{
+          background: `radial-gradient(ellipse 70% 100% at 50% 50%, rgba(${d.accentRgb},0.04) 0%, transparent 70%)`,
+          opacity: hovered ? 1 : 0,
+          transition: "opacity 0.5s ease",
+        }}
       />
 
-      {/* Left accent bar — fills top→bottom as you scroll through the strip */}
-      <motion.div
-        className="absolute left-0 top-0 bottom-0 w-[2px] origin-top"
+      {/* Left accent bar */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-[2px]"
         style={{
           background: `linear-gradient(to bottom, transparent, ${d.accentColor}, transparent)`,
-          scaleY: prefersReduced ? 1 : barScaleY,
+          opacity: isInView ? 1 : 0,
+          transition: "opacity 0.8s ease 0.3s",
         }}
       />
 
@@ -931,7 +858,7 @@ function DisciplineStrip({
           <motion.div
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: `radial-gradient(circle at ${smoothX.get() * 100}% ${smoothY.get() * 100}%, rgba(${d.accentRgb},0.1) 0%, transparent 65%)`,
+              background: `radial-gradient(circle at 50% 50%, rgba(${d.accentRgb},0.1) 0%, transparent 65%)`,
             }}
             animate={{ opacity: hovered ? 1 : 0.4 }}
             transition={{ duration: 0.5 }}
@@ -963,10 +890,9 @@ function DisciplineStrip({
             transition={{ duration: 0.8, delay: 0.3 + index * 0.1 }}
           />
 
-          {/* The actual graphic — triggers when in view, drifts up on scroll */}
+          {/* The actual graphic — triggers when in view */}
           <motion.div
             className="relative w-full max-w-[280px] h-[200px]"
-            style={prefersReduced ? undefined : { y: graphicY }}
           >
             <d.Graphic active={isInView} />
           </motion.div>
@@ -1218,12 +1144,12 @@ function DisciplineSpread() {
 
         {/* ── Floating section label — fades as spread opens ─ */}
         <motion.div
-          className="absolute top-[88px] left-1/2 -translate-x-1/2 flex items-center gap-3 z-20 pointer-events-none"
+          className="absolute top-[80px] left-1/2 -translate-x-1/2 flex items-center gap-3 z-20 pointer-events-none"
           style={{ opacity: labelOpacity, y: labelY }}
         >
           <div className="h-px w-8 bg-[#FF5C00]" />
           <span className="font-mono text-[10px] text-[#6F6A60] uppercase tracking-[0.3em] whitespace-nowrap">
-            03 — What we do
+            [ 03 ] — What we do
           </span>
           <div className="h-px w-8 bg-[#FF5C00]" />
         </motion.div>
@@ -1302,7 +1228,7 @@ function SystemOrbit({ inView }: { inView: boolean }) {
   const NODES = [
     { label: "Technology", sub: "Full-stack & AI",  angle: -90, stat: "45%", statLabel: "Visibility", color: "#4F8EF7" },
     { label: "Design",     sub: "Brand & Motion",   angle:  30, stat: "40%", statLabel: "Engagement", color: "#B87FFF" },
-    { label: "Growth",     sub: "SEO & Funnels",    angle: 150, stat: "3×",  statLabel: "Speed",      color: "#34D399" },
+    { label: "Strategy",   sub: "GTM & Roadmap",     angle: 150, stat: "3×",  statLabel: "Speed",      color: "#F59E0B" },
   ];
 
   const positions = NODES.map(n => {
@@ -1699,38 +1625,69 @@ function HeaderBlock({
             system that compounds over time and gives our clients an unfair advantage.
           </motion.p>
 
-          {/* Stats — premium dark card (same style as Philosophy) */}
-          <div
+          {/* Stats — premium light card */}
+          <motion.div
             className="mt-10 relative rounded-2xl overflow-hidden"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
             style={{
-              background: "linear-gradient(135deg, #0D0D0B 0%, #1a1410 100%)",
-              border: "1px solid rgba(255,92,0,0.15)",
-              boxShadow: "0 20px 60px -12px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04) inset",
+              background: "linear-gradient(160deg, #FFFFFF 0%, #FAF7F2 100%)",
+              border: "1px solid rgba(13,13,11,0.09)",
+              boxShadow: "0 2px 0 rgba(255,255,255,0.9) inset, 0 8px 40px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.04)",
             }}
           >
             {/* Top orange hairline */}
-            <div
-              className="absolute inset-x-0 top-0 h-[1.5px]"
-              style={{ background: "linear-gradient(90deg, transparent 0%, #FF5C00 40%, #FF9A3C 60%, transparent 100%)" }}
-            />
-            {/* Ambient glow */}
-            <div
-              className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-32 rounded-full blur-[60px] opacity-20 pointer-events-none"
-              style={{ background: "#FF5C00" }}
-            />
-            <div className="relative grid grid-cols-3 divide-x divide-white/[0.06]">
+            <div className="absolute inset-x-0 top-0 h-[2px]"
+              style={{ background: "linear-gradient(90deg, transparent 5%, #FF5C00 40%, #FF9A3C 60%, transparent 95%)" }} />
+
+            <div className="relative grid grid-cols-3 divide-x divide-[#0D0D0B]/[0.07]">
               {[{ n: "3", label: "Disciplines" }, { n: "1", label: "System" }, { n: "∞", label: "Compounds" }].map(({ n, label }, i) => (
-                <div key={label} className="flex flex-col items-center justify-center px-3 py-6 gap-2 text-center">
-                  <div
-                    className="w-1 h-1 rounded-full mb-1"
-                    style={{ background: "#FF5C00", boxShadow: "0 0 6px #FF5C00" }}
+                <motion.div
+                  key={label}
+                  className="relative flex flex-col items-center justify-center px-3 py-8 gap-2 text-center cursor-default overflow-hidden"
+                  whileHover="hovered"
+                  initial="idle"
+                >
+                  {/* Hover warm wash from bottom */}
+                  <motion.div
+                    className="absolute inset-0 pointer-events-none"
+                    variants={{ idle: { opacity: 0 }, hovered: { opacity: 1 } }}
+                    transition={{ duration: 0.35 }}
+                    style={{ background: "radial-gradient(ellipse 100% 140% at 50% 115%, rgba(255,92,0,0.09) 0%, transparent 65%)" }}
                   />
-                  <span className="font-instrument text-[clamp(26px,7vw,42px)] text-white leading-none tracking-[-0.04em]">{n}</span>
-                  <span className="font-mono text-[9px] text-white/35 uppercase tracking-[0.2em]">{label}</span>
-                </div>
+                  {/* Hover top bar */}
+                  <motion.div
+                    className="absolute top-0 inset-x-0 h-[2px] origin-left"
+                    style={{ background: "linear-gradient(90deg, #FF5C00, rgba(255,154,60,0.4))" }}
+                    variants={{ idle: { scaleX: 0 }, hovered: { scaleX: 1 } }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  />
+
+                  <motion.span
+                    className="font-instrument leading-none tracking-[-0.04em] tabular-nums"
+                    style={{ fontSize: "clamp(32px,5vw,52px)" }}
+                    variants={{ idle: { color: "#0D0D0B", y: 0 }, hovered: { color: "#FF5C00", y: -3 } }}
+                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  >{n}</motion.span>
+
+                  <motion.span
+                    className="font-mono text-[9px] uppercase tracking-[0.22em]"
+                    variants={{ idle: { color: "#9A9488" }, hovered: { color: "#4A463F" } }}
+                    transition={{ duration: 0.3 }}
+                  >{label}</motion.span>
+
+                  <motion.div
+                    className="h-px rounded-full bg-[#FF5C00] origin-center"
+                    style={{ width: 28 }}
+                    variants={{ idle: { scaleX: 0, opacity: 0 }, hovered: { scaleX: 1, opacity: 0.45 } }}
+                    transition={{ duration: 0.35 }}
+                  />
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* RIGHT — animated system orbit diagram (hidden on mobile to prevent overflow) */}
