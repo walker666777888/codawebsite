@@ -444,8 +444,8 @@ export default function Philosophy() {
 
           {/* Mobile fallback — simple stacked cards */}
           <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {CARDS.map((card) => (
-              <div key={card.id} className="rounded-2xl p-6"
+            {CARDS.map((card, i) => (
+              <div key={card.id} className={`rounded-2xl p-6${i >= 4 ? " hidden sm:block" : ""}`}
                 style={{ background: card.bg, border: `1px solid ${card.border}`, boxShadow: card.shadow }}>
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-1.5 h-1.5 rounded-full" style={{ background: card.dot }} />
