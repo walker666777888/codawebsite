@@ -254,27 +254,15 @@ function VisualEcosystem() {
         CODA
       </text>
 
-      {/* Outer nodes — pure SVG, no HTML overlay */}
+      {/* Outer nodes — pure SVG */}
       {nodes.map((n, i) => (
-        <motion.g key={`nd${i}`}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          style={{ originX: n.x, originY: n.y } as React.CSSProperties}
-          transition={{ duration: 0.55, delay: 0.35 + n.delay, type: "spring", stiffness: 200 }}
-        >
-          {/* Pulse ring */}
-          <motion.circle cx={n.x} cy={n.y} r="22" fill="none" stroke="#FF5C00" strokeWidth="0.8"
-            animate={{ r: [22, 28, 22], opacity: [0.5, 0, 0.5] }}
-            transition={{ duration: 2.4, delay: i * 0.38, repeat: Infinity }}
-          />
-          {/* Node circle */}
-          <circle cx={n.x} cy={n.y} r="20" fill="#FEFCF8" stroke="rgba(255,92,0,0.25)" strokeWidth="1" />
-          {/* Label */}
+        <g key={`nd${i}`}>
+          <circle cx={n.x} cy={n.y} r="20" fill="#FEFCF8" stroke="rgba(255,92,0,0.3)" strokeWidth="1" />
           <text x={n.x} y={n.y + 3.5} textAnchor="middle" fill="#0D0D0B"
             fontSize="7" fontFamily="'DM Mono', monospace" fontWeight="600" letterSpacing="1.5">
             {n.label}
           </text>
-        </motion.g>
+        </g>
       ))}
     </svg>
     </div>
