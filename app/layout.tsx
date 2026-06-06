@@ -3,6 +3,7 @@ import { Instrument_Serif, DM_Sans, DM_Mono, Unbounded } from "next/font/google"
 import "./globals.css";
 import LenisProvider from "@/components/providers/LenisProvider";
 import FormModalProvider from "@/components/providers/FormModalProvider";
+import { VideoPreloadProvider } from "@/components/providers/VideoPreloadProvider";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PageReveal from "@/components/ui/PageReveal";
@@ -38,8 +39,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 
   title: {
-    default: "CODA — Digital Product Studio | Web, AI & Growth Systems",
-    template: "%s | CODA Studio",
+    default: "CODA",
   },
 
   description:
@@ -47,7 +47,6 @@ export const metadata: Metadata = {
 
   keywords: [
     "web development agency",
-    "digital product studio",
     "build a website",
     "web app development",
     "AI integration agency",
@@ -81,7 +80,7 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE_URL,
     siteName: "CODA Studio",
-    title: "CODA — Digital Product Studio | Web, AI & Growth Systems",
+    title: "CODA | Citizen Of Digital Age.",
     description:
       "We build high-performance digital ecosystems — web platforms, AI products, design systems, and growth engines. System-first. Built to compound.",
     images: [
@@ -89,7 +88,6 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "CODA Studio — Digital Product Studio",
       },
     ],
     locale: "en_US",
@@ -97,7 +95,6 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "CODA — Digital Product Studio | Web, AI & Growth Systems",
     description:
       "We build high-performance digital ecosystems — web platforms, AI products, design systems, and growth engines.",
     images: ["/og-image.png"],
@@ -170,18 +167,24 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"
+        />
       </head>
       <body className="flex flex-col min-h-screen selection:bg-[#FF5C00] selection:text-white">
         {/* Skip to main — keyboard accessibility */}
         <a href="#main-content" className="skip-link">Skip to main content</a>
         <LenisProvider>
           <FormModalProvider>
-            <PageReveal />
-            <ScrollProgress />
-            <GrainOverlay />
-            <Navbar />
-            <main id="main-content" className="flex-1">{children}</main>
-            <Footer />
+            <VideoPreloadProvider>
+              <PageReveal />
+              <ScrollProgress />
+              <GrainOverlay />
+              <Navbar />
+              <main id="main-content" className="flex-1">{children}</main>
+              <Footer />
+            </VideoPreloadProvider>
           </FormModalProvider>
         </LenisProvider>
       </body>

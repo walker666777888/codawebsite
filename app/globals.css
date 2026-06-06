@@ -116,9 +116,8 @@
   html {
     overflow-x: clip;
     scrollbar-width: none;
-    /* Smooth native scrolling for anchor links / JS scroll calls */
-    scroll-behavior: smooth;
-    /* Prevent overscroll glow/bounce bleed on Chrome Android */
+    /* scroll-behavior: smooth is intentionally removed — Lenis owns all
+       scroll easing. Having both causes double-ease jank on anchor jumps. */
     overscroll-behavior: none;
   }
 
@@ -138,6 +137,13 @@
     overscroll-behavior: none;
     /* Eliminate 300ms tap delay on mobile */
     touch-action: manipulation;
+  }
+
+  /* Match DigitalGap grid so the GSAP pin spacer blends in */
+  .pin-spacer {
+    background-color: #F4F0E8;
+    background-image: linear-gradient(to right,#E6E1DA 1px,transparent 1px),linear-gradient(to bottom,#E6E1DA 1px,transparent 1px);
+    background-size: 40px 40px;
   }
 
   /* Lenis smooth scroll specific */
@@ -164,19 +170,29 @@
 }
 
 
-/* ── Mobile scroll performance ─────────────────────────────────────────── */
+/* ── Section rendering performance (all viewports) ─────────────────────── */
+/*
+ * content-visibility: auto — browser skips layout + paint for off-screen
+ * sections entirely. Only the visible section and ~1 ahead are rendered.
+ * contain-intrinsic-size must be generous so the scrollbar height stays
+ * stable and sections don't "pop" as they scroll into view.
+ */
+main > section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 900px;
+}
+
+/* On mobile, be even more aggressive with containment */
 @media (max-width: 767px) {
-  /*
-   * content-visibility: auto — browser skips layout + paint for off-screen
-   * sections entirely. Only the visible section and ~1 ahead are rendered.
-   * This is the single biggest mobile scroll perf win.
-   * CSS animations are NOT killed here — they run on the GPU compositor
-   * thread, completely separate from scroll, and don't cause stutter.
-   */
   main > section {
-    content-visibility: auto;
-    contain-intrinsic-size: 0 600px;
+    contain-intrinsic-size: 0 700px;
   }
+}
+
+/* Hero section must NOT have content-visibility — it's always in view */
+#hero {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
 }
 
 
@@ -210,6 +226,18 @@
   .elevation-sm { box-shadow: var(--shadow-sm); }
   .elevation-md { box-shadow: var(--shadow-md); }
   .elevation-lg { box-shadow: var(--shadow-lg); }
+
+  /* ── GPU-promote fixed elements ────────────────────────────
+     Fixed elements without their own compositor layer force the
+     browser to repaint the ENTIRE page on every scroll frame.
+     translateZ(0) gives each one an isolated GPU layer \u2014 zero
+     main-thread cost during scroll. Applied to navbar, progress
+     bar, grain overlay, and any other fixed UI chrome. */
+  [style*="position: fixed"],
+  .fixed {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
 }
 
 /* ── Custom Cursor (removed — native cursor restored) ──── */
@@ -388,6 +416,26 @@
 .animate-noise         { animation: noise-anim 8s steps(8, end) infinite; }
 .animate-border-rotate { animation: border-rotate 4s linear infinite; }
 .animate-scan-line     { animation: scan-line 5s ease-in-out infinite 1.5s; }
+
+/* ── Hero & page-specific keyframes ──────────────────────────── */
+@keyframes hero-orb-a {
+  0%, 100% { transform: translate(-30%, -20%) scale(1); }
+  33%       { transform: translate(20%, 40%) scale(1.15); }
+  66%       { transform: translate(-10%, 10%) scale(0.9); }
+}
+
+@keyframes hero-orb-b {
+  0%, 100% { transform: translate(10%, 10%) scale(1); }
+  40%       { transform: translate(-40%, -30%) scale(1.2); }
+  70%       { transform: translate(20%, 30%) scale(0.85); }
+}
+
+@keyframes laser-scan-line {
+  0%   { top: -10%; opacity: 0; }
+  5%   { opacity: 0.4; }
+  95%  { opacity: 0.4; }
+  100% { top: 110%; opacity: 0; }
+}
 
 /* Liquid glass */
 .liquid-glass {

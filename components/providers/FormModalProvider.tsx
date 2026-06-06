@@ -25,9 +25,9 @@ export default function FormModalProvider({ children }: { children: React.ReactN
 
   const close = useCallback(() => {
     setIsOpen(false);
-    // Small delay matches the panel exit spring so Lenis restarts
+    // Small delay matches the panel exit transition so Lenis restarts
     // only after the modal has slid back down.
-    setTimeout(() => lenis.start(), 500);
+    setTimeout(() => lenis.start(), 600);
   }, [lenis]);
 
   return (

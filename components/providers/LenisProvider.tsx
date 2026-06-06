@@ -41,28 +41,27 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
     // ─── Desktop: full butter-smooth Lenis ─────────────────────────────────
     const lenis = new Lenis({
       /**
-       * lerp: interpolation factor per frame.
-       * Lower = silkier / more momentum (butter-smooth).
-       * 0.065 = liquid glide with minimal overshoot on desktop.
+       * lerp: linear interpolation factor per frame (0–1).
+       * 0.09 → smooth but responsive — the sweet spot.
+       * Too low (0.05) = laggy feel on fast scrolls.
+       * Do NOT set duration when using lerp — they conflict.
        */
-      lerp: 0.065,
+      lerp: 0.09,
 
       /**
-       * duration: easing duration cap in seconds.
+       * Easing: smooth cubic — organic deceleration, no abrupt stop.
        */
-      duration: 1.4,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
 
       /**
-       * Easing: exponential-out — starts fast, decelerates gently
-       * like butter sliding to a stop.
+       * wheelMultiplier: slightly above 1 for a more responsive feel.
        */
-      easing: (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+      wheelMultiplier: 1.1,
 
       /**
-       * wheelMultiplier: slightly below 1 so per-tick motion feels
-       * continuous rather than stepped.
+       * touchMultiplier: for trackpads.
        */
-      wheelMultiplier: 0.9,
+      touchMultiplier: 1.0,
 
       /** Smooth wheel scrolling (mouse wheel / trackpad) */
       smoothWheel: true,
@@ -73,12 +72,18 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
 
     lenisRef.current = lenis;
 
-    // Keep GSAP ScrollTrigger in sync with Lenis scroll position
+    // Keep GSAP ScrollTrigger in sync with Lenis scroll position.
+    // Lenis v1.3 updates window.scrollY natively on each frame, so no
+    // scrollerProxy is needed — just notify ScrollTrigger on each scroll event.
     lenis.on("scroll", ScrollTrigger.update);
 
-    // Drive Lenis via GSAP's RAF — ensures perfect frame-sync with all animations
+    // Drive Lenis via GSAP's RAF — ensures perfect frame-sync with all animations.
+    // GSAP passes time in seconds; lenis.raf() expects milliseconds.
     const tick = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
+
+    // Tell GSAP to fire every frame (60/120fps) — never drop below.
+    gsap.ticker.fps(120);
 
     // Prevent GSAP from throttling frames during heavy animation (kills jank)
     gsap.ticker.lagSmoothing(0);

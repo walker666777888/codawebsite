@@ -4,7 +4,7 @@ import { useScroll, motion, useSpring, useTransform } from "motion/react";
 
 export default function ScrollProgress() {
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const scaleX = useSpring(scrollYProgress, { stiffness: 80, damping: 26, restDelta: 0.001 });
 
   // Fade the bar in only after 2% scroll (avoids flash on load)
   const barOpacity = useTransform(scrollYProgress, [0, 0.02], [0, 1]);

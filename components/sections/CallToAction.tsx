@@ -1,15 +1,58 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { useRef, useEffect, useState, useCallback } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { ArrowRight } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
 
+/* ── Wave text — letters cascade up on hover ── */
+function WaveText({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <span
+      className={className}
+      style={{ ...style, display: "inline-block" }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {text.split("").map((ch, i) => (
+        <motion.span
+          key={i}
+          style={{ display: "inline-block", whiteSpace: ch === " " ? "pre" : undefined }}
+          animate={hovered ? { y: -10, color: "#ffffff" } : { y: 0, color: "#FF5C00" }}
+          transition={{ type: "spring", stiffness: 400, damping: 18, delay: i * 0.035 }}
+        >{ch}</motion.span>
+      ))}
+    </span>
+  );
+}
+
 export default function CallToAction() {
   const { open: openForm } = useFormModal();
   const sectionRef = useRef<HTMLElement>(null);
+  const cardRef    = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+
+  /* ── 3D tilt on mouse move ── */
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const rotateX = useSpring(useTransform(mouseY, [-1, 1], [6, -6]),  { stiffness: 200, damping: 28 });
+  const rotateY = useSpring(useTransform(mouseX, [-1, 1], [-6, 6]), { stiffness: 200, damping: 28 });
+  const spotX   = useSpring(mouseX, { stiffness: 200, damping: 25 });
+  const spotY   = useSpring(mouseY, { stiffness: 200, damping: 25 });
+
+  const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    mouseX.set(((e.clientX - rect.left) / rect.width  - 0.5) * 2);
+    mouseY.set(((e.clientY - rect.top)  / rect.height - 0.5) * 2);
+  }, [mouseX, mouseY]);
+
+  const onMouseLeave = useCallback(() => {
+    mouseX.set(0);
+    mouseY.set(0);
+  }, [mouseX, mouseY]);
 
   /* Single IntersectionObserver — no JS animation loop, no framer scroll tracking */
   useEffect(() => {
@@ -103,15 +146,38 @@ export default function CallToAction() {
         </div>
 
         <div className="relative z-10 w-full flex flex-col items-center">
-          {/* Card — CSS animated, GPU composited */}
-          <div
-            className={`cta-card${visible ? " in" : ""} w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 rounded-3xl px-6 sm:px-10 py-10 sm:py-14`}
+          {/* Card — 3D tilt on mouse move */}
+          <motion.div
+            ref={cardRef}
+            onMouseMove={onMouseMove}
+            onMouseLeave={onMouseLeave}
+            className={`cta-card${visible ? " in" : ""} relative w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 rounded-3xl px-6 sm:px-10 py-10 sm:py-14 overflow-hidden`}
             style={{
               background: "#1a0d00",
               border: "1px solid rgba(255,255,255,0.07)",
               boxShadow: "0 8px 40px rgba(0,0,0,0.35)",
+              rotateX,
+              rotateY,
+              transformStyle: "preserve-3d",
+              perspective: 800,
             }}
           >
+            {/* Mouse-following inner spotlight */}
+            <motion.div
+              className="absolute pointer-events-none rounded-full"
+              style={{
+                width: 420,
+                height: 420,
+                x: useTransform(spotX, [-1, 1], [-80, 80]),
+                y: useTransform(spotY, [-1, 1], [-80, 80]),
+                top: "50%",
+                left: "50%",
+                marginTop: -210,
+                marginLeft: -210,
+                background: "radial-gradient(circle, rgba(255,92,0,0.18) 0%, transparent 65%)",
+                filter: "blur(30px)",
+              }}
+            />
             {/* Eyebrow */}
             <div
               className={`cta-eyebrow${visible ? " in" : ""} inline-flex items-center gap-3 border border-white/10 bg-white/[0.05] rounded-full px-5 py-2.5`}
@@ -126,20 +192,26 @@ export default function CallToAction() {
               </p>
             </div>
 
-            {/* Headline — pure CSS transform, no JS per-frame cost */}
+            {/* Headline */}
             <div>
-              {["Ready to", "Dominate?"].map((line, li) => (
-                <div key={li} className="cta-line-wrap">
-                  <span
-                    className={`cta-line${visible ? ` in-${li}` : ""} font-instrument tracking-[-0.04em] leading-[1.0] ${
-                      li === 1 ? "italic text-[#FF5C00]" : "text-white"
-                    }`}
-                    style={{ fontSize: "clamp(40px, 10vw, 130px)" }}
-                  >
-                    {line}
-                  </span>
-                </div>
-              ))}
+              <div className="cta-line-wrap">
+                <WaveText
+                  text="Ready to"
+                  className={`cta-line${visible ? " in-0" : ""} font-instrument tracking-[-0.04em] leading-[1.0]`}
+                  style={{ fontSize: "clamp(40px, 10vw, 130px)" }}
+                />
+              </div>
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                animate={visible ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.85, delay: 0.36, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <WaveText
+                  text="Dominate?"
+                  className="font-instrument italic tracking-[-0.04em] leading-[1.0]"
+                  style={{ fontSize: "clamp(40px, 10vw, 130px)" }}
+                />
+              </motion.div>
             </div>
 
             {/* Sub-copy */}
@@ -172,7 +244,7 @@ export default function CallToAction() {
               <span className="w-1 h-1 rounded-full bg-white/20" />
               <span>Just results</span>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
     </>

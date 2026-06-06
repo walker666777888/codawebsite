@@ -91,6 +91,7 @@ export default function ParticleCanvas({
     for (let i = 0; i < quantity; i++) circles.push(makeCircle());
 
     let raf: number;
+    let rafActive = false;
 
     const animate = () => {
       const { w, h } = canvasSize.current;
@@ -140,13 +141,28 @@ export default function ParticleCanvas({
         }
       }
 
-      raf = requestAnimationFrame(animate);
+      if (rafActive) raf = requestAnimationFrame(animate);
     };
 
+    // IntersectionObserver: pause canvas when off-screen
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        rafActive = entry.isIntersecting;
+        if (rafActive) raf = requestAnimationFrame(animate);
+        else cancelAnimationFrame(raf);
+      },
+      { threshold: 0 }
+    );
+    io.observe(container);
+
+    // Start
+    rafActive = true;
     raf = requestAnimationFrame(animate);
 
     return () => {
+      rafActive = false;
       cancelAnimationFrame(raf);
+      io.disconnect();
       ro.disconnect();
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseleave", onMouseLeave);
