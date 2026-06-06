@@ -171,101 +171,51 @@ function VisualChaos() {
    packets trace the exact curve using precomputed keyframes.
 ───────────────────────────────────────────────────────────── */
 function VisualEcosystem() {
-  const W = 420, H = 290;
   const hcx = 210, hcy = 145, hr = 96;
   const labels = ["TECH", "GROW", "DATA", "SITE", "BRAND", "OPS"];
-
   const nodes = labels.map((label, i) => {
     const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
-    return { x: hcx + hr * Math.cos(a), y: hcy + hr * Math.sin(a), label, delay: i * 0.1 };
+    return { x: hcx + hr * Math.cos(a), y: hcy + hr * Math.sin(a), label };
   });
-
-  const ctrl = (nx: number, ny: number) => ({
-    x: (hcx + nx) / 2 + (hcx - (hcx + nx) / 2) * 0.3,
-    y: (hcy + ny) / 2 + (hcy - (hcy + ny) / 2) * 0.3,
-  });
-
-  const bz = (t: number, p0: number, pc: number, p1: number) =>
-    (1 - t) ** 2 * p0 + 2 * (1 - t) * t * pc + t ** 2 * p1;
 
   return (
-    <div className="relative w-full h-full">
-    <svg className="absolute inset-0 w-full h-full" viewBox={`0 0 ${W} ${H}`} fill="none">
-      <defs>
-        <radialGradient id="eco-g" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#FF8A30" />
-          <stop offset="100%" stopColor="#FF5C00" />
-        </radialGradient>
-        <filter id="eco-f" x="-80%" y="-80%" width="260%" height="260%">
-          <feGaussianBlur stdDeviation="9" result="b" />
-          <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-        </filter>
-      </defs>
-
-      {/* Curved spokes + data packets */}
-      {nodes.map((n, i) => {
-        const c = ctrl(n.x, n.y);
-        return (
-          <g key={`sp${i}`}>
-            <motion.path
-              d={`M ${hcx} ${hcy} Q ${c.x} ${c.y} ${n.x} ${n.y}`}
-              stroke="#FF5C00" strokeWidth="1.2" fill="none" opacity="0.25"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 0.9, delay: 0.2 + i * 0.1 }}
-            />
-            <motion.circle r="3.5" fill="#FF5C00"
-              animate={{
-                cx: [hcx, bz(0.25,hcx,c.x,n.x), bz(0.5,hcx,c.x,n.x), bz(0.75,hcx,c.x,n.x), n.x,
-                     bz(0.75,hcx,c.x,n.x), bz(0.5,hcx,c.x,n.x), bz(0.25,hcx,c.x,n.x), hcx],
-                cy: [hcy, bz(0.25,hcy,c.y,n.y), bz(0.5,hcy,c.y,n.y), bz(0.75,hcy,c.y,n.y), n.y,
-                     bz(0.75,hcy,c.y,n.y), bz(0.5,hcy,c.y,n.y), bz(0.25,hcy,c.y,n.y), hcy],
-                opacity: [0, 0.7, 1, 0.8, 0.5, 0.4, 0.6, 0.3, 0],
-              }}
-              transition={{ duration: 3.2, delay: i * 0.53, repeat: Infinity, ease: "linear" }}
-            />
-          </g>
-        );
-      })}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 420 290"
+      style={{ display: "block", width: "100%", height: "100%" }}
+    >
+      {/* Spokes */}
+      {nodes.map((n, i) => (
+        <line key={`s${i}`} x1={hcx} y1={hcy} x2={n.x} y2={n.y}
+          stroke="#FF5C00" strokeWidth="1" opacity="0.3" />
+      ))}
 
       {/* Hex ring */}
       {nodes.map((n, i) => {
         const nx = nodes[(i + 1) % 6];
-        return (
-          <motion.line key={`rg${i}`}
-            x1={n.x} y1={n.y} x2={nx.x} y2={nx.y}
-            stroke="#C8C3BB" strokeWidth="0.7" strokeDasharray="2 5"
-            initial={{ opacity: 0 }} animate={{ opacity: 0.4 }}
-            transition={{ duration: 0.5, delay: 0.9 + i * 0.08 }}
-          />
-        );
+        return <line key={`r${i}`} x1={n.x} y1={n.y} x2={nx.x} y2={nx.y}
+          stroke="#C8C3BB" strokeWidth="0.7" strokeDasharray="3 5" opacity="0.5" />;
       })}
 
-      {/* Hub glow */}
-      {[50, 34].map((rg, i) => (
-        <motion.circle key={i} cx={hcx} cy={hcy} r={rg} fill="#FF5C00"
-          animate={{ opacity: [0.05, 0.16, 0.05] }}
-          transition={{ duration: 2.2, delay: i * 0.7, repeat: Infinity }}
-        />
-      ))}
-      <circle cx={hcx} cy={hcy} r="28" fill="url(#eco-g)" filter="url(#eco-f)" />
+      {/* Hub */}
+      <circle cx={hcx} cy={hcy} r="32" fill="#FF5C00" opacity="0.12" />
+      <circle cx={hcx} cy={hcy} r="22" fill="#FF5C00" />
       <text x={hcx} y={hcy + 4} textAnchor="middle" fill="white"
-        fontSize="9.5" fontFamily="'DM Mono', monospace" fontWeight="700" letterSpacing="1.5">
+        fontSize="8" fontFamily="monospace" fontWeight="700" letterSpacing="1">
         CODA
       </text>
 
-      {/* Outer nodes — pure SVG */}
+      {/* Nodes */}
       {nodes.map((n, i) => (
-        <g key={`nd${i}`}>
-          <circle cx={n.x} cy={n.y} r="20" fill="#FEFCF8" stroke="rgba(255,92,0,0.3)" strokeWidth="1" />
-          <text x={n.x} y={n.y + 3.5} textAnchor="middle" fill="#0D0D0B"
-            fontSize="7" fontFamily="'DM Mono', monospace" fontWeight="600" letterSpacing="1.5">
+        <g key={`n${i}`}>
+          <circle cx={n.x} cy={n.y} r="22" fill="#FEFCF8" stroke="#FF5C00" strokeOpacity="0.3" strokeWidth="1" />
+          <text x={n.x} y={n.y + 3.5} textAnchor="middle" fill="#1a1a18"
+            fontSize="7" fontFamily="monospace" fontWeight="600" letterSpacing="1">
             {n.label}
           </text>
         </g>
       ))}
     </svg>
-    </div>
   );
 }
 
