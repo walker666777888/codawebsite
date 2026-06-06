@@ -207,7 +207,7 @@ export default function CallToAction() {
                 transition={{ duration: 0.85, delay: 0.36, ease: [0.16, 1, 0.3, 1] }}
               >
                 <WaveText
-                  text="Dominate?"
+                  text="Dominate!"
                   className="font-instrument italic tracking-[-0.04em] leading-[1.0]"
                   style={{ fontSize: "clamp(40px, 10vw, 130px)" }}
                 />
