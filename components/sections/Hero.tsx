@@ -159,7 +159,7 @@ export default function Hero() {
 
       <TechnicalOverlay />
       <TechnicalOverlay 
-        className="bottom-32 left-6 text-left" 
+        className="bottom-10 left-6 text-left"
         title="DATA.STREAM.SYNC" 
         subtitle="LATENCY: 12ms" 
       />
