@@ -280,13 +280,11 @@ export default function DigitalGap() {
     const texts   = Array.from(mobileTextRef.current.children) as HTMLElement[];
     const visuals = Array.from(mobileVisualRef.current.children) as HTMLElement[];
 
-    // CSS already sets correct initial opacities — just confirm with GSAP
-    gsap.set(texts,   { clearProps: "all" });
-    gsap.set(visuals, { clearProps: "all" });
-    gsap.set(texts[0],   { opacity: 1 });
-    gsap.set(texts.slice(1),   { opacity: 0 });
-    gsap.set(visuals[0], { opacity: 1, y: 0 });
-    gsap.set(visuals.slice(1), { opacity: 0, y: 0 });
+    // Hard-set initial states — never clearProps (would flash all visible)
+    gsap.set(texts[0],          { opacity: 1 });
+    gsap.set(texts.slice(1),    { opacity: 0 });
+    gsap.set(visuals[0],        { opacity: 1 });
+    gsap.set(visuals.slice(1),  { opacity: 0 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -296,7 +294,7 @@ export default function DigitalGap() {
         pin: true,
         pinSpacing: true,
         pinType: "transform",
-        scrub: 1.2,
+        scrub: 1,
         anticipatePin: 1,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
@@ -308,13 +306,13 @@ export default function DigitalGap() {
 
     tl
       .to(texts[0],   { opacity: 0, duration: 1 })
-      .to(visuals[0], { opacity: 0, y: -20, duration: 1 }, "<")
+      .to(visuals[0], { opacity: 0, duration: 1 }, "<")
       .to(texts[1],   { opacity: 1, duration: 1 }, "<")
-      .to(visuals[1], { opacity: 1, y: 0, duration: 1 }, "<")
+      .to(visuals[1], { opacity: 1, duration: 1 }, "<")
       .to(texts[1],   { opacity: 0, duration: 1 })
-      .to(visuals[1], { opacity: 0, y: -20, duration: 1 }, "<")
+      .to(visuals[1], { opacity: 0, duration: 1 }, "<")
       .to(texts[2],   { opacity: 1, duration: 1 }, "<")
-      .to(visuals[2], { opacity: 1, y: 0, duration: 1 }, "<");
+      .to(visuals[2], { opacity: 1, duration: 1 }, "<");
 
     gsap.delayedCall(0.15, () => ScrollTrigger.refresh());
 
