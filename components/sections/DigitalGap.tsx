@@ -408,8 +408,8 @@ export default function DigitalGap() {
           ))}
         </div>
 
-        {/* Visuals — fill all remaining space */}
-        <div ref={mobileVisualRef} className="relative w-full flex-1 min-h-0">
+        {/* Visuals — capped height, never too tall */}
+        <div ref={mobileVisualRef} className="relative w-full" style={{ height: 280 }}>
           {VISUALS.map((v, i) => (
             <div key={i} className="absolute inset-0 rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6"
               style={{ opacity: i === 0 ? 1 : 0 }}>
