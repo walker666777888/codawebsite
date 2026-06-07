@@ -178,20 +178,6 @@ export default function CallToAction() {
                 filter: "blur(30px)",
               }}
             />
-            {/* Eyebrow */}
-            <div
-              className={`cta-eyebrow${visible ? " in" : ""} inline-flex items-center gap-3 border border-white/10 bg-white/[0.05] rounded-full px-5 py-2.5`}
-            >
-              <motion.span
-                className="w-1.5 h-1.5 rounded-full bg-[#FF5C00]"
-                animate={{ opacity: [1, 0.3, 1], scale: [1, 0.6, 1] }}
-                transition={{ duration: 2.5, repeat: Infinity }}
-              />
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/50">
-                Ready when you are
-              </p>
-            </div>
-
             {/* Headline */}
             <div>
               <div className="cta-line-wrap">
