@@ -5,7 +5,7 @@ import {
   useScroll,
   useTransform,
 } from "motion/react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { useFormModal } from "@/components/providers/FormModalProvider";
 
