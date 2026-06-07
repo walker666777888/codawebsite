@@ -221,51 +221,43 @@ function VisualEcosystem() {
 
 /* ── Section ───────────────────────────────────────────────── */
 export default function DigitalGap() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const textRef      = useRef<HTMLDivElement>(null);
-  const visualsRef   = useRef<HTMLDivElement>(null);
-  const progressRef  = useRef<HTMLDivElement>(null);
+  // ── Desktop refs ──────────────────────────────────────────
+  const desktopContainerRef = useRef<HTMLDivElement>(null);
+  const textRef             = useRef<HTMLDivElement>(null);
+  const visualsRef          = useRef<HTMLDivElement>(null);
+  const progressRef         = useRef<HTMLDivElement>(null);
 
+  // ── Mobile refs ───────────────────────────────────────────
+  const mobileContainerRef  = useRef<HTMLDivElement>(null);
+  const mobileTextRef       = useRef<HTMLDivElement>(null);
+  const mobileVisualRef     = useRef<HTMLDivElement>(null);
+  const mobileProgressRef   = useRef<HTMLDivElement>(null);
+
+  // ── Desktop GSAP (md+) ────────────────────────────────────
   useEffect(() => {
-    // Skip heavy GSAP pin+scrub on mobile widths instead of touch detection
-    // because many Windows laptops have touch screens and we want the desktop animation.
-    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-    if (isMobile) return;
-
+    if (window.innerWidth < 768) return;
     const ctx = gsap.context(() => {
-      if (!containerRef.current || !textRef.current || !visualsRef.current) return;
-
+      if (!desktopContainerRef.current || !textRef.current || !visualsRef.current) return;
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "+=150%",
-          pin: true,
-          pinSpacing: true,
-          pinType: "transform", // use CSS transform instead of position:fixed — avoids jump with Lenis smooth scroll
-          scrub: 1.2,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
+          trigger: desktopContainerRef.current,
+          start: "top top", end: "+=150%",
+          pin: true, pinSpacing: true,
+          pinType: "transform", scrub: 1.2,
+          anticipatePin: 1, invalidateOnRefresh: true,
           onUpdate: (self) => {
-            if (progressRef.current) {
+            if (progressRef.current)
               progressRef.current.style.transform = `scaleX(${self.progress})`;
-            }
           },
         },
       });
-
       const texts   = textRef.current.children;
       const visuals = visualsRef.current.children;
-
-      gsap.set([...Array.from(texts), ...Array.from(visuals)], {
-        willChange: "transform, opacity",
-        transform: "translateZ(0)",
-      });
+      gsap.set([...Array.from(texts), ...Array.from(visuals)], { willChange: "transform, opacity", transform: "translateZ(0)" });
       gsap.set(texts,      { opacity: 0.15, y: 0 });
       gsap.set(visuals,    { opacity: 0, y: 40, scale: 0.95 });
       gsap.set(visuals[0], { opacity: 1, y: 0, scale: 1 });
       gsap.set(texts[0],   { opacity: 1 });
-
       tl
         .to(texts[0],   { opacity: 0.15, duration: 1 })
         .to(visuals[0], { opacity: 0, y: -40, scale: 0.95, duration: 1 }, "<")
@@ -275,69 +267,98 @@ export default function DigitalGap() {
         .to(visuals[1], { opacity: 0, y: -40, scale: 0.95, duration: 1 }, "<")
         .to(texts[2],   { opacity: 1, y: 0, duration: 1 }, "<")
         .to(visuals[2], { opacity: 1, y: 0, scale: 1, duration: 1 }, "<");
-
-      // Defer refresh so Lenis has time to initialise before ScrollTrigger
-      // locks in its scroll-position measurements.
       gsap.delayedCall(0.15, () => ScrollTrigger.refresh());
-    }, containerRef);
-
+    }, desktopContainerRef);
     return () => ctx.revert();
   }, []);
 
-  return (
-    <section
-      ref={containerRef}
-      className="h-screen bg-[#F4F0E8] text-[#0D0D0B] overflow-hidden border-b border-[#E6E1DA] relative"
-    >
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: "linear-gradient(to right,#E6E1DA 1px,transparent 1px),linear-gradient(to bottom,#E6E1DA 1px,transparent 1px)",
-        backgroundSize: "40px 40px",
-      }} />
+  // ── Mobile GSAP (<md) ─────────────────────────────────────
+  useEffect(() => {
+    if (window.innerWidth >= 768) return;
+    if (!mobileContainerRef.current || !mobileTextRef.current || !mobileVisualRef.current) return;
 
+    const texts   = Array.from(mobileTextRef.current.children) as HTMLElement[];
+    const visuals = Array.from(mobileVisualRef.current.children) as HTMLElement[];
+
+    // CSS already sets correct initial opacities — just confirm with GSAP
+    gsap.set(texts,   { clearProps: "all" });
+    gsap.set(visuals, { clearProps: "all" });
+    gsap.set(texts[0],   { opacity: 1 });
+    gsap.set(texts.slice(1),   { opacity: 0 });
+    gsap.set(visuals[0], { opacity: 1, y: 0 });
+    gsap.set(visuals.slice(1), { opacity: 0, y: 0 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: mobileContainerRef.current,
+        start: "top top",
+        end: "+=150%",
+        pin: true,
+        pinSpacing: true,
+        pinType: "transform",
+        scrub: 1.2,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          if (mobileProgressRef.current)
+            mobileProgressRef.current.style.transform = `scaleX(${self.progress})`;
+        },
+      },
+    });
+
+    tl
+      .to(texts[0],   { opacity: 0, duration: 1 })
+      .to(visuals[0], { opacity: 0, y: -20, duration: 1 }, "<")
+      .to(texts[1],   { opacity: 1, duration: 1 }, "<")
+      .to(visuals[1], { opacity: 1, y: 0, duration: 1 }, "<")
+      .to(texts[1],   { opacity: 0, duration: 1 })
+      .to(visuals[1], { opacity: 0, y: -20, duration: 1 }, "<")
+      .to(texts[2],   { opacity: 1, duration: 1 }, "<")
+      .to(visuals[2], { opacity: 1, y: 0, duration: 1 }, "<");
+
+    gsap.delayedCall(0.15, () => ScrollTrigger.refresh());
+
+    return () => {
+      ScrollTrigger.getAll().forEach(st => {
+        if (st.vars.trigger === mobileContainerRef.current) st.kill();
+      });
+      tl.kill();
+    };
+  }, []);
+
+  const BG = (
+    <div className="absolute inset-0 pointer-events-none" style={{
+      backgroundImage: "linear-gradient(to right,#E6E1DA 1px,transparent 1px),linear-gradient(to bottom,#E6E1DA 1px,transparent 1px)",
+      backgroundSize: "40px 40px",
+    }} />
+  );
+
+  const VISUALS = [<VisualFragility key="frag" />, <VisualChaos key="chaos" />, <VisualEcosystem key="eco" />];
+  const TEXTS = [
+    { pre: "Most businesses are", em: "digitally fragile." },
+    { pre: "Disconnected tools create", em: "chaos." },
+    { pre: "We engineer", em: "ecosystems." },
+  ];
+
+  return (<>
+    {/* ═══════════════════════════════════════════════════
+        DESKTOP  (md+)  — original side-by-side animation
+    ═══════════════════════════════════════════════════ */}
+    <section
+      ref={desktopContainerRef}
+      className="hidden md:block h-screen bg-[#F4F0E8] text-[#0D0D0B] overflow-hidden border-b border-[#E6E1DA] relative"
+    >
+      {BG}
       <div className="absolute inset-x-0 bottom-0 h-[2px] bg-[#E6E1DA] z-10 overflow-hidden">
         <div ref={progressRef} className="absolute inset-0 bg-[#FF5C00] origin-left" style={{ transform: "scaleX(0)" }} />
       </div>
-
-      <div className="relative z-10 h-full max-w-7xl mx-auto px-6 py-16 md:py-0 md:flex md:flex-col md:justify-center">
-        <SectionLabel
-          index={1}
-          className="mb-8 md:mb-12 inline-flex w-fit px-3 py-1.5 rounded-full"
-          style={{
-            background: "rgba(244,240,232,0.92)",
-            backdropFilter: "blur(8px)",
-            WebkitBackdropFilter: "blur(8px)",
-            border: "1px solid rgba(13,13,11,0.12)",
-            color: "#3D3A35",
-          }}
+      <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-center">
+        <SectionLabel index={1} className="mb-12 inline-flex w-fit px-3 py-1.5 rounded-full"
+          style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
         >The Digital Gap</SectionLabel>
-
-        {/* Mobile: static stacked — no GSAP, pure native scroll */}
-        <div className="block md:hidden space-y-10">
-          {[
-            { pre: "Most businesses are", em: "digitally fragile.", visual: <VisualFragility key="frag" /> },
-            { pre: "Disconnected tools create", em: "chaos.", visual: <VisualChaos key="chaos" /> },
-            { pre: "We engineer", em: "ecosystems.", visual: <VisualEcosystem key="eco" /> },
-          ].map(({ pre, em, visual }, i) => (
-            <div key={i} className="space-y-5">
-              <h2 className="font-instrument leading-[1.1] tracking-[-0.03em]"
-                style={{ fontSize: "clamp(28px, 7vw, 44px)" }}>
-                {pre}{" "}<span className="italic text-[#FF5C00]">{em}</span>
-              </h2>
-              <div className="w-full h-[240px] rounded-2xl border border-[#E6E1DA] bg-white overflow-hidden">
-                {visual}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Desktop: GSAP scroll-jacked */}
-        <div className="hidden md:grid grid-cols-2 gap-20 items-center">
+        <div className="grid grid-cols-2 gap-20 items-center">
           <div ref={textRef} className="space-y-10">
-            {[
-              { pre: "Most businesses are", em: "digitally fragile." },
-              { pre: "Disconnected tools create", em: "chaos." },
-              { pre: "We engineer", em: "ecosystems." },
-            ].map(({ pre, em }, i) => (
+            {TEXTS.map(({ pre, em }, i) => (
               <h2 key={i} className="font-instrument leading-[1.1] tracking-[-0.03em]"
                 style={{ fontSize: "clamp(30px, 4vw, 54px)" }}>
                 {pre}{" "}<span className="italic text-[#FF5C00]">{em}</span>
@@ -345,7 +366,7 @@ export default function DigitalGap() {
             ))}
           </div>
           <div ref={visualsRef} className="relative h-[360px] w-full">
-            {[<VisualFragility key="frag" />, <VisualChaos key="chaos" />, <VisualEcosystem key="eco" />].map((v, i) => (
+            {VISUALS.map((v, i) => (
               <div key={i} className="absolute inset-0 rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6">
                 {v}
               </div>
@@ -353,11 +374,50 @@ export default function DigitalGap() {
           </div>
         </div>
       </div>
-
-      {/* Anchored to section bottom — stays visible throughout the entire pinned scroll */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 hidden md:block">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
         <span className="font-mono text-[11px] text-[#0D0D0B]/55 uppercase tracking-[0.3em]">Scroll to explore</span>
       </div>
     </section>
-  );
+
+    {/* ═══════════════════════════════════════════════════
+        MOBILE  (<md)  — same scrub animation, stacked
+    ═══════════════════════════════════════════════════ */}
+    <section
+      ref={mobileContainerRef}
+      className="md:hidden h-screen bg-[#F4F0E8] text-[#0D0D0B] overflow-hidden border-b border-[#E6E1DA] relative"
+    >
+      {BG}
+      <div className="absolute inset-x-0 bottom-0 h-[2px] bg-[#E6E1DA] z-10 overflow-hidden">
+        <div ref={mobileProgressRef} className="absolute inset-0 bg-[#FF5C00] origin-left" style={{ transform: "scaleX(0)" }} />
+      </div>
+      <div className="relative z-10 h-full max-w-7xl mx-auto px-5 flex flex-col justify-center pt-10 pb-16 gap-6">
+        <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full shrink-0"
+          style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
+        >The Digital Gap</SectionLabel>
+
+        {/* Texts — overlapping, hidden by default, GSAP shows one at a time */}
+        <div ref={mobileTextRef} className="relative shrink-0" style={{ height: 110 }}>
+          {TEXTS.map(({ pre, em }, i) => (
+            <h2 key={i} className="absolute inset-x-0 top-0 font-instrument leading-[1.15] tracking-[-0.03em]"
+              style={{ fontSize: "clamp(32px, 9vw, 44px)", opacity: i === 0 ? 1 : 0 }}>
+              {pre}{" "}<span className="italic text-[#FF5C00]">{em}</span>
+            </h2>
+          ))}
+        </div>
+
+        {/* Visuals — fixed height matching desktop aspect ratio */}
+        <div ref={mobileVisualRef} className="relative w-full" style={{ height: 260 }}>
+          {VISUALS.map((v, i) => (
+            <div key={i} className="absolute inset-0 rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6"
+              style={{ opacity: i === 0 ? 1 : 0 }}>
+              {v}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
+        <span className="font-mono text-[10px] text-[#0D0D0B]/55 uppercase tracking-[0.3em]">Scroll to explore</span>
+      </div>
+    </section>
+  </>);
 }
