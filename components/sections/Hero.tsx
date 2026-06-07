@@ -301,7 +301,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
-          className="font-sans text-[15px] sm:text-[17px] text-[#4A463F] md:text-white/55 max-w-[480px] leading-[1.7] sm:leading-[1.75] mb-8 sm:mb-12"
+          className="font-sans text-[13px] sm:text-[17px] text-[#4A463F] md:text-white/55 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-[1.75] mb-8 sm:mb-12"
         >
           We don&apos;t just build products. We architect the unfair advantage your competitors can&apos;t copy.
         </motion.p>
