@@ -10,12 +10,12 @@ import MagneticButton from "@/components/ui/MagneticButton";
 import { useFormModal } from "@/components/providers/FormModalProvider";
 import LiquidEther from "@/components/ui/LiquidEther";
 
-const PARTICLES = Array.from({ length: 30 }).map((_, i) => ({
+const PARTICLES = Array.from({ length: 70 }).map((_, i) => ({
   id: i,
   left: `${(i * 33.7) % 100}%`,
   duration: 12 + (i % 10),
   delay: (i * 0.6) % 8,
-  size: i % 5 === 0 ? 3 : (i % 3 === 0 ? 2 : 1.5),
+  size: i % 5 === 0 ? 5 : (i % 3 === 0 ? 3.5 : 2.5),
   isOrange: i % 4 === 0,
   yOffset: -(100 + (i % 30))
 }));
@@ -141,7 +141,7 @@ export default function Hero() {
       {/* ── Warm ambient mesh — layer 1 — mobile only ─── */}
       <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
         <div
-          className="absolute top-[-14%] left-[50%] -translate-x-1/2 w-[700px] h-[560px] rounded-full blur-[70px] opacity-[0.30]"
+          className="absolute top-[-14%] left-[50%] -translate-x-1/2 w-[820px] h-[660px] rounded-full blur-[70px] opacity-[0.42]"
           style={{ background: "radial-gradient(ellipse, rgba(255,138,61,0.9) 0%, transparent 62%)" }}
         />
       </div>
@@ -149,8 +149,32 @@ export default function Hero() {
       {/* ── Warm ambient mesh — layer 2 — mobile only ── */}
       <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
         <div
-          className="absolute bottom-[6%] right-[6%] w-[380px] h-[380px] rounded-full blur-[55px] opacity-[0.18]"
+          className="absolute bottom-[6%] right-[6%] w-[520px] h-[520px] rounded-full blur-[55px] opacity-[0.30]"
           style={{ background: "radial-gradient(circle, rgba(255,92,0,0.7) 0%, transparent 66%)" }}
+        />
+      </div>
+
+      {/* ── Warm ambient mesh — layer 3 — mobile only ── */}
+      <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
+        <div
+          className="absolute top-[35%] left-[-10%] w-[380px] h-[380px] rounded-full blur-[60px] opacity-[0.22]"
+          style={{ background: "radial-gradient(circle, rgba(255,138,61,0.8) 0%, transparent 65%)" }}
+        />
+      </div>
+
+      {/* ── Warm ambient mesh — layer 4 — mobile only ── */}
+      <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
+        <div
+          className="absolute bottom-[28%] left-[20%] w-[300px] h-[300px] rounded-full blur-[50px] opacity-[0.18]"
+          style={{ background: "radial-gradient(circle, rgba(255,92,0,0.6) 0%, transparent 65%)" }}
+        />
+      </div>
+
+      {/* ── Warm ambient mesh — layer 5 — mobile only ── */}
+      <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
+        <div
+          className="absolute top-[60%] right-[-5%] w-[280px] h-[280px] rounded-full blur-[45px] opacity-[0.20]"
+          style={{ background: "radial-gradient(circle, rgba(255,115,40,0.65) 0%, transparent 65%)" }}
         />
       </div>
 

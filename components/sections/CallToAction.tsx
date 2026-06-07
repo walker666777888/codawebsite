@@ -211,7 +211,7 @@ export default function CallToAction() {
             <div className={`cta-btn${visible ? " in" : ""} flex flex-col items-center gap-4`}>
               <MagneticButton variant="accent" onClick={openForm}>
                 <span
-                  className="flex items-center gap-3 bg-[#FF5C00] text-white px-6 py-3 sm:px-9 sm:py-4 rounded-xl font-sans font-semibold text-[13px] sm:text-[15px] tracking-[-0.01em]"
+                  className="flex items-center gap-2 sm:gap-3 bg-[#FF5C00] text-white px-5 py-2.5 sm:px-9 sm:py-4 rounded-xl font-sans font-semibold text-[12px] sm:text-[15px] tracking-[-0.01em]"
                   style={{ boxShadow: "0 8px 24px rgba(255,92,0,0.4)" }}
                 >
                   Start a project
