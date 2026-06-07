@@ -280,11 +280,16 @@ export default function DigitalGap() {
     const texts   = Array.from(mobileTextRef.current.children) as HTMLElement[];
     const visuals = Array.from(mobileVisualRef.current.children) as HTMLElement[];
 
-    // Hard-set initial states — never clearProps (would flash all visible)
-    gsap.set(texts[0],          { opacity: 1 });
-    gsap.set(texts.slice(1),    { opacity: 0 });
-    gsap.set(visuals[0],        { opacity: 1 });
-    gsap.set(visuals.slice(1),  { opacity: 0 });
+    // Each h2 has two block spans: [0] = pre text, [1] = em text (italic orange)
+    const pre = texts.map(h2 => h2.children[0] as HTMLElement);
+    const em  = texts.map(h2 => h2.children[1] as HTMLElement);
+
+    // h2 opacity:1 always — child spans control visibility to prevent simultaneous stacking
+    gsap.set(texts, { opacity: 1 });
+    gsap.set([pre[0], em[0]], { opacity: 1, y: 0 });
+    gsap.set([pre[1], em[1], pre[2], em[2]], { opacity: 0, y: 24 });
+    gsap.set(visuals[0], { opacity: 1, y: 0, scale: 1 });
+    gsap.set([visuals[1], visuals[2]], { opacity: 0, y: 40, scale: 0.95 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -307,14 +312,18 @@ export default function DigitalGap() {
     });
 
     tl
-      .to(texts[0],   { opacity: 0, duration: 1 })
-      .to(visuals[0], { opacity: 0, duration: 1 }, "<")
-      .to(texts[1],   { opacity: 1, duration: 1 }, "<")
-      .to(visuals[1], { opacity: 1, duration: 1 }, "<")
-      .to(texts[1],   { opacity: 0, duration: 1 })
-      .to(visuals[1], { opacity: 0, duration: 1 }, "<")
-      .to(texts[2],   { opacity: 1, duration: 1 }, "<")
-      .to(visuals[2], { opacity: 1, duration: 1 }, "<");
+      // Slide 0 → 1: exit phrase 0, then enter phrase 1 line-by-line
+      .to([pre[0], em[0]], { opacity: 0, y: -18, duration: 1 })
+      .to(visuals[0],      { opacity: 0, y: -30, scale: 0.95, duration: 1 }, "<")
+      .to(pre[1],          { opacity: 1, y: 0, duration: 1 })
+      .to(visuals[1],      { opacity: 1, y: 0, scale: 1, duration: 1 }, "<")
+      .to(em[1],           { opacity: 1, y: 0, duration: 1 }, "<0.35")
+      // Slide 1 → 2: exit phrase 1, then enter phrase 2 line-by-line
+      .to([pre[1], em[1]], { opacity: 0, y: -18, duration: 1 })
+      .to(visuals[1],      { opacity: 0, y: -30, scale: 0.95, duration: 1 }, "<")
+      .to(pre[2],          { opacity: 1, y: 0, duration: 1 })
+      .to(visuals[2],      { opacity: 1, y: 0, scale: 1, duration: 1 }, "<")
+      .to(em[2],           { opacity: 1, y: 0, duration: 1 }, "<0.35");
 
     gsap.delayedCall(0.15, () => ScrollTrigger.refresh());
 
@@ -396,14 +405,15 @@ export default function DigitalGap() {
 
         {/* Top: Label + Text */}
         <div>
-          <SectionLabel index={1} className="mb-5 inline-flex w-fit px-3 py-1.5 rounded-full"
+          <SectionLabel index={1} className="mb-8 inline-flex w-fit px-3 py-1.5 rounded-full"
             style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
           >The Digital Gap</SectionLabel>
           <div ref={mobileTextRef} className="relative" style={{ height: 120 }}>
             {TEXTS.map(({ pre, em }, i) => (
-              <h2 key={i} className="absolute inset-x-0 top-0 font-instrument leading-[1.15] tracking-[-0.03em]"
+              <h2 key={i} className="absolute inset-x-0 top-3 font-instrument tracking-[-0.03em]"
                 style={{ fontSize: "clamp(30px, 8.5vw, 42px)", opacity: i === 0 ? 1 : 0 }}>
-                {pre}{" "}<span className="italic text-[#FF5C00]">{em}</span>
+                <span className="block leading-[1.15]">{pre}</span>
+                <span className="block leading-[1.15] italic text-[#FF5C00]">{em}</span>
               </h2>
             ))}
           </div>

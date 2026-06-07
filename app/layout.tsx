@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 
   title: {
     default: "CODA",
-    template: "%s | CODA",
+    template: "%s | CODA ",
   },
 
   description:

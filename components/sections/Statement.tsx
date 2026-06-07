@@ -1499,8 +1499,7 @@ function HeadlineBlock({ reduced, mobile }: { reduced: boolean; mobile: boolean 
   const FS3 = "clamp(40px, 4.8vw, 72px)";
   const ease = [0.16, 1, 0.3, 1] as const;
 
-  // On mobile the lines render static — the parent column does one fade-up.
-  const anim = (props: Record<string, unknown>) => (mobile ? {} : props);
+  const anim = (props: Record<string, unknown>) => props;
 
   return (
     <div className="relative flex flex-col gap-0">
@@ -1579,10 +1578,7 @@ function HeaderBlock({
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  // On desktop, animate each element individually (pass the props through).
-  // On mobile, return nothing so elements render static — the single wrapper
-  // animation below handles the entrance.
-  const anim = (props: Record<string, unknown>) => (mobile ? {} : props);
+  const anim = (props: Record<string, unknown>) => props;
 
   return (
     <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 lg:pt-32 pb-12 sm:pb-20 relative z-10">
@@ -1591,21 +1587,12 @@ function HeaderBlock({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center overflow-visible">
 
         {/* LEFT — label + headline + copy + stats.
-            On mobile this whole column does ONE fade-up; on desktop it's a
-            passthrough and the children animate individually.
             key={mobile} forces a clean remount when the breakpoint is detected
             after mount, so children never get stranded at opacity:0 by losing
             their reveal props mid-life. */}
         <motion.div
           key={mobile ? "mobile" : "desktop"}
           className="overflow-visible"
-          {...(mobile
-            ? {
-                initial: { opacity: 0, y: 30 },
-                animate: isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 },
-                transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-              }
-            : {})}
         >
           {/* Label */}
           <motion.div
