@@ -384,29 +384,32 @@ export default function DigitalGap() {
     ═══════════════════════════════════════════════════ */}
     <section
       ref={mobileContainerRef}
-      className="md:hidden h-screen bg-[#F4F0E8] text-[#0D0D0B] overflow-hidden border-b border-[#E6E1DA] relative"
+      className="md:hidden bg-[#F4F0E8] text-[#0D0D0B] overflow-hidden border-b border-[#E6E1DA] relative"
+      style={{ height: "100dvh" }}
     >
       {BG}
       <div className="absolute inset-x-0 bottom-0 h-[2px] bg-[#E6E1DA] z-10 overflow-hidden">
         <div ref={mobileProgressRef} className="absolute inset-0 bg-[#FF5C00] origin-left" style={{ transform: "scaleX(0)" }} />
       </div>
-      <div className="relative z-10 h-full max-w-7xl mx-auto px-5 flex flex-col justify-center pt-10 pb-16 gap-6">
-        <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full shrink-0"
+
+      <div className="relative z-10 h-full px-5 flex flex-col pt-10 pb-10">
+        {/* Label */}
+        <SectionLabel index={1} className="mb-5 inline-flex w-fit px-3 py-1.5 rounded-full shrink-0"
           style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
         >The Digital Gap</SectionLabel>
 
-        {/* Texts — overlapping, hidden by default, GSAP shows one at a time */}
-        <div ref={mobileTextRef} className="relative shrink-0" style={{ height: 110 }}>
+        {/* Texts */}
+        <div ref={mobileTextRef} className="relative shrink-0 mb-5" style={{ height: 120 }}>
           {TEXTS.map(({ pre, em }, i) => (
             <h2 key={i} className="absolute inset-x-0 top-0 font-instrument leading-[1.15] tracking-[-0.03em]"
-              style={{ fontSize: "clamp(32px, 9vw, 44px)", opacity: i === 0 ? 1 : 0 }}>
+              style={{ fontSize: "clamp(30px, 8.5vw, 42px)", opacity: i === 0 ? 1 : 0 }}>
               {pre}{" "}<span className="italic text-[#FF5C00]">{em}</span>
             </h2>
           ))}
         </div>
 
-        {/* Visuals — fixed height matching desktop aspect ratio */}
-        <div ref={mobileVisualRef} className="relative w-full" style={{ height: 260 }}>
+        {/* Visuals — fill all remaining space */}
+        <div ref={mobileVisualRef} className="relative w-full flex-1 min-h-0">
           {VISUALS.map((v, i) => (
             <div key={i} className="absolute inset-0 rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6"
               style={{ opacity: i === 0 ? 1 : 0 }}>
@@ -414,9 +417,11 @@ export default function DigitalGap() {
             </div>
           ))}
         </div>
-      </div>
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
-        <span className="font-mono text-[10px] text-[#0D0D0B]/55 uppercase tracking-[0.3em]">Scroll to explore</span>
+
+        {/* Scroll hint — inside flex so it's always visible */}
+        <div className="shrink-0 pt-4 flex justify-center">
+          <span className="font-mono text-[10px] text-[#0D0D0B]/55 uppercase tracking-[0.3em]">Scroll to explore</span>
+        </div>
       </div>
     </section>
   </>);
