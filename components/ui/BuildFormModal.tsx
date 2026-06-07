@@ -559,7 +559,7 @@ function PhoneField({
             whileTap={{ scale: 0.97 }}
             className="h-full flex items-center gap-2 rounded-[14px] px-3.5 py-4 cursor-pointer outline-none select-none"
             style={{
-              background: open ? "rgba(255,92,0,0.08)" : "rgba(255,255,255,0.035)",
+              background: open ? "rgb(38,22,12)" : "rgb(30,28,24)",
               boxShadow: open
                 ? "0 0 0 1px rgba(255,92,0,0.6), 0 0 20px rgba(255,92,0,0.10), inset 0 1px 0 rgba(255,255,255,0.06)"
                 : "0 0 0 1px rgba(255,255,255,0.09), inset 0 1px 0 rgba(255,255,255,0.04)",
@@ -605,7 +605,7 @@ function PhoneField({
 
                 {/* search */}
                 <div className="px-3 pt-3 pb-2">
-                  <div className="flex items-center gap-2 bg-white/[0.05] rounded-[10px] px-3 py-2"
+                  <div className="flex items-center gap-2 bg-[#1e1c18] rounded-[10px] px-3 py-2"
                     style={{ boxShadow: "0 0 0 1px rgba(255,255,255,0.07)" }}>
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none" className="text-white/30 shrink-0">
                       <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.4"/>
@@ -739,7 +739,7 @@ function Dropdown({
         whileTap={{ scale: 0.99 }}
         className="w-full flex items-center justify-between gap-3 rounded-[14px] px-4 py-3.5 cursor-pointer outline-none text-left"
         style={{
-          background: open || hasSelected ? "rgba(255,92,0,0.07)" : "rgba(255,255,255,0.035)",
+          background: open ? "rgb(38,22,12)" : hasSelected ? "rgb(35,20,10)" : "rgb(30,28,24)",
           boxShadow: open
             ? "0 0 0 1px rgba(255,92,0,0.6), 0 0 28px rgba(255,92,0,0.10), inset 0 1px 0 rgba(255,255,255,0.06)"
             : hasSelected
