@@ -893,7 +893,16 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
   const [brief,     setBrief]     = useState("");
   const [ptype,     setPtype]     = useState<string[]>([]);
   const [otherPtype, setOtherPtype] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
   const nameRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -910,6 +919,9 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
     }, 600);
     return () => clearTimeout(t);
   }, [isOpen]);
+
+  /* shifts form-item delays past the panel settle point on mobile */
+  const fd = (base: number) => isMobile ? Math.max(base + 0.18, 0.42) : base;
 
   const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
@@ -945,8 +957,12 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
     }
   }, [name, email, dialCode, phoneNum, ptype, otherPtype, brief]);
 
-  const panelTransition = { type: "tween" as const, duration: 0.65, ease: E };
-  const exitTransition  = { type: "tween" as const, duration: 0.55, ease: E };
+  const panelTransition = isMobile
+    ? { type: "tween" as const, duration: 0.40, ease: [0.25, 0.46, 0.45, 0.94] as const }
+    : { type: "tween" as const, duration: 0.65, ease: E };
+  const exitTransition = isMobile
+    ? { type: "tween" as const, duration: 0.28, ease: [0.4, 0, 0.6, 0] as const }
+    : { type: "tween" as const, duration: 0.55, ease: E };
 
   return (
     <AnimatePresence>
@@ -1120,11 +1136,11 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                       /* form */
                       <motion.form key="form" onSubmit={handleSubmit}
                         className="flex flex-col gap-5"
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        transition={{ duration: 0.25 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
                       >
                         {/* name + email */}
-                        <FadeUp delay={0.25}>
+                        <FadeUp delay={fd(0.25)}>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <Field id="name" label="Your name" required value={name}
                               onChange={setName} placeholder="What do they call you?" inputRef={nameRef} />
@@ -1137,7 +1153,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                         </FadeUp>
 
                         {/* phone */}
-                        <FadeUp delay={0.31}>
+                        <FadeUp delay={fd(0.31)}>
                           <PhoneField
                             dialCode={dialCode}
                             selectedCode={selectedCode}
@@ -1148,7 +1164,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                         </FadeUp>
 
                         {/* project type */}
-                        <FadeUp delay={0.37}>
+                        <FadeUp delay={fd(0.37)}>
                           <div className="flex flex-col gap-3">
                             <div>
                               <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-white/75 mb-2.5">
@@ -1189,7 +1205,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                         </FadeUp>
 
                         {/* brief */}
-                        <FadeUp delay={0.44}>
+                        <FadeUp delay={fd(0.44)}>
                           <Field id="brief" label="Tell us about your project" textarea
                             value={brief} onChange={setBrief} maxLength={600}
                             placeholder="Describe what you're building, the problem you're solving, and what success looks like…"
@@ -1197,7 +1213,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                         </FadeUp>
 
                         {/* submit */}
-                        <FadeUp delay={0.51}>
+                        <FadeUp delay={fd(0.51)}>
                           <motion.button
                             type="submit"
                             disabled={status === "submitting" || !name.trim() || !email.trim() || !phoneNum.trim()}
