@@ -6,6 +6,7 @@ import MagneticButton from "@/components/ui/MagneticButton";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
+import { lenisScrollTo } from "@/components/providers/LenisProvider";
 
 const NAV_ANCHOR_LINKS = [
   { label: "Work",       href: "#work" },
@@ -16,7 +17,7 @@ const NAV_ANCHOR_LINKS = [
 function scrollToSection(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
   e.preventDefault();
   const el = document.getElementById(href.replace("#", ""));
-  if (el) el.scrollIntoView({ behavior: "smooth" });
+  if (el) lenisScrollTo(el);
 }
 
 export default function Navbar() {

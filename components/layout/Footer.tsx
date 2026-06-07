@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import React, { useRef, useEffect } from "react";
 import ScrambleText from "@/components/ui/ScrambleText";
 import { useVideoPreload } from "@/components/providers/VideoPreloadProvider";
+import { lenisScrollTo } from "@/components/providers/LenisProvider";
 
 /* ── Fit-text: waits for font load then fills container exactly ── */
 function useFitText() {
@@ -43,7 +44,7 @@ function scrollToSection(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
   if (!href.startsWith("#")) return;
   e.preventDefault();
   const el = document.getElementById(href.replace("#", ""));
-  if (el) el.scrollIntoView({ behavior: "smooth" });
+  if (el) lenisScrollTo(el);
 }
 
 function AnimLink({ href, children }: { href: string; children: React.ReactNode }) {
