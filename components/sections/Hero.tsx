@@ -216,7 +216,7 @@ export default function Hero() {
         {/* Brand name */}
         <h1
           className="font-instrument tracking-[-0.04em] leading-[1.04] mb-2 sm:mb-3 text-center"
-          style={{ fontSize: "clamp(44px, 8.5vw, 118px)" }}
+          style={{ fontSize: "clamp(52px, 8.5vw, 118px)" }}
         >
           {(["Citizen", "Of", "Digital Age."] as Array<string>).map((word, wi) => (
             <span
