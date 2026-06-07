@@ -4,19 +4,10 @@ import {
   motion,
   useScroll,
   useTransform,
-  AnimatePresence,
 } from "motion/react";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
-import AnimatedCounter from "@/components/ui/AnimatedCounter";
 import { useFormModal } from "@/components/providers/FormModalProvider";
-
-const METRICS = [
-  { value: 45, suffix: "%", label: "Visibility Lift" },
-  { value: 40, suffix: "%", label: "Engagement Gain" },
-  { value: 3,  suffix: "×", label: "Faster Launch" },
-  { value: 12, suffix: "+", label: "Systems Built" },
-];
 
 const PARTICLES = Array.from({ length: 30 }).map((_, i) => ({
   id: i,
@@ -96,48 +87,6 @@ function TechnicalOverlay({
   );
 }
 
-function MobileMetricsCarousel() {
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    if (window.innerWidth >= 768) return; // desktop has static metrics bar, no carousel needed
-    const timer = setInterval(() => {
-      setIndex(prev => (prev + 1) % METRICS.length);
-    }, 3500);
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <div className="md:hidden relative h-[90px] w-full border-t border-[#0D0D0B]/[0.1] overflow-hidden flex items-center justify-center bg-[#F4F0E8]">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={index}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -12 }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col items-center justify-center absolute inset-0"
-        >
-          <span className="font-instrument leading-none mb-1 tabular-nums text-[#0D0D0B]" style={{ fontSize: "clamp(36px, 10vw, 42px)" }}>
-            <AnimatedCounter value={METRICS[index].value} suffix={METRICS[index].suffix} startImmediately={true} />
-          </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#6F6A60]">
-            {METRICS[index].label}
-          </span>
-        </motion.div>
-      </AnimatePresence>
-      <div className="absolute bottom-0 left-0 h-[2px] bg-[#0D0D0B]/5 w-full">
-         <motion.div 
-            key={index + "bar"}
-            className="h-full bg-[#FF5C00]"
-            initial={{ width: "0%" }}
-            animate={{ width: "100%" }}
-            transition={{ duration: 3.5, ease: "linear" }}
-         />
-      </div>
-    </div>
-  );
-}
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -386,85 +335,6 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* ── Bottom metrics bar ───────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 2.6, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 w-full"
-      >
-        <div className="hidden md:grid grid-cols-4 border-t border-[#0D0D0B]/[0.1] overflow-hidden">
-          {METRICS.map((m, i) => (
-          <motion.div
-            key={i}
-            className={`relative group flex flex-col items-center justify-center py-7 cursor-default overflow-hidden ${
-              i > 0 ? "border-l border-[#0D0D0B]/[0.1]" : ""
-            }`}
-            whileHover="hovered"
-            initial="idle"
-          >
-            {/* Spotlight fill on hover */}
-            <motion.div
-              className="absolute inset-0 pointer-events-none"
-              variants={{
-                idle:    { opacity: 0 },
-                hovered: { opacity: 1 },
-              }}
-              transition={{ duration: 0.4 }}
-              style={{ background: "radial-gradient(ellipse 80% 100% at 50% 120%, rgba(255,92,0,0.10) 0%, transparent 70%)" }}
-            />
-
-            {/* Top orange bar that draws in on hover */}
-            <motion.div
-              className="absolute top-0 inset-x-0 h-[2px] origin-left"
-              style={{ background: "linear-gradient(90deg, #FF5C00, rgba(255,92,0,0.3))" }}
-              variants={{
-                idle:    { scaleX: 0 },
-                hovered: { scaleX: 1 },
-              }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            />
-
-            {/* Number */}
-            <motion.span
-              className="font-instrument leading-none mb-2 tabular-nums"
-              style={{ fontSize: "clamp(28px, 3vw, 42px)" }}
-              variants={{
-                idle:    { color: "#0D0D0B", y: 0 },
-                hovered: { color: "#FF5C00", y: -3 },
-              }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <AnimatedCounter value={m.value} suffix={m.suffix} />
-            </motion.span>
-
-            {/* Label */}
-            <motion.span
-              className="font-mono text-[9px] uppercase tracking-[0.22em]"
-              variants={{
-                idle:    { color: "rgba(111,106,96,1)", y: 0, opacity: 1 },
-                hovered: { color: "rgba(13,13,11,0.7)", y: -2, opacity: 1 },
-              }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {m.label}
-            </motion.span>
-
-            {/* Underline that draws under label */}
-            <motion.div
-              className="mt-2 h-px rounded-full bg-[#FF5C00] origin-center"
-              variants={{
-                idle:    { scaleX: 0, opacity: 0 },
-                hovered: { scaleX: 1, opacity: 0.5 },
-              }}
-              style={{ width: "40px" }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            />
-          </motion.div>
-        ))}
-        </div>
-        <MobileMetricsCarousel />
-      </motion.div>
 
       {/* ── Scroll indicator ─────────────────────────────── */}
       <motion.div
