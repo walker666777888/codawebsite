@@ -170,30 +170,9 @@
 }
 
 
-/* ── Section rendering performance (all viewports) ─────────────────────── */
-/*
- * content-visibility: auto — browser skips layout + paint for off-screen
- * sections entirely. Only the visible section and ~1 ahead are rendered.
- * contain-intrinsic-size must be generous so the scrollbar height stays
- * stable and sections don't "pop" as they scroll into view.
- */
-main > section {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 900px;
-}
-
-/* On mobile, be even more aggressive with containment */
-@media (max-width: 767px) {
-  main > section {
-    contain-intrinsic-size: 0 700px;
-  }
-}
-
-/* Hero section must NOT have content-visibility — it's always in view */
-#hero {
-  content-visibility: visible;
-  contain-intrinsic-size: none;
-}
+/* content-visibility: auto was removed — it caused scroll position jumps on
+   load and large empty gaps while scrolling, because contain-intrinsic-size
+   estimates never matched actual section heights. */
 
 
 @layer utilities {
