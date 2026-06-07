@@ -183,17 +183,14 @@ export default function WorkShowcase() {
         <div
           className="overflow-hidden rounded-2xl"
           style={{ cursor: "grab" }}
-          /* Mouse events */
           onMouseDown={e => { e.preventDefault(); onPointerDown(e.clientX); (e.currentTarget as HTMLDivElement).style.cursor = "grabbing"; }}
           onMouseMove={e => onPointerMove(e.clientX)}
           onMouseUp={e => { onPointerUp(); (e.currentTarget as HTMLDivElement).style.cursor = "grab"; }}
           onMouseLeave={e => { onPointerUp(); (e.currentTarget as HTMLDivElement).style.cursor = "grab"; }}
-          /* Touch events */
           onTouchStart={e => onPointerDown(e.touches[0].clientX)}
           onTouchMove={e => { e.preventDefault(); onPointerMove(e.touches[0].clientX); }}
           onTouchEnd={onPointerUp}
         >
-          {/* Double the cards for seamless loop — RAF handles wrapping */}
           <div ref={trackRef} className="flex gap-5 pb-2" style={{ width: "max-content", willChange: "transform" }}>
             {projects.map((p, i) => <ProjectCard key={`a-${i}`} project={p} index={i} />)}
             {projects.map((p, i) => <ProjectCard key={`b-${i}`} project={p} index={i} />)}
