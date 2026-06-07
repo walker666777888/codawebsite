@@ -1494,10 +1494,13 @@ function KineticWord({
 /* Entrance-only fade+rise — no scroll-linked parallax springs (those ran a
    physics sim every scroll frame on huge text, which made the section feel
    heavy). whileInView fires once, then the block is static = light scroll. */
-function HeadlineBlock({ reduced }: { reduced: boolean }) {
+function HeadlineBlock({ reduced, mobile }: { reduced: boolean; mobile: boolean }) {
   const FS  = "clamp(52px, 6vw, 92px)";
   const FS3 = "clamp(40px, 4.8vw, 72px)";
   const ease = [0.16, 1, 0.3, 1] as const;
+
+  // On mobile the lines render static — the parent column does one fade-up.
+  const anim = (props: Record<string, unknown>) => (mobile ? {} : props);
 
   return (
     <div className="relative flex flex-col gap-0">
@@ -1507,10 +1510,12 @@ function HeadlineBlock({ reduced }: { reduced: boolean }) {
         <motion.span
           className="block font-instrument text-[#14130F] leading-[1.0]"
           style={{ fontSize: FS, letterSpacing: "-0.04em" }}
-          initial={{ y: "108%", opacity: 0 }}
-          whileInView={{ y: "0%", opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.0, ease }}
+          {...anim({
+            initial: { y: "108%", opacity: 0 },
+            whileInView: { y: "0%", opacity: 1 },
+            viewport: { once: true },
+            transition: { duration: 1.0, ease },
+          })}
         >
           We engineer
         </motion.span>
@@ -1521,10 +1526,12 @@ function HeadlineBlock({ reduced }: { reduced: boolean }) {
         <motion.span
           className="block font-instrument italic text-[#FF5C00] leading-[1.0]"
           style={{ fontSize: `calc(${FS} * 1.08)`, letterSpacing: "-0.05em" }}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9, delay: 0.14, ease }}
+          {...anim({
+            initial: { opacity: 0, y: 20 },
+            whileInView: { opacity: 1, y: 0 },
+            viewport: { once: true },
+            transition: { duration: 0.9, delay: 0.14, ease },
+          })}
         >
           <KineticWord words={WORDS} interval={2800} reduced={reduced} />
         </motion.span>
@@ -1536,10 +1543,12 @@ function HeadlineBlock({ reduced }: { reduced: boolean }) {
         <motion.span
           className="block font-instrument text-[#C4BDB4] leading-[1.0]"
           style={{ fontSize: FS3, letterSpacing: "-0.03em" }}
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.9, delay: 0.26, ease }}
+          {...anim({
+            initial: { opacity: 0, y: 24 },
+            whileInView: { opacity: 1, y: 0 },
+            viewport: { once: true, amount: 0.1 },
+            transition: { duration: 0.9, delay: 0.26, ease },
+          })}
         >
           that dominate.
         </motion.span>
@@ -1558,43 +1567,81 @@ function HeaderBlock({
   const reduced = useReducedMotion();
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
+  // ── Mobile / smaller screens (< lg) ──────────────────────────────
+  // Collapse the many per-element scroll animations into ONE simple fade-up
+  // on the whole block. Lighter and less busy than 5+ staggered reveals.
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const update = () => setMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  // On desktop, animate each element individually (pass the props through).
+  // On mobile, return nothing so elements render static — the single wrapper
+  // animation below handles the entrance.
+  const anim = (props: Record<string, unknown>) => (mobile ? {} : props);
+
   return (
     <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 lg:pt-32 pb-12 sm:pb-20 relative z-10">
 
       {/* ── Two-column layout ──────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center overflow-visible">
 
-        {/* LEFT — label + headline + copy + stats */}
-        <div className="overflow-visible">
+        {/* LEFT — label + headline + copy + stats.
+            On mobile this whole column does ONE fade-up; on desktop it's a
+            passthrough and the children animate individually. */}
+        <motion.div
+          className="overflow-visible"
+          {...(mobile
+            ? {
+                initial: { opacity: 0, y: 30 },
+                whileInView: { opacity: 1, y: 0 },
+                viewport: { once: true, amount: 0.15 },
+                transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+              }
+            : {})}
+        >
           {/* Label */}
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            {...anim({
+              initial: { opacity: 0, x: -24 },
+              whileInView: { opacity: 1, x: 0 },
+              viewport: { once: true },
+              transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+            })}
             className="flex items-center gap-4 mb-12"
           >
             <motion.div
-              initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              {...anim({
+                initial: { scaleX: 0 }, whileInView: { scaleX: 1 }, viewport: { once: true },
+                transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+              })}
               className="h-[1px] w-12 bg-[#FF5C00] origin-left"
             />
             <span className="font-mono text-[10px] text-[#6F6A60] uppercase tracking-[0.32em]">What we do</span>
             <div className="relative">
               <span className="block w-1.5 h-1.5 rounded-full bg-[#FF5C00]" />
-              <motion.span className="absolute inset-0 rounded-full bg-[#FF5C00]"
-                animate={{ scale: [1, 2.8, 1], opacity: [0.7, 0, 0.7] }}
-                transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut" }} />
+              {/* Pulsing halo — desktop only (one less continuous loop on mobile) */}
+              {!mobile && (
+                <motion.span className="absolute inset-0 rounded-full bg-[#FF5C00]"
+                  animate={{ scale: [1, 2.8, 1], opacity: [0.7, 0, 0.7] }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut" }} />
+              )}
             </div>
           </motion.div>
 
           {/* ── Creative headline ─────────────────────────── */}
-          <HeadlineBlock reduced={!!reduced} />
+          <HeadlineBlock reduced={!!reduced} mobile={mobile} />
 
           {/* Sub-copy */}
           <motion.p
-            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            transition={{ duration: 0.9, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
+            {...anim({
+              initial: { opacity: 0, y: 16 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true },
+              transition: { duration: 0.9, delay: 0.38, ease: [0.16, 1, 0.3, 1] },
+            })}
             className="mt-10 font-sans text-[14.5px] text-[#4A463F] max-w-full sm:max-w-[380px] leading-[1.9]">
             Three disciplines Technology, Design, and Growth.  unified into one
             system that compounds over time and gives our clients an unfair advantage.
@@ -1603,10 +1650,12 @@ function HeaderBlock({
           {/* Stats — premium light card */}
           <motion.div
             className="mt-10 relative rounded-2xl overflow-hidden"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            {...anim({
+              initial: { opacity: 0, y: 20 },
+              whileInView: { opacity: 1, y: 0 },
+              viewport: { once: true },
+              transition: { duration: 0.7, delay: 0.45, ease: [0.16, 1, 0.3, 1] },
+            })}
             style={{
               background: "linear-gradient(160deg, #FFFFFF 0%, #FAF7F2 100%)",
               border: "1px solid rgba(13,13,11,0.09)",
@@ -1663,18 +1712,21 @@ function HeaderBlock({
               ))}
             </div>
           </motion.div>
-        </div>
-
-        {/* RIGHT — animated system orbit diagram (hidden on mobile to prevent overflow) */}
-        <motion.div
-          className="hidden lg:flex relative items-center justify-center w-full"
-          initial={{ opacity: 0, scale: 0.92 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <SystemOrbit inView={isInView} />
         </motion.div>
+
+        {/* RIGHT — animated system orbit diagram (desktop only — not mounted on
+            mobile so its many infinite loops never run on touch devices) */}
+        {!mobile && (
+          <motion.div
+            className="hidden lg:flex relative items-center justify-center w-full"
+            initial={{ opacity: 0, scale: 0.92 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <SystemOrbit inView={isInView} />
+          </motion.div>
+        )}
       </div>
 
       {/* ── Scroll-driven divider ─────────────────────────── */}
