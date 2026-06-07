@@ -451,7 +451,7 @@ export default function Philosophy() {
                   <div className="w-1.5 h-1.5 rounded-full" style={{ background: card.dot }} />
                   <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#6F6A60]">{card.category}</span>
                 </div>
-                <h3 className="font-instrument text-[22px] tracking-[-0.03em] text-[#0D0D0B] mb-2">
+                <h3 className="font-instrument text-[28px] tracking-[-0.03em] text-[#0D0D0B] mb-2">
                   {card.title} <span className="italic text-[#FF5C00]">{card.accent}</span>
                 </h3>
                 <p className="font-sans text-[13px] text-[#4A463F] leading-[1.75] mb-4">{card.body}</p>
