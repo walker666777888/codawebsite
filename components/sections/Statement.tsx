@@ -1491,14 +1491,10 @@ function KineticWord({
 }
 
 /* ── Headline block ── */
-function HeadlineBlock({
-  reduced, line1Y, line2Y, line3Y,
-}: {
-  reduced: boolean;
-  line1Y: MotionValue<number>;
-  line2Y: MotionValue<number>;
-  line3Y: MotionValue<number>;
-}) {
+/* Entrance-only fade+rise — no scroll-linked parallax springs (those ran a
+   physics sim every scroll frame on huge text, which made the section feel
+   heavy). whileInView fires once, then the block is static = light scroll. */
+function HeadlineBlock({ reduced }: { reduced: boolean }) {
   const FS  = "clamp(52px, 6vw, 92px)";
   const FS3 = "clamp(40px, 4.8vw, 72px)";
   const ease = [0.16, 1, 0.3, 1] as const;
@@ -1510,7 +1506,7 @@ function HeadlineBlock({
       <div className="-mx-3 px-3 pt-[0.04em] pb-[0.08em]">
         <motion.span
           className="block font-instrument text-[#14130F] leading-[1.0]"
-          style={{ fontSize: FS, letterSpacing: "-0.04em", ...(reduced ? {} : { y: line1Y }) }}
+          style={{ fontSize: FS, letterSpacing: "-0.04em" }}
           initial={{ y: "108%", opacity: 0 }}
           whileInView={{ y: "0%", opacity: 1 }}
           viewport={{ once: true }}
@@ -1524,7 +1520,7 @@ function HeadlineBlock({
       <div className="overflow-visible pl-0 pr-4">
         <motion.span
           className="block font-instrument italic text-[#FF5C00] leading-[1.0]"
-          style={{ fontSize: `calc(${FS} * 1.08)`, letterSpacing: "-0.05em", ...(reduced ? {} : { y: line2Y }) }}
+          style={{ fontSize: `calc(${FS} * 1.08)`, letterSpacing: "-0.05em" }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -1534,15 +1530,16 @@ function HeadlineBlock({
         </motion.span>
       </div>
 
-      {/* Line 3 — "that dominate." */}
-      <div className="overflow-hidden pl-0 mt-3 pb-[0.18em] pt-[0.04em]">
+      {/* Line 3 — "that dominate." — simple opacity fade (no clip-reveal mask,
+          so it can never get stranded hidden) */}
+      <div className="overflow-visible pl-0 mt-3 pb-[0.18em] pt-[0.04em]">
         <motion.span
           className="block font-instrument text-[#C4BDB4] leading-[1.0]"
-          style={{ fontSize: FS3, letterSpacing: "-0.03em", ...(reduced ? {} : { y: line3Y }) }}
-          initial={{ y: "108%", opacity: 0 }}
-          whileInView={{ y: "0%", opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.0, delay: 0.26, ease }}
+          style={{ fontSize: FS3, letterSpacing: "-0.03em" }}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.9, delay: 0.26, ease }}
         >
           that dominate.
         </motion.span>
@@ -1554,29 +1551,12 @@ function HeadlineBlock({
 
 function HeaderBlock({
   lineW,
-  scrollYProgress,
 }: {
   lineW: MotionValue<string>;
-  scrollYProgress: MotionValue<number>;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const isInView = useInView(ref, { once: true, margin: "-80px" });
-
-  const { scrollYProgress: localProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const line1Y = useTransform(localProgress, [0, 1], [40, -30]);
-  const line2Y = useTransform(localProgress, [0, 1], [60, -50]);
-  const line3Y = useTransform(localProgress, [0, 1], [80, -70]);
-  const rightY = useTransform(localProgress, [0, 1], [30, -30]);
-
-  const sp = { stiffness: 60, damping: 20 };
-  const sLine1Y = useSpring(line1Y, sp);
-  const sLine2Y = useSpring(line2Y, sp);
-  const sLine3Y = useSpring(line3Y, sp);
-  const sRightY = useSpring(rightY, sp);
 
   return (
     <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 lg:pt-32 pb-12 sm:pb-20 relative z-10">
@@ -1609,12 +1589,7 @@ function HeaderBlock({
           </motion.div>
 
           {/* ── Creative headline ─────────────────────────── */}
-          <HeadlineBlock
-            reduced={!!reduced}
-            line1Y={sLine1Y}
-            line2Y={sLine2Y}
-            line3Y={sLine3Y}
-          />
+          <HeadlineBlock reduced={!!reduced} />
 
           {/* Sub-copy */}
           <motion.p
@@ -1693,7 +1668,6 @@ function HeaderBlock({
         {/* RIGHT — animated system orbit diagram (hidden on mobile to prevent overflow) */}
         <motion.div
           className="hidden lg:flex relative items-center justify-center w-full"
-          style={reduced ? {} : { y: sRightY }}
           initial={{ opacity: 0, scale: 0.92 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -1794,7 +1768,7 @@ export default function Statement() {
       </div>
 
       {/* ── Header ───────────────────────────────────────────── */}
-      <HeaderBlock lineW={lineW} scrollYProgress={scrollYProgress} />
+      <HeaderBlock lineW={lineW} />
 
       {/* ── Discipline cards ─────────────────────────────────────
           Mobile / tablet: Premium sticky stack effect
