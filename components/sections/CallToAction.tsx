@@ -184,7 +184,7 @@ export default function CallToAction() {
                 <WaveText
                   text="Ready to"
                   className={`cta-line${visible ? " in-0" : ""} font-instrument tracking-[-0.04em] leading-[1.0]`}
-                  style={{ fontSize: "clamp(52px, 10vw, 130px)" }}
+                  style={{ fontSize: "clamp(64px, 10vw, 130px)" }}
                 />
               </div>
               <motion.div
@@ -195,14 +195,14 @@ export default function CallToAction() {
                 <WaveText
                   text="Dominate!"
                   className="font-instrument italic tracking-[-0.04em] leading-[1.0]"
-                  style={{ fontSize: "clamp(52px, 10vw, 130px)" }}
+                  style={{ fontSize: "clamp(64px, 10vw, 130px)" }}
                 />
               </motion.div>
             </div>
 
             {/* Sub-copy */}
             <p
-              className={`cta-sub${visible ? " in" : ""} font-sans text-[13px] sm:text-[17px] text-white/60 max-w-md leading-[1.65] sm:leading-[1.7]`}
+              className={`cta-sub${visible ? " in" : ""} font-sans text-[12px] sm:text-[17px] text-white/60 max-w-[240px] sm:max-w-md leading-[1.65] sm:leading-[1.7]`}
             >
               Most agencies build features. We build systems that outlast them.
             </p>
