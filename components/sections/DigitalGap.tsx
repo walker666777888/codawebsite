@@ -392,23 +392,24 @@ export default function DigitalGap() {
         <div ref={mobileProgressRef} className="absolute inset-0 bg-[#FF5C00] origin-left" style={{ transform: "scaleX(0)" }} />
       </div>
 
-      <div className="relative z-10 h-full px-5 flex flex-col pt-10 pb-10">
-        {/* Label */}
-        <SectionLabel index={1} className="mb-5 inline-flex w-fit px-3 py-1.5 rounded-full shrink-0"
-          style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
-        >The Digital Gap</SectionLabel>
+      <div className="relative z-10 h-full px-5 flex flex-col justify-between pt-20 pb-6">
 
-        {/* Texts */}
-        <div ref={mobileTextRef} className="relative shrink-0 mb-5" style={{ height: 120 }}>
-          {TEXTS.map(({ pre, em }, i) => (
-            <h2 key={i} className="absolute inset-x-0 top-0 font-instrument leading-[1.15] tracking-[-0.03em]"
-              style={{ fontSize: "clamp(30px, 8.5vw, 42px)", opacity: i === 0 ? 1 : 0 }}>
-              {pre}{" "}<span className="italic text-[#FF5C00]">{em}</span>
-            </h2>
-          ))}
+        {/* Top: Label + Text */}
+        <div>
+          <SectionLabel index={1} className="mb-5 inline-flex w-fit px-3 py-1.5 rounded-full"
+            style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
+          >The Digital Gap</SectionLabel>
+          <div ref={mobileTextRef} className="relative" style={{ height: 120 }}>
+            {TEXTS.map(({ pre, em }, i) => (
+              <h2 key={i} className="absolute inset-x-0 top-0 font-instrument leading-[1.15] tracking-[-0.03em]"
+                style={{ fontSize: "clamp(30px, 8.5vw, 42px)", opacity: i === 0 ? 1 : 0 }}>
+                {pre}{" "}<span className="italic text-[#FF5C00]">{em}</span>
+              </h2>
+            ))}
+          </div>
         </div>
 
-        {/* Visuals — capped height, never too tall */}
+        {/* Middle: Visual card */}
         <div ref={mobileVisualRef} className="relative w-full" style={{ height: 280 }}>
           {VISUALS.map((v, i) => (
             <div key={i} className="absolute inset-0 rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6"
@@ -418,10 +419,11 @@ export default function DigitalGap() {
           ))}
         </div>
 
-        {/* Scroll hint — inside flex so it's always visible */}
-        <div className="shrink-0 pt-4 flex justify-center">
+        {/* Bottom: Scroll hint always pinned to bottom */}
+        <div className="flex justify-center">
           <span className="font-mono text-[10px] text-[#0D0D0B]/55 uppercase tracking-[0.3em]">Scroll to explore</span>
         </div>
+
       </div>
     </section>
   </>);
