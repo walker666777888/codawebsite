@@ -198,7 +198,7 @@ export default function CallToAction() {
                 <WaveText
                   text="Ready to"
                   className={`cta-line${visible ? " in-0" : ""} font-instrument tracking-[-0.04em] leading-[1.0]`}
-                  style={{ fontSize: "clamp(40px, 10vw, 130px)" }}
+                  style={{ fontSize: "clamp(52px, 10vw, 130px)" }}
                 />
               </div>
               <motion.div
@@ -209,14 +209,14 @@ export default function CallToAction() {
                 <WaveText
                   text="Dominate!"
                   className="font-instrument italic tracking-[-0.04em] leading-[1.0]"
-                  style={{ fontSize: "clamp(40px, 10vw, 130px)" }}
+                  style={{ fontSize: "clamp(52px, 10vw, 130px)" }}
                 />
               </motion.div>
             </div>
 
             {/* Sub-copy */}
             <p
-              className={`cta-sub${visible ? " in" : ""} font-sans text-[17px] text-white/60 max-w-md leading-[1.7]`}
+              className={`cta-sub${visible ? " in" : ""} font-sans text-[13px] sm:text-[17px] text-white/60 max-w-md leading-[1.65] sm:leading-[1.7]`}
             >
               Most agencies build features. We build systems that outlast them.
             </p>
@@ -225,7 +225,7 @@ export default function CallToAction() {
             <div className={`cta-btn${visible ? " in" : ""} flex flex-col items-center gap-4`}>
               <MagneticButton variant="accent" onClick={openForm}>
                 <span
-                  className="flex items-center gap-3 bg-[#FF5C00] text-white px-9 py-4 rounded-xl font-sans font-semibold text-[15px] tracking-[-0.01em]"
+                  className="flex items-center gap-3 bg-[#FF5C00] text-white px-6 py-3 sm:px-9 sm:py-4 rounded-xl font-sans font-semibold text-[13px] sm:text-[15px] tracking-[-0.01em]"
                   style={{ boxShadow: "0 8px 24px rgba(255,92,0,0.4)" }}
                 >
                   Start a project
