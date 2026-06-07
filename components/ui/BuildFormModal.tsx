@@ -422,8 +422,8 @@ function Field({
     "0 0 0 1px rgba(255,92,0,0.7), 0 0 28px rgba(255,92,0,0.13), inset 0 1px 0 rgba(255,255,255,0.07)",
   ]);
   const bg = useTransform(fSpr, [0, 1], [
-    "rgba(255,255,255,0.035)",
-    "rgba(255,92,0,0.055)",
+    "rgb(30,28,24)",
+    "rgb(38,22,12)",
   ]);
 
   const sharedEvents = {
@@ -538,8 +538,8 @@ function PhoneField({
     "0 0 0 1px rgba(255,92,0,0.7), 0 0 28px rgba(255,92,0,0.13), inset 0 1px 0 rgba(255,255,255,0.07)",
   ]);
   const bg = useTransform(fSpr, [0, 1], [
-    "rgba(255,255,255,0.035)",
-    "rgba(255,92,0,0.055)",
+    "rgb(30,28,24)",
+    "rgb(38,22,12)",
   ]);
 
   return (
@@ -955,7 +955,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
           {/* backdrop */}
           <motion.div
             key="bd"
-            className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-[6px]"
+            className="fixed inset-0 z-[200] bg-black/60 md:backdrop-blur-[6px]"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: E }}
             onClick={onClose}
@@ -966,7 +966,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
           <motion.div
             key="panel"
             role="dialog" aria-modal="true" aria-label="Start a project"
-            className="fixed inset-x-0 bottom-0 top-[24px] z-[201] rounded-t-[24px] md:inset-0 md:rounded-none"
+            className="fixed inset-0 z-[201] md:inset-0"
             style={{
               background: "#0C0C0A",
               display: "flex",
@@ -1175,7 +1175,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                                             value={otherPtype}
                                             onChange={(e) => setOtherPtype(e.target.value)}
                                             placeholder="Please specify..."
-                                            className="w-full bg-black/20 rounded-[10px] px-3 py-2 text-white text-[13px] font-sans outline-none border border-white/10 focus:border-[#FF5C00]/50 placeholder-white/20"
+                                            className="w-full bg-[#1e1c18] rounded-[10px] px-3 py-2 text-white text-[13px] font-sans outline-none border border-white/10 focus:border-[#FF5C00]/50 placeholder-white/20"
                                             autoFocus
                                           />
                                         </motion.div>
