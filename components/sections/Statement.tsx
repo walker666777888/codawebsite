@@ -1592,14 +1592,17 @@ function HeaderBlock({
 
         {/* LEFT — label + headline + copy + stats.
             On mobile this whole column does ONE fade-up; on desktop it's a
-            passthrough and the children animate individually. */}
+            passthrough and the children animate individually.
+            key={mobile} forces a clean remount when the breakpoint is detected
+            after mount, so children never get stranded at opacity:0 by losing
+            their reveal props mid-life. */}
         <motion.div
+          key={mobile ? "mobile" : "desktop"}
           className="overflow-visible"
           {...(mobile
             ? {
                 initial: { opacity: 0, y: 30 },
-                whileInView: { opacity: 1, y: 0 },
-                viewport: { once: true, amount: 0.15 },
+                animate: isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 },
                 transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
               }
             : {})}
