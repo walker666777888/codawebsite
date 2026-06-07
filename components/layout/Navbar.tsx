@@ -59,7 +59,7 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link href="/" className="flex items-baseline gap-[1px] group shrink-0">
-              <span className="font-instrument text-[20px] tracking-[-0.025em] text-[#14130F] transition-opacity duration-300 group-hover:opacity-60">
+              <span className={`font-instrument text-[20px] tracking-[-0.025em] transition-all duration-500 group-hover:opacity-60 ${scrolled ? "text-[#14130F]" : "text-[#14130F] md:text-white"}`}>
                 CODA
               </span>
               <motion.span
@@ -78,7 +78,7 @@ export default function Navbar() {
                 >
                   <a href={link.href}
                     onClick={(e) => scrollToSection(e, link.href)}
-                    className="relative group px-3 py-1.5 rounded-lg transition-colors duration-200 text-[#6F6A60] hover:text-[#14130F] hover:bg-[#0D0D0B]/[0.04]"
+                    className={`relative group px-3 py-1.5 rounded-lg transition-colors duration-200 hover:bg-[#0D0D0B]/[0.04] ${scrolled ? "text-[#6F6A60] hover:text-[#14130F]" : "text-[#6F6A60] md:text-white/60 hover:text-[#14130F] md:hover:text-white"}`}
                   >
                     {link.label}
                     <span className="absolute inset-x-3 bottom-0.5 h-[1.5px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-full bg-[#FF5C00]" />

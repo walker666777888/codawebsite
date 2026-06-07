@@ -8,6 +8,7 @@ import {
 import { useRef, useEffect, useState } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { useFormModal } from "@/components/providers/FormModalProvider";
+import LiquidEther from "@/components/ui/LiquidEther";
 
 const PARTICLES = Array.from({ length: 30 }).map((_, i) => ({
   id: i,
@@ -118,16 +119,35 @@ export default function Hero() {
       className="relative h-[100svh] overflow-hidden flex flex-col"
       style={{ background: "#F4F0E8" }}
     >
-      {/* ── Warm ambient mesh — layer 1 ─── */}
-      <div className="absolute inset-0 pointer-events-none z-[2]">
+      {/* ── Dark base for desktop (LiquidEther sits on top) ── */}
+      <div className="absolute inset-0 z-[0] hidden md:block bg-black" />
+
+      {/* ── LiquidEther fluid background — desktop only ── */}
+      <div className="absolute inset-0 z-[1] hidden md:block">
+        <LiquidEther
+          colors={["#fb7b7b", "#ff7b1f", "#fbc210"]}
+          mouseForce={25}
+          cursorSize={100}
+          isViscous={false}
+          viscous={100}
+          autoDemo={true}
+          autoSpeed={0}
+          autoIntensity={1.3}
+          isBounce={true}
+          resolution={0.5}
+        />
+      </div>
+
+      {/* ── Warm ambient mesh — layer 1 — mobile only ─── */}
+      <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
         <div
           className="absolute top-[-14%] left-[50%] -translate-x-1/2 w-[700px] h-[560px] rounded-full blur-[70px] opacity-[0.30]"
           style={{ background: "radial-gradient(ellipse, rgba(255,138,61,0.9) 0%, transparent 62%)" }}
         />
       </div>
 
-      {/* ── Warm ambient mesh — layer 2 ── */}
-      <div className="absolute inset-0 pointer-events-none z-[2]">
+      {/* ── Warm ambient mesh — layer 2 — mobile only ── */}
+      <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
         <div
           className="absolute bottom-[6%] right-[6%] w-[380px] h-[380px] rounded-full blur-[55px] opacity-[0.18]"
           style={{ background: "radial-gradient(circle, rgba(255,92,0,0.7) 0%, transparent 66%)" }}
@@ -148,8 +168,8 @@ export default function Hero() {
       <DataParticles />
       <LaserScan />
 
-      {/* ── Dynamic Kinetic Orb — pure CSS animations (no JS rAF) ── */}
-      <div className="absolute inset-0 pointer-events-none z-[2]" aria-hidden="true">
+      {/* ── Dynamic Kinetic Orb — mobile only (desktop uses LiquidEther) ── */}
+      <div className="absolute inset-0 pointer-events-none z-[2] md:hidden" aria-hidden="true">
         <div
           className="absolute w-[140vw] h-[140vw] md:w-[60vw] md:h-[60vw] rounded-full blur-[80px] md:blur-[60px] opacity-50"
           style={{
@@ -180,45 +200,12 @@ export default function Hero() {
         }}
       />
 
-      {/* Edge vignette — feather into the paper base */}
+      {/* Edge vignette — feather into the paper base — mobile only */}
       <div
-        className="absolute inset-0 pointer-events-none z-[3]"
+        className="absolute inset-0 pointer-events-none z-[3] md:hidden"
         style={{ background: "radial-gradient(ellipse 90% 90% at 50% 45%, transparent 45%, rgba(244,240,232,0.85) 100%)" }}
       />
 
-      {/* ── Side vertical label ───────────────────────────── */}
-      <motion.div
-        className="absolute left-6 top-1/2 -translate-y-1/2 z-10 hidden lg:flex flex-col items-center gap-3"
-        initial={{ opacity: 0, x: -12 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 2.6, ease: [0.16, 1, 0.3, 1] }}
-      >
-        <div className="w-[1px] h-12 bg-gradient-to-b from-transparent to-[#0D0D0B]/15" />
-        <span
-          className="font-mono text-[9px] text-[#6F6A60] uppercase tracking-[0.3em] whitespace-nowrap"
-          style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
-        >
-          01 / Hero
-        </span>
-        <div className="w-[1px] h-12 bg-gradient-to-t from-transparent to-[#0D0D0B]/15" />
-      </motion.div>
-
-      {/* ── Right vertical label ──────────────────────────── */}
-      <motion.div
-        className="absolute right-6 top-1/2 -translate-y-1/2 z-10 hidden lg:flex flex-col items-center gap-3"
-        initial={{ opacity: 0, x: 12 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 2.6, ease: [0.16, 1, 0.3, 1] }}
-      >
-        <div className="w-[1px] h-12 bg-gradient-to-b from-transparent to-[#0D0D0B]/15" />
-        <span
-          className="font-mono text-[9px] text-[#9A9488] uppercase tracking-[0.3em] whitespace-nowrap"
-          style={{ writingMode: "vertical-rl" }}
-        >
-          CODA. 2025
-        </span>
-        <div className="w-[1px] h-12 bg-gradient-to-t from-transparent to-[#0D0D0B]/15" />
-      </motion.div>
 
       {/* ── Main content ─────────────────────────────────── */}
       <motion.div
@@ -238,7 +225,7 @@ export default function Hero() {
             >
               <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.05em] relative">
                 <motion.span
-                  className={["inline-block relative", wi === 2 ? "italic text-[#FF5C00] animate-chromatic" : "text-[#0D0D0B]"].join(" ")}
+                  className={["inline-block relative", wi === 2 ? "italic text-[#FF5C00] animate-chromatic" : "text-[#0D0D0B] md:text-white"].join(" ")}
                   initial={{ y: "108%", skewY: 4 }}
                   animate={{ y: "0%", skewY: 0 }}
                   transition={{ duration: 1.05, delay: 1.6 + wi * 0.13, ease: [0.16, 1, 0.3, 1] }}
@@ -302,11 +289,11 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 2.1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="h-[1px] w-10 bg-[#0D0D0B]/30 block shrink-0" />
-          <p className="font-instrument italic text-[#0D0D0B]/70 text-[24px] sm:text-[34px] tracking-[-0.02em] text-center">
+          <span className="h-[1px] w-10 bg-[#0D0D0B]/30 md:bg-white/20 block shrink-0" />
+          <p className="font-instrument italic text-[#0D0D0B]/70 md:text-white/75 text-[24px] sm:text-[34px] tracking-[-0.02em] text-center">
             Dominate the <span className="text-[#FF5C00]">Digital Age.</span>
           </p>
-          <span className="h-[1px] w-10 bg-[#0D0D0B]/30 block shrink-0" />
+          <span className="h-[1px] w-10 bg-[#0D0D0B]/30 md:bg-white/20 block shrink-0" />
         </motion.div>
 
         {/* Sub-copy */}
@@ -314,7 +301,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
-          className="font-sans text-[15px] sm:text-[17px] text-[#4A463F] max-w-[480px] leading-[1.7] sm:leading-[1.75] mb-8 sm:mb-12"
+          className="font-sans text-[15px] sm:text-[17px] text-[#4A463F] md:text-white/55 max-w-[480px] leading-[1.7] sm:leading-[1.75] mb-8 sm:mb-12"
         >
           We don&apos;t just build products. We architect the unfair advantage your competitors can&apos;t copy.
         </motion.p>
@@ -336,17 +323,17 @@ export default function Hero() {
       </motion.div>
 
 
-      {/* ── Scroll indicator ─────────────────────────────── */}
+      {/* ── Scroll indicator — pinned to very bottom ─────── */}
       <motion.div
-        className="absolute left-1/2 -translate-x-1/2 bottom-[110px] flex flex-col items-center gap-2 z-10"
+        className="absolute left-1/2 -translate-x-1/2 bottom-6 flex flex-col items-center gap-2 z-10 pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 3.4, duration: 1.2 }}
       >
         <div className="w-[1px] h-10 overflow-hidden relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0D0D0B]/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0D0D0B]/20 md:via-white/20 to-transparent" />
           <motion.div
-            className="w-full h-[35%] bg-[#0D0D0B]/50"
+            className="w-full h-[35%] bg-[#0D0D0B]/50 md:bg-white/50"
             animate={{ y: ["0%", "230%"] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.3 }}
           />
