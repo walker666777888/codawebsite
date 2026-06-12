@@ -148,18 +148,20 @@ function Pushpin({ color }: { color: string }) {
 function DraggableCard({
   card,
   zIndex,
+  constraintsRef,
   onDragStart,
 }: {
   card: typeof CARDS[0];
   zIndex: number;
+  constraintsRef: React.RefObject<HTMLDivElement | null>;
   onDragStart: () => void;
 }) {
   return (
     <motion.div
       drag
       dragMomentum={false}
-      dragElastic={0}
-      dragConstraints={false}
+      dragElastic={0.05}
+      dragConstraints={constraintsRef}
       dragTransition={{ power: 0, timeConstant: 0 }}
       onDragStart={onDragStart}
       className="absolute select-none"
@@ -230,6 +232,7 @@ function DraggableCard({
 
 /* ─── Draggable board (desktop only) ─────────────────────── */
 function DraggableBoard() {
+  const boardRef = useRef<HTMLDivElement>(null);
   const [order, setOrder] = useState(CARDS.map((c) => c.id));
   const bringToFront = useCallback(
     (id: number) => setOrder((prev) => [...prev.filter((x) => x !== id), id]),
@@ -240,6 +243,7 @@ function DraggableBoard() {
     <div className="hidden lg:block relative">
       {/* Board */}
       <div
+        ref={boardRef}
         className="relative w-full overflow-hidden rounded-3xl"
         style={{
           height: 640,
@@ -286,6 +290,7 @@ function DraggableBoard() {
             key={card.id}
             card={card}
             zIndex={order.indexOf(card.id) + 1}
+            constraintsRef={boardRef}
             onDragStart={() => bringToFront(card.id)}
           />
         ))}

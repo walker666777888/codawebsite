@@ -8,7 +8,8 @@ import {
 import { useRef, useEffect, useState } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { useFormModal } from "@/components/providers/FormModalProvider";
-import LiquidEther from "@/components/ui/LiquidEther";
+import dynamic from "next/dynamic";
+const LiquidEther = dynamic(() => import("@/components/ui/LiquidEther"), { ssr: false });
 
 const PARTICLES = Array.from({ length: 70 }).map((_, i) => ({
   id: i,
@@ -141,7 +142,7 @@ export default function Hero() {
       {/* ── Warm ambient mesh — layer 1 — mobile only ─── */}
       <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
         <div
-          className="absolute top-[-14%] left-[50%] -translate-x-1/2 w-[820px] h-[660px] rounded-full blur-[70px] opacity-[0.42]"
+          className="absolute top-[-14%] left-[50%] -translate-x-1/2 w-[820px] h-[660px] rounded-full opacity-[0.42]"
           style={{ background: "radial-gradient(ellipse, rgba(255,138,61,0.9) 0%, transparent 62%)" }}
         />
       </div>
@@ -149,7 +150,7 @@ export default function Hero() {
       {/* ── Warm ambient mesh — layer 2 — mobile only ── */}
       <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
         <div
-          className="absolute bottom-[6%] right-[6%] w-[520px] h-[520px] rounded-full blur-[55px] opacity-[0.30]"
+          className="absolute bottom-[6%] right-[6%] w-[520px] h-[520px] rounded-full opacity-[0.30]"
           style={{ background: "radial-gradient(circle, rgba(255,92,0,0.7) 0%, transparent 66%)" }}
         />
       </div>
@@ -157,7 +158,7 @@ export default function Hero() {
       {/* ── Warm ambient mesh — layer 3 — mobile only ── */}
       <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
         <div
-          className="absolute top-[35%] left-[-10%] w-[380px] h-[380px] rounded-full blur-[60px] opacity-[0.22]"
+          className="absolute top-[35%] left-[-10%] w-[380px] h-[380px] rounded-full opacity-[0.22]"
           style={{ background: "radial-gradient(circle, rgba(255,138,61,0.8) 0%, transparent 65%)" }}
         />
       </div>
@@ -165,7 +166,7 @@ export default function Hero() {
       {/* ── Warm ambient mesh — layer 4 — mobile only ── */}
       <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
         <div
-          className="absolute bottom-[28%] left-[20%] w-[300px] h-[300px] rounded-full blur-[50px] opacity-[0.18]"
+          className="absolute bottom-[28%] left-[20%] w-[300px] h-[300px] rounded-full opacity-[0.18]"
           style={{ background: "radial-gradient(circle, rgba(255,92,0,0.6) 0%, transparent 65%)" }}
         />
       </div>
@@ -173,7 +174,7 @@ export default function Hero() {
       {/* ── Warm ambient mesh — layer 5 — mobile only ── */}
       <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
         <div
-          className="absolute top-[60%] right-[-5%] w-[280px] h-[280px] rounded-full blur-[45px] opacity-[0.20]"
+          className="absolute top-[60%] right-[-5%] w-[280px] h-[280px] rounded-full opacity-[0.20]"
           style={{ background: "radial-gradient(circle, rgba(255,115,40,0.65) 0%, transparent 65%)" }}
         />
       </div>
@@ -195,7 +196,7 @@ export default function Hero() {
       {/* ── Dynamic Kinetic Orb — mobile only (desktop uses LiquidEther) ── */}
       <div className="absolute inset-0 pointer-events-none z-[2] md:hidden" aria-hidden="true">
         <div
-          className="absolute w-[140vw] h-[140vw] md:w-[60vw] md:h-[60vw] rounded-full blur-[80px] md:blur-[60px] opacity-50"
+          className="absolute w-[140vw] h-[140vw] md:w-[60vw] md:h-[60vw] rounded-full opacity-50"
           style={{
             background: "radial-gradient(circle, rgba(255,92,0,0.50) 0%, rgba(255,138,61,0.22) 40%, transparent 70%)",
             animation: "hero-orb-a 15s ease-in-out infinite",
@@ -203,7 +204,7 @@ export default function Hero() {
           }}
         />
         <div
-          className="absolute top-[40%] right-[-40%] w-[120vw] h-[120vw] md:w-[50vw] md:h-[50vw] rounded-full blur-[70px] md:blur-[50px] opacity-45"
+          className="absolute top-[40%] right-[-40%] w-[120vw] h-[120vw] md:w-[50vw] md:h-[50vw] rounded-full opacity-45"
           style={{
             background: "radial-gradient(circle, rgba(255,138,61,0.45) 0%, rgba(255,92,0,0.18) 50%, transparent 70%)",
             animation: "hero-orb-b 18s ease-in-out infinite",

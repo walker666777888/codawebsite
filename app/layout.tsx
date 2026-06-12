@@ -80,7 +80,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: SITE_URL,
-    siteName: "CODA Studio",
+    siteName: "CODA",
     title: "CODA | Citizen Of Digital Age.",
     description:
       "We build high-performance digital ecosystems — web platforms, AI products, design systems, and growth engines. System-first. Built to compound.",

@@ -12,7 +12,9 @@ import {
 } from "motion/react";
 import { useRef, useCallback, useState, type PointerEvent } from "react";
 import AnimatedCounter from "@/components/ui/AnimatedCounter";
-import HoverCanvas, { type CanvasEffect } from "@/components/ui/HoverCanvas";
+import dynamic from "next/dynamic";
+const HoverCanvas = dynamic(() => import("@/components/ui/HoverCanvas"), { ssr: false });
+import type { CanvasEffect } from "@/components/ui/HoverCanvas";
 
 interface StatDef {
   value: number;

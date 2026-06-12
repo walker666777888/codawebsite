@@ -1497,60 +1497,39 @@ function KineticWord({
 function HeadlineBlock({ reduced, mobile }: { reduced: boolean; mobile: boolean }) {
   const FS  = "clamp(52px, 6vw, 92px)";
   const FS3 = "clamp(40px, 4.8vw, 72px)";
-  const ease = [0.16, 1, 0.3, 1] as const;
-
-  const anim = (props: Record<string, unknown>) => props;
 
   return (
     <div className="relative flex flex-col gap-0">
 
       {/* Line 1 — "We engineer" — flush left, lighter weight feel */}
       <div className="-mx-3 px-3 pt-[0.04em] pb-[0.08em]">
-        <motion.span
+        <span
           className="block font-instrument text-[#14130F] leading-[1.0]"
           style={{ fontSize: FS, letterSpacing: "-0.04em" }}
-          {...anim({
-            initial: { y: "108%", opacity: 0 },
-            whileInView: { y: "0%", opacity: 1 },
-            viewport: { once: true },
-            transition: { duration: 1.0, ease },
-          })}
         >
           We engineer
-        </motion.span>
+        </span>
       </div>
 
       {/* Line 2 — rotating word */}
       <div className="overflow-visible pl-0 pr-4">
-        <motion.span
+        <span
           className="block font-instrument italic text-[#FF5C00] leading-[1.0]"
           style={{ fontSize: `calc(${FS} * 1.08)`, letterSpacing: "-0.05em" }}
-          {...anim({
-            initial: { opacity: 0, y: 20 },
-            whileInView: { opacity: 1, y: 0 },
-            viewport: { once: true },
-            transition: { duration: 0.9, delay: 0.14, ease },
-          })}
         >
           <KineticWord words={WORDS} interval={2800} reduced={reduced} />
-        </motion.span>
+        </span>
       </div>
 
       {/* Line 3 — "that dominate." — simple opacity fade (no clip-reveal mask,
           so it can never get stranded hidden) */}
       <div className="overflow-visible pl-0 mt-3 pb-[0.18em] pt-[0.04em]">
-        <motion.span
+        <span
           className="block font-instrument text-[#C4BDB4] leading-[1.0]"
           style={{ fontSize: FS3, letterSpacing: "-0.03em" }}
-          {...anim({
-            initial: { opacity: 0, y: 24 },
-            whileInView: { opacity: 1, y: 0 },
-            viewport: { once: true, amount: 0.1 },
-            transition: { duration: 0.9, delay: 0.26, ease },
-          })}
         >
           that dominate.
-        </motion.span>
+        </span>
       </div>
 
     </div>
@@ -1578,37 +1557,31 @@ function HeaderBlock({
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  const anim = (props: Record<string, unknown>) => props;
-
   return (
     <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 lg:pt-32 pb-12 sm:pb-20 relative z-10">
 
       {/* ── Two-column layout ──────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center overflow-visible">
+      <motion.div
+        className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center overflow-visible"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+      >
 
         {/* LEFT — label + headline + copy + stats.
             key={mobile} forces a clean remount when the breakpoint is detected
             after mount, so children never get stranded at opacity:0 by losing
             their reveal props mid-life. */}
-        <motion.div
+        <div
           key={mobile ? "mobile" : "desktop"}
           className="overflow-visible"
         >
           {/* Label */}
-          <motion.div
-            {...anim({
-              initial: { opacity: 0, x: -24 },
-              whileInView: { opacity: 1, x: 0 },
-              viewport: { once: true },
-              transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-            })}
+          <div
             className="flex items-center gap-4 mb-12"
           >
-            <motion.div
-              {...anim({
-                initial: { scaleX: 0 }, whileInView: { scaleX: 1 }, viewport: { once: true },
-                transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
-              })}
+            <div
               className="h-[1px] w-12 bg-[#FF5C00] origin-left"
             />
             <span className="font-mono text-[10px] text-[#6F6A60] uppercase tracking-[0.32em]">What we do</span>
@@ -1621,31 +1594,21 @@ function HeaderBlock({
                   transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut" }} />
               )}
             </div>
-          </motion.div>
+          </div>
 
           {/* ── Creative headline ─────────────────────────── */}
           <HeadlineBlock reduced={!!reduced} mobile={mobile} />
 
           {/* Sub-copy */}
-          <motion.p
-            {...anim({
-              initial: { opacity: 0, y: 16 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true },
-              transition: { duration: 0.9, delay: 0.38, ease: [0.16, 1, 0.3, 1] },
-            })}
+          <p
             className="mt-10 font-sans text-[14.5px] text-[#4A463F] max-w-full sm:max-w-[380px] leading-[1.9]">
             Three disciplines Technology, Design, and Growth.  unified into one
             system that compounds over time and gives our clients an unfair advantage.
-          </motion.p>
+          </p>
 
           {/* Stats — premium light card */}
-          <motion.div
+          <div
             className="mt-10 relative rounded-2xl overflow-hidden"
-            {...anim({
-              initial: { opacity: 0, y: 20 },
-              whileInView: { opacity: 1, y: 0 },
-              viewport: { once: true },
-              transition: { duration: 0.7, delay: 0.45, ease: [0.16, 1, 0.3, 1] },
-            })}
             style={{
               background: "linear-gradient(160deg, #FFFFFF 0%, #FAF7F2 100%)",
               border: "1px solid rgba(13,13,11,0.09)",
@@ -1701,23 +1664,19 @@ function HeaderBlock({
                 </motion.div>
               ))}
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
         {/* RIGHT — animated system orbit diagram (desktop only — not mounted on
             mobile so its many infinite loops never run on touch devices) */}
         {!mobile && (
-          <motion.div
+          <div
             className="hidden lg:flex relative items-center justify-center w-full"
-            initial={{ opacity: 0, scale: 0.92 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           >
             <SystemOrbit inView={isInView} />
-          </motion.div>
+          </div>
         )}
-      </div>
+      </motion.div>
 
       {/* ── Scroll-driven divider ─────────────────────────── */}
       <div className="mt-16 relative">

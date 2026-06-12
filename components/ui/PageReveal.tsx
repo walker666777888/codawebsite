@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 export default function PageReveal() {
   const [phase, setPhase] = useState<"show" | "exit">("show");
   const [hidden, setHidden] = useState(false);
-  const [count, setCount] = useState(0);
+  const countRef = useRef<HTMLSpanElement>(null);
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -22,7 +22,9 @@ export default function PageReveal() {
     const duration = 1300;
     const tick = (now: number) => {
       const p = Math.min((now - startTime) / duration, 1);
-      setCount(Math.floor(p * 100));
+      if (countRef.current) {
+        countRef.current.textContent = String(Math.floor(p * 100)).padStart(3, "0");
+      }
       if (p < 1) rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
@@ -110,7 +112,7 @@ export default function PageReveal() {
             className="absolute bottom-8 right-8 font-mono text-[11px] text-white/25 tracking-[0.1em] z-10 tabular-nums"
             initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.4, delay: 0.3 }}
-          >{String(count).padStart(3, "0")}</motion.p>
+          ><span ref={countRef}>000</span></motion.p>
         )}
       </AnimatePresence>
 

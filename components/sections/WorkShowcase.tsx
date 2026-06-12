@@ -164,7 +164,7 @@ export default function WorkShowcase() {
       <div className="max-w-7xl mx-auto px-6 relative z-10 mb-14">
         <motion.div initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
-          <SectionLabel index={5} className="mb-5 block">Selected Work</SectionLabel>
+          <SectionLabel index={3} className="mb-5 block">Selected Work</SectionLabel>
           <h2 className="font-instrument tracking-[-0.03em] text-[#0D0D0B] leading-[1.04]"
             style={{ fontSize: "clamp(36px,5vw,66px)" }}>
             Digital ecosystems <span className="italic text-[#FF5C00]">in action.</span>

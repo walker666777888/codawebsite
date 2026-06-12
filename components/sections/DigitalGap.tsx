@@ -197,6 +197,27 @@ function VisualEcosystem() {
           stroke="#C8C3BB" strokeWidth="0.7" strokeDasharray="3 5" opacity="0.5" />;
       })}
 
+      {/* Animated Data Packets */}
+      {nodes.map((n, i) => (
+        <motion.circle
+          key={`p${i}`}
+          r="2.5"
+          fill="#FF5C00"
+          animate={{
+            cx: [hcx, n.x],
+            cy: [hcy, n.y],
+            opacity: [0, 1, 1, 0],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "linear",
+            delay: i * 0.35,
+            times: [0, 0.15, 0.85, 1],
+          }}
+        />
+      ))}
+
       {/* Hub */}
       <circle cx={hcx} cy={hcy} r="32" fill="#FF5C00" opacity="0.12" />
       <circle cx={hcx} cy={hcy} r="22" fill="#FF5C00" />

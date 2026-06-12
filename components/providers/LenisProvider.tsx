@@ -115,9 +115,6 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
     const tick = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
 
-    // Tell GSAP to fire every frame (60/120fps) — never drop below.
-    gsap.ticker.fps(120);
-
     // Prevent GSAP from throttling frames during heavy animation (kills jank)
     gsap.ticker.lagSmoothing(0);
 
