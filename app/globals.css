@@ -139,6 +139,10 @@
     touch-action: manipulation;
   }
 
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+
   /* Match DigitalGap grid so the GSAP pin spacer blends in */
   .pin-spacer {
     background-color: #F4F0E8;
@@ -219,49 +223,7 @@
   }
 }
 
-/* ── Custom Cursor (removed — native cursor restored) ──── */
-.cursor-dot,
-.cursor-ring {
-  pointer-events: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  border-radius: 50%;
-  will-change: transform;
-  opacity: 0;
-}
 
-.cursor-dot {
-  width: 6px;
-  height: 6px;
-  background: #FF5C00;
-  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
-}
-
-.cursor-ring {
-  width: 38px;
-  height: 38px;
-  border: 1.5px solid rgba(13,13,11,0.5);
-  transition: width 0.35s ease, height 0.35s ease, border-color 0.35s ease, background 0.35s ease;
-}
-
-.cursor-dot.is-hovering {
-  width: 8px;
-  height: 8px;
-  background: #FF5C00;
-}
-
-.cursor-ring.is-hovering {
-  width: 58px;
-  height: 58px;
-  border-color: #FF5C00;
-  background: rgba(255,92,0,0.06);
-}
-
-@media (hover: none) {
-  .cursor-dot, .cursor-ring { display: none; }
-}
 
 /* ── Keyframes ─────────────────────────────────────────── */
 @keyframes marquee {
@@ -443,41 +405,7 @@
   animation: shimmer-text 3s linear infinite;
 }
 
-/* Cursor enhancements */
-.cursor-dot.is-text {
-  width: 3px;
-  height: 3px;
-  background: #FF5C00;
-}
 
-.cursor-ring.is-text {
-  width: 80px;
-  height: 80px;
-  border-color: rgba(255, 92, 0, 0.2);
-  background: rgba(255, 92, 0, 0.03);
-}
-
-/* Cursor trail dots */
-.cursor-trail {
-  pointer-events: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9997;
-  border-radius: 50%;
-  will-change: transform;
-  opacity: 0;
-  background: #FF5C00;
-  transition: opacity 0.3s ease;
-}
-
-.cursor-trail-1 { width: 5px; height: 5px; }
-.cursor-trail-2 { width: 4px; height: 4px; }
-.cursor-trail-3 { width: 3px; height: 3px; }
-
-@media (hover: none) {
-  .cursor-trail { display: none; }
-}
 
 /* ── Marquee pause on hover ────────────────────────────── */
 .marquee-track {

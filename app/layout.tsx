@@ -9,6 +9,7 @@ import Footer from "@/components/layout/Footer";
 import PageReveal from "@/components/ui/PageReveal";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import GrainOverlay from "@/components/ui/GrainOverlay";
+import CustomCursor from "@/components/ui/CustomCursor";
 
 const instrumentSerif = Instrument_Serif({
   weight: "400",
@@ -182,6 +183,7 @@ export default function RootLayout({
               <PageReveal />
               <ScrollProgress />
               <GrainOverlay />
+              <CustomCursor />
               <Navbar />
               <main id="main-content" className="flex-1">{children}</main>
               <Footer />
