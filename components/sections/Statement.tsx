@@ -560,8 +560,7 @@ function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; 
         }}
         className="group/card relative rounded-[28px] overflow-hidden cursor-default transition-shadow duration-500 h-full"
       >
-        <div className="absolute top-0 inset-x-0 h-[2.5px] z-10"
-          style={{ background: `linear-gradient(90deg,transparent 0%,${ORANGE} 30%,${ORANGE} 70%,transparent 100%)` }} />
+
         <motion.div className="absolute inset-0 pointer-events-none z-[2] rounded-[28px]"
           style={{ opacity: hovered ? 1 : 0, background: `radial-gradient(circle at ${glowX}% ${glowY}%,rgba(255,92,0,0.08) 0%,transparent 60%)`, transition: "opacity 0.5s ease" }} />
         <div className="absolute -top-16 -left-16 w-48 h-48 rounded-full blur-[60px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 pointer-events-none"
@@ -929,11 +928,6 @@ function DisciplineCardBody({
         boxShadow: `0 1px 0 rgba(255,255,255,1) inset`,
       }}
     >
-      {/* Top accent bar — orange, full width */}
-      <div
-        className="absolute top-0 inset-x-0 h-[2.5px] z-10"
-        style={{ background: `linear-gradient(90deg, transparent 0%, ${ORANGE} 30%, ${ORANGE} 70%, transparent 100%)` }}
-      />
 
 
       {/* Subtle warm corner glow, reveals on hover */}
