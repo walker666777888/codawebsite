@@ -16,7 +16,8 @@ const builders: Record<CanvasEffect, Builder> = {
 
   /* ── Card 1: Matrix rain — denser, darker, faster ── */
   matrix(ctx, size) {
-    const fontSize = 9;
+    const fontSize = 12; // Bolder and larger
+    const colSpacing = 7; // Tighter horizontal spacing for higher density
     const glyphs = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>/\\|{}[]!@#$%^&*".split("");
     let cols = 0;
     // Each column gets its own speed so they fall at different rates
@@ -28,21 +29,22 @@ const builders: Record<CanvasEffect, Builder> = {
       const { width, height } = size();
       if (width !== lastW) {
         lastW = width;
-        cols = Math.max(1, Math.floor(width / fontSize));
+        cols = Math.max(1, Math.floor(width / colSpacing));
         drops  = Array.from({ length: cols }, () => Math.random() * -60);
-        speeds = Array.from({ length: cols }, () => 0.38 + Math.random() * 0.72);
+        speeds = Array.from({ length: cols }, () => 0.4 + Math.random() * 0.8);
       }
 
-      // Very light paper wash — long bright trails
-      ctx.fillStyle = "rgba(251,249,244,0.14)";
+      // Very light paper wash — longer trails for higher density appearance
+      ctx.fillStyle = "rgba(251,249,244,0.07)";
       ctx.fillRect(0, 0, width, height);
 
-      ctx.font = `bold ${fontSize}px ui-monospace, monospace`;
+      // 900 weight for extra boldness
+      ctx.font = `900 ${fontSize}px ui-monospace, SFMono-Regular, Menlo, monospace`;
       ctx.textBaseline = "top";
 
       for (let i = 0; i < cols; i++) {
         const ch = glyphs[(Math.random() * glyphs.length) | 0];
-        const x = i * fontSize;
+        const x = i * colSpacing;
         const y = drops[i] * fontSize;
 
         // Top glyph in each stream is bright white-orange, rest fade down
@@ -50,17 +52,17 @@ const builders: Record<CanvasEffect, Builder> = {
         if (rand > 0.88) {
           ctx.fillStyle = "rgba(255,255,220,0.98)";   // bright white lead
         } else if (rand > 0.72) {
-          ctx.fillStyle = "rgba(255,92,0,0.90)";       // orange
+          ctx.fillStyle = "rgba(255,92,0,0.95)";       // orange
         } else if (rand > 0.50) {
-          ctx.fillStyle = "rgba(255,150,60,0.70)";     // mid orange
+          ctx.fillStyle = "rgba(255,150,60,0.80)";     // mid orange
         } else if (rand > 0.28) {
-          ctx.fillStyle = "rgba(200,100,20,0.55)";     // dark amber
+          ctx.fillStyle = "rgba(200,100,20,0.65)";     // dark amber
         } else {
-          ctx.fillStyle = "rgba(74,70,63,0.42)";       // muted ink tail
+          ctx.fillStyle = "rgba(74,70,63,0.55)";       // muted ink tail
         }
         ctx.fillText(ch, x, y);
 
-        if (y > height && Math.random() > 0.965) {
+        if (y > height && Math.random() > 0.95) {
           drops[i] = Math.random() * -20;
         }
         drops[i] += speeds[i];

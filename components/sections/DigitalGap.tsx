@@ -305,6 +305,9 @@ export default function DigitalGap() {
     const pre = texts.map(h2 => h2.children[0] as HTMLElement);
     const em  = texts.map(h2 => h2.children[1] as HTMLElement);
 
+    // Add hardware acceleration for mobile to prevent layout thrashing
+    gsap.set([...pre, ...em, ...visuals], { willChange: "transform, opacity", transform: "translateZ(0)" });
+
     // h2 opacity:1 always — child spans control visibility to prevent simultaneous stacking
     gsap.set(texts, { opacity: 1 });
     gsap.set([pre[0], em[0]], { opacity: 1, y: 0 });
@@ -322,7 +325,7 @@ export default function DigitalGap() {
         // NO pinType:"transform" on mobile — Lenis is disabled on touch devices,
         // so native scroll drives ScrollTrigger. pinType:"transform" fights the
         // browser's off-thread scroll and causes jitter. Default (fixed) is correct.
-        scrub: true,
+        scrub: 1.2,
         anticipatePin: 1,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
