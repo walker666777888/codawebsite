@@ -325,7 +325,7 @@ export default function DigitalGap() {
         // NO pinType:"transform" on mobile — Lenis is disabled on touch devices,
         // so native scroll drives ScrollTrigger. pinType:"transform" fights the
         // browser's off-thread scroll and causes jitter. Default (fixed) is correct.
-        scrub: 1.2,
+        scrub: true,
         anticipatePin: 1,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
