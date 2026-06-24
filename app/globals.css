@@ -139,9 +139,7 @@
     touch-action: manipulation;
   }
 
-  *, *::before, *::after {
-    cursor: none !important;
-  }
+  /* Native cursor restored */
 
   /* Match DigitalGap grid so the GSAP pin spacer blends in */
   .pin-spacer {
