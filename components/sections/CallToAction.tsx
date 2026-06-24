@@ -125,7 +125,7 @@ export default function CallToAction() {
 
       <section
         ref={sectionRef}
-        className="relative py-28 sm:py-40 px-6 [&_*::selection]:bg-[#39FF14] [&_*::selection]:text-[#0D0D0B]"
+        className="relative py-28 sm:py-40 px-6 [&_*::selection]:bg-[#FF5C00] [&_*::selection]:text-[#FEFCF8]"
         style={{ background: "#FF5C00" }}
       >
         {/* Background — desktop only decorations, zero mobile cost */}
