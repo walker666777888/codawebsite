@@ -8,6 +8,7 @@ import SectionLabel from "@/components/ui/SectionLabel";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ ignoreMobileResize: true });
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -418,7 +419,7 @@ export default function DigitalGap() {
     <section
       ref={mobileContainerRef}
       className="md:hidden bg-[#F4F0E8] text-[#0D0D0B] overflow-hidden border-b border-[#E6E1DA] relative"
-      style={{ height: "100dvh" }}
+      style={{ height: "100svh" }}
     >
       {BG}
       <div className="absolute inset-x-0 bottom-0 h-[2px] bg-[#E6E1DA] z-10 overflow-hidden">
