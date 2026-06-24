@@ -62,25 +62,9 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Inner Dot */}
+      {/* ── Main Cursor Frame ── */}
       <motion.div
-        className="fixed top-0 left-0 w-[5px] h-[5px] bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference"
-        style={{
-          x: mouseX,
-          y: mouseY,
-          translateX: "-50%",
-          translateY: "-50%",
-          opacity: isVisible ? 1 : 0,
-        }}
-        animate={{
-          scale: isHovering ? 0 : 1,
-        }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-      />
-
-      {/* Outer Ring */}
-      <motion.div
-        className="fixed top-0 left-0 w-8 h-8 border border-white/60 rounded-full pointer-events-none z-[9998] flex items-center justify-center mix-blend-difference"
+        className="fixed top-0 left-0 pointer-events-none z-[9999] flex items-center justify-center rounded-full"
         style={{
           x: smoothX,
           y: smoothY,
@@ -89,11 +73,46 @@ export default function CustomCursor() {
           opacity: isVisible ? 1 : 0,
         }}
         animate={{
-          scale: isHovering ? 1.8 : 1,
-          backgroundColor: isHovering ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0)",
-          borderColor: isHovering ? "rgba(255, 255, 255, 0)" : "rgba(255, 255, 255, 0.6)",
+          width: isHovering ? 64 : 12,
+          height: isHovering ? 64 : 12,
+          backgroundColor: isHovering ? "#FF5C00" : "#14130F",
         }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {/* Inner Label (Only visible on hover) */}
+        <motion.div
+          className="text-[#FEFCF8] font-mono text-[10px] tracking-[0.1em] uppercase whitespace-nowrap flex items-center justify-center overflow-hidden"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{
+            opacity: isHovering ? 1 : 0,
+            scale: isHovering ? 1 : 0.5,
+          }}
+          transition={{ duration: 0.3, ease: "easeOut", delay: isHovering ? 0.1 : 0 }}
+        >
+          {isHovering ? (
+            <span className="flex items-center">
+              Tap <span className="ml-1 text-[12px] leading-none">↗</span>
+            </span>
+          ) : null}
+        </motion.div>
+      </motion.div>
+
+      {/* ── Magnetic Trailing Aura ── */}
+      <motion.div
+        className="fixed top-0 left-0 rounded-full pointer-events-none z-[9998]"
+        style={{
+          x: useSpring(mouseX, { damping: 40, stiffness: 150, mass: 0.8 }),
+          y: useSpring(mouseY, { damping: 40, stiffness: 150, mass: 0.8 }),
+          translateX: "-50%",
+          translateY: "-50%",
+          opacity: isVisible ? 1 : 0,
+        }}
+        animate={{
+          width: isHovering ? 0 : 40,
+          height: isHovering ? 0 : 40,
+          border: "1px solid rgba(20, 19, 15, 0.15)",
+        }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
       />
     </>
   );
