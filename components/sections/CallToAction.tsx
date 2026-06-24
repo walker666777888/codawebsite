@@ -20,7 +20,7 @@ function WaveText({ text, className, style }: { text: string; className?: string
         <motion.span
           key={i}
           style={{ display: "inline-block", whiteSpace: ch === " " ? "pre" : undefined }}
-          animate={hovered ? { y: -10, color: "#ffffff" } : { y: 0, color: "#FF5C00" }}
+          animate={hovered ? { y: -10, color: "#FF5C00" } : { y: 0, color: "#ffffff" }}
           transition={{ type: "spring", stiffness: 400, damping: 18, delay: i * 0.035 }}
         >{ch}</motion.span>
       ))}
