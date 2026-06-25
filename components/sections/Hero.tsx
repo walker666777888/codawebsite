@@ -126,7 +126,7 @@ export default function Hero() {
       {/* ── LiquidEther fluid background — desktop only ── */}
       <div className="absolute inset-0 z-[1] hidden md:block">
         <LiquidEther
-          colors={["#fb7b7b", "#ff7b1f", "#fbc210"]}
+          colors={["#ffaeae", "#ff9851", "#fed553"]}
           mouseForce={25}
           cursorSize={100}
           isViscous={false}
