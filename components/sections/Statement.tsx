@@ -1665,7 +1665,7 @@ function HeaderBlock({
             mobile so its many infinite loops never run on touch devices) */}
         {!mobile && (
           <div
-            className="hidden lg:flex relative items-center justify-center w-full"
+            className="hidden md:flex relative items-center justify-center w-full"
           >
             <SystemOrbit inView={isInView} />
           </div>
@@ -1709,7 +1709,7 @@ function MobileDisciplineStack() {
   ];
 
   return (
-    <div className="lg:hidden max-w-7xl mx-auto px-5 pb-8 flex flex-col relative z-10" style={{ gap: "35vh" }}>
+    <div className="md:hidden max-w-7xl mx-auto px-5 pb-8 flex flex-col relative z-10" style={{ gap: "35vh" }}>
       {allCards.map((d, i) => (
         <div
           key={d.num}
@@ -1769,12 +1769,12 @@ export default function Statement() {
           Mobile / tablet: Premium sticky stack effect
           Desktop (lg+): pinned fan-out — cards spread centre → row. */}
       <MobileDisciplineStack />
-      <div className="hidden lg:block">
+      <div className="hidden md:block">
         <DisciplineSpread />
       </div>
 
       {/* ── Landscape tiles ─────────────────────────────────── */}
-      <div className="hidden lg:block max-w-7xl mx-auto px-6 pb-10 relative z-10">
+      <div className="hidden md:block max-w-7xl mx-auto px-6 pb-10 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
           {LANDSCAPE_TILES.map((tile, i) => (
             <LandscapeTile key={tile.num} tile={tile} index={i} />

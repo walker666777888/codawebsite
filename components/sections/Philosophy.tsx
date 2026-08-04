@@ -240,7 +240,7 @@ function DraggableBoard() {
   );
 
   return (
-    <div className="hidden lg:block relative">
+    <div className="hidden md:block relative">
       {/* Board */}
       <div
         ref={boardRef}
@@ -448,7 +448,7 @@ export default function Philosophy() {
           <DraggableBoard />
 
           {/* Mobile fallback — simple stacked cards */}
-          <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
             {CARDS.map((card, i) => (
               <div key={card.id} className={`rounded-2xl p-6${i >= 4 ? " hidden sm:block" : ""}`}
                 style={{ background: card.bg, border: `1px solid ${card.border}`, boxShadow: card.shadow }}>
