@@ -395,7 +395,7 @@ export default function DigitalGap() {
             {TEXTS.map(({ pre, em }, i) => (
               <h2 key={i} className="font-instrument leading-[1.1] tracking-[-0.03em]"
                 style={{ fontSize: "clamp(30px, 4vw, 54px)" }}>
-                {pre}{" "}<span className="italic text-[#FF5C00]">{em}</span>
+                {pre}{" "}<span className="text-[#FF5C00]">{em}</span>
               </h2>
             ))}
           </div>
@@ -438,7 +438,7 @@ export default function DigitalGap() {
               <h2 key={i} className="absolute inset-x-0 top-3 font-instrument tracking-[-0.03em]"
                 style={{ fontSize: "clamp(30px, 8.5vw, 42px)", opacity: i === 0 ? 1 : 0 }}>
                 <span className="block leading-[1.15]">{pre}</span>
-                <span className="block leading-[1.15] italic text-[#FF5C00]">{em}</span>
+                <span className="block leading-[1.15] text-[#FF5C00]">{em}</span>
               </h2>
             ))}
           </div>

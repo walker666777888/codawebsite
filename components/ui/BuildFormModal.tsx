@@ -645,7 +645,7 @@ function PhoneField({
                       >
                         <FlagImg code={c.code} size={18} />
                         <div className="flex flex-col flex-1 min-w-0">
-                          <span className={`font-sans text-[12px] truncate ${active ? "text-white" : "text-white/60"}`}>{c.name}</span>
+                          <span className={`font-sans text-[12px] truncate ${active ?"text-white" : "text-white/60"}`}>{c.name}</span>
                           {fmt && <span className="font-mono text-[9px] text-white/25 truncate">{fmt}</span>}
                         </div>
                         <span className="font-mono text-[11px] text-white/30 tabular-nums shrink-0">{c.dial}</span>
@@ -823,11 +823,11 @@ function Dropdown({
                       transition={{ duration: 0.15 }}
                     />
                     <div className="flex flex-col gap-0.5 flex-1 min-w-0">
-                      <span className={`font-sans text-[13px] font-medium leading-tight ${on ? "text-white" : "text-white/65"}`}>
+                      <span className={`font-sans text-[13px] font-medium leading-tight ${on ?"text-white" : "text-white/65"}`}>
                         {opt.label}
                       </span>
                       {opt.sub && (
-                        <span className={`font-mono text-[9px] uppercase tracking-[0.16em] ${on ? "text-[#FF5C00]/60" : "text-white/22"}`}>
+                        <span className={`font-mono text-[9px] uppercase tracking-[0.16em] ${on ?"text-[#FF5C00]/60" : "text-white/22"}`}>
                           {opt.sub}
                         </span>
                       )}
@@ -1045,7 +1045,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                       <h2 className="font-instrument text-white leading-[1.04] tracking-[-0.03em] mt-8"
                         style={{ fontSize: "clamp(30px, 3vw, 50px)" }}>
                         Let&apos;s build something<br />
-                        that <span className="italic text-[#FF5C00]">compounds.</span>
+                        that <span className="text-[#FF5C00]">compounds.</span>
                       </h2>
                     </FadeUp>
                     <FadeUp delay={0.38}>
@@ -1092,7 +1092,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                     </span>
                     <h2 className="font-instrument text-white text-[28px] tracking-[-0.025em] leading-tight mt-3">
                       Let&apos;s build something that{" "}
-                      <span className="italic text-[#FF5C00]">compounds.</span>
+                      <span className="text-[#FF5C00]">compounds.</span>
                     </h2>
                   </div>
 

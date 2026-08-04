@@ -208,7 +208,7 @@ function DraggableCard({
           style={{ fontSize: "clamp(22px, 2.2vw, 28px)" }}
         >
           {card.title}{" "}
-          <span className="italic text-[#FF5C00]">{card.accent}</span>
+          <span className="text-[#FF5C00]">{card.accent}</span>
         </h3>
 
         {/* Body */}
@@ -438,7 +438,7 @@ export default function Philosophy() {
 
         {/* Section label */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 md:pt-28 pb-10">
-          <div ref={heroRef} className={`phil-label${visible ? " in" : ""}`}>
+          <div ref={heroRef} className={`phil-label${visible ?" in" : ""}`}>
             <SectionLabel index={2}>Our Philosophy</SectionLabel>
           </div>
         </div>
@@ -450,14 +450,14 @@ export default function Philosophy() {
           {/* Mobile fallback — simple stacked cards */}
           <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
             {CARDS.map((card, i) => (
-              <div key={card.id} className={`rounded-2xl p-6${i >= 4 ? " hidden sm:block" : ""}`}
+              <div key={card.id} className={`rounded-2xl p-6${i >= 4 ?" hidden sm:block" : ""}`}
                 style={{ background: card.bg, border: `1px solid ${card.border}`, boxShadow: card.shadow }}>
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-1.5 h-1.5 rounded-full" style={{ background: card.dot }} />
                   <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#6F6A60]">{card.category}</span>
                 </div>
                 <h3 className="font-instrument text-[28px] tracking-[-0.03em] text-[#0D0D0B] mb-2">
-                  {card.title} <span className="italic text-[#FF5C00]">{card.accent}</span>
+                  {card.title} <span className="text-[#FF5C00]">{card.accent}</span>
                 </h3>
                 <p className="font-sans text-[13px] text-[#4A463F] leading-[1.75] mb-4">{card.body}</p>
                 <div className="border-t pt-3" style={{ borderColor: "rgba(13,13,11,0.08)" }}>

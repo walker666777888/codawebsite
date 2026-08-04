@@ -172,7 +172,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
               >
                 {card.title}
                 <br />
-                <span className="italic text-[#FF5C00]">{card.subtitle}</span>
+                <span className="text-[#FF5C00]">{card.subtitle}</span>
               </h3>
 
               <div
@@ -247,7 +247,7 @@ export default function Capabilities() {
             >
               Your stack.
               <br />
-              <span className="italic text-[#FF5C00]">Rebuilt right.</span>
+              <span className="text-[#FF5C00]">Rebuilt right.</span>
             </h2>
           </motion.div>
           <motion.p

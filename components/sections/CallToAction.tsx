@@ -151,7 +151,7 @@ export default function CallToAction() {
             ref={cardRef}
             onMouseMove={onMouseMove}
             onMouseLeave={onMouseLeave}
-            className={`cta-card${visible ? " in" : ""} relative w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 rounded-3xl px-6 sm:px-10 py-10 sm:py-14 overflow-hidden`}
+            className={`cta-card${visible ?" in" : ""} relative w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 rounded-3xl px-6 sm:px-10 py-10 sm:py-14 overflow-hidden`}
             style={{
               background: "#1a0d00",
               border: "1px solid rgba(255,255,255,0.07)",
@@ -183,7 +183,7 @@ export default function CallToAction() {
               <div className="cta-line-wrap">
                 <WaveText
                   text="Ready to"
-                  className={`cta-line${visible ? " in-0" : ""} font-instrument tracking-[-0.04em] leading-[1.0]`}
+                  className={`cta-line${visible ?" in-0" : ""} font-instrument tracking-[-0.04em] leading-[1.0]`}
                   style={{ fontSize: "clamp(64px, 10vw, 130px)" }}
                 />
               </div>
@@ -194,7 +194,7 @@ export default function CallToAction() {
               >
                 <WaveText
                   text="Dominate!"
-                  className="font-instrument italic tracking-[-0.04em] leading-[1.0]"
+                  className="font-instrument tracking-[-0.04em] leading-[1.0]"
                   style={{ fontSize: "clamp(64px, 10vw, 130px)" }}
                 />
               </motion.div>
@@ -202,13 +202,13 @@ export default function CallToAction() {
 
             {/* Sub-copy */}
             <p
-              className={`cta-sub${visible ? " in" : ""} font-sans text-[12px] sm:text-[17px] text-white/60 max-w-[240px] sm:max-w-md leading-[1.65] sm:leading-[1.7]`}
+              className={`cta-sub${visible ?" in" : ""} font-sans text-[12px] sm:text-[17px] text-white/60 max-w-[240px] sm:max-w-md leading-[1.65] sm:leading-[1.7]`}
             >
               Most agencies build features. We build systems that outlast them.
             </p>
 
             {/* CTA button */}
-            <div className={`cta-btn${visible ? " in" : ""} flex flex-col items-center gap-4`}>
+            <div className={`cta-btn${visible ?" in" : ""} flex flex-col items-center gap-4`}>
               <MagneticButton variant="accent" onClick={openForm}>
                 <span
                   className="flex items-center gap-2 sm:gap-3 bg-[#FF5C00] text-white px-5 py-2.5 sm:px-9 sm:py-4 rounded-xl font-sans font-semibold text-[12px] sm:text-[15px] tracking-[-0.01em]"
@@ -222,7 +222,7 @@ export default function CallToAction() {
 
             {/* Footer note */}
             <div
-              className={`cta-note${visible ? " in" : ""} flex items-center gap-4 font-mono text-[10px] text-white/30 tracking-widest uppercase`}
+              className={`cta-note${visible ?" in" : ""} flex items-center gap-4 font-mono text-[10px] text-white/30 tracking-widest uppercase`}
             >
               <span>No retainers</span>
               <span className="w-1 h-1 rounded-full bg-white/20" />

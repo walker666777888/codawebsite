@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, DM_Sans, DM_Mono, Unbounded } from "next/font/google";
+import { Instrument_Serif, DM_Sans, DM_Mono, Unbounded, Syne } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/providers/LenisProvider";
 import FormModalProvider from "@/components/providers/FormModalProvider";
@@ -7,7 +7,6 @@ import { VideoPreloadProvider } from "@/components/providers/VideoPreloadProvide
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PageReveal from "@/components/ui/PageReveal";
-import ScrollProgress from "@/components/ui/ScrollProgress";
 import GrainOverlay from "@/components/ui/GrainOverlay";
 import CustomCursor from "@/components/ui/CustomCursor";
 
@@ -32,6 +31,11 @@ const unbounded = Unbounded({
   weight: ["900"],
   subsets: ["latin"],
   variable: "--font-unbounded",
+});
+
+const syne = Syne({
+  subsets: ["latin"],
+  variable: "--font-syne",
 });
 
 const SITE_URL = "https://www.coda.studio";
@@ -162,7 +166,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${instrumentSerif.variable} ${dmSans.variable} ${dmMono.variable} ${unbounded.variable} antialiased`}
+      className={`${instrumentSerif.variable} ${dmSans.variable} ${dmMono.variable} ${unbounded.variable} ${syne.variable} antialiased`}
     >
       <head>
         <script
@@ -181,7 +185,6 @@ export default function RootLayout({
           <FormModalProvider>
             <VideoPreloadProvider>
               <PageReveal />
-              <ScrollProgress />
               <GrainOverlay />
               <CustomCursor />
               <Navbar />

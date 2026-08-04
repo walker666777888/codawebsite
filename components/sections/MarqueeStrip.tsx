@@ -34,16 +34,14 @@ function MarqueeRow({ items, reverse = false, speed = 28, dim = false, paused = 
         {doubled.map((item, i) => (
           <span key={i} className="inline-flex items-center gap-5 mx-5">
             <span
-              className={`font-mono text-[10.5px] uppercase tracking-[0.22em] transition-colors duration-400 cursor-default ${
-                dim
-                  ? "text-[#0D0D0B]/40 hover:text-[#0D0D0B]/65"
+              className={`font-mono text-[10.5px] uppercase tracking-[0.22em] transition-colors duration-400 cursor-default ${ dim ?"text-[#0D0D0B]/40 hover:text-[#0D0D0B]/65"
                   : "text-[#0D0D0B]/65 hover:text-[#0D0D0B]"
               }`}
             >
               {item}
             </span>
             <span
-              className={`shrink-0 ${dim ? "text-[#0D0D0B]/20" : "text-[#FF5C00]/60"}`}
+              className={`shrink-0 ${dim ?"text-[#0D0D0B]/20" : "text-[#FF5C00]/60"}`}
               style={{ fontSize: "6px" }}
             >
               {SEP}

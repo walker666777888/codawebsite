@@ -794,7 +794,23 @@ export default function LiquidEther({
         window.addEventListener("resize", this._resize);
         document.addEventListener("visibilitychange", this._onVisibility);
       }
-      init() { this.props.$wrapper.prepend(Common.renderer!.domElement); this.output = new Output(); }
+      init() { 
+        this.props.$wrapper.prepend(Common.renderer!.domElement); 
+        this.output = new Output(); 
+        if ("requestIdleCallback" in window) {
+          requestIdleCallback(() => {
+            if (Common.renderer && this.output) {
+              Common.renderer.compile(this.output.scene, this.output.camera);
+            }
+          });
+        } else {
+          setTimeout(() => {
+            if (Common.renderer && this.output) {
+              Common.renderer.compile(this.output.scene, this.output.camera);
+            }
+          }, 500);
+        }
+      }
       resize() { Common.resize(); this.output.resize(); }
       render() {
         if (this.autoDriver) this.autoDriver.update();
@@ -869,5 +885,5 @@ export default function LiquidEther({
     };
   }, [BFECC, cursorSize, dt, isBounce, isViscous, iterationsPoisson, iterationsViscous, mouseForce, resolution, viscous, colors, autoDemo, autoSpeed, autoIntensity, takeoverDuration, autoResumeDelay, autoRampDuration]);
 
-  return <div ref={mountRef} className={`liquid-ether-container ${className || ""}`} style={style} />;
+  return <div ref={mountRef} className={`liquid-ether-container ${className ||""}`} style={style} />;
 }

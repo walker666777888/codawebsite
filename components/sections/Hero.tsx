@@ -8,6 +8,7 @@ import {
 import { useRef, useEffect, useState } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { useFormModal } from "@/components/providers/FormModalProvider";
+import { useIsLowEndDevice } from "@/hooks/useIsLowEndDevice";
 import dynamic from "next/dynamic";
 const LiquidEther = dynamic(() => import("@/components/ui/LiquidEther"), { ssr: false });
 
@@ -27,7 +28,7 @@ function DataParticles() {
       {PARTICLES.map((p) => (
         <motion.div
           key={p.id}
-          className={`absolute rounded-full ${p.isOrange ? 'bg-[#FF5C00]' : 'bg-[#0D0D0B]'}`}
+          className={`absolute rounded-full ${p.isOrange ?'bg-[#FF5C00]' : 'bg-[#0D0D0B]'}`}
           style={{
             left: p.left,
             width: p.size,
@@ -100,6 +101,8 @@ export default function Hero() {
     setIsTouch("ontouchstart" in window || navigator.maxTouchPoints > 0);
   }, []);
 
+  const isLowTier = useIsLowEndDevice();
+
   /* ── Scroll parallax (desktop only) ──────────────────── */
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y    = useTransform(scrollYProgress, [0, 1], isTouch ? ["0%", "0%"] : ["0%", "20%"]);
@@ -121,26 +124,30 @@ export default function Hero() {
       style={{ background: "#F4F0E8" }}
     >
       {/* ── Dark base for desktop (LiquidEther sits on top) ── */}
-      <div className="absolute inset-0 z-[0] hidden md:block bg-black" />
+      <div className={`absolute inset-0 z-[0] hidden ${isLowTier ? "" : "md:block"} bg-black`} />
 
       {/* ── LiquidEther fluid background — desktop only ── */}
-      <div className="absolute inset-0 z-[1] hidden md:block">
-        <LiquidEther
-          colors={["#ffaeae", "#ff9851", "#fed553"]}
-          mouseForce={25}
-          cursorSize={100}
-          isViscous={false}
-          viscous={100}
-          autoDemo={true}
-          autoSpeed={0}
-          autoIntensity={1.3}
-          isBounce={true}
-          resolution={0.5}
-        />
-      </div>
+      {!isLowTier && (
+        <div className="absolute inset-0 z-[1] hidden md:block">
+          <LiquidEther
+            colors={["#ffaeae", "#ff9851", "#fed553"]}
+            mouseForce={25}
+            cursorSize={100}
+            isViscous={false}
+            viscous={100}
+            iterationsViscous={8} // Drastically reduced from 32
+            iterationsPoisson={8} // Drastically reduced from 32
+            autoDemo={true}
+            autoSpeed={0}
+            autoIntensity={1.3}
+            isBounce={true}
+            resolution={0.25} // Reduced from 0.5 to cut pixels calculated by 4x
+          />
+        </div>
+      )}
 
       {/* ── Warm ambient mesh — layer 1 — mobile only ─── */}
-      <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
+      <div className={`absolute inset-0 pointer-events-none z-[2] gpu ${isLowTier ? "block" : "md:hidden"}`}>
         <div
           className="absolute top-[-14%] left-[50%] -translate-x-1/2 w-[820px] h-[660px] rounded-full opacity-[0.42]"
           style={{ background: "radial-gradient(ellipse, rgba(255,138,61,0.9) 0%, transparent 62%)" }}
@@ -148,7 +155,7 @@ export default function Hero() {
       </div>
 
       {/* ── Warm ambient mesh — layer 2 — mobile only ── */}
-      <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
+      <div className={`absolute inset-0 pointer-events-none z-[2] gpu ${isLowTier ? "block" : "md:hidden"}`}>
         <div
           className="absolute bottom-[6%] right-[6%] w-[520px] h-[520px] rounded-full opacity-[0.30]"
           style={{ background: "radial-gradient(circle, rgba(255,92,0,0.7) 0%, transparent 66%)" }}
@@ -156,7 +163,7 @@ export default function Hero() {
       </div>
 
       {/* ── Warm ambient mesh — layer 3 — mobile only ── */}
-      <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
+      <div className={`absolute inset-0 pointer-events-none z-[2] gpu ${isLowTier ? "block" : "md:hidden"}`}>
         <div
           className="absolute top-[35%] left-[-10%] w-[380px] h-[380px] rounded-full opacity-[0.22]"
           style={{ background: "radial-gradient(circle, rgba(255,138,61,0.8) 0%, transparent 65%)" }}
@@ -164,7 +171,7 @@ export default function Hero() {
       </div>
 
       {/* ── Warm ambient mesh — layer 4 — mobile only ── */}
-      <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
+      <div className={`absolute inset-0 pointer-events-none z-[2] gpu ${isLowTier ? "block" : "md:hidden"}`}>
         <div
           className="absolute bottom-[28%] left-[20%] w-[300px] h-[300px] rounded-full opacity-[0.18]"
           style={{ background: "radial-gradient(circle, rgba(255,92,0,0.6) 0%, transparent 65%)" }}
@@ -172,7 +179,7 @@ export default function Hero() {
       </div>
 
       {/* ── Warm ambient mesh — layer 5 — mobile only ── */}
-      <div className="absolute inset-0 pointer-events-none z-[2] md:hidden">
+      <div className={`absolute inset-0 pointer-events-none z-[2] gpu ${isLowTier ? "block" : "md:hidden"}`}>
         <div
           className="absolute top-[60%] right-[-5%] w-[280px] h-[280px] rounded-full opacity-[0.20]"
           style={{ background: "radial-gradient(circle, rgba(255,115,40,0.65) 0%, transparent 65%)" }}
@@ -194,7 +201,7 @@ export default function Hero() {
       <LaserScan />
 
       {/* ── Dynamic Kinetic Orb — mobile only (desktop uses LiquidEther) ── */}
-      <div className="absolute inset-0 pointer-events-none z-[2] md:hidden" aria-hidden="true">
+      <div className={`absolute inset-0 pointer-events-none z-[2] gpu ${isLowTier ? "block" : "md:hidden"}`} aria-hidden="true">
         <div
           className="absolute w-[140vw] h-[140vw] md:w-[60vw] md:h-[60vw] rounded-full opacity-50"
           style={{
@@ -250,7 +257,7 @@ export default function Hero() {
             >
               <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.05em] relative">
                 <motion.span
-                  className={["inline-block relative", wi === 2 ? "italic text-[#FF5C00] animate-chromatic" : "text-[#0D0D0B] md:text-white"].join(" ")}
+                  className={["inline-block relative", wi === 2 ? "text-[#FF5C00] animate-chromatic" : "text-[#0D0D0B] md:text-white"].join(" ")}
                   initial={{ y: "108%", skewY: 4 }}
                   animate={{ y: "0%", skewY: 0 }}
                   transition={{ duration: 1.05, delay: 1.6 + wi * 0.13, ease: [0.16, 1, 0.3, 1] }}
@@ -293,11 +300,11 @@ export default function Hero() {
                           5.7%{opacity:.7;transform:translate( 6px,-3px);clip-path:inset(50% 0 20% 0)}
                         }
                       `}</style>
-                      <span aria-hidden className="absolute inset-0 pointer-events-none select-none font-instrument italic"
+                      <span aria-hidden className="absolute inset-0 pointer-events-none select-none font-instrument"
                         style={{ color: "#FF1500", animation: "glitch-r 2s linear infinite" }}>{word}</span>
-                      <span aria-hidden className="absolute inset-0 pointer-events-none select-none font-instrument italic"
+                      <span aria-hidden className="absolute inset-0 pointer-events-none select-none font-instrument"
                         style={{ color: "#00E5FF", animation: "glitch-b 2s linear infinite", animationDelay: "0.035s" }}>{word}</span>
-                      <span aria-hidden className="absolute inset-0 pointer-events-none select-none font-instrument italic"
+                      <span aria-hidden className="absolute inset-0 pointer-events-none select-none font-instrument"
                         style={{ color: "#00FF88", animation: "glitch-g 2s linear infinite", animationDelay: "0.07s" }}>{word}</span>
                     </>
                   )}
@@ -315,7 +322,7 @@ export default function Hero() {
           transition={{ duration: 0.9, delay: 2.1, ease: [0.16, 1, 0.3, 1] }}
         >
           <span className="h-[1px] w-10 bg-[#0D0D0B]/30 md:bg-white/20 block shrink-0" />
-          <p className="font-instrument italic text-[#0D0D0B]/70 md:text-white/75 text-[24px] sm:text-[34px] tracking-[-0.02em] text-center">
+          <p className="font-instrument text-[#0D0D0B]/70 md:text-white/75 text-[24px] sm:text-[34px] tracking-[-0.02em] text-center">
             Dominate the <span className="text-[#FF5C00]">Digital Age.</span>
           </p>
           <span className="h-[1px] w-10 bg-[#0D0D0B]/30 md:bg-white/20 block shrink-0" />

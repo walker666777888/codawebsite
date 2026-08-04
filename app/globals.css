@@ -12,7 +12,7 @@
   --color-paper-lavender: #BAB3C8;
   --color-paper-sticky: #F6F3E6;
 
-  --font-instrument: var(--font-instrument-serif), serif;
+  --font-instrument: var(--font-syne), sans-serif;
   --font-sans: var(--font-dm-sans), sans-serif;
   --font-mono: var(--font-dm-mono), monospace;
 
@@ -22,6 +22,7 @@
   --animate-duration-slow: 700ms;
   --animate-duration-ambient: 4s;
 }
+
 
 /* ── Accessibility: Skip link ──────────────────────────── */
 .skip-link {
@@ -128,7 +129,7 @@
   body {
     background-color: var(--coda-bg);
     color: var(--coda-ink);
-    font-family: var(--font-dm-sans), sans-serif;
+    font-family: var(--font-sans);
     overflow-x: clip;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;

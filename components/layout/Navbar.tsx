@@ -42,12 +42,10 @@ export default function Navbar() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.9, delay: 1.7, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed z-50 top-0 left-0 right-0 w-full flex items-start transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled ? "pt-3" : "pt-0"}`}
+        className={`fixed z-50 top-0 left-0 right-0 w-full flex items-start transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled ?"pt-3" : "pt-0"}`}
       >
-        <div className={`w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled ? "mx-4 max-w-[calc(100%-2rem)]" : "mx-0 max-w-full"}`}>
-          <div className={`relative flex items-center h-[56px] px-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            scrolled
-              ? "rounded-2xl bg-[#F4F0E8] border border-[#E6E1DA] shadow-[0_8px_40px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.9)]"
+        <div className={`w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled ?"mx-4 max-w-[calc(100%-2rem)]" : "mx-0 max-w-full"}`}>
+          <div className={`relative flex items-center h-[56px] px-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${ scrolled ?"rounded-2xl bg-white/70 backdrop-blur-2xl border border-white/40 shadow-[0_8px_32px_rgba(255,92,0,0.1),0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,1)]"
               : "rounded-none bg-transparent border-transparent shadow-none"
           }`}>
 
@@ -60,7 +58,7 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link href="/" className="flex items-baseline gap-[1px] group shrink-0">
-              <span className={`font-instrument text-[20px] tracking-[-0.025em] transition-all duration-500 group-hover:opacity-60 ${scrolled ? "text-[#14130F]" : "text-[#14130F] md:text-white"}`}>
+              <span className={`font-instrument text-[20px] tracking-[-0.025em] transition-all duration-500 group-hover:opacity-60 ${scrolled ?"text-[#14130F]" : "text-[#14130F] md:text-white"}`}>
                 CODA
               </span>
               <motion.span
@@ -71,7 +69,7 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop nav — absolutely centered */}
-            <nav className="hidden sm:flex items-center gap-1 text-[13px] font-sans absolute left-1/2 -translate-x-1/2">
+            <nav className="hidden sm:flex items-center gap-2 text-[16px] font-instrument font-semibold absolute left-1/2 -translate-x-1/2">
               {NAV_ANCHOR_LINKS.map((link, i) => (
                 <motion.div key={link.label}
                   initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
@@ -79,7 +77,7 @@ export default function Navbar() {
                 >
                   <a href={link.href}
                     onClick={(e) => scrollToSection(e, link.href)}
-                    className={`relative group px-3 py-1.5 rounded-lg transition-colors duration-200 hover:bg-[#0D0D0B]/[0.04] ${scrolled ? "text-[#6F6A60] hover:text-[#14130F]" : "text-[#6F6A60] md:text-white/60 hover:text-[#14130F] md:hover:text-white"}`}
+                    className={`relative group px-3 py-1.5 rounded-lg transition-colors duration-200 hover:bg-[#0D0D0B]/[0.04] ${scrolled ?"text-[#6F6A60] hover:text-[#14130F]" : "text-[#6F6A60] md:text-white/60 hover:text-[#14130F] md:hover:text-white"}`}
                   >
                     {link.label}
                     <span className="absolute inset-x-3 bottom-0.5 h-[1.5px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-full bg-[#FF5C00]" />

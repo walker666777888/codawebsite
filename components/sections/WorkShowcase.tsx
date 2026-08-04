@@ -167,7 +167,7 @@ export default function WorkShowcase() {
           <SectionLabel index={3} className="mb-5 block">Selected Work</SectionLabel>
           <h2 className="font-instrument tracking-[-0.03em] text-[#0D0D0B] leading-[1.04]"
             style={{ fontSize: "clamp(36px,5vw,66px)" }}>
-            Digital ecosystems <span className="italic text-[#FF5C00]">in action.</span>
+            Digital ecosystems <span className="text-[#FF5C00]">in action.</span>
           </h2>
         </motion.div>
       </div>

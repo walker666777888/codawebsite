@@ -575,7 +575,7 @@ function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; 
                 style={{ color: ORANGE, border: `1px solid ${ORANGE_SOFT}`, background: ORANGE_DIM }}>{tile.tags[0]}</span>
             </div>
             <h3 className="font-instrument tracking-[-0.03em] leading-[1.04] text-[#14130F]" style={{ fontSize: "clamp(24px,1.9vw,36px)" }}>
-              {tile.title}<br /><span className="italic" style={{ color: ORANGE }}>{tile.subtitle}</span>
+              {tile.title}<br /><span className="" style={{ color: ORANGE }}>{tile.subtitle}</span>
             </h3>
             <p className="font-sans text-[12.5px] text-[#4A463F] leading-[1.65]">{tile.tagline}</p>
             <div className="space-y-1.5">
@@ -785,7 +785,7 @@ function DisciplineStrip({
             </div>
             <div className="overflow-hidden">
               <motion.h3
-                className="font-instrument italic tracking-[-0.03em] leading-[1.05]"
+                className="font-instrument tracking-[-0.03em] leading-[1.05]"
                 style={{ fontSize: "clamp(36px, 4vw, 58px)", color: d.accentColor }}
                 initial={{ y: "105%" }}
                 animate={isInView ? { y: "0%" } : { y: "105%" }}
@@ -959,7 +959,7 @@ function DisciplineCardBody({
         >
           {d.title}
           <br />
-          <span className="italic" style={{ color: ORANGE }}>{d.subtitle}</span>
+          <span className="" style={{ color: ORANGE }}>{d.subtitle}</span>
         </h3>
 
         {/* Graphic area — orange border */}
@@ -1471,7 +1471,7 @@ function KineticWord({
       <AnimatePresence mode="wait">
         <motion.span
           key={word}
-          className="inline-block italic text-[#FF5C00]"
+          className="inline-block text-[#FF5C00]"
           initial={reduced ? { opacity: 0 } : { y: "105%", opacity: 0 }}
           animate={{ y: "0%", opacity: 1 }}
           exit={reduced ? { opacity: 0 } : { y: "-105%", opacity: 0 }}
@@ -1508,7 +1508,7 @@ function HeadlineBlock({ reduced, mobile }: { reduced: boolean; mobile: boolean 
       {/* Line 2 — rotating word */}
       <div className="overflow-visible pl-0 pr-4">
         <span
-          className="block font-instrument italic text-[#FF5C00] leading-[1.0]"
+          className="block font-instrument text-[#FF5C00] leading-[1.0]"
           style={{ fontSize: `calc(${FS} * 1.08)`, letterSpacing: "-0.05em" }}
         >
           <KineticWord words={WORDS} interval={2800} reduced={reduced} />
@@ -1672,17 +1672,11 @@ function HeaderBlock({
         )}
       </motion.div>
 
-      {/* ── Scroll-driven divider ─────────────────────────── */}
+      {/* ── Static orange divider ─────────────────────────── */}
       <div className="mt-16 relative">
-        <div className="h-px bg-[#0D0D0B]/[0.08] rounded-full overflow-hidden">
-          <motion.div style={{ width: lineW }}
-            className="h-full bg-gradient-to-r from-[#FF5C00] via-[#FF7A2E] to-transparent rounded-full origin-left" />
-        </div>
-        <motion.div
-          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-[#FF5C00]"
-          style={{ left: lineW, boxShadow: "0 0 8px rgba(255,92,0,0.6)" }}
-        />
+        <div className="h-px w-full bg-[#FF5C00] rounded-full opacity-80" />
       </div>
+
     </div>
   );
 }
