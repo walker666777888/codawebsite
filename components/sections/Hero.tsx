@@ -124,7 +124,7 @@ export default function Hero() {
       style={{ background: "#F4F0E8" }}
     >
       {/* ── Dark base for desktop (LiquidEther sits on top) ── */}
-      <div className={`absolute inset-0 z-[0] hidden ${isLowTier ? "" : "md:block"} bg-black`} />
+      <div className="absolute inset-0 z-[0] hidden md:block bg-black" />
 
       {/* ── LiquidEther fluid background — desktop only ── */}
       {!isLowTier && (
@@ -257,7 +257,7 @@ export default function Hero() {
             >
               <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.05em] relative">
                 <motion.span
-                  className={["inline-block relative", wi === 2 ? "text-[#FF5C00] animate-chromatic" : `text-[#0D0D0B] ${!isLowTier ? 'md:text-white' : ''}`].join(" ")}
+                  className={["inline-block relative", wi === 2 ? "text-[#FF5C00] animate-chromatic" : "text-[#0D0D0B] md:text-white"].join(" ")}
                   initial={{ y: "108%", skewY: 4 }}
                   animate={{ y: "0%", skewY: 0 }}
                   transition={{ duration: 1.05, delay: 1.6 + wi * 0.13, ease: [0.16, 1, 0.3, 1] }}
@@ -321,11 +321,11 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 2.1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className={`h-[1px] w-10 bg-[#0D0D0B]/30 ${!isLowTier ? 'md:bg-white/20' : ''} block shrink-0`} />
-          <p className={`font-instrument text-[#0D0D0B]/70 ${!isLowTier ? 'md:text-white/75' : ''} text-[24px] sm:text-[34px] tracking-[-0.02em] text-center`}>
+          <span className="h-[1px] w-10 bg-[#0D0D0B]/30 md:bg-white/20 block shrink-0" />
+          <p className="font-instrument text-[#0D0D0B]/70 md:text-white/75 text-[24px] sm:text-[34px] tracking-[-0.02em] text-center">
             Dominate the <span className="text-[#FF5C00]">Digital Age.</span>
           </p>
-          <span className={`h-[1px] w-10 bg-[#0D0D0B]/30 ${!isLowTier ? 'md:bg-white/20' : ''} block shrink-0`} />
+          <span className="h-[1px] w-10 bg-[#0D0D0B]/30 md:bg-white/20 block shrink-0" />
         </motion.div>
 
         {/* Sub-copy */}
@@ -333,7 +333,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
-          className={`font-sans text-[13px] sm:text-[17px] text-[#4A463F] ${!isLowTier ? 'md:text-white/55' : ''} max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-[1.75] mb-8 sm:mb-12`}
+          className="font-sans text-[13px] sm:text-[17px] text-[#4A463F] md:text-white/55 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-[1.75] mb-8 sm:mb-12"
         >
           We don&apos;t just build products. We architect the unfair advantage your competitors can&apos;t copy.
         </motion.p>
