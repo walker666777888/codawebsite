@@ -58,7 +58,7 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link href="/" className="flex items-baseline gap-[1px] group shrink-0">
-              <span className={`font-instrument text-[20px] tracking-[-0.025em] transition-all duration-500 group-hover:opacity-60 ${scrolled ?"text-[#14130F]" : "text-white"}`}>
+              <span className={`font-instrument text-[20px] tracking-[-0.025em] transition-all duration-500 group-hover:opacity-60 ${scrolled || mobileMenuOpen ?"text-[#14130F]" : "text-white"}`}>
                 CODA
               </span>
               <motion.span
@@ -111,7 +111,7 @@ export default function Navbar() {
 
             {/* Mobile hamburger */}
             <motion.button
-              className={`sm:hidden ml-auto p-2 transition-colors duration-300 ${scrolled ? "text-[#14130F]" : "text-white"}`}
+              className={`sm:hidden ml-auto p-2 transition-colors duration-300 ${scrolled || mobileMenuOpen ? "text-[#14130F]" : "text-white"}`}
               onClick={() => setMobileMenuOpen((v) => !v)}
               whileTap={{ scale: 0.88 }}
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
