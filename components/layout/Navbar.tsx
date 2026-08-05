@@ -144,9 +144,9 @@ export default function Navbar() {
             aria-modal="true"
             aria-label="Navigation menu"
             className="fixed inset-0 z-40 bg-[#F4F0E8] flex flex-col items-center justify-center sm:hidden overflow-hidden"
-            initial={{ y: "-100%", opacity: 0 }}
-            animate={{ y: "0%", opacity: 1, transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] } }}
-            exit={{ y: "-100%", opacity: 0, transition: { duration: 0.3, ease: "easeInOut" } }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } }}
+            exit={{ opacity: 0, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1], delay: 0.15 } }}
           >
             <div className="absolute top-[-20%] left-[-20%] w-[500px] h-[500px] rounded-full pointer-events-none"
               style={{ background: "radial-gradient(circle, rgba(255,92,0,0.15) 0%, transparent 70%)" }}
@@ -154,8 +154,9 @@ export default function Navbar() {
             <nav className="relative flex flex-col items-center gap-0">
               {NAV_ANCHOR_LINKS.map((link, i) => (
                 <motion.div key={link.label}
-                  initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.15 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                  initial={{ opacity: 0, y: 30 }} 
+                  animate={{ opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.1 + i * 0.08, ease: [0.22, 1, 0.36, 1] } }}
+                  exit={{ opacity: 0, y: 10, transition: { duration: 0.25, delay: i * 0.04, ease: "easeOut" } }}
                 >
                   <a href={link.href}
                     onClick={(e) => { scrollToSection(e, link.href); setMobileMenuOpen(false); }}
@@ -164,7 +165,12 @@ export default function Navbar() {
                   </a>
                 </motion.div>
               ))}
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.5 }} className="mt-12">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] } }} 
+                exit={{ opacity: 0, y: 10, transition: { duration: 0.25, delay: 0.16, ease: "easeOut" } }}
+                className="mt-12"
+              >
                 <MagneticButton variant="primary" onClick={() => { setMobileMenuOpen(false); openForm(); }}>
                   <span className="flex items-center gap-2 font-sans font-semibold text-[16px] px-8 py-3.5">
                     Start a build
