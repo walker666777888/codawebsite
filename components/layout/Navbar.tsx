@@ -146,7 +146,7 @@ export default function Navbar() {
                 )}
               </AnimatePresence>
             </motion.button>
-          </div>
+          </motion.div>
       </motion.header>
 
       {/* Mobile full-screen menu */}
