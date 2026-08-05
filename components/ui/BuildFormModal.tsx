@@ -893,7 +893,10 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
   const [brief,     setBrief]     = useState("");
   const [ptype,     setPtype]     = useState<string[]>([]);
   const [otherPtype, setOtherPtype] = useState("");
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== "undefined") return window.matchMedia("(max-width: 767px)").matches;
+    return false;
+  });
   const nameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
