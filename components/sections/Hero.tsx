@@ -278,7 +278,7 @@ export default function Hero() {
 
         {/* Tagline */}
         <motion.div
-          className="flex items-center gap-4 mb-6 sm:mb-10 -mt-6 sm:-mt-8"
+          className="flex items-center gap-4 mb-12 sm:mb-14 -mt-6 sm:-mt-8"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 2.1, ease: [0.16, 1, 0.3, 1] }}
