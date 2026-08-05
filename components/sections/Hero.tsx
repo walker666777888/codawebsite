@@ -211,11 +211,11 @@ export default function Hero() {
       {/* ── Main content ─────────────────────────────────── */}
       <motion.div
         style={{ y: textY, opacity: fade }}
-        className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pt-16 sm:pt-20"
+        className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pt-16 sm:pt-20 pointer-events-none"
       >
 
         {/* Brand name Desktop (WarpText) */}
-        <div className="hidden md:flex w-full justify-center mb-2 sm:mb-3 mt-4 md:mt-0 font-instrument">
+        <div className="hidden md:flex w-full justify-center mb-2 sm:mb-3 mt-4 md:mt-0 font-instrument pointer-events-auto">
           <WarpText
             text="Citizen Of Digital Age."
             color="#FF5C00"
@@ -333,7 +333,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 2.4, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-center gap-5"
+          className="flex items-center gap-5 pointer-events-auto"
         >
           <MagneticButton variant="primary" onClick={openForm}>
             <span className="flex items-center gap-2 font-sans font-semibold text-[14px] px-8 py-3.5 tracking-[-0.01em]">
