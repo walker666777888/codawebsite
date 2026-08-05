@@ -209,7 +209,7 @@ export default function Hero() {
 
         {/* Brand name Mobile (Original) */}
         <h1
-          className="md:hidden font-instrument tracking-[-0.04em] leading-[1.04] mb-2 sm:mb-3 text-center"
+          className="md:hidden font-instrument tracking-[-0.04em] leading-[1.04] -mt-8 mb-8 sm:mb-10 text-center"
           style={{ fontSize: "clamp(52px, 8.5vw, 118px)" }}
         >
           {(["Citizen", "Of", "Digital Age."] as Array<string>).map((word, wi) => (
