@@ -127,7 +127,7 @@ export default function Navbar() {
             {/* Mobile hamburger */}
             <motion.button
               layout
-              className={`sm:hidden ml-auto p-2 transition-colors duration-300 ${scrolled || mobileMenuOpen ? "text-[#14130F]" : "text-white"}`}
+              className={`relative z-10 flex sm:hidden ml-auto p-2 transition-colors duration-300 ${scrolled || mobileMenuOpen ? "text-[#14130F]" : "text-white"}`}
               onClick={() => setMobileMenuOpen((v) => !v)}
               whileTap={{ scale: 0.88 }}
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
