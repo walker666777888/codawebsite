@@ -971,7 +971,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
           {/* backdrop */}
           <motion.div
             key="bd"
-            className="fixed inset-0 z-[200] bg-black/60 md:backdrop-blur-[6px]"
+            className="fixed inset-0 z-[200] bg-black/80"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: E }}
             onClick={onClose}
@@ -988,11 +988,11 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
-              willChange: "transform, opacity",
+              willChange: "transform",
             }}
-            initial={{ y: "100%", opacity: 0.95 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "100%", opacity: 0.95, transition: exitTransition }}
+            initial={{ y: "100%" }}
+            animate={{ y: "0%" }}
+            exit={{ y: "100%", transition: exitTransition }}
             transition={reduced ? { duration: 0 } : panelTransition}
           >
             {/* subtle graph grid */}
