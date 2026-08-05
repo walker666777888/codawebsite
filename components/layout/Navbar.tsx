@@ -144,10 +144,9 @@ export default function Navbar() {
             aria-modal="true"
             aria-label="Navigation menu"
             className="fixed inset-0 z-40 bg-[#F4F0E8] flex flex-col items-center justify-center sm:hidden overflow-hidden"
-            initial={{ y: "-100%" }}
-            animate={{ y: "0%" }}
-            exit={{ y: "-100%" }}
-            transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
+            initial={{ y: "-100%", opacity: 0 }}
+            animate={{ y: "0%", opacity: 1, transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] } }}
+            exit={{ y: "-100%", opacity: 0, transition: { duration: 0.3, ease: "easeInOut" } }}
           >
             <div className="absolute top-[-20%] left-[-20%] w-[500px] h-[500px] rounded-full pointer-events-none"
               style={{ background: "radial-gradient(circle, rgba(255,92,0,0.15) 0%, transparent 70%)" }}
