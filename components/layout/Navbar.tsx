@@ -42,10 +42,9 @@ export default function Navbar() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.9, delay: 1.7, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed z-50 top-0 left-0 right-0 w-full flex items-start transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled ?"pt-3" : "pt-0"}`}
+        className={`fixed z-50 top-0 left-0 right-0 w-full flex justify-center transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled ?"pt-3 px-4 sm:px-6" : "pt-0 px-0"}`}
       >
-        <div className={`w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled ?"mx-4 max-w-[calc(100%-2rem)]" : "mx-0 max-w-full"}`}>
-          <div className={`relative flex items-center h-[56px] px-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${ scrolled ?"rounded-2xl bg-white/70 backdrop-blur-2xl border border-white/40 shadow-[0_8px_32px_rgba(255,92,0,0.1),0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,1)]"
+        <div className={`relative w-full max-w-[1400px] flex items-center h-[56px] px-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${ scrolled ?"rounded-2xl bg-white/75 backdrop-blur-md border border-white/40 shadow-[0_8px_32px_rgba(255,92,0,0.1),0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,1)]"
               : "rounded-none bg-transparent border-transparent shadow-none"
           }`}>
 
@@ -131,7 +130,6 @@ export default function Navbar() {
               </AnimatePresence>
             </motion.button>
           </div>
-        </div>
       </motion.header>
 
       {/* Mobile full-screen menu */}
