@@ -72,7 +72,35 @@ function LaserScan() {
   );
 }
 
-// Pure-CSS scramble — avoids setInterval setState that forces 12 React re-renders/s
+function DynamicHex() {
+  const hexRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    const chars = "0123456789ABCDEF";
+    let animationFrameId: number;
+    let lastTime = 0;
+
+    const animate = (time: number) => {
+      if (time - lastTime > 80) {
+        if (hexRef.current) {
+          let result = "";
+          for (let i = 0; i < 12; i++) {
+            result += chars[Math.floor(Math.random() * chars.length)];
+          }
+          hexRef.current.innerText = result;
+        }
+        lastTime = time;
+      }
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
+
+  return <div ref={hexRef} className="text-[#FF5C00] opacity-70">A4B9C2D1E8F3</div>;
+}
+
 function TechnicalOverlay({ 
   className = "top-24 right-6 text-right", 
   title = "SYS.CORE.INIT", 
@@ -85,7 +113,7 @@ function TechnicalOverlay({
   return (
     <div className={`absolute z-20 text-white/40 font-mono text-[10px] tracking-widest block md:hidden ${className}`}>
       <div>{title}</div>
-      <div className="text-[#FF5C00] opacity-70">A4B9C2D1E8F3</div>
+      <DynamicHex />
       <div>{subtitle}</div>
     </div>
   );
