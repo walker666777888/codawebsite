@@ -215,7 +215,7 @@ export default function Hero() {
           {(["Citizen", "Of", "Digital Age."] as Array<string>).map((word, wi) => (
             <span
               key={wi}
-              className={["inline-block mr-[0.2em] last:mr-0", wi === 2 ? "block -mt-3" : ""].join(" ")}
+              className={["inline-block mr-[0.2em] last:mr-0", wi === 2 ? "block -mt-7" : ""].join(" ")}
             >
               <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.05em] relative">
                 <motion.span
