@@ -26,8 +26,9 @@ export function useIsLowEndDevice() {
     // 4. Touch device check (optional, but often correlates with mobile where we already disable WebGL)
     const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
-    // If it's a mobile touch device, or it has limited cores/RAM, or user prefers reduced motion
-    if (prefersReducedMotion || cores < 4 || memory < 4 || isTouch) {
+    // If it's a mobile touch device, or it has severely limited cores/RAM, or user prefers reduced motion
+    // Note: Brave browser spoofs cores/memory to 2 for privacy, so we use < 2 instead of < 4.
+    if (prefersReducedMotion || cores < 2 || memory < 2 || isTouch) {
       setIsLowEnd(true);
     }
   }, []);
