@@ -11,6 +11,7 @@ import { useFormModal } from "@/components/providers/FormModalProvider";
 import { useIsLowEndDevice } from "@/hooks/useIsLowEndDevice";
 import dynamic from "next/dynamic";
 const LiquidEther = dynamic(() => import("@/components/ui/LiquidEther"), { ssr: false });
+import WarpText from "@/components/ui/WarpText";
 
 const PARTICLES = Array.from({ length: 70 }).map((_, i) => ({
   id: i,
@@ -28,7 +29,7 @@ function DataParticles() {
       {PARTICLES.map((p) => (
         <motion.div
           key={p.id}
-          className={`absolute rounded-full ${p.isOrange ?'bg-[#FF5C00]' : 'bg-[#0D0D0B]'}`}
+          className={`absolute rounded-full ${p.isOrange ?'bg-[#FF5C00]' : 'bg-white'}`}
           style={{
             left: p.left,
             width: p.size,
@@ -82,7 +83,7 @@ function TechnicalOverlay({
   subtitle?: string; 
 }) {
   return (
-    <div className={`absolute z-20 text-[#0D0D0B]/40 font-mono text-[10px] tracking-widest block md:hidden ${className}`}>
+    <div className={`absolute z-20 text-white/40 font-mono text-[10px] tracking-widest block md:hidden ${className}`}>
       <div>{title}</div>
       <div className="text-[#FF5C00] opacity-70">A4B9C2D1E8F3</div>
       <div>{subtitle}</div>
@@ -124,11 +125,11 @@ export default function Hero() {
       style={{ background: "#F4F0E8" }}
     >
       {/* ── Dark base for desktop (LiquidEther sits on top) ── */}
-      <div className="absolute inset-0 z-[0] hidden md:block bg-black" />
+      <div className="absolute inset-0 z-[0] bg-black" />
 
       {/* ── LiquidEther fluid background — desktop only ── */}
       {!isLowTier && (
-        <div className="absolute inset-0 z-[1] hidden md:block">
+        <div className="absolute inset-0 z-[1]">
           <LiquidEther
             colors={["#ffaeae", "#ff9851", "#fed553"]}
             mouseForce={25}
@@ -146,45 +147,7 @@ export default function Hero() {
         </div>
       )}
 
-      {/* ── Warm ambient mesh — layer 1 — mobile only ─── */}
-      <div className={`absolute inset-0 pointer-events-none z-[2] gpu ${isLowTier ? "block" : "md:hidden"}`}>
-        <div
-          className="absolute top-[-14%] left-[50%] -translate-x-1/2 w-[820px] h-[660px] rounded-full opacity-[0.42]"
-          style={{ background: "radial-gradient(ellipse, rgba(255,138,61,0.9) 0%, transparent 62%)" }}
-        />
-      </div>
 
-      {/* ── Warm ambient mesh — layer 2 — mobile only ── */}
-      <div className={`absolute inset-0 pointer-events-none z-[2] gpu ${isLowTier ? "block" : "md:hidden"}`}>
-        <div
-          className="absolute bottom-[6%] right-[6%] w-[520px] h-[520px] rounded-full opacity-[0.30]"
-          style={{ background: "radial-gradient(circle, rgba(255,92,0,0.7) 0%, transparent 66%)" }}
-        />
-      </div>
-
-      {/* ── Warm ambient mesh — layer 3 — mobile only ── */}
-      <div className={`absolute inset-0 pointer-events-none z-[2] gpu ${isLowTier ? "block" : "md:hidden"}`}>
-        <div
-          className="absolute top-[35%] left-[-10%] w-[380px] h-[380px] rounded-full opacity-[0.22]"
-          style={{ background: "radial-gradient(circle, rgba(255,138,61,0.8) 0%, transparent 65%)" }}
-        />
-      </div>
-
-      {/* ── Warm ambient mesh — layer 4 — mobile only ── */}
-      <div className={`absolute inset-0 pointer-events-none z-[2] gpu ${isLowTier ? "block" : "md:hidden"}`}>
-        <div
-          className="absolute bottom-[28%] left-[20%] w-[300px] h-[300px] rounded-full opacity-[0.18]"
-          style={{ background: "radial-gradient(circle, rgba(255,92,0,0.6) 0%, transparent 65%)" }}
-        />
-      </div>
-
-      {/* ── Warm ambient mesh — layer 5 — mobile only ── */}
-      <div className={`absolute inset-0 pointer-events-none z-[2] gpu ${isLowTier ? "block" : "md:hidden"}`}>
-        <div
-          className="absolute top-[60%] right-[-5%] w-[280px] h-[280px] rounded-full opacity-[0.20]"
-          style={{ background: "radial-gradient(circle, rgba(255,115,40,0.65) 0%, transparent 65%)" }}
-        />
-      </div>
 
 
 
@@ -200,25 +163,7 @@ export default function Hero() {
       <DataParticles />
       <LaserScan />
 
-      {/* ── Dynamic Kinetic Orb — mobile only (desktop uses LiquidEther) ── */}
-      <div className={`absolute inset-0 pointer-events-none z-[2] gpu ${isLowTier ? "block" : "md:hidden"}`} aria-hidden="true">
-        <div
-          className="absolute w-[140vw] h-[140vw] md:w-[60vw] md:h-[60vw] rounded-full opacity-50"
-          style={{
-            background: "radial-gradient(circle, rgba(255,92,0,0.50) 0%, rgba(255,138,61,0.22) 40%, transparent 70%)",
-            animation: "hero-orb-a 15s ease-in-out infinite",
-            willChange: "transform",
-          }}
-        />
-        <div
-          className="absolute top-[40%] right-[-40%] w-[120vw] h-[120vw] md:w-[50vw] md:h-[50vw] rounded-full opacity-45"
-          style={{
-            background: "radial-gradient(circle, rgba(255,138,61,0.45) 0%, rgba(255,92,0,0.18) 50%, transparent 70%)",
-            animation: "hero-orb-b 18s ease-in-out infinite",
-            willChange: "transform",
-          }}
-        />
-      </div>
+
 
 
       {/* ── Fine dot grid ────────────────────────────────── */}
@@ -232,11 +177,7 @@ export default function Hero() {
         }}
       />
 
-      {/* Edge vignette — feather into the paper base — mobile only */}
-      <div
-        className="absolute inset-0 pointer-events-none z-[3] md:hidden"
-        style={{ background: "radial-gradient(ellipse 90% 90% at 50% 45%, transparent 45%, rgba(244,240,232,0.85) 100%)" }}
-      />
+
 
 
       {/* ── Main content ─────────────────────────────────── */}
@@ -245,19 +186,40 @@ export default function Hero() {
         className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pt-16 sm:pt-20"
       >
 
-        {/* Brand name */}
+        {/* Brand name Desktop (WarpText) */}
+        <div className="hidden md:flex w-full justify-center mb-2 sm:mb-3 mt-4 md:mt-0 font-instrument">
+          <WarpText
+            text="Citizen Of Digital Age."
+            color="#FF5C00"
+            warpStrength={0.05}
+            warpScale={0.8}
+            speed={1.5}
+            pointerInfluence={0.75}
+            pointerStrength={0.57}
+            refraction={0.02}
+            ripple
+            fontSize="clamp(64px, 11vw, 150px)"
+            fontWeight={600}
+            style={{ height: '300px', width: '100%', maxWidth: '1400px' }}
+            fontFamily="inherit"
+            letterSpacing="-0.04em"
+            lineHeight={1.04}
+          />
+        </div>
+
+        {/* Brand name Mobile (Original) */}
         <h1
-          className="font-instrument tracking-[-0.04em] leading-[1.04] mb-2 sm:mb-3 text-center"
+          className="md:hidden font-instrument tracking-[-0.04em] leading-[1.04] mb-2 sm:mb-3 text-center"
           style={{ fontSize: "clamp(52px, 8.5vw, 118px)" }}
         >
           {(["Citizen", "Of", "Digital Age."] as Array<string>).map((word, wi) => (
             <span
               key={wi}
-              className={["inline-block mr-[0.2em] last:mr-0", wi === 2 ? "block mt-1" : ""].join(" ")}
+              className={["inline-block mr-[0.2em] last:mr-0", wi === 2 ? "block -mt-3" : ""].join(" ")}
             >
               <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.05em] relative">
                 <motion.span
-                  className={["inline-block relative", wi === 2 ? "text-[#FF5C00] animate-chromatic" : "text-[#0D0D0B] md:text-white"].join(" ")}
+                  className={["inline-block relative", wi === 2 ? "text-[#FF5C00] animate-chromatic" : "text-white"].join(" ")}
                   initial={{ y: "108%", skewY: 4 }}
                   animate={{ y: "0%", skewY: 0 }}
                   transition={{ duration: 1.05, delay: 1.6 + wi * 0.13, ease: [0.16, 1, 0.3, 1] }}
@@ -321,11 +283,11 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 2.1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="h-[1px] w-10 bg-[#0D0D0B]/30 md:bg-white/20 block shrink-0" />
-          <p className="font-instrument text-[#0D0D0B]/70 md:text-white/75 text-[24px] sm:text-[34px] tracking-[-0.02em] text-center">
+          <span className="h-[1px] w-10 bg-white/20 block shrink-0" />
+          <p className="font-instrument text-white/75 text-[18px] sm:text-[24px] md:text-[34px] tracking-[-0.02em] text-center whitespace-nowrap">
             Dominate the <span className="text-[#FF5C00]">Digital Age.</span>
           </p>
-          <span className="h-[1px] w-10 bg-[#0D0D0B]/30 md:bg-white/20 block shrink-0" />
+          <span className="h-[1px] w-10 bg-white/20 block shrink-0" />
         </motion.div>
 
         {/* Sub-copy */}
@@ -333,7 +295,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
-          className="font-sans text-[13px] sm:text-[17px] text-[#4A463F] md:text-white/55 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-[1.75] mb-8 sm:mb-12"
+          className="font-sans text-[13px] sm:text-[17px] text-white/55 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-[1.75] mb-8 sm:mb-12"
         >
           We don&apos;t just build products. We architect the unfair advantage your competitors can&apos;t copy.
         </motion.p>
