@@ -42,33 +42,49 @@ export default function Navbar() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.9, delay: 1.7, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed z-50 top-0 left-0 right-0 w-full flex justify-center transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled ?"pt-3 px-4 sm:px-6" : "pt-0 px-0"}`}
+        className="fixed z-50 top-0 left-0 right-0 w-full flex justify-center pointer-events-none"
       >
-        <div className={`relative w-full max-w-[1400px] flex items-center h-[56px] px-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${ scrolled ?"rounded-2xl bg-white/75 backdrop-blur-md border border-white/40 shadow-[0_8px_32px_rgba(255,92,0,0.1),0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,1)]"
-              : "rounded-none bg-transparent border-transparent shadow-none"
-          }`}>
+        <motion.div 
+          layout
+          className={`relative max-w-[1400px] flex items-center h-[56px] px-6 pointer-events-auto ${scrolled ? "w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] mt-3" : "w-full mt-0"}`}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          style={{ originY: 0 }}
+        >
+          
+          {/* ── GPU-Accelerated Pill Background ── */}
+          <motion.div 
+            layout
+            className="absolute inset-0 rounded-2xl bg-white/75 backdrop-blur-md border border-white/40 shadow-[0_8px_32px_rgba(255,92,0,0.1),0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,1)] pointer-events-none"
+            initial={false}
+            animate={{ opacity: scrolled ? 1 : 0 }}
+            transition={{ duration: 0.3 }}
+          />
 
-            {/* Orange glow top edge on pill */}
-            {scrolled && (
-              <span className="pointer-events-none absolute inset-x-6 top-0 h-px rounded-full"
-                style={{ background: "linear-gradient(90deg,transparent,rgba(255,92,0,0.45) 50%,transparent)" }}
-              />
-            )}
+          {/* Orange glow top edge on pill */}
+          <motion.div 
+            layout
+            className="absolute inset-x-6 top-0 h-px rounded-full pointer-events-none"
+            style={{ background: "linear-gradient(90deg,transparent,rgba(255,92,0,0.45) 50%,transparent)" }}
+            initial={false}
+            animate={{ opacity: scrolled ? 1 : 0 }}
+            transition={{ duration: 0.3 }}
+          />
 
-            {/* Logo */}
-            <Link href="/" className="flex items-baseline gap-[1px] group shrink-0">
-              <span className={`font-instrument text-[20px] tracking-[-0.025em] transition-all duration-500 group-hover:opacity-60 ${scrolled || mobileMenuOpen ?"text-[#14130F]" : "text-white"}`}>
-                CODA
-              </span>
-              <motion.span
-                className="font-mono text-[#FF5C00] text-[20px] leading-none"
-                whileHover={{ scale: 1.5, rotate: 15 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              >.</motion.span>
-            </Link>
-
+          {/* Logo */}
+          <motion.div layout className="relative z-10 flex shrink-0">
+            <Link href="/" className="flex items-baseline gap-[1px] group">
+            <span className={`font-instrument text-[20px] tracking-[-0.025em] transition-colors duration-500 group-hover:opacity-60 ${scrolled || mobileMenuOpen ?"text-[#14130F]" : "text-white"}`}>
+              CODA
+            </span>
+            <motion.span
+              className="font-mono text-[#FF5C00] text-[20px] leading-none"
+              whileHover={{ scale: 1.5, rotate: 15 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >.</motion.span>
+          </Link>
+          </motion.div>
             {/* Desktop nav — absolutely centered */}
-            <nav className="hidden sm:flex items-center gap-2 text-[16px] font-instrument font-semibold absolute left-1/2 -translate-x-1/2">
+            <motion.nav layout className="hidden sm:flex items-center gap-2 text-[16px] font-instrument font-semibold absolute left-1/2 -translate-x-1/2">
               {NAV_ANCHOR_LINKS.map((link, i) => (
                 <motion.div key={link.label}
                   initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
@@ -83,10 +99,10 @@ export default function Navbar() {
                   </a>
                 </motion.div>
               ))}
-            </nav>
+            </motion.nav>
 
             {/* CTA */}
-            <div className="hidden sm:flex items-center gap-3 ml-auto">
+            <motion.div layout className="hidden sm:flex items-center gap-3 ml-auto z-10">
               <motion.button
                 onClick={openForm}
                 whileHover={{ scale: 1.04 }}
@@ -106,10 +122,11 @@ export default function Navbar() {
                   transition={{ duration: 0.55, ease: "easeInOut" }}
                 />
               </motion.button>
-            </div>
+            </motion.div>
 
             {/* Mobile hamburger */}
             <motion.button
+              layout
               className={`sm:hidden ml-auto p-2 transition-colors duration-300 ${scrolled || mobileMenuOpen ? "text-[#14130F]" : "text-white"}`}
               onClick={() => setMobileMenuOpen((v) => !v)}
               whileTap={{ scale: 0.88 }}
