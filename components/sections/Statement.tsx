@@ -1194,7 +1194,7 @@ const WORDS = ["Systems", "Brands", "Products", "Growth", "Futures"];
 
 /* ── System orbit — fully SVG-driven so rings + nodes always align ── */
 function SystemOrbit({ inView }: { inView: boolean }) {
-  const reduced = useReducedMotion();
+  const reduced = true; // Animation disabled per user request (was useReducedMotion())
   const containerRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState<number | null>(null);
 
