@@ -6,6 +6,7 @@
   --color-coda-ink: #0D0D0B;
   --color-coda-muted: #4D4A45;
   --color-coda-accent: #FF5C00;
+  --color-coda-dark: #1a0d00;
   
   --color-paper-terracotta: #C58F63;
   --color-paper-sage: #E2DFD5;
@@ -45,7 +46,7 @@
 
 /* ── Accessibility: Focus states ───────────────────────── */
 :focus-visible {
-  outline: 2px solid #FF5C00;
+  outline: 2px solid var(--color-coda-accent);
   outline-offset: 3px;
   border-radius: 4px;
 }

@@ -4,6 +4,7 @@ import {
   motion,
   useScroll,
   useTransform,
+  useReducedMotion
 } from "motion/react";
 import { useRef, useEffect, useState } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
@@ -13,7 +14,7 @@ import dynamic from "next/dynamic";
 const LiquidEther = dynamic(() => import("@/components/ui/LiquidEther"), { ssr: false });
 import WarpText from "@/components/ui/WarpText";
 
-const PARTICLES = Array.from({ length: 70 }).map((_, i) => ({
+const PARTICLES = Array.from({ length: 25 }).map((_, i) => ({
   id: i,
   left: `${(i * 33.7) % 100}%`,
   duration: 12 + (i % 10),
@@ -35,7 +36,7 @@ function DataParticles() {
       {PARTICLES.map((p) => (
         <div
           key={p.id}
-          className={`absolute rounded-full ${p.isOrange ?'bg-[#FF5C00]' : 'bg-white'}`}
+          className={`absolute rounded-full ${p.isOrange ?'bg-coda-accent' : 'bg-white'}`}
           style={{
             left: p.left,
             width: p.size,
@@ -69,7 +70,7 @@ function LaserScan() {
   return (
     /* Pure CSS animation — no JS rAF, no re-renders */
     <div
-      className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#FF5C00] to-transparent z-[15] pointer-events-none opacity-40 mix-blend-screen md:hidden"
+      className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-coda-accent to-transparent z-[15] pointer-events-none opacity-40 mix-blend-screen md:hidden"
       style={{
         boxShadow: "0 0 20px 1px rgba(255,92,0,0.4)",
         animation: "laser-scan-line 6s linear infinite",
@@ -114,7 +115,7 @@ function DynamicHex() {
     };
   }, []);
 
-  return <div ref={hexRef} className="text-[#FF5C00] opacity-70">A4B9C2D1E8F3</div>;
+  return <div ref={hexRef} className="text-coda-accent opacity-70">A4B9C2D1E8F3</div>;
 }
 
 function TechnicalOverlay({ 
@@ -147,12 +148,14 @@ export default function Hero() {
   }, []);
 
   const isLowTier = useIsLowEndDevice();
+  const prefersReducedMotion = useReducedMotion();
+  const shouldDisableParallax = isTouch || isLowTier || prefersReducedMotion;
 
   /* ── Scroll parallax (desktop only) ──────────────────── */
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y    = useTransform(scrollYProgress, [0, 1], isTouch ? ["0%", "0%"] : ["0%", "20%"]);
-  const fade = useTransform(scrollYProgress, [0, 0.55], isTouch ? [1, 1] : [1, 0]);
-  const textY = useTransform(scrollYProgress, [0, 1], isTouch ? ["0%", "0%"] : ["0%", "8%"]);
+  const y    = useTransform(scrollYProgress, [0, 1], shouldDisableParallax ? ["0%", "0%"] : ["0%", "20%"]);
+  const fade = useTransform(scrollYProgress, [0, 0.55], shouldDisableParallax ? [1, 1] : [1, 0]);
+  const textY = useTransform(scrollYProgress, [0, 1], shouldDisableParallax ? ["0%", "0%"] : ["0%", "8%"]);
 
 
   const headlineWords = [
@@ -165,8 +168,7 @@ export default function Hero() {
     <section
       ref={ref}
       id="hero"
-      className="relative h-[100svh] overflow-hidden flex flex-col"
-      style={{ background: "#F4F0E8" }}
+      className="relative h-[100svh] overflow-hidden flex flex-col bg-coda-bg"
     >
       {/* ── Dark base for desktop (LiquidEther sits on top) ── */}
       <div className="absolute inset-0 z-[0] bg-black" />
@@ -263,7 +265,7 @@ export default function Hero() {
             >
               <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.05em] relative">
                 <motion.span
-                  className={["inline-block relative", wi === 2 ? "text-[#FF5C00] animate-chromatic" : "text-white"].join(" ")}
+                  className={["inline-block relative", wi === 2 ? "text-coda-accent animate-chromatic" : "text-white"].join(" ")}
                   initial={{ y: "108%", skewY: 4 }}
                   animate={{ y: "0%", skewY: 0 }}
                   transition={{ duration: 1.05, delay: 1.6 + wi * 0.13, ease: [0.16, 1, 0.3, 1] }}
@@ -329,7 +331,7 @@ export default function Hero() {
         >
           <span className="h-[1px] w-10 bg-white/20 block shrink-0" />
           <p className="font-instrument text-white/75 text-[18px] sm:text-[24px] md:text-[34px] tracking-[-0.02em] text-center whitespace-nowrap">
-            Dominate the <span className="text-[#FF5C00]">Digital Age.</span>
+            Dominate the <span className="text-coda-accent">Digital Age.</span>
           </p>
           <span className="h-[1px] w-10 bg-white/20 block shrink-0" />
         </motion.div>
@@ -369,9 +371,9 @@ export default function Hero() {
         transition={{ delay: 3.4, duration: 1.2 }}
       >
         <div className="w-[1px] h-10 overflow-hidden relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0D0D0B]/20 md:via-white/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-coda-ink/20 md:via-white/20 to-transparent" />
           <motion.div
-            className="w-full h-[35%] bg-[#0D0D0B]/50 md:bg-white/50"
+            className="w-full h-[35%] bg-coda-ink/50 md:bg-white/50"
             animate={{ y: ["0%", "230%"] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.3 }}
           />

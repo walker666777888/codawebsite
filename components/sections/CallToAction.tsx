@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { ArrowRight } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
@@ -33,12 +33,13 @@ export default function CallToAction() {
   const sectionRef = useRef<HTMLElement>(null);
   const cardRef    = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   /* ── 3D tilt on mouse move ── */
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const rotateX = useSpring(useTransform(mouseY, [-1, 1], [6, -6]),  { stiffness: 200, damping: 28 });
-  const rotateY = useSpring(useTransform(mouseX, [-1, 1], [-6, 6]), { stiffness: 200, damping: 28 });
+  const rotateX = useSpring(useTransform(mouseY, [-1, 1], prefersReducedMotion ? [0, 0] : [6, -6]),  { stiffness: 200, damping: 28 });
+  const rotateY = useSpring(useTransform(mouseX, [-1, 1], prefersReducedMotion ? [0, 0] : [-6, 6]), { stiffness: 200, damping: 28 });
   const spotX   = useSpring(mouseX, { stiffness: 200, damping: 25 });
   const spotY   = useSpring(mouseY, { stiffness: 200, damping: 25 });
 
@@ -125,8 +126,7 @@ export default function CallToAction() {
 
       <section
         ref={sectionRef}
-        className="relative py-28 sm:py-40 px-6 [&_*::selection]:bg-[#FF5C00] [&_*::selection]:text-[#FEFCF8]"
-        style={{ background: "#FF5C00" }}
+        className="relative py-28 sm:py-40 px-6 bg-coda-accent [&_*::selection]:bg-white [&_*::selection]:text-coda-accent"
       >
         {/* Background — desktop only decorations, zero mobile cost */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -168,13 +168,13 @@ export default function CallToAction() {
               style={{
                 width: 420,
                 height: 420,
-                x: useTransform(spotX, [-1, 1], [-80, 80]),
-                y: useTransform(spotY, [-1, 1], [-80, 80]),
+                x: useTransform(spotX, [-1, 1], prefersReducedMotion ? [0, 0] : [-80, 80]),
+                y: useTransform(spotY, [-1, 1], prefersReducedMotion ? [0, 0] : [-80, 80]),
                 top: "50%",
                 left: "50%",
                 marginTop: -210,
                 marginLeft: -210,
-                background: "radial-gradient(circle, rgba(255,92,0,0.18) 0%, transparent 65%)",
+                background: "radial-gradient(circle, color-mix(in srgb, var(--color-coda-accent) 18%, transparent) 0%, transparent 65%)",
                 filter: "blur(30px)",
               }}
             />
@@ -211,8 +211,8 @@ export default function CallToAction() {
             <div className={`cta-btn${visible ?" in" : ""} flex flex-col items-center gap-4`}>
               <MagneticButton variant="accent" onClick={openForm}>
                 <span
-                  className="flex items-center gap-2 sm:gap-3 bg-[#FF5C00] text-white px-5 py-2.5 sm:px-9 sm:py-4 rounded-xl font-sans font-semibold text-[12px] sm:text-[15px] tracking-[-0.01em]"
-                  style={{ boxShadow: "0 8px 24px rgba(255,92,0,0.4)" }}
+                  className="flex items-center gap-2 sm:gap-3 bg-coda-accent text-white px-5 py-2.5 sm:px-9 sm:py-4 rounded-xl font-sans font-semibold text-[12px] sm:text-[15px] tracking-[-0.01em]"
+                  style={{ boxShadow: "0 8px 24px color-mix(in srgb, var(--color-coda-accent) 40%, transparent)" }}
                 >
                   Start a project
                   <ArrowRight className="w-4 h-4" />
