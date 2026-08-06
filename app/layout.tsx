@@ -181,9 +181,6 @@ export default function RootLayout({
             </VideoPreloadProvider>
           </FormModalProvider>
         </LenisProvider>
-        {/* impeccable-live-start */}
-        <Script src="http://localhost:8400/live.js?token=1b2b52b5-38fd-4a7e-9021-bc4b27b13797" strategy="afterInteractive" />
-        {/* impeccable-live-end */}
       </body>
     </html>
   );
