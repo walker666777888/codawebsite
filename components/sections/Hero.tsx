@@ -26,8 +26,14 @@ const PARTICLES = Array.from({ length: 70 }).map((_, i) => ({
 function DataParticles() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1] md:hidden">
+      <style>{`
+        @keyframes particleUp {
+          0% { transform: translateY(0vh); }
+          100% { transform: translateY(var(--y-offset, -100vh)); }
+        }
+      `}</style>
       {PARTICLES.map((p) => (
-        <motion.div
+        <div
           key={p.id}
           className={`absolute rounded-full ${p.isOrange ?'bg-[#FF5C00]' : 'bg-white'}`}
           style={{
@@ -36,9 +42,9 @@ function DataParticles() {
             height: p.size,
             bottom: "-10%",
             opacity: p.isOrange ? 0.7 : 0.25,
-          }}
-          animate={{ y: [`0vh`, `${p.yOffset}vh`] }}
-          transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: "linear" }}
+            "--y-offset": `${p.yOffset}vh`,
+            animation: `particleUp ${p.duration}s linear ${p.delay}s infinite`
+          } as React.CSSProperties}
         />
       ))}
     </div>
@@ -79,9 +85,10 @@ function DynamicHex() {
     const chars = "0123456789ABCDEF";
     let animationFrameId: number;
     let lastTime = 0;
+    let isVisible = false;
 
     const animate = (time: number) => {
-      if (time - lastTime > 80) {
+      if (isVisible && time - lastTime > 80) {
         if (hexRef.current) {
           let result = "";
           for (let i = 0; i < 12; i++) {
@@ -94,8 +101,17 @@ function DynamicHex() {
       animationFrameId = requestAnimationFrame(animate);
     };
 
+    const observer = new IntersectionObserver((entries) => {
+      isVisible = entries[0].isIntersecting;
+    });
+
+    if (hexRef.current) observer.observe(hexRef.current);
+
     animationFrameId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationFrameId);
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
+    };
   }, []);
 
   return <div ref={hexRef} className="text-[#FF5C00] opacity-70">A4B9C2D1E8F3</div>;

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, DM_Sans, DM_Mono, Unbounded, Syne } from "next/font/google";
+import Script from "next/script";
+import { Space_Mono, Unbounded } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/providers/LenisProvider";
 import FormModalProvider from "@/components/providers/FormModalProvider";
@@ -10,32 +11,18 @@ import PageReveal from "@/components/ui/PageReveal";
 import GrainOverlay from "@/components/ui/GrainOverlay";
 import CustomCursor from "@/components/ui/CustomCursor";
 
-const instrumentSerif = Instrument_Serif({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-instrument-serif",
-});
 
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
-});
 
-const dmMono = DM_Mono({
-  weight: ["400", "500"],
+const spaceMono = Space_Mono({
+  weight: ["400", "700"],
   subsets: ["latin"],
-  variable: "--font-dm-mono",
+  variable: "--font-space-mono",
 });
 
 const unbounded = Unbounded({
   weight: ["900"],
   subsets: ["latin"],
   variable: "--font-unbounded",
-});
-
-const syne = Syne({
-  subsets: ["latin"],
-  variable: "--font-syne",
 });
 
 const SITE_URL = "https://www.coda.studio";
@@ -166,9 +153,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${instrumentSerif.variable} ${dmSans.variable} ${dmMono.variable} ${unbounded.variable} ${syne.variable} antialiased`}
+      className={`${spaceMono.variable} ${unbounded.variable} antialiased`}
     >
       <head>
+        <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -193,6 +181,9 @@ export default function RootLayout({
             </VideoPreloadProvider>
           </FormModalProvider>
         </LenisProvider>
+        {/* impeccable-live-start */}
+        <Script src="http://localhost:8400/live.js?token=1b2b52b5-38fd-4a7e-9021-bc4b27b13797" strategy="afterInteractive" />
+        {/* impeccable-live-end */}
       </body>
     </html>
   );

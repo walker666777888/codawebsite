@@ -12,9 +12,9 @@
   --color-paper-lavender: #BAB3C8;
   --color-paper-sticky: #F6F3E6;
 
-  --font-instrument: var(--font-syne), sans-serif;
-  --font-sans: var(--font-dm-sans), sans-serif;
-  --font-mono: var(--font-dm-mono), monospace;
+  --font-instrument: 'Clash Display', sans-serif;
+  --font-sans: 'Satoshi', sans-serif;
+  --font-mono: var(--font-space-mono), monospace;
 
   --ease-coda-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --animate-duration-fast: 150ms;

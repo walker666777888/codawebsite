@@ -84,7 +84,7 @@ export default function Navbar() {
           </Link>
           </motion.div>
             {/* Desktop nav — absolutely centered */}
-            <motion.nav layout className="hidden sm:flex items-center gap-2 text-[16px] font-instrument font-semibold absolute left-1/2 -translate-x-1/2">
+            <motion.nav layout className="hidden sm:flex items-center gap-2 text-[16px] font-instrument absolute left-1/2 -translate-x-1/2">
               {NAV_ANCHOR_LINKS.map((link, i) => (
                 <motion.div key={link.label}
                   initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}

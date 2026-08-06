@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-06T22:15:00Z",
+  "title": "Design System: Citizen Of Digital Age",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Digital Flame", "canonical": "#FF5C00", "tonalRamp": ["#331200", "#662500", "#993700", "#CC4A00", "#FF5C00", "#FF7C33", "#FF9D66", "#FFBD99", "#FFDECC"] },
+      "neutral-bg": { "role": "neutral", "displayName": "Paper Warmth", "canonical": "#F4F0E8", "tonalRamp": ["#302A1F", "#61553E", "#91805D", "#C2AA7C", "#F3D59B", "#F4F0E8", "#F7F4EF", "#FAF8F5", "#FDFCFB"] },
+      "ink": { "role": "neutral", "displayName": "Deep Ink", "canonical": "#0D0D0B", "tonalRamp": ["#000000", "#0D0D0B", "#1A1A16", "#33332C", "#4D4D42", "#666658", "#80806E", "#999984", "#B3B39A"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display (Playfair)", "purpose": "Hero headlines only." },
+      "body": { "displayName": "Body (Montserrat)", "purpose": "Main reading text." },
+      "label": { "displayName": "Label (Space Mono)", "purpose": "Technical metadata and tags." }
+    },
+    "shadows": [
+      { "name": "accent-glow", "value": "0 16px 40px -12px rgba(255, 92, 0, 0.35)", "purpose": "Interactive glow for primary buttons." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main call to action.",
+      "html": "<button class=\"ds-btn-primary\"><span>Start a project</span><span class=\"ds-arrow\">→</span></button>",
+      "css": ".ds-btn-primary { background: #FF5C00; color: #fff; padding: 16px 32px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: -0.01em; font-weight: 600; border: none; border-radius: 9999px; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; } .ds-btn-primary:hover { box-shadow: 0 16px 40px -12px rgba(255, 92, 0, 0.35); } .ds-arrow { transition: transform 0.3s ease-out; } .ds-btn-primary:hover .ds-arrow { transform: translateX(4px); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Engineered Gallery",
+    "overview": "This system represents absolute digital precision blended with warm, tactile sophistication. It is unapologetically high-tech and sleek but deliberately offsets the coldness of raw data with organic, editorial typography (Playfair Display) and warm paper-like background colors. It is built to compound and scale without ever feeling generic.\n\nKey Characteristics:\n- Tactical use of a vibrant accent color (#FF5C00) against muted paper backgrounds.\n- High-contrast, editorial display typography paired with technical monospace labels.\n- Micro-interactions that feel buttery smooth and responsive.\n- Fluid, physics-driven animations (WebGL and spring-based UI) rather than static layouts.",
+    "keyCharacteristics": [
+      "Tactical use of a vibrant accent color (#FF5C00) against muted paper backgrounds.",
+      "High-contrast, editorial display typography paired with technical monospace labels.",
+      "Micro-interactions that feel buttery smooth and responsive.",
+      "Fluid, physics-driven animations (WebGL and spring-based UI) rather than static layouts."
+    ],
+    "rules": [
+      { "name": "The Surgical Accent Rule", "body": "Digital Flame (#FF5C00) must never be used as a large background fill. It is a highlighter, a laser pointer, and a call to action.", "section": "colors" },
+      { "name": "The Typographic Tension Rule", "body": "Never use Montserrat (sans-serif) for large expressive headlines. Never use Playfair Display for small UI elements.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest. Shadows appear only as a response to state (hover, elevation, focus) or as abstract ambient lighting.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do rely on generous vertical spacing (`py-24`, `py-36`) to let sections breathe.",
+      "Do mix the Playfair serif with Space Mono for technical metadata."
+    ],
+    "donts": [
+      "Don't use drop shadows to separate static content containers; use 1px grid lines instead.",
+      "Don't center-align body copy longer than 3 lines.",
+      "Don't overuse the #FF5C00 accent; its rarity is its power."
+    ]
+  }
+}

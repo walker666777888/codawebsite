@@ -120,16 +120,24 @@ export default function WorkShowcase() {
     const ro = new ResizeObserver(measure);
     ro.observe(track);
 
+    let isVisible = true;
+    const io = new IntersectionObserver((entries) => {
+      isVisible = entries[0].isIntersecting;
+    });
+    io.observe(track);
+
     /* RAF loop — runs every frame, updates only transform */
     const tick = () => {
-      if (!isDragging.current) {
-        offsetRef.current -= speed;
+      if (isVisible) {
+        if (!isDragging.current) {
+          offsetRef.current -= speed;
+        }
+        /* Seamless wrap — when we've scrolled one full set, reset */
+        if (halfW.current > 0 && offsetRef.current <= -halfW.current) {
+          offsetRef.current += halfW.current;
+        }
+        track.style.transform = `translateX(${offsetRef.current}px)`;
       }
-      /* Seamless wrap — when we've scrolled one full set, reset */
-      if (halfW.current > 0 && offsetRef.current <= -halfW.current) {
-        offsetRef.current += halfW.current;
-      }
-      track.style.transform = `translateX(${offsetRef.current}px)`;
       rafId.current = requestAnimationFrame(tick);
     };
     rafId.current = requestAnimationFrame(tick);
@@ -137,6 +145,7 @@ export default function WorkShowcase() {
     return () => {
       cancelAnimationFrame(rafId.current);
       ro.disconnect();
+      io.disconnect();
     };
   }, []);
 
