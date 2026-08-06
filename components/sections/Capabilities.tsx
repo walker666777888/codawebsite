@@ -152,10 +152,10 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
           </div>
 
           {/* Content */}
-          <div className="relative z-[10] p-5 sm:p-8 flex flex-col flex-1 min-h-[300px] sm:min-h-[360px] justify-between">
-            <div>
+          <div className="relative z-[10] p-5 sm:p-8 flex flex-col gap-8 flex-1 min-h-[300px] sm:min-h-[360px] justify-between">
+            <div className="flex flex-col gap-5 sm:gap-6">
               {/* Header row */}
-              <div className="flex items-center justify-between mb-6 sm:mb-10">
+              <div className="flex items-center justify-between">
                 <span className="font-mono text-[11px] text-[#6F6A60] tracking-widest">{card.num}</span>
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center border border-[#0D0D0B]/[0.1] bg-[#0D0D0B]/[0.04] group-hover:border-[#0D0D0B]/30 transition-all duration-400"
@@ -166,9 +166,10 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
               </div>
 
               {/* Title */}
-              <h3
-                className="font-instrument leading-[1.08] tracking-[-0.025em] text-[#0D0D0B]/80 group-hover:text-[#0D0D0B] transition-colors duration-400 mb-4"
-                style={{ fontSize: "clamp(22px, 5vw, 32px)" }}
+              <div className="flex flex-col gap-4">
+                <h3
+                  className="font-instrument leading-[1.08] tracking-[-0.025em] text-[#0D0D0B]/80 group-hover:text-[#0D0D0B] transition-colors duration-400"
+                  style={{ fontSize: "clamp(22px, 5vw, 32px)" }}
               >
                 {card.title}
                 <br />
@@ -187,11 +188,12 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
                 <p className="font-sans text-[14px] text-[#4A463F] leading-[1.7] group-hover:text-[#0D0D0B]/65 transition-colors duration-500">
                   {card.desc}
                 </p>
+                </div>
               </div>
             </div>
 
             {/* Tags */}
-            <div className="flex flex-wrap gap-2 mt-8">
+            <div className="flex flex-wrap gap-2">
               {card.tags.map((tag, ti) => (
                 <motion.span
                   key={tag}
@@ -231,16 +233,17 @@ export default function Capabilities() {
         style={{ background: "radial-gradient(ellipse, #FF5C00 0%, transparent 70%)" }}
       />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto flex flex-col gap-10 sm:gap-16 lg:gap-20">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10 sm:mb-16 lg:mb-20">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col gap-4"
           >
-            <SectionLabel index={4} className="mb-4">Capabilities</SectionLabel>
+            <SectionLabel index={4}>Capabilities</SectionLabel>
             <h2
               className="font-instrument text-[#0D0D0B] tracking-[-0.03em] leading-[1.05]"
               style={{ fontSize: "clamp(36px, 4.5vw, 60px)" }}

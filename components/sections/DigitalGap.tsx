@@ -386,8 +386,8 @@ export default function DigitalGap() {
       <div className="absolute inset-x-0 bottom-0 h-[2px] bg-[#E6E1DA] z-10 overflow-hidden">
         <div ref={progressRef} className="absolute inset-0 bg-[#FF5C00] origin-left" style={{ transform: "scaleX(0)" }} />
       </div>
-      <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-center">
-        <SectionLabel index={1} className="mb-12 inline-flex w-fit px-3 py-1.5 rounded-full"
+      <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-center gap-12">
+        <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full"
           style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
         >The Digital Gap</SectionLabel>
         <div className="grid grid-cols-2 gap-20 items-center">
@@ -429,8 +429,8 @@ export default function DigitalGap() {
       <div className="relative z-10 h-full px-5 flex flex-col justify-between pt-20 pb-6">
 
         {/* Top: Label + Text */}
-        <div>
-          <SectionLabel index={1} className="mb-8 inline-flex w-fit px-3 py-1.5 rounded-full"
+        <div className="flex flex-col gap-8">
+          <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full"
             style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
           >The Digital Gap</SectionLabel>
           <div ref={mobileTextRef} className="relative" style={{ height: 120 }}>

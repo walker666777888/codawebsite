@@ -44,8 +44,8 @@ const projects = [
 /* ── ProjectCard ─────────────────────────────────────────────── */
 function ProjectCard({ project, index }: { project: (typeof projects)[0]; index: number }) {
   return (
-    <div className="shrink-0 w-[78vw] sm:w-[55vw] md:w-[42vw] lg:w-[34vw] group select-none">
-      <div className={`aspect-[4/3] bg-gradient-to-br ${project.gradient} rounded-2xl mb-5 relative overflow-hidden`}>
+    <div className="shrink-0 w-[78vw] sm:w-[55vw] md:w-[42vw] lg:w-[34vw] group select-none flex flex-col gap-5">
+      <div className={`aspect-[4/3] bg-gradient-to-br ${project.gradient} rounded-2xl relative overflow-hidden`}>
         {/* Grid */}
         <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
           style={{ backgroundImage: "linear-gradient(to right,#fff 1px,transparent 1px),linear-gradient(to bottom,#fff 1px,transparent 1px)", backgroundSize: "32px 32px" }} />
@@ -82,9 +82,9 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
       </div>
       {/* Footer */}
       <div className="flex justify-between items-start px-1">
-        <div>
-          <h3 className="font-instrument text-[22px] text-[#0D0D0B] tracking-[-0.02em] leading-none mb-1.5">{project.title}</h3>
-          <p className="font-sans text-[13px] text-[#9A9287] mt-0.5">{project.category}</p>
+        <div className="flex flex-col gap-1">
+          <h3 className="font-instrument text-[22px] text-[#0D0D0B] tracking-[-0.02em] leading-none">{project.title}</h3>
+          <p className="font-sans text-[13px] text-[#9A9287]">{project.category}</p>
         </div>
         <span className="font-mono text-[11px] tracking-[0.1em] text-[#B0AA9F]">{project.year}</span>
       </div>
@@ -163,17 +163,18 @@ export default function WorkShowcase() {
   const onPointerUp = () => { isDragging.current = false; };
 
   return (
-    <section id="work" ref={sectionRef} className="py-16 sm:py-24 lg:py-36 bg-[#F4F0E8] overflow-hidden relative">
+    <section id="work" ref={sectionRef} className="py-16 sm:py-24 lg:py-36 bg-[#F4F0E8] overflow-hidden relative flex flex-col gap-14">
       {/* Separators */}
       <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#D6D1CB] to-transparent" />
       <div className="absolute inset-0 pointer-events-none opacity-[0.35]"
         style={{ backgroundImage: "linear-gradient(to right,#E6E1DA 1px,transparent 1px),linear-gradient(to bottom,#E6E1DA 1px,transparent 1px)", backgroundSize: "60px 60px" }} />
 
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-6 relative z-10 mb-14">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.div initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
-          <SectionLabel index={3} className="mb-5 block">Selected Work</SectionLabel>
+          viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col gap-5">
+          <SectionLabel index={3} className="block">Selected Work</SectionLabel>
           <h2 className="font-instrument tracking-[-0.03em] text-[#0D0D0B] leading-[1.04]"
             style={{ fontSize: "clamp(36px,5vw,66px)" }}>
             Digital ecosystems <span className="text-[#FF5C00]">in action.</span>

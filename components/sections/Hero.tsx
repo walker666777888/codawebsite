@@ -229,11 +229,11 @@ export default function Hero() {
       {/* ── Main content ─────────────────────────────────── */}
       <motion.div
         style={{ y: textY, opacity: fade }}
-        className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pt-16 sm:pt-20 pointer-events-none"
+        className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pt-16 sm:pt-20 gap-8 md:gap-12 pointer-events-none"
       >
 
         {/* Brand name Desktop (WarpText) */}
-        <div className="hidden md:flex w-full justify-center mb-2 sm:mb-3 mt-4 md:mt-0 font-instrument pointer-events-auto">
+        <div className="hidden md:flex w-full justify-center font-instrument pointer-events-auto">
           <WarpText
             text="Citizen Of Digital Age."
             color="#FF5C00"
@@ -255,7 +255,7 @@ export default function Hero() {
 
         {/* Brand name Mobile (Original) */}
         <h1
-          className="md:hidden font-instrument tracking-[-0.04em] leading-[1.04] -mt-8 mb-16 sm:mb-20 text-center"
+          className="md:hidden font-instrument tracking-[-0.04em] leading-[1.04] text-center"
           style={{ fontSize: "clamp(62px, 10.5vw, 118px)" }}
         >
           {(["Citizen", "Of", "Digital Age."] as Array<string>).map((word, wi) => (
@@ -324,7 +324,7 @@ export default function Hero() {
 
         {/* Tagline */}
         <motion.div
-          className="flex items-center gap-4 mb-12 sm:mb-14 -mt-6 sm:-mt-8"
+          className="flex items-center gap-4"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 2.1, ease: [0.16, 1, 0.3, 1] }}
@@ -341,7 +341,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
-          className="font-sans text-[13px] sm:text-[17px] text-white/55 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-[1.75] mb-14 sm:mb-16"
+          className="font-sans text-[13px] sm:text-[17px] text-white/55 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-[1.75]"
         >
           We don&apos;t just build products. We architect the unfair advantage your competitors can&apos;t copy.
         </motion.p>

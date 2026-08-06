@@ -181,7 +181,7 @@ function DraggableCard({
     >
       {/* Paper card */}
       <div
-        className="relative rounded-2xl overflow-visible"
+        className="relative rounded-2xl overflow-visible flex flex-col gap-4"
         style={{
           background: card.bg,
           border: `1px solid ${card.border}`,
@@ -192,7 +192,7 @@ function DraggableCard({
         {card.pin && <Pushpin color={card.pinColor} />}
 
         {/* Category */}
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-center gap-2">
           <div
             className="w-1.5 h-1.5 rounded-full shrink-0"
             style={{ background: card.dot, boxShadow: `0 0 5px ${card.dot}` }}
@@ -204,7 +204,7 @@ function DraggableCard({
 
         {/* Title */}
         <h3
-          className="font-instrument tracking-[-0.03em] leading-[1.05] text-[#0D0D0B] mb-3"
+          className="font-instrument tracking-[-0.03em] leading-[1.05] text-[#0D0D0B]"
           style={{ fontSize: "clamp(22px, 2.2vw, 28px)" }}
         >
           {card.title}{" "}
@@ -212,7 +212,7 @@ function DraggableCard({
         </h3>
 
         {/* Body */}
-        <p className="font-sans text-[13px] text-[#4A463F] leading-[1.75] mb-5">
+        <p className="font-sans text-[13px] text-[#4A463F] leading-[1.75]">
           {card.body}
         </p>
 
@@ -450,16 +450,16 @@ export default function Philosophy() {
           {/* Mobile fallback — simple stacked cards */}
           <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
             {CARDS.map((card, i) => (
-              <div key={card.id} className={`rounded-2xl p-6${i >= 4 ?" hidden sm:block" : ""}`}
+              <div key={card.id} className={`rounded-2xl p-6 flex flex-col gap-3${i >= 4 ?" hidden sm:block" : ""}`}
                 style={{ background: card.bg, border: `1px solid ${card.border}`, boxShadow: card.shadow }}>
-                <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full" style={{ background: card.dot }} />
                   <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#6F6A60]">{card.category}</span>
                 </div>
-                <h3 className="font-instrument text-[28px] tracking-[-0.03em] text-[#0D0D0B] mb-2">
+                <h3 className="font-instrument text-[28px] tracking-[-0.03em] text-[#0D0D0B]">
                   {card.title} <span className="text-[#FF5C00]">{card.accent}</span>
                 </h3>
-                <p className="font-sans text-[13px] text-[#4A463F] leading-[1.75] mb-4">{card.body}</p>
+                <p className="font-sans text-[13px] text-[#4A463F] leading-[1.75]">{card.body}</p>
                 <div className="border-t pt-3" style={{ borderColor: "rgba(13,13,11,0.08)" }}>
                   <span className="font-mono text-[8.5px] tracking-[0.18em] text-[#9A9488] uppercase">{card.tags}</span>
                 </div>

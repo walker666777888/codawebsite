@@ -217,7 +217,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
       {/* Content */}
       <div className="relative z-10 flex flex-col justify-between h-full p-7 md:p-9">
         {/* Top meta */}
-        <div className="flex items-start justify-between gap-2 mb-6">
+        <div className="flex items-start justify-between gap-2">
           <span className="font-mono text-[10px] tracking-[0.24em] text-[#9A9488] uppercase">
             {String(index + 1).padStart(2, "0")}
           </span>
@@ -245,8 +245,8 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
         </motion.div>
 
         {/* Bottom — glass plate keeps copy crisp over the animation */}
-        <div className="mt-auto -mx-2 px-2 py-1.5 rounded-xl transition-colors duration-300 group-hover:bg-[#FBF9F4]/60">
-          <p className="font-sans text-[15px] font-medium text-[#14130F] leading-tight mb-2">
+        <div className="mt-auto flex flex-col gap-2 -mx-2 px-2 py-1.5 rounded-xl transition-colors duration-300 group-hover:bg-[#FBF9F4]/60">
+          <p className="font-sans text-[15px] font-medium text-[#14130F] leading-tight">
             {stat.label}
           </p>
           <p className="font-sans text-[12px] text-[#6F6A60] leading-relaxed">
@@ -284,17 +284,17 @@ export default function BentoMetrics() {
       />
 
       {/* Contained to match the rest of the site (no longer edge-to-edge) */}
-      <div className="max-w-7xl mx-auto w-full">
+      <div className="max-w-7xl mx-auto w-full flex flex-col gap-6">
         {/* Section header */}
         <motion.div
           ref={headerRef}
           initial={{ opacity: 0, y: 20 }}
           animate={headerInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-end justify-between mb-6 border-t border-[#0D0D0B]/[0.1] pt-8"
+          className="flex items-end justify-between border-t border-[#0D0D0B]/[0.1] pt-8"
         >
-          <div>
-            <p className="font-mono text-[10px] text-[#6F6A60] uppercase tracking-[0.28em] mb-3">
+          <div className="flex flex-col gap-3">
+            <p className="font-mono text-[10px] text-[#6F6A60] uppercase tracking-[0.28em]">
               Impact Metrics
             </p>
             <h2

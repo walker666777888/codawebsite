@@ -178,34 +178,37 @@ export default function CallToAction() {
                 filter: "blur(30px)",
               }}
             />
-            {/* Headline */}
-            <div>
-              <div className="cta-line-wrap">
-                <WaveText
-                  text="Ready to"
-                  className={`cta-line${visible ?" in-0" : ""} font-instrument tracking-[-0.04em] leading-[1.0]`}
-                  style={{ fontSize: "clamp(64px, 10vw, 130px)" }}
-                />
+            {/* Content Group (Headline + Sub-copy) */}
+            <div className="flex flex-col items-center gap-5 sm:gap-6">
+              {/* Headline */}
+              <div>
+                <div className="cta-line-wrap">
+                  <WaveText
+                    text="Ready to"
+                    className={`cta-line${visible ?" in-0" : ""} font-instrument tracking-[-0.04em] leading-[1.0]`}
+                    style={{ fontSize: "clamp(64px, 10vw, 130px)" }}
+                  />
+                </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={visible ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.85, delay: 0.36, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <WaveText
+                    text="Dominate!"
+                    className="font-instrument tracking-[-0.04em] leading-[1.0]"
+                    style={{ fontSize: "clamp(64px, 10vw, 130px)" }}
+                  />
+                </motion.div>
               </div>
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                animate={visible ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.85, delay: 0.36, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <WaveText
-                  text="Dominate!"
-                  className="font-instrument tracking-[-0.04em] leading-[1.0]"
-                  style={{ fontSize: "clamp(64px, 10vw, 130px)" }}
-                />
-              </motion.div>
-            </div>
 
-            {/* Sub-copy */}
-            <p
-              className={`cta-sub${visible ?" in" : ""} font-sans text-[12px] sm:text-[17px] text-white/60 max-w-[240px] sm:max-w-md leading-[1.65] sm:leading-[1.7]`}
-            >
-              Most agencies build features. We build systems that outlast them.
-            </p>
+              {/* Sub-copy */}
+              <p
+                className={`cta-sub${visible ?" in" : ""} font-sans text-[12px] sm:text-[17px] text-white/60 max-w-[240px] sm:max-w-md leading-[1.65] sm:leading-[1.7]`}
+              >
+                Most agencies build features. We build systems that outlast them.
+              </p>
+            </div>
 
             {/* CTA button */}
             <div className={`cta-btn${visible ?" in" : ""} flex flex-col items-center gap-4`}>

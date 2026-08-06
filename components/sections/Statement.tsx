@@ -769,9 +769,9 @@ function DisciplineStrip({
         </div>
 
         {/* ── Text column ── */}
-        <div className="py-10 md:py-14 px-7 md:px-10 flex flex-col justify-between border-r border-[#0D0D0B]/[0.08]">
+        <div className="py-10 md:py-14 px-7 md:px-10 flex flex-col justify-between gap-6 md:gap-8 border-r border-[#0D0D0B]/[0.08]">
           {/* Title */}
-          <div>
+          <div className="flex flex-col gap-6">
             <div className="overflow-hidden mb-0.5">
               <motion.h3
                 className="font-instrument tracking-[-0.03em] leading-[1.05] text-[#0D0D0B]"
@@ -797,7 +797,7 @@ function DisciplineStrip({
 
             {/* Description */}
             <motion.p
-              className="mt-6 font-sans text-[14px] text-[#4A463F] leading-[1.8] max-w-sm"
+              className="font-sans text-[14px] text-[#4A463F] leading-[1.8] max-w-sm"
               initial={{ opacity: 0, y: 14 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
               transition={{ duration: 0.8, delay: 0.35 + index * 0.1 }}
@@ -807,7 +807,7 @@ function DisciplineStrip({
           </div>
 
           {/* Capabilities list */}
-          <div className="mt-8 space-y-2">
+          <div className="space-y-2">
             {d.capabilities.map((cap, ci) => (
               <motion.div
                 key={ci}
@@ -831,7 +831,7 @@ function DisciplineStrip({
           </div>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-2 mt-6">
+          <div className="flex flex-wrap gap-2">
             {d.tags.map((tag, ti) => (
               <motion.span
                 key={tag}
@@ -1552,7 +1552,7 @@ function HeaderBlock({
   }, []);
 
   return (
-    <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 lg:pt-32 pb-12 sm:pb-20 relative z-10">
+    <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 lg:pt-32 pb-12 sm:pb-20 relative z-10 flex flex-col gap-16">
 
       {/* ── Two-column layout ──────────────────────────────── */}
       <motion.div
@@ -1569,11 +1569,11 @@ function HeaderBlock({
             their reveal props mid-life. */}
         <div
           key={mobile ? "mobile" : "desktop"}
-          className="overflow-visible"
+          className="overflow-visible flex flex-col gap-10"
         >
           {/* Label */}
           <div
-            className="flex items-center gap-4 mb-12"
+            className="flex items-center gap-4"
           >
             <div
               className="h-[1px] w-12 bg-[#FF5C00] origin-left"
@@ -1595,14 +1595,14 @@ function HeaderBlock({
 
           {/* Sub-copy */}
           <p
-            className="mt-10 font-sans text-[14.5px] text-[#4A463F] max-w-full sm:max-w-[380px] leading-[1.9]">
+            className="font-sans text-[14.5px] text-[#4A463F] max-w-full sm:max-w-[380px] leading-[1.9]">
             Three disciplines Technology, Design, and Growth.  unified into one
             system that compounds over time and gives our clients an unfair advantage.
           </p>
 
           {/* Stats — premium light card */}
           <div
-            className="mt-10 relative rounded-2xl overflow-hidden"
+            className="relative rounded-2xl overflow-hidden"
             style={{
               background: "linear-gradient(160deg, #FFFFFF 0%, #FAF7F2 100%)",
               border: "1px solid rgba(13,13,11,0.09)",
@@ -1673,7 +1673,7 @@ function HeaderBlock({
       </motion.div>
 
       {/* ── Static orange divider ─────────────────────────── */}
-      <div className="mt-16 relative">
+      <div className="relative">
         <div className="h-px w-full bg-[#FF5C00] rounded-full opacity-80" />
       </div>
 
