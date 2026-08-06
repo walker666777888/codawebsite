@@ -215,7 +215,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col justify-between h-full p-7 md:p-9">
+      <div className="relative z-10 flex flex-col h-full p-6 md:p-8">
         {/* Top meta */}
         <div className="flex items-start justify-between gap-2">
           <span className="font-mono text-[10px] tracking-[0.24em] text-[#9A9488] uppercase">
@@ -233,19 +233,19 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
 
         {/* Metric — extra large, gentle parallax + glass plate for legibility */}
         <motion.div
-          className="my-auto py-2"
+          className="mt-auto mb-3 md:mb-5 pt-8"
           style={reduced ? undefined : { y: numberY }}
         >
           <div
-            className="font-instrument text-[#14130F] leading-[0.88] tracking-[-0.03em] tabular-nums transition-colors duration-500 group-hover:text-[#FF5C00]"
-            style={{ fontSize: large ? "clamp(80px, 11vw, 140px)" : "clamp(64px, 8vw, 110px)" }}
+            className="font-instrument text-[#14130F] leading-[0.85] tracking-[-0.04em] tabular-nums transition-colors duration-500 group-hover:text-[#FF5C00]"
+            style={{ fontSize: large ? "clamp(48px, 12vw, 120px)" : "clamp(40px, 8vw, 96px)" }}
           >
             <AnimatedCounter value={stat.value} suffix={stat.suffix} />
           </div>
         </motion.div>
 
         {/* Bottom — glass plate keeps copy crisp over the animation */}
-        <div className="mt-auto flex flex-col gap-2 -mx-2 px-2 py-1.5 rounded-xl transition-colors duration-300 group-hover:bg-[#FBF9F4]/60">
+        <div className="flex flex-col gap-2 -mx-2 px-2 py-1.5 rounded-xl transition-colors duration-300 group-hover:bg-[#FBF9F4]/60">
           <p className="font-sans text-[15px] font-medium text-[#14130F] leading-tight">
             {stat.label}
           </p>

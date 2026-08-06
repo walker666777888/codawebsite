@@ -229,7 +229,7 @@ export default function Hero() {
       {/* ── Main content ─────────────────────────────────── */}
       <motion.div
         style={{ y: textY, opacity: fade }}
-        className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pt-16 sm:pt-20 gap-8 md:gap-12 pointer-events-none"
+        className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pt-16 sm:pt-20 gap-4 md:gap-6 pointer-events-none"
       >
 
         {/* Brand name Desktop (WarpText) */}
@@ -322,44 +322,45 @@ export default function Hero() {
           ))}
         </h1>
 
-        {/* Tagline */}
-        <motion.div
-          className="flex items-center gap-4"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 2.1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <span className="h-[1px] w-10 bg-white/20 block shrink-0" />
-          <p className="font-instrument text-white/75 text-[18px] sm:text-[24px] md:text-[34px] tracking-[-0.02em] text-center whitespace-nowrap">
-            Dominate the <span className="text-coda-accent">Digital Age.</span>
-          </p>
-          <span className="h-[1px] w-10 bg-white/20 block shrink-0" />
-        </motion.div>
+        <div className="flex flex-col items-center gap-5 sm:gap-7 md:-mt-12">
+          {/* Tagline */}
+          <motion.div
+            className="flex items-center gap-4"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 2.1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="h-[1px] w-10 bg-white/20 block shrink-0" />
+            <p className="font-instrument text-white/75 text-[18px] sm:text-[24px] md:text-[34px] tracking-[-0.02em] text-center whitespace-nowrap">
+              Engineer your <span className="text-coda-accent">unfair advantage.</span>
+            </p>
+            <span className="h-[1px] w-10 bg-white/20 block shrink-0" />
+          </motion.div>
 
-        {/* Sub-copy */}
-        <motion.p
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
-          className="font-sans text-[13px] sm:text-[17px] text-white/55 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-[1.75]"
-        >
-          We don&apos;t just build products. We architect the unfair advantage your competitors can&apos;t copy.
-        </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
+            className="font-sans text-[14px] sm:text-[16px] text-white/55 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-relaxed"
+          >
+            We unify technology, design, and growth into compounding digital ecosystems that outpace your competition.
+          </motion.p>
 
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 2.4, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-center gap-5 pointer-events-auto"
-        >
-          <MagneticButton variant="primary" onClick={openForm}>
-            <span className="flex items-center gap-2 font-sans font-semibold text-[14px] px-8 py-3.5 tracking-[-0.01em]">
-              Start a project
-              <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
-            </span>
-          </MagneticButton>
-        </motion.div>
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 2.4, ease: [0.16, 1, 0.3, 1] }}
+            className="flex items-center gap-5 pointer-events-auto"
+          >
+            <MagneticButton variant="primary" onClick={openForm}>
+              <span className="flex items-center gap-2 font-sans font-semibold text-[14px] px-8 py-3.5 tracking-[-0.01em]">
+                Start a project
+                <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
+              </span>
+            </MagneticButton>
+          </motion.div>
+        </div>
       </motion.div>
 
 

@@ -168,8 +168,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
               {/* Title */}
               <div className="flex flex-col gap-4">
                 <h3
-                  className="font-instrument leading-[1.08] tracking-[-0.025em] text-[#0D0D0B]/80 group-hover:text-[#0D0D0B] transition-colors duration-400"
-                  style={{ fontSize: "clamp(22px, 5vw, 32px)" }}
+                  className="font-instrument leading-[1.08] tracking-[-0.01em] text-[#0D0D0B]/80 group-hover:text-[#0D0D0B] transition-colors duration-400 text-h3"
               >
                 {card.title}
                 <br />
@@ -185,7 +184,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
                   border: "1px solid rgba(255,255,255,0.6)",
                 }}
               >
-                <p className="font-sans text-[14px] text-[#4A463F] leading-[1.7] group-hover:text-[#0D0D0B]/65 transition-colors duration-500">
+                <p className="font-sans text-[15px] text-[#4A463F] leading-relaxed group-hover:text-[#0D0D0B]/65 transition-colors duration-500">
                   {card.desc}
                 </p>
                 </div>
@@ -245,8 +244,7 @@ export default function Capabilities() {
           >
             <SectionLabel index={4}>Capabilities</SectionLabel>
             <h2
-              className="font-instrument text-[#0D0D0B] tracking-[-0.03em] leading-[1.05]"
-              style={{ fontSize: "clamp(36px, 4.5vw, 60px)" }}
+              className="font-instrument text-[#0D0D0B] tracking-[-0.03em] leading-[1.05] text-h2"
             >
               Your stack.
               <br />

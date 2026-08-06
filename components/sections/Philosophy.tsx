@@ -204,15 +204,14 @@ function DraggableCard({
 
         {/* Title */}
         <h3
-          className="font-instrument tracking-[-0.03em] leading-[1.05] text-[#0D0D0B]"
-          style={{ fontSize: "clamp(22px, 2.2vw, 28px)" }}
+          className="font-instrument tracking-[-0.01em] leading-[1.05] text-[#0D0D0B] text-h4"
         >
           {card.title}{" "}
           <span className="text-[#FF5C00]">{card.accent}</span>
         </h3>
 
         {/* Body */}
-        <p className="font-sans text-[13px] text-[#4A463F] leading-[1.75]">
+        <p className="font-sans text-[15px] text-[#4A463F] leading-relaxed">
           {card.body}
         </p>
 
@@ -456,10 +455,10 @@ export default function Philosophy() {
                   <div className="w-1.5 h-1.5 rounded-full" style={{ background: card.dot }} />
                   <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#6F6A60]">{card.category}</span>
                 </div>
-                <h3 className="font-instrument text-[28px] tracking-[-0.03em] text-[#0D0D0B]">
+                <h3 className="font-instrument text-[28px] tracking-[-0.01em] text-[#0D0D0B]">
                   {card.title} <span className="text-[#FF5C00]">{card.accent}</span>
                 </h3>
-                <p className="font-sans text-[13px] text-[#4A463F] leading-[1.75]">{card.body}</p>
+                <p className="font-sans text-[15px] text-[#4A463F] leading-relaxed">{card.body}</p>
                 <div className="border-t pt-3" style={{ borderColor: "rgba(13,13,11,0.08)" }}>
                   <span className="font-mono text-[8.5px] tracking-[0.18em] text-[#9A9488] uppercase">{card.tags}</span>
                 </div>

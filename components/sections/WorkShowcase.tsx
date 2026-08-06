@@ -57,8 +57,8 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
           style={{ background: `linear-gradient(90deg,transparent,${project.accent},transparent)` }} />
         {/* Watermark */}
         <div className="absolute inset-0 flex items-center justify-center select-none pointer-events-none">
-          <span className="font-instrument text-white leading-none tracking-[-0.04em] opacity-[0.04]"
-            style={{ fontSize: "clamp(28px,4vw,56px)" }}>{project.title}</span>
+          <span className="font-instrument text-white leading-none tracking-[-0.04em] opacity-[0.04] text-h2"
+            >{project.title}</span>
         </div>
         {/* Number */}
         <div className="absolute top-5 left-5">
@@ -84,7 +84,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
       <div className="flex justify-between items-start px-1">
         <div className="flex flex-col gap-1">
           <h3 className="font-instrument text-[22px] text-[#0D0D0B] tracking-[-0.02em] leading-none">{project.title}</h3>
-          <p className="font-sans text-[13px] text-[#9A9287]">{project.category}</p>
+          <p className="font-sans text-[15px] text-[#9A9287]">{project.category}</p>
         </div>
         <span className="font-mono text-[11px] tracking-[0.1em] text-[#B0AA9F]">{project.year}</span>
       </div>
@@ -175,8 +175,8 @@ export default function WorkShowcase() {
           viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col gap-5">
           <SectionLabel index={3} className="block">Selected Work</SectionLabel>
-          <h2 className="font-instrument tracking-[-0.03em] text-[#0D0D0B] leading-[1.04]"
-            style={{ fontSize: "clamp(36px,5vw,66px)" }}>
+          <h2 className="font-instrument tracking-[-0.03em] text-[#0D0D0B] leading-[1.04] text-h2"
+            >
             Digital ecosystems <span className="text-[#FF5C00]">in action.</span>
           </h2>
         </motion.div>

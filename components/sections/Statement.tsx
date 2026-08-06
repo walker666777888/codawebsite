@@ -574,7 +574,7 @@ function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; 
               <span className="font-mono text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 rounded-full"
                 style={{ color: ORANGE, border: `1px solid ${ORANGE_SOFT}`, background: ORANGE_DIM }}>{tile.tags[0]}</span>
             </div>
-            <h3 className="font-instrument tracking-[-0.03em] leading-[1.04] text-[#14130F]" style={{ fontSize: "clamp(24px,1.9vw,36px)" }}>
+            <h3 className="font-instrument tracking-[-0.01em] leading-[1.04] text-[#14130F] text-h3">
               {tile.title}<br /><span className="" style={{ color: ORANGE }}>{tile.subtitle}</span>
             </h3>
             <p className="font-sans text-[12.5px] text-[#4A463F] leading-[1.65]">{tile.tagline}</p>
@@ -774,8 +774,7 @@ function DisciplineStrip({
           <div className="flex flex-col gap-6">
             <div className="overflow-hidden mb-0.5">
               <motion.h3
-                className="font-instrument tracking-[-0.03em] leading-[1.05] text-[#0D0D0B]"
-                style={{ fontSize: "clamp(36px, 4vw, 58px)" }}
+                className="font-instrument tracking-[-0.03em] leading-[1.05] text-[#0D0D0B] text-h2"
                 initial={{ y: "105%" }}
                 animate={isInView ? { y: "0%" } : { y: "105%" }}
                 transition={{ duration: 0.85, delay: 0.15 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -785,8 +784,8 @@ function DisciplineStrip({
             </div>
             <div className="overflow-hidden">
               <motion.h3
-                className="font-instrument tracking-[-0.03em] leading-[1.05]"
-                style={{ fontSize: "clamp(36px, 4vw, 58px)", color: d.accentColor }}
+                className="font-instrument tracking-[-0.03em] leading-[1.05] text-h2"
+                style={{ color: d.accentColor }}
                 initial={{ y: "105%" }}
                 animate={isInView ? { y: "0%" } : { y: "105%" }}
                 transition={{ duration: 0.85, delay: 0.22 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -797,7 +796,7 @@ function DisciplineStrip({
 
             {/* Description */}
             <motion.p
-              className="font-sans text-[14px] text-[#4A463F] leading-[1.8] max-w-sm"
+              className="font-sans text-[15px] text-[#4A463F] leading-relaxed max-w-sm"
               initial={{ opacity: 0, y: 14 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
               transition={{ duration: 0.8, delay: 0.35 + index * 0.1 }}
@@ -823,7 +822,7 @@ function DisciplineStrip({
                   animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
                   transition={{ duration: 0.5, delay: 0.55 + index * 0.08 + ci * 0.07, ease: [0.16, 1, 0.3, 1] }}
                 />
-                <span className="font-sans text-[13px] text-[#4A463F] group-hover/cap:text-[#0D0D0B]/75 transition-colors duration-300">
+                <span className="font-sans text-[15px] text-[#4A463F] group-hover/cap:text-[#0D0D0B]/75 transition-colors duration-300">
                   {cap}
                 </span>
               </motion.div>
@@ -952,10 +951,8 @@ function DisciplineCardBody({
           </span>
         </div>
 
-        {/* Title — italic subtitle always orange */}
         <h3
-          className="font-instrument tracking-[-0.03em] leading-[1.04] text-[#14130F]"
-          style={{ fontSize: "clamp(24px, 1.9vw, 36px)" }}
+          className="font-instrument tracking-[-0.01em] leading-[1.04] text-[#14130F] text-h3"
         >
           {d.title}
           <br />
@@ -1426,7 +1423,7 @@ function SystemOrbit({ inView }: { inView: boolean }) {
                   transition={{ duration: 0.3 }}
                 >
                   <motion.span
-                    className="font-instrument text-[14px] leading-none font-semibold"
+                    className="font-instrument text-[15px] leading-none font-semibold"
                     animate={{ color: isHovered ? n.color : "#FF5C00" }}
                     transition={{ duration: 0.3 }}
                   >{n.stat}</motion.span>
@@ -1595,7 +1592,7 @@ function HeaderBlock({
 
           {/* Sub-copy */}
           <p
-            className="font-sans text-[14.5px] text-[#4A463F] max-w-full sm:max-w-[380px] leading-[1.9]">
+            className="font-sans text-[15px] text-[#4A463F] max-w-full sm:max-w-[380px] leading-relaxed">
             Three disciplines Technology, Design, and Growth.  unified into one
             system that compounds over time and gives our clients an unfair advantage.
           </p>
