@@ -320,15 +320,15 @@ export default function DigitalGap() {
       scrollTrigger: {
         trigger: mobileContainerRef.current,
         start: "top top",
-        end: "+=200%", // Extended end for better scroll distance between snaps
+        end: "+=120%", // Shorter distance so it takes less swiping to progress
         pin: true,
         pinSpacing: true,
-        scrub: 1.5, // 1.5s smoothing to completely eliminate micro-stuttering
+        scrub: 0.2, // Very fast response to finger (0.2s) instead of sluggish 1.5s
         snap: {
-          snapTo: 1 / 2, // 3 parts, meaning it snaps to 0%, 50%, or 100% progress
-          duration: { min: 0.2, max: 0.6 }, // smooth snap duration
-          ease: "power2.inOut",
-          delay: 0.1 // wait 0.1s after user stops scrolling before snapping
+          snapTo: 1 / 2,
+          duration: { min: 0.1, max: 0.35 }, // Punchy, fast snap
+          ease: "power3.out", // Snappy deceleration
+          delay: 0.05 // Almost instant snap when finger lifts
         },
         anticipatePin: 1,
         invalidateOnRefresh: true,
