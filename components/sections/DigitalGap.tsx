@@ -249,7 +249,11 @@ export default function DigitalGap() {
   const visualsRef          = useRef<HTMLDivElement>(null);
   const progressRef         = useRef<HTMLDivElement>(null);
 
-
+  // ── Mobile refs ───────────────────────────────────────────
+  const mobileContainerRef  = useRef<HTMLDivElement>(null);
+  const mobileTextRef       = useRef<HTMLDivElement>(null);
+  const mobileVisualRef     = useRef<HTMLDivElement>(null);
+  const mobileProgressRef   = useRef<HTMLDivElement>(null);
 
   // ── Desktop GSAP (md+) ────────────────────────────────────
   useEffect(() => {
@@ -290,6 +294,75 @@ export default function DigitalGap() {
     return () => ctx.revert();
   }, []);
 
+  // ── Mobile GSAP (<md) ─────────────────────────────────────
+  useEffect(() => {
+    if (window.innerWidth >= 768) return;
+    if (!mobileContainerRef.current || !mobileTextRef.current || !mobileVisualRef.current) return;
+
+    const texts   = Array.from(mobileTextRef.current.children) as HTMLElement[];
+    const visuals = Array.from(mobileVisualRef.current.children) as HTMLElement[];
+
+    // Each h2 has two block spans: [0] = pre text, [1] = em text (italic orange)
+    const pre = texts.map(h2 => h2.children[0] as HTMLElement);
+    const em  = texts.map(h2 => h2.children[1] as HTMLElement);
+
+    // Add hardware acceleration for mobile to prevent layout thrashing
+    gsap.set([...pre, ...em, ...visuals], { willChange: "transform, opacity", transform: "translateZ(0)" });
+
+    // h2 opacity:1 always — child spans control visibility to prevent simultaneous stacking
+    gsap.set(texts, { opacity: 1 });
+    gsap.set([pre[0], em[0]], { opacity: 1, y: 0 });
+    gsap.set([pre[1], em[1], pre[2], em[2]], { opacity: 0, y: 24 });
+    gsap.set(visuals[0], { opacity: 1, y: 0, scale: 1 });
+    gsap.set([visuals[1], visuals[2]], { opacity: 0, y: 40, scale: 0.95 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: mobileContainerRef.current,
+        start: "top top",
+        end: "+=200%", // Extended end for better scroll distance between snaps
+        pin: true,
+        pinSpacing: true,
+        scrub: 1.5, // 1.5s smoothing to completely eliminate micro-stuttering
+        snap: {
+          snapTo: 1 / 2, // 3 parts, meaning it snaps to 0%, 50%, or 100% progress
+          duration: { min: 0.2, max: 0.6 }, // smooth snap duration
+          ease: "power2.inOut",
+          delay: 0.1 // wait 0.1s after user stops scrolling before snapping
+        },
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          if (mobileProgressRef.current)
+            mobileProgressRef.current.style.transform = `scaleX(${self.progress})`;
+        },
+      },
+    });
+
+    tl
+      // Slide 0 → 1
+
+      .to([pre[0], em[0]], { opacity: 0, y: -18, duration: 1 })
+      .to(visuals[0],      { opacity: 0, y: -30, scale: 0.95, duration: 1 }, "<")
+      .to(pre[1],          { opacity: 1, y: 0, duration: 1 })
+      .to(visuals[1],      { opacity: 1, y: 0, scale: 1, duration: 1 }, "<")
+      .to(em[1],           { opacity: 1, y: 0, duration: 1 }, "<0.35")
+      // Slide 1 → 2: exit phrase 1, then enter phrase 2 line-by-line
+      .to([pre[1], em[1]], { opacity: 0, y: -18, duration: 1 })
+      .to(visuals[1],      { opacity: 0, y: -30, scale: 0.95, duration: 1 }, "<")
+      .to(pre[2],          { opacity: 1, y: 0, duration: 1 })
+      .to(visuals[2],      { opacity: 1, y: 0, scale: 1, duration: 1 }, "<")
+      .to(em[2],           { opacity: 1, y: 0, duration: 1 }, "<0.35");
+
+    gsap.delayedCall(0.15, () => ScrollTrigger.refresh());
+
+    return () => {
+      ScrollTrigger.getAll().forEach(st => {
+        if (st.vars.trigger === mobileContainerRef.current) st.kill();
+      });
+      tl.kill();
+    };
+  }, []);
 
   const BG = (
     <div className="absolute inset-0 pointer-events-none" style={{
@@ -345,44 +418,51 @@ export default function DigitalGap() {
     </section>
 
     {/* ═══════════════════════════════════════════════════
-        MOBILE  (<md)  — Native CSS Scroll Snapping
+        MOBILE  (<md)  — same scrub animation, stacked
     ═══════════════════════════════════════════════════ */}
     <section
-      className="md:hidden bg-[#F4F0E8] text-[#0D0D0B] overflow-y-scroll snap-y snap-mandatory border-b border-[#E6E1DA] relative"
-      style={{ height: "100svh", WebkitOverflowScrolling: "touch" }}
+      ref={mobileContainerRef}
+      className="md:hidden bg-[#F4F0E8] text-[#0D0D0B] overflow-hidden border-b border-[#E6E1DA] relative"
+      style={{ height: "100svh" }}
     >
-      <div className="flex flex-col w-full">
-        {TEXTS.map(({ pre, em }, i) => (
-          <div key={i} className="relative z-10 w-full shrink-0 snap-start snap-always px-5 flex flex-col justify-between pt-20 pb-6" style={{ height: "100svh" }}>
-            {BG}
-            
-            {/* Top: Label + Text */}
-            <div className="flex flex-col gap-8 relative z-10">
-              <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full"
-                style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
-              >The Digital Gap</SectionLabel>
-              <h2 className="font-instrument tracking-[-0.03em]"
-                style={{ fontSize: "clamp(30px, 8.5vw, 42px)" }}>
+      {BG}
+      <div className="absolute inset-x-0 bottom-0 h-[2px] bg-[#E6E1DA] z-10 overflow-hidden">
+        <div ref={mobileProgressRef} className="absolute inset-0 bg-[#FF5C00] origin-left" style={{ transform: "scaleX(0)" }} />
+      </div>
+
+      <div className="relative z-10 h-full px-5 flex flex-col justify-between pt-20 pb-6">
+
+        {/* Top: Label + Text */}
+        <div className="flex flex-col gap-8">
+          <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full"
+            style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
+          >The Digital Gap</SectionLabel>
+          <div ref={mobileTextRef} className="relative" style={{ height: 120 }}>
+            {TEXTS.map(({ pre, em }, i) => (
+              <h2 key={i} className="absolute inset-x-0 top-3 font-instrument tracking-[-0.03em]"
+                style={{ fontSize: "clamp(30px, 8.5vw, 42px)", opacity: i === 0 ? 1 : 0 }}>
                 <span className="block leading-[1.15]">{pre}</span>
                 <span className="block leading-[1.15] text-[#FF5C00]">{em}</span>
               </h2>
-            </div>
-
-            {/* Middle: Visual card */}
-            <div className="relative w-full z-10" style={{ height: 280 }}>
-              <div className="absolute inset-0 rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6">
-                {VISUALS[i]}
-              </div>
-            </div>
-
-            {/* Bottom: Scroll hint */}
-            <div className="flex justify-center z-10">
-              <span className="font-mono text-[10px] text-[#0D0D0B]/55 uppercase tracking-[0.3em]">
-                {i < TEXTS.length - 1 ? "Swipe to explore" : "Swipe to continue"}
-              </span>
-            </div>
+            ))}
           </div>
-        ))}
+        </div>
+
+        {/* Middle: Visual card */}
+        <div ref={mobileVisualRef} className="relative w-full" style={{ height: 280 }}>
+          {VISUALS.map((v, i) => (
+            <div key={i} className="absolute inset-0 rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6"
+              style={{ opacity: i === 0 ? 1 : 0 }}>
+              {v}
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom: Scroll hint always pinned to bottom */}
+        <div className="flex justify-center">
+          <span className="font-mono text-[10px] text-[#0D0D0B]/55 uppercase tracking-[0.3em]">Scroll to explore</span>
+        </div>
+
       </div>
     </section>
   </>);
