@@ -253,7 +253,6 @@ export default function DigitalGap() {
   const mobileContainerRef  = useRef<HTMLDivElement>(null);
   const mobileTextRef       = useRef<HTMLDivElement>(null);
   const mobileVisualRef     = useRef<HTMLDivElement>(null);
-  const mobileProgressRef   = useRef<HTMLDivElement>(null);
 
   // ── Desktop GSAP (md+) ────────────────────────────────────
   useEffect(() => {
@@ -332,10 +331,6 @@ export default function DigitalGap() {
         },
         anticipatePin: 1,
         invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          if (mobileProgressRef.current)
-            mobileProgressRef.current.style.transform = `scaleX(${self.progress})`;
-        },
       },
     });
 
@@ -426,9 +421,6 @@ export default function DigitalGap() {
       style={{ height: "100svh" }}
     >
       {BG}
-      <div className="absolute inset-x-0 bottom-0 h-[2px] bg-[#E6E1DA] z-10 overflow-hidden">
-        <div ref={mobileProgressRef} className="absolute inset-0 bg-[#FF5C00] origin-left" style={{ transform: "scaleX(0)" }} />
-      </div>
 
       <div className="relative z-10 h-full px-5 flex flex-col justify-between pt-20 pb-6">
 
