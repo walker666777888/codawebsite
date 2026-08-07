@@ -1449,8 +1449,11 @@ function KineticWord({
   reduced: boolean;
 }) {
   const [index, setIndex] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref);
 
   useEffect(() => {
+    if (!inView) return;
     const t = setInterval(() => {
       setIndex((i) => {
         const next = (i + 1) % words.length;
@@ -1459,12 +1462,12 @@ function KineticWord({
       });
     }, interval);
     return () => clearInterval(t);
-  }, [words.length, interval, onIndex]);
+  }, [words.length, interval, onIndex, inView]);
 
   const word = words[index];
 
   return (
-    <span className="inline-block overflow-hidden align-bottom pb-[0.18em] pt-[0.04em] -mx-2 px-2" style={{ minWidth: "max-content" }}>
+    <span ref={ref} className="inline-block overflow-hidden align-bottom pb-[0.18em] pt-[0.04em] -mx-2 px-2" style={{ minWidth: "max-content" }}>
       <AnimatePresence mode="wait">
         <motion.span
           key={word}
