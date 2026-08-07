@@ -322,7 +322,7 @@ export default function HoverCanvas({
   active: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const apiRef = useRef<{ start: () => void; scheduleStop: () => void } | null>(null);
+  const apiRef = useRef<{ start: () => void; scheduleStop: () => void; hardStop: () => void } | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
