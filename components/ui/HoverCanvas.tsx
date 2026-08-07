@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
+import { useInView } from "framer-motion";
 
 export type CanvasEffect = "matrix" | "spheres" | "network" | "plasma";
 
@@ -384,7 +385,7 @@ export default function HoverCanvas({
     parent?.addEventListener("pointermove", onMove);
     parent?.addEventListener("pointerleave", onLeave);
     window.addEventListener("resize", resize);
-    apiRef.current = { start, scheduleStop };
+    apiRef.current = { start, scheduleStop, hardStop };
 
     return () => {
       parent?.removeEventListener("pointermove", onMove);
@@ -396,21 +397,33 @@ export default function HoverCanvas({
     };
   }, [effect]);
 
+  const inView = useInView(canvasRef);
+
   useEffect(() => {
     const api = apiRef.current;
     if (!api) return;
-    if (active) api.start();
-    else api.scheduleStop();
-  }, [active]);
+    
+    if (active && inView) {
+      api.start();
+    } else if (!inView) {
+      // Aggressive kill when off-screen to save CPU/battery
+      api.hardStop();
+    } else {
+      // Graceful fade-out when on-screen but no longer hovered
+      api.scheduleStop();
+    }
+  }, [active, inView]);
 
   return (
     <canvas
       ref={canvasRef}
       aria-hidden
-      className="absolute inset-0 h-full w-full pointer-events-none"
+      className="absolute inset-0 w-full h-full pointer-events-none rounded-[14px]"
       style={{
         opacity: active ? 1 : 0,
         transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+        maskImage: "radial-gradient(ellipse at center, white, transparent)",
+        WebkitMaskImage: "radial-gradient(ellipse at center, white, transparent)"
       }}
     />
   );

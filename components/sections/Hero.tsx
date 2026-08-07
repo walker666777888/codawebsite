@@ -89,7 +89,9 @@ function DynamicHex() {
     let isVisible = false;
 
     const animate = (time: number) => {
-      if (isVisible && time - lastTime > 80) {
+      if (!isVisible) return;
+
+      if (time - lastTime > 80) {
         if (hexRef.current) {
           let result = "";
           for (let i = 0; i < 12; i++) {
@@ -103,7 +105,11 @@ function DynamicHex() {
     };
 
     const observer = new IntersectionObserver((entries) => {
+      const wasVisible = isVisible;
       isVisible = entries[0].isIntersecting;
+      if (isVisible && !wasVisible) {
+        animationFrameId = requestAnimationFrame(animate);
+      }
     });
 
     if (hexRef.current) observer.observe(hexRef.current);

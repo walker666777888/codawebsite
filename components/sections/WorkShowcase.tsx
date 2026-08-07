@@ -115,32 +115,40 @@ export default function WorkShowcase() {
     if (!track) return;
 
     /* Measure half-width once content renders */
-    const measure = () => { halfW.current = track.scrollWidth / 2; };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(track);
-
     let isVisible = true;
-    const io = new IntersectionObserver((entries) => {
-      isVisible = entries[0].isIntersecting;
-    });
-    io.observe(track);
 
-    /* RAF loop — runs every frame, updates only transform */
     const tick = () => {
-      if (isVisible) {
-        if (!isDragging.current) {
-          offsetRef.current -= speed;
-        }
-        /* Seamless wrap — when we've scrolled one full set, reset */
-        if (halfW.current > 0 && offsetRef.current <= -halfW.current) {
-          offsetRef.current += halfW.current;
-        }
-        track.style.transform = `translateX(${offsetRef.current}px)`;
+      if (!isVisible) return; // Completely halt loop when off-screen
+
+      if (!isDragging.current) {
+        offsetRef.current -= speed;
       }
+      /* Seamless wrap — when we've scrolled one full set, reset */
+      if (halfW.current > 0 && offsetRef.current <= -halfW.current) {
+        offsetRef.current += halfW.current;
+      }
+      track.style.transform = `translateX(${offsetRef.current}px)`;
+      
       rafId.current = requestAnimationFrame(tick);
     };
     rafId.current = requestAnimationFrame(tick);
+
+    /* 2. ResizeObserver for responsive bounds */
+    const ro = new ResizeObserver(() => {
+      if (!track) return;
+      halfW.current = track.scrollWidth / 2;
+    });
+    ro.observe(track);
+
+    /* 3. IntersectionObserver to pause when offscreen */
+    const io = new IntersectionObserver(([entry]) => {
+      const wasVisible = isVisible;
+      isVisible = entry.isIntersecting;
+      if (isVisible && !wasVisible) {
+        rafId.current = requestAnimationFrame(tick);
+      }
+    });
+    io.observe(track);
 
     return () => {
       cancelAnimationFrame(rafId.current);
