@@ -18,7 +18,10 @@ import { useRef, useState, useEffect, useCallback } from "react";
 ═══════════════════════════════════════════════════════════ */
 
 /** Technology — premium network topology */
-function TechGraphic({ active }: { active: boolean }) {
+function TechGraphic({ active: activeProp }: { active: boolean }) {
+  const ref = useRef<any>(null);
+  const inView = useInView(ref);
+  const active = activeProp && inView;
   const W = 420, H = 220;
   const CX = 210, CY = 110;
   // Elliptical layout so nodes fill the wide container
@@ -48,7 +51,7 @@ function TechGraphic({ active }: { active: boolean }) {
   ];
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+    <svg ref={ref} viewBox={`0 0 ${W} ${H}`} fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
       <defs>
         <radialGradient id="tg-hub" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#60A5FA" />
@@ -160,7 +163,10 @@ function TechGraphic({ active }: { active: boolean }) {
 }
 
 /** Design — morphing colour blocks filling the full wide container */
-function DesignGraphic({ active }: { active: boolean }) {
+function DesignGraphic({ active: activeProp }: { active: boolean }) {
+  const ref = useRef<any>(null);
+  const inView = useInView(ref);
+  const active = activeProp && inView;
   const VW = 420, VH = 220;
   // 4 blocks spread across full width
   const BW = 84, BH = 76, GAP = 16;
@@ -196,7 +202,7 @@ function DesignGraphic({ active }: { active: boolean }) {
   const swatchColors = ["#FF5C00", "#4F8EF7", "#B87FFF", "#5FCF5F", "#F59E0B"];
 
   return (
-    <svg viewBox={`0 0 ${VW} ${VH}`} fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+    <svg ref={ref} viewBox={`0 0 ${VW} ${VH}`} fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
 
       {/* Morphing colour blocks — full width */}
       {labels.map((label, i) => (
@@ -298,7 +304,10 @@ function DesignGraphic({ active }: { active: boolean }) {
 }
 
 /** Digital Strategy — roadmap phase tracker */
-function StrategyGraphic({ active }: { active: boolean }) {
+function StrategyGraphic({ active: activeProp }: { active: boolean }) {
+  const ref = useRef<any>(null);
+  const inView = useInView(ref);
+  const active = activeProp && inView;
   const AMBER  = "#F59E0B";
   const CYCLE  = 3.8;
   const REPEAT = 1.2;
@@ -317,7 +326,7 @@ function StrategyGraphic({ active }: { active: boolean }) {
   ];
 
   return (
-    <div className="w-full h-full flex flex-col gap-[5px] px-1 justify-center">
+    <div ref={ref} className="w-full h-full flex flex-col gap-[5px] px-1 justify-center">
 
       {/* KPI cards */}
       <div className="grid grid-cols-3 gap-1">
@@ -374,7 +383,10 @@ function StrategyGraphic({ active }: { active: boolean }) {
    LANDSCAPE TILE GRAPHICS
 ═══════════════════════════════════════════════════════════ */
 
-function EcommerceGraphic({ active }: { active: boolean }) {
+function EcommerceGraphic({ active: activeProp }: { active: boolean }) {
+  const ref = useRef<any>(null);
+  const inView = useInView(ref);
+  const active = activeProp && inView;
   const ORANGE = "#FF5C00";
   const CYCLE  = 3.2;
   const REPEAT = 1.4;
@@ -384,7 +396,7 @@ function EcommerceGraphic({ active }: { active: boolean }) {
     { label: "Leather Wallet Slim",  rank: "#3", old: "#11", delay: 0.28 },
   ];
   return (
-    <div className="w-full h-full flex flex-col justify-center gap-[6px] px-1">
+    <div ref={ref} className="w-full h-full flex flex-col justify-center gap-[6px] px-1">
       {/* Header — static once active */}
       <div className="flex items-center justify-between">
         <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.4)", letterSpacing: "0.12em", textTransform: "uppercase" }}>Marketplace Rankings</span>
@@ -425,7 +437,10 @@ function EcommerceGraphic({ active }: { active: boolean }) {
   );
 }
 
-function PerformanceGraphic({ active }: { active: boolean }) {
+function PerformanceGraphic({ active: activeProp }: { active: boolean }) {
+  const ref = useRef<any>(null);
+  const inView = useInView(ref);
+  const active = activeProp && inView;
   const ORANGE = "#FF5C00";
   const CYCLE  = 3.5;
   const REPEAT = 1.2;
@@ -441,7 +456,7 @@ function PerformanceGraphic({ active }: { active: boolean }) {
     { label: "ROI",  value: "+210%"},
   ];
   return (
-    <div className="w-full h-full flex flex-col justify-center gap-2 px-1">
+    <div ref={ref} className="w-full h-full flex flex-col justify-center gap-2 px-1">
       {/* KPI cards — appear once and stay */}
       <div className="grid grid-cols-3 gap-2 mb-1">
         {kpis.map((k, i) => (
