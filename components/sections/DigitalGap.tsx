@@ -408,7 +408,12 @@ export default function DigitalGap() {
         </div>
       </div>
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
-        <span className="font-mono text-[11px] text-[#0D0D0B]/55 uppercase tracking-[0.3em]">Scroll to explore</span>
+        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[rgba(13,13,11,0.08)] bg-[rgba(255,255,255,0.75)] backdrop-blur-md shadow-[0_4px_24px_rgba(13,13,11,0.06)]">
+          <span className="font-mono text-[10px] text-[#3D3A35] font-semibold uppercase tracking-[0.25em]">Scroll to explore</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#FF5C00]">
+            <path d="M12 5v14M19 12l-7 7-7-7"/>
+          </svg>
+        </div>
       </div>
     </section>
 
@@ -451,8 +456,13 @@ export default function DigitalGap() {
         </div>
 
         {/* Bottom: Scroll hint always pinned to bottom */}
-        <div className="flex justify-center">
-          <span className="font-mono text-[10px] text-[#0D0D0B]/55 uppercase tracking-[0.3em]">Scroll to explore</span>
+        <div className="flex justify-center pb-2">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(13,13,11,0.08)] bg-[rgba(255,255,255,0.75)] backdrop-blur-md shadow-[0_4px_20px_rgba(13,13,11,0.06)]">
+            <span className="font-mono text-[9px] text-[#3D3A35] font-semibold uppercase tracking-[0.25em]">Scroll to explore</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#FF5C00]">
+              <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+          </div>
         </div>
 
       </div>
