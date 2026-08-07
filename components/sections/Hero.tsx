@@ -210,9 +210,9 @@ export default function Hero() {
         )}
       </button>
 
-      {/* ── LiquidEther fluid background — desktop only ── */}
+      {/* ── LiquidEther fluid background ── */}
       {!isLowTier && (
-        <div className="absolute inset-0 z-[1]">
+        <div className={`absolute inset-0 z-[1] ${isInteractMode ? "pointer-events-auto" : "pointer-events-none md:pointer-events-auto"}`}>
           <LiquidEther
             colors={["#ffaeae", "#ff9851", "#fed553"]}
             mouseForce={25}
