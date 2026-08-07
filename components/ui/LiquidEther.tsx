@@ -361,6 +361,11 @@ export default function LiquidEther({
         return clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom;
       }
       updateHoverState(clientX: number, clientY: number) {
+        if (!this.container) return false;
+        if (window.getComputedStyle(this.container).pointerEvents === "none") {
+          this.isHoverInside = false;
+          return false;
+        }
         this.isHoverInside = this.isPointInside(clientX, clientY);
         return this.isHoverInside;
       }
