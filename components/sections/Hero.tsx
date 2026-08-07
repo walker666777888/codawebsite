@@ -185,7 +185,7 @@ export default function Hero() {
             iterationsViscous={8} // Drastically reduced from 32
             iterationsPoisson={8} // Drastically reduced from 32
             autoDemo={true}
-            autoSpeed={0}
+            autoSpeed={0.4}
             autoIntensity={1.3}
             isBounce={true}
             resolution={0.25} // Reduced from 0.5 to cut pixels calculated by 4x
