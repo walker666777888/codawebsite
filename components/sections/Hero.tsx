@@ -143,9 +143,22 @@ export default function Hero() {
 
   // Detect touch device — disable all JS-driven parallax on mobile
   const [isTouch, setIsTouch] = useState(false);
+  const [isInteractMode, setIsInteractMode] = useState(false);
+
   useEffect(() => {
     setIsTouch("ontouchstart" in window || navigator.maxTouchPoints > 0);
   }, []);
+
+  useEffect(() => {
+    if (isInteractMode) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isInteractMode]);
 
   const isLowTier = useIsLowEndDevice();
   const prefersReducedMotion = useReducedMotion();
@@ -168,10 +181,34 @@ export default function Hero() {
     <section
       ref={ref}
       id="hero"
-      className="relative h-[100svh] overflow-hidden flex flex-col bg-coda-bg"
+      className={`relative h-[100svh] overflow-hidden flex flex-col bg-coda-bg ${isInteractMode ? "touch-none" : ""}`}
     >
       {/* ── Dark base for desktop (LiquidEther sits on top) ── */}
       <div className="absolute inset-0 z-[0] bg-black" />
+
+      {/* ── Mobile Fluid Interact Toggle ── */}
+      <button
+        onClick={() => setIsInteractMode(!isInteractMode)}
+        className="absolute top-6 left-1/2 -translate-x-1/2 z-50 md:hidden inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(255,255,255,0.1)] bg-[rgba(13,13,11,0.6)] backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-colors"
+      >
+        {isInteractMode ? (
+          <>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-[#FF5C00]">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <span className="font-mono text-[9px] text-white/90 font-semibold uppercase tracking-[0.1em]">Screen Locked</span>
+          </>
+        ) : (
+          <>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/50">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+            </svg>
+            <span className="font-mono text-[9px] text-white/50 font-semibold uppercase tracking-[0.1em]">Screen Unlocked</span>
+          </>
+        )}
+      </button>
 
       {/* ── LiquidEther fluid background — desktop only ── */}
       {!isLowTier && (
