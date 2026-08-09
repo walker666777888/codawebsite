@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
-import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion, useMotionTemplate } from "motion/react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { ArrowRight } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
@@ -42,6 +42,19 @@ export default function CallToAction() {
   const rotateY = useSpring(useTransform(mouseX, [-1, 1], prefersReducedMotion ? [0, 0] : [-6, 6]), { stiffness: 200, damping: 28 });
   const spotX   = useSpring(mouseX, { stiffness: 200, damping: 25 });
   const spotY   = useSpring(mouseY, { stiffness: 200, damping: 25 });
+
+  const textX = useTransform(spotX, [-1, 1], prefersReducedMotion ? [0, 0] : [-12, 12]);
+  const textY = useTransform(spotY, [-1, 1], prefersReducedMotion ? [0, 0] : [-12, 12]);
+  const btnX  = useTransform(spotX, [-1, 1], prefersReducedMotion ? [0, 0] : [-22, 22]);
+  const btnY  = useTransform(spotY, [-1, 1], prefersReducedMotion ? [0, 0] : [-22, 22]);
+
+  const shadowX = useTransform(spotX, [-1, 1], [20, -20]);
+  const shadowY = useTransform(spotY, [-1, 1], [20, -20]);
+  const textShadow = useMotionTemplate`${shadowX}px ${shadowY}px 40px rgba(255,92,0,0.35)`;
+
+  const maskX = useTransform(spotX, [-1, 1], ["0%", "100%"]);
+  const maskY = useTransform(spotY, [-1, 1], ["0%", "100%"]);
+  const glowMask = useMotionTemplate`radial-gradient(500px circle at ${maskX} ${maskY}, black, transparent)`;
 
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const rect = cardRef.current?.getBoundingClientRect();
@@ -178,10 +191,20 @@ export default function CallToAction() {
                 filter: "blur(30px)",
               }}
             />
+            {/* Interactive Border Glow */}
+            <motion.div
+              className="absolute inset-0 pointer-events-none rounded-3xl"
+              style={{
+                border: "1px solid rgba(255,255,255,0.3)",
+                WebkitMaskImage: glowMask,
+                maskImage: glowMask,
+              }}
+            />
+
             {/* Content Group (Headline + Sub-copy) */}
             <div className="flex flex-col items-center gap-5 sm:gap-6">
               {/* Headline */}
-              <div>
+              <motion.div style={{ x: textX, y: textY, textShadow }}>
                 <div className="cta-line-wrap">
                   <WaveText
                     text="Ready to"
@@ -200,7 +223,7 @@ export default function CallToAction() {
                     style={{ fontSize: "clamp(64px, 10vw, 130px)" }}
                   />
                 </motion.div>
-              </div>
+              </motion.div>
 
               {/* Sub-copy */}
               <p
@@ -211,7 +234,7 @@ export default function CallToAction() {
             </div>
 
             {/* CTA button */}
-            <div className={`cta-btn${visible ?" in" : ""} flex flex-col items-center gap-4`}>
+            <motion.div style={{ x: btnX, y: btnY }} className={`cta-btn${visible ?" in" : ""} flex flex-col items-center gap-4`}>
               <MagneticButton variant="accent" onClick={openForm}>
                 <span
                   className="flex items-center gap-2 sm:gap-3 bg-coda-accent text-white px-5 py-2.5 sm:px-9 sm:py-4 rounded-xl font-sans font-semibold text-[12px] sm:text-[15px] tracking-[-0.01em]"
@@ -221,7 +244,7 @@ export default function CallToAction() {
                   <ArrowRight className="w-4 h-4" />
                 </span>
               </MagneticButton>
-            </div>
+            </motion.div>
 
             {/* Footer note */}
             <div
