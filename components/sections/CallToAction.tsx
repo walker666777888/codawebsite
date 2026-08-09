@@ -45,8 +45,6 @@ export default function CallToAction() {
 
   const textX = useTransform(spotX, [-1, 1], prefersReducedMotion ? [0, 0] : [-12, 12]);
   const textY = useTransform(spotY, [-1, 1], prefersReducedMotion ? [0, 0] : [-12, 12]);
-  const btnX  = useTransform(spotX, [-1, 1], prefersReducedMotion ? [0, 0] : [-22, 22]);
-  const btnY  = useTransform(spotY, [-1, 1], prefersReducedMotion ? [0, 0] : [-22, 22]);
 
   const shadowX = useTransform(spotX, [-1, 1], [20, -20]);
   const shadowY = useTransform(spotY, [-1, 1], [20, -20]);
@@ -234,7 +232,7 @@ export default function CallToAction() {
             </div>
 
             {/* CTA button */}
-            <motion.div style={{ x: btnX, y: btnY }} className={`cta-btn${visible ?" in" : ""} flex flex-col items-center gap-4`}>
+            <div className={`cta-btn${visible ?" in" : ""} flex flex-col items-center gap-4`}>
               <MagneticButton variant="accent" onClick={openForm}>
                 <span
                   className="flex items-center gap-2 sm:gap-3 bg-coda-accent text-white px-5 py-2.5 sm:px-9 sm:py-4 rounded-xl font-sans font-semibold text-[12px] sm:text-[15px] tracking-[-0.01em]"
@@ -244,7 +242,7 @@ export default function CallToAction() {
                   <ArrowRight className="w-4 h-4" />
                 </span>
               </MagneticButton>
-            </motion.div>
+            </div>
 
             {/* Footer note */}
             <div
