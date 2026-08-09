@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import React, { useRef, useEffect } from "react";
 import ScrambleText from "@/components/ui/ScrambleText";
+import VariableProximity from "@/components/ui/VariableProximity";
 import { useVideoPreload } from "@/components/providers/VideoPreloadProvider";
 import { lenisScrollTo } from "@/components/providers/LenisProvider";
 
@@ -117,11 +118,11 @@ function VideoText({ shouldLoad }: { shouldLoad: boolean }) {
 }
 
 export default function Footer() {
-  const ref = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
   const { shouldLoad } = useVideoPreload();
 
   return (
-    <footer id="contact" ref={ref} className="relative bg-[#0A0A09] text-white overflow-hidden">
+    <footer id="contact" ref={containerRef} className="relative bg-[#0A0A09] text-white overflow-hidden">
 
       {/* ── Nav content ─────────────────────────────────── */}
       <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-16">
@@ -137,7 +138,14 @@ export default function Footer() {
           >
             <div className="flex items-baseline gap-[2px] mb-5">
               <span className="font-instrument text-[48px] text-white tracking-[-0.04em] leading-none">
-                <ScrambleText text="CODA" delay={0.3} />
+                <VariableProximity
+                  label="CODA"
+                  fromFontVariationSettings="'wght' 400"
+                  toFontVariationSettings="'wght' 800"
+                  containerRef={containerRef}
+                  radius={80}
+                  falloff="linear"
+                />
               </span>
               <motion.span
                 className="font-mono text-[#FF5C00] text-[48px] leading-none"
@@ -156,7 +164,14 @@ export default function Footer() {
               whileHover={{ x: 4 }}
               transition={{ duration: 0.25 }}
             >
-              <ScrambleText text="Connect@citizenofdigitalage.com" delay={0.8} speed={0.48} />
+              <VariableProximity
+                label="Connect@citizenofdigitalage.com"
+                fromFontVariationSettings="'wght' 400"
+                toFontVariationSettings="'wght' 800"
+                containerRef={containerRef}
+                radius={80}
+                falloff="linear"
+              />
               <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
             </motion.a>
           </motion.div>
@@ -169,12 +184,26 @@ export default function Footer() {
             transition={{ duration: 0.7, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white mb-6">
-              <ScrambleText text="Navigation" delay={0.1} speed={0.5} />
+              <VariableProximity
+                label="Navigation"
+                fromFontVariationSettings="'wght' 400"
+                toFontVariationSettings="'wght' 800"
+                containerRef={containerRef}
+                radius={80}
+              />
             </p>
             <ul className="space-y-4">
               {LINKS.map(({ label, href }, i) => (
                 <motion.li key={label} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.15 + i * 0.07 }}>
-                  <AnimLink href={href}><ScrambleText text={label} delay={0.2 + i * 0.08} speed={0.42} /></AnimLink>
+                  <AnimLink href={href}>
+                    <VariableProximity
+                      label={label}
+                      fromFontVariationSettings="'wght' 400"
+                      toFontVariationSettings="'wght' 800"
+                      containerRef={containerRef}
+                      radius={80}
+                    />
+                  </AnimLink>
                 </motion.li>
               ))}
             </ul>
@@ -188,12 +217,26 @@ export default function Footer() {
             transition={{ duration: 0.7, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white mb-6">
-              <ScrambleText text="Social" delay={0.15} speed={0.5} />
+              <VariableProximity
+                label="Social"
+                fromFontVariationSettings="'wght' 400"
+                toFontVariationSettings="'wght' 800"
+                containerRef={containerRef}
+                radius={80}
+              />
             </p>
             <ul className="space-y-4">
               {SOCIAL.map(({ label, href }, i) => (
                 <motion.li key={label} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 + i * 0.07 }}>
-                  <AnimLink href={href}><ScrambleText text={label} delay={0.28 + i * 0.09} speed={0.42} /></AnimLink>
+                  <AnimLink href={href}>
+                    <VariableProximity
+                      label={label}
+                      fromFontVariationSettings="'wght' 400"
+                      toFontVariationSettings="'wght' 800"
+                      containerRef={containerRef}
+                      radius={80}
+                    />
+                  </AnimLink>
                 </motion.li>
               ))}
             </ul>
