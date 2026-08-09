@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion, useMotionTemplate } from "motion/react";
+import Galaxy from "@/components/ui/Galaxy";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { ArrowRight } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
@@ -170,9 +171,8 @@ export default function CallToAction() {
 
       <section
         ref={sectionRef}
-        className="relative py-28 sm:py-40 px-6 bg-coda-accent [&_*::selection]:bg-white [&_*::selection]:text-coda-accent"
+        className="relative py-28 sm:py-40 px-6 bg-black [&_*::selection]:bg-coda-accent [&_*::selection]:text-white overflow-hidden"
       >
-        {/* Background — desktop only decorations, zero mobile cost */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="hidden md:flex absolute inset-0 items-center justify-center">
             {[0, 1, 2, 3].map((i) => (
@@ -189,48 +189,36 @@ export default function CallToAction() {
           />
         </div>
 
+        {/* Galaxy Background for the whole section */}
+        <Galaxy
+          className="!z-0"
+          starSpeed={0.9}
+          density={1.9}
+          hueShift={210}
+          speed={1.8}
+          glowIntensity={0.6}
+          saturation={1}
+          mouseRepulsion={true}
+          repulsionStrength={2}
+          twinkleIntensity={0}
+          rotationSpeed={0.2}
+          transparent={false}
+        />
+
         <div className="relative z-10 w-full flex flex-col items-center">
           {/* Card — 3D tilt on mouse move */}
           <motion.div
             ref={cardRef}
             onMouseMove={onMouseMove}
             onMouseLeave={onMouseLeave}
-            className={`cta-card${visible ?" in" : ""} relative w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 rounded-3xl px-6 sm:px-10 py-10 sm:py-14 overflow-hidden`}
+            className={`cta-card${visible ?" in" : ""} relative w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 px-6 sm:px-10 py-10 sm:py-14 z-10`}
             style={{
-              background: "#1a0d00",
-              border: "1px solid rgba(255,255,255,0.07)",
-              boxShadow: "0 8px 40px rgba(0,0,0,0.35)",
               rotateX,
               rotateY,
               transformStyle: "preserve-3d",
               perspective: 800,
             }}
           >
-            {/* Mouse-following inner spotlight */}
-            <motion.div
-              className="absolute pointer-events-none rounded-full"
-              style={{
-                width: 420,
-                height: 420,
-                x: useTransform(spotX, [-1, 1], prefersReducedMotion ? [0, 0] : [-80, 80]),
-                y: useTransform(spotY, [-1, 1], prefersReducedMotion ? [0, 0] : [-80, 80]),
-                top: "50%",
-                left: "50%",
-                marginTop: -210,
-                marginLeft: -210,
-                background: "radial-gradient(circle, color-mix(in srgb, var(--color-coda-accent) 18%, transparent) 0%, transparent 65%)",
-                filter: "blur(30px)",
-              }}
-            />
-            {/* Interactive Border Glow */}
-            <motion.div
-              className="absolute inset-0 pointer-events-none rounded-3xl"
-              style={{
-                border: "1px solid rgba(255,255,255,0.3)",
-                WebkitMaskImage: glowMask,
-                maskImage: glowMask,
-              }}
-            />
 
             {/* Content Group (Headline + Sub-copy) */}
             <div className="flex flex-col items-center gap-5 sm:gap-6">
