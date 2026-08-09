@@ -12,6 +12,7 @@ import { useFormModal } from "@/components/providers/FormModalProvider";
 import { useIsLowEndDevice } from "@/hooks/useIsLowEndDevice";
 import dynamic from "next/dynamic";
 const LiquidEther = dynamic(() => import("@/components/ui/LiquidEther"), { ssr: false });
+import TextType from "@/components/ui/TextType";
 import WarpText from "@/components/ui/WarpText";
 
 const PARTICLES = Array.from({ length: 25 }).map((_, i) => ({
@@ -373,7 +374,23 @@ export default function Hero() {
           >
             <span className="h-[1px] w-10 bg-white/20 block shrink-0" />
             <p className="font-instrument text-white/75 text-[18px] sm:text-[24px] md:text-[34px] tracking-[-0.02em] text-center whitespace-nowrap">
-              Engineer your <span className="text-coda-accent">unfair advantage.</span>
+              <TextType 
+                text="Engineer your " 
+                as="span" 
+                showCursor={false} 
+                initialDelay={2600} 
+                typingSpeed={50} 
+              />
+              <span className="text-coda-accent">
+                <TextType 
+                  text="unfair advantage." 
+                  as="span" 
+                  showCursor={false} 
+                  initialDelay={2600 + (14 * 50)} 
+                  typingSpeed={50} 
+                  cursorClassName="bg-coda-accent" 
+                />
+              </span>
             </p>
             <span className="h-[1px] w-10 bg-white/20 block shrink-0" />
           </motion.div>
@@ -384,7 +401,13 @@ export default function Hero() {
             transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
             className="font-sans text-[14px] sm:text-[16px] text-white/55 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-relaxed"
           >
-            We unify technology, design, and growth into compounding digital ecosystems that outpace your competition.
+            <TextType 
+              text="We unify technology, design, and growth into compounding digital ecosystems that outpace your competition." 
+              as="span" 
+              showCursor={false} 
+              initialDelay={4200} 
+              typingSpeed={30} 
+            />
           </motion.p>
 
           {/* CTAs */}
