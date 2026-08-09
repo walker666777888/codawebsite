@@ -9,6 +9,18 @@ import { useFormModal } from "@/components/providers/FormModalProvider";
 /* ── Wave text — letters cascade up on hover ── */
 function WaveText({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
   const [hovered, setHovered] = useState(false);
+  const [pulse, setPulse] = useState(false);
+
+  useEffect(() => {
+    const t = setInterval(() => {
+      setPulse(true);
+      setTimeout(() => setPulse(false), 1200);
+    }, 6000);
+    return () => clearInterval(t);
+  }, []);
+
+  const active = hovered || pulse;
+
   return (
     <span
       className={className}
@@ -20,7 +32,7 @@ function WaveText({ text, className, style }: { text: string; className?: string
         <motion.span
           key={i}
           style={{ display: "inline-block", whiteSpace: ch === " " ? "pre" : undefined }}
-          animate={hovered ? { y: -10, color: "#FF5C00" } : { y: 0, color: "#ffffff" }}
+          animate={active ? { y: -10, color: "#FF5C00" } : { y: 0, color: "#ffffff" }}
           transition={{ type: "spring", stiffness: 400, damping: 18, delay: i * 0.035 }}
         >{ch}</motion.span>
       ))}
@@ -101,6 +113,27 @@ export default function CallToAction() {
         @keyframes cta-ring {
           0%   { transform: scale(0.13); opacity: 0.45; }
           100% { transform: scale(1);    opacity: 0; }
+        }
+        @keyframes cta-shine {
+          0%   { transform: translateX(-150%) skewX(-20deg); }
+          15%, 100% { transform: translateX(200%) skewX(-20deg); }
+        }
+        
+        .cta-btn-shine {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          overflow: hidden;
+          border-radius: inherit;
+        }
+        .cta-btn-shine::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 50%;
+          height: 100%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+          animation: cta-shine 4s infinite;
         }
 
         .cta-card { opacity: 0; }
@@ -235,11 +268,14 @@ export default function CallToAction() {
             <div className={`cta-btn${visible ?" in" : ""} flex flex-col items-center gap-4`}>
               <MagneticButton variant="accent" onClick={openForm}>
                 <span
-                  className="flex items-center gap-2 sm:gap-3 bg-coda-accent text-white px-5 py-2.5 sm:px-9 sm:py-4 rounded-xl font-sans font-semibold text-[12px] sm:text-[15px] tracking-[-0.01em]"
+                  className="flex items-center gap-2 sm:gap-3 bg-coda-accent text-white px-5 py-2.5 sm:px-9 sm:py-4 rounded-xl font-sans font-semibold text-[12px] sm:text-[15px] tracking-[-0.01em] relative overflow-hidden"
                   style={{ boxShadow: "0 8px 24px color-mix(in srgb, var(--color-coda-accent) 40%, transparent)" }}
                 >
-                  Start a project
-                  <ArrowRight className="w-4 h-4" />
+                  <span className="relative z-10 flex items-center gap-2 sm:gap-3">
+                    Start a project
+                    <ArrowRight className="w-4 h-4" />
+                  </span>
+                  <div className="cta-btn-shine" />
                 </span>
               </MagneticButton>
             </div>
