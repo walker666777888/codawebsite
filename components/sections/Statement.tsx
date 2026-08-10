@@ -1617,60 +1617,74 @@ function HeaderBlock({
 
           {/* Stats — premium light card */}
           <div
-            className="relative rounded-2xl overflow-hidden"
+            className="relative mt-8 rounded-[28px] overflow-hidden"
             style={{
-              background: "linear-gradient(160deg, #FFFFFF 0%, #FAF7F2 100%)",
-              border: "1px solid rgba(13,13,11,0.09)",
-              boxShadow: "0 2px 0 rgba(255,255,255,0.9) inset, 0 8px 40px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.04)",
+              background: "linear-gradient(160deg, #FFFFFF 0%, #FCFAF7 40%, #F6F2EB 100%)",
+              boxShadow: "0 20px 60px -15px rgba(20, 19, 15, 0.08), 0 0 0 1px rgba(20, 19, 15, 0.05), inset 0 2px 0 rgba(255, 255, 255, 1)",
             }}
           >
-            {/* Top orange hairline */}
-            <div className="absolute inset-x-0 top-0 h-[2px]"
-              style={{ background: "linear-gradient(90deg, transparent 5%, #FF5C00 40%, #FF7A1A 60%, transparent 95%)" }} />
+            {/* Grain overlay for tactile premium feel */}
+            <div className="absolute inset-0 opacity-[0.025] mix-blend-multiply pointer-events-none"
+                 style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")" }} />
 
-            <div className="relative grid grid-cols-3 divide-x divide-[#0D0D0B]/[0.07]">
+            {/* Top metallic/orange hairline */}
+            <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white to-transparent opacity-90" />
+            <div className="absolute inset-x-0 top-[1px] h-[1px] opacity-70"
+              style={{ background: "linear-gradient(90deg, transparent 15%, #FF5C00 50%, transparent 85%)" }} />
+
+            <div className="relative grid grid-cols-3">
               {[{ n: "3", label: "Disciplines" }, { n: "1", label: "System" }, { n: "∞", label: "Compounds" }].map(({ n, label }, i) => (
-                <motion.div
-                  key={label}
-                  className="relative flex flex-col items-center justify-center px-3 py-8 gap-2 text-center cursor-default overflow-hidden"
-                  whileHover="hovered"
-                  initial="idle"
-                >
-                  {/* Hover warm wash from bottom */}
+                <div key={label} className="relative">
+                  {/* Divider line that fades out at edges, skip first */}
+                  {i !== 0 && (
+                    <div className="absolute left-0 top-[15%] bottom-[15%] w-px pointer-events-none"
+                         style={{ background: "linear-gradient(to bottom, transparent, rgba(13,13,11,0.06) 20%, rgba(13,13,11,0.06) 80%, transparent)" }} />
+                  )}
+                  
                   <motion.div
-                    className="absolute inset-0 pointer-events-none"
-                    variants={{ idle: { opacity: 0 }, hovered: { opacity: 1 } }}
-                    transition={{ duration: 0.35 }}
-                    style={{ background: "radial-gradient(ellipse 100% 140% at 50% 115%, rgba(255,92,0,0.09) 0%, transparent 65%)" }}
-                  />
-                  {/* Hover top bar */}
-                  <motion.div
-                    className="absolute top-0 inset-x-0 h-[2px] origin-left"
-                    style={{ background: "linear-gradient(90deg, #FF5C00, rgba(255,122,26,0.4))" }}
-                    variants={{ idle: { scaleX: 0 }, hovered: { scaleX: 1 } }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  />
+                    className="relative flex flex-col items-center justify-center px-4 py-10 md:py-12 gap-3 text-center cursor-default overflow-hidden group/stat h-full"
+                    whileHover="hovered"
+                    initial="idle"
+                  >
+                    {/* Hover warm wash from bottom */}
+                    <motion.div
+                      className="absolute inset-0 pointer-events-none"
+                      variants={{ idle: { opacity: 0 }, hovered: { opacity: 1 } }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                      style={{ background: "radial-gradient(100% 120% at 50% 115%, rgba(255,92,0,0.12) 0%, transparent 70%)" }}
+                    />
+                    
+                    {/* Hover top bar */}
+                    <motion.div
+                      className="absolute top-0 inset-x-0 h-[2px] origin-center"
+                      style={{ background: "linear-gradient(90deg, transparent, #FF5C00, transparent)" }}
+                      variants={{ idle: { scaleX: 0, opacity: 0 }, hovered: { scaleX: 1, opacity: 1 } }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    />
 
-                  <motion.span
-                    className="font-instrument leading-none tracking-[-0.04em] tabular-nums"
-                    style={{ fontSize: "clamp(32px,5vw,52px)" }}
-                    variants={{ idle: { color: "#0D0D0B", y: 0 }, hovered: { color: "#FF5C00", y: -3 } }}
-                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  >{n}</motion.span>
+                    {/* Value */}
+                    <motion.span
+                      className="font-instrument leading-none tracking-[-0.03em] tabular-nums"
+                      style={{ fontSize: "clamp(36px, 6vw, 64px)" }}
+                      variants={{ idle: { color: "#14130F", y: 0, scale: 1 }, hovered: { color: "#FF5C00", y: -4, scale: 1.04 } }}
+                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    >{n}</motion.span>
 
-                  <motion.span
-                    className="font-mono text-[9px] uppercase tracking-[0.22em]"
-                    variants={{ idle: { color: "#9A9488" }, hovered: { color: "#4A463F" } }}
-                    transition={{ duration: 0.3 }}
-                  >{label}</motion.span>
+                    {/* Label */}
+                    <motion.span
+                      className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.25em]"
+                      variants={{ idle: { color: "#9A9488" }, hovered: { color: "#14130F" } }}
+                      transition={{ duration: 0.3 }}
+                    >{label}</motion.span>
 
-                  <motion.div
-                    className="h-px rounded-full bg-[#FF5C00] origin-center"
-                    style={{ width: 28 }}
-                    variants={{ idle: { scaleX: 0, opacity: 0 }, hovered: { scaleX: 1, opacity: 0.45 } }}
-                    transition={{ duration: 0.35 }}
-                  />
-                </motion.div>
+                    {/* Little decorative dot */}
+                    <motion.div
+                      className="absolute bottom-6 w-1 h-1 rounded-full bg-[#FF5C00]"
+                      variants={{ idle: { scale: 0, opacity: 0, y: 10 }, hovered: { scale: 1, opacity: 1, y: 0 } }}
+                      transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+                    />
+                  </motion.div>
+                </div>
               ))}
             </div>
           </div>
