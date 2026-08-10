@@ -151,18 +151,23 @@ export default function Hero() {
   // Detect touch device — disable all JS-driven parallax on mobile
   const [isTouch, setIsTouch] = useState(false);
   const [isInteractMode, setIsInteractMode] = useState(false);
+  const [isMobileScreen, setIsMobileScreen] = useState(false);
 
   useEffect(() => {
     setIsTouch("ontouchstart" in window || navigator.maxTouchPoints > 0);
-  }, []);
+    
+    const handleResize = () => setIsMobileScreen(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
 
-  useEffect(() => {
     if (isInteractMode) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
+    
     return () => {
+      window.removeEventListener("resize", handleResize);
       document.body.style.overflow = "";
     };
   }, [isInteractMode]);
@@ -218,7 +223,7 @@ export default function Hero() {
           <LiquidEther
             colors={["#ffaeae", "#ff9851", "#fed553"]}
             mouseForce={25}
-            cursorSize={100}
+            cursorSize={isMobileScreen ? 40 : 100}
             isViscous={false}
             viscous={100}
             iterationsViscous={8} // Drastically reduced from 32
@@ -260,6 +265,9 @@ export default function Hero() {
         }}
       />
 
+      {/* ── Vignette for Text Readability ────────────────── */}
+      <div className="absolute inset-0 pointer-events-none z-[3] bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.65)_0%,transparent_70%)]" />
+
 
 
 
@@ -292,7 +300,7 @@ export default function Hero() {
 
         {/* Brand name Mobile (Original) */}
         <h1
-          className="md:hidden font-instrument tracking-[-0.04em] leading-[1.04] text-center"
+          className="md:hidden font-instrument tracking-[-0.04em] leading-[1.04] text-center drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]"
           style={{ fontSize: "clamp(62px, 10.5vw, 118px)" }}
         >
           {(["Citizen", "Of", "Digital Age."] as Array<string>).map((word, wi) => (
@@ -362,13 +370,13 @@ export default function Hero() {
         <div className="flex flex-col items-center gap-5 sm:gap-7 md:-mt-12">
           {/* Tagline */}
           <motion.div
-            className="flex items-center gap-4"
+            className="flex items-center gap-2 sm:gap-4 max-w-full"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 2.1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span className="h-[1px] w-10 bg-white/20 block shrink-0" />
-            <p className="font-instrument text-white/75 text-[18px] sm:text-[24px] md:text-[34px] tracking-[-0.02em] text-center whitespace-nowrap">
+            <span className="h-[1px] w-4 sm:w-10 bg-white/20 block shrink" />
+            <p className="font-instrument text-white/95 text-[18px] min-[390px]:text-[20px] sm:text-[28px] md:text-[40px] tracking-[-0.02em] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
               <TextType 
                 text="Engineer your " 
                 as="span" 
@@ -387,14 +395,14 @@ export default function Hero() {
                 />
               </span>
             </p>
-            <span className="h-[1px] w-10 bg-white/20 block shrink-0" />
+            <span className="h-[1px] w-4 sm:w-10 bg-white/20 block shrink" />
           </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
-            className="font-sans text-[14px] sm:text-[16px] text-white/55 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-relaxed"
+            className="font-sans text-[14px] sm:text-[16px] text-white/80 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
           >
             <TextType 
               text="We unify technology, design, and growth into compounding digital ecosystems that outpace your competition." 
