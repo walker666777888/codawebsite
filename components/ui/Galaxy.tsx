@@ -263,9 +263,21 @@ export default function Galaxy({
 
     const mesh = new Mesh(gl, { geometry, program });
     let animateId: number;
+    let isIntersecting = false;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        isIntersecting = entries[0].isIntersecting;
+      },
+      { threshold: 0 }
+    );
+    observer.observe(ctn);
 
     function update(t: number) {
       animateId = requestAnimationFrame(update);
+      
+      if (!isIntersecting) return; // Pause rendering to save GPU/CPU
+
       if (!disableAnimation) {
         program.uniforms.uTime.value = t * 0.001;
         program.uniforms.uStarSpeed.value = (t * 0.001 * starSpeed) / 10.0;
@@ -307,6 +319,7 @@ export default function Galaxy({
     }
 
     return () => {
+      observer.disconnect();
       cancelAnimationFrame(animateId);
       window.removeEventListener('resize', resize);
       if (mouseInteraction) {
