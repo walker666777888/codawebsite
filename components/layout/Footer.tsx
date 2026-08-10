@@ -4,7 +4,6 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import React, { useRef, useEffect } from "react";
 import ScrambleText from "@/components/ui/ScrambleText";
-import VariableProximity from "@/components/ui/VariableProximity";
 import { useVideoPreload } from "@/components/providers/VideoPreloadProvider";
 import { lenisScrollTo } from "@/components/providers/LenisProvider";
 
@@ -53,7 +52,7 @@ function AnimLink({ href, children }: { href: string; children: React.ReactNode 
     <motion.a
       href={href}
       onClick={(e) => scrollToSection(e, href)}
-      className="inline-block font-sans text-sm text-white/40 no-underline"
+      className="inline-block font-sans text-sm text-white/40 no-underline transition-colors duration-300"
       whileHover={{ color: "#FF5C00" }}
       transition={{ duration: 0.25 }}
     >
@@ -138,14 +137,7 @@ export default function Footer() {
           >
             <div className="flex items-baseline gap-[2px] mb-5">
               <span className="font-instrument text-[48px] text-white tracking-[-0.04em] leading-none">
-                <VariableProximity
-                  label="CODA"
-                  fromFontVariationSettings="'wght' 400"
-                  toFontVariationSettings="'wght' 800"
-                  containerRef={containerRef}
-                  radius={80}
-                  falloff="linear"
-                />
+                CODA
               </span>
               <motion.span
                 className="font-mono text-[#FF5C00] text-[48px] leading-none"
@@ -164,14 +156,7 @@ export default function Footer() {
               whileHover={{ x: 4 }}
               transition={{ duration: 0.25 }}
             >
-              <VariableProximity
-                label="Connect@citizenofdigitalage.com"
-                fromFontVariationSettings="'wght' 400"
-                toFontVariationSettings="'wght' 800"
-                containerRef={containerRef}
-                radius={80}
-                falloff="linear"
-              />
+              Connect@citizenofdigitalage.com
               <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
             </motion.a>
           </motion.div>
@@ -184,25 +169,13 @@ export default function Footer() {
             transition={{ duration: 0.7, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white mb-6">
-              <VariableProximity
-                label="Navigation"
-                fromFontVariationSettings="'wght' 400"
-                toFontVariationSettings="'wght' 800"
-                containerRef={containerRef}
-                radius={80}
-              />
+              Navigation
             </p>
             <ul className="space-y-4">
               {LINKS.map(({ label, href }, i) => (
                 <motion.li key={label} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.15 + i * 0.07 }}>
                   <AnimLink href={href}>
-                    <VariableProximity
-                      label={label}
-                      fromFontVariationSettings="'wght' 400"
-                      toFontVariationSettings="'wght' 800"
-                      containerRef={containerRef}
-                      radius={80}
-                    />
+                    {label}
                   </AnimLink>
                 </motion.li>
               ))}
@@ -217,25 +190,13 @@ export default function Footer() {
             transition={{ duration: 0.7, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white mb-6">
-              <VariableProximity
-                label="Social"
-                fromFontVariationSettings="'wght' 400"
-                toFontVariationSettings="'wght' 800"
-                containerRef={containerRef}
-                radius={80}
-              />
+              Social
             </p>
             <ul className="space-y-4">
               {SOCIAL.map(({ label, href }, i) => (
                 <motion.li key={label} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 + i * 0.07 }}>
                   <AnimLink href={href}>
-                    <VariableProximity
-                      label={label}
-                      fromFontVariationSettings="'wght' 400"
-                      toFontVariationSettings="'wght' 800"
-                      containerRef={containerRef}
-                      radius={80}
-                    />
+                    {label}
                   </AnimLink>
                 </motion.li>
               ))}

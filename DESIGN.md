@@ -3,8 +3,12 @@ name: Citizen Of Digital Age
 description: High-performance digital ecosystems — web platforms, AI products, design systems.
 colors:
   primary: "#FF5C00"
+  primary-mid: "#FF7A1A"
+  primary-light: "#FF9E42"
+  primary-dark: "#E65300"
   neutral-bg: "#F4F0E8"
   ink: "#0D0D0B"
+  ink-dark: "#14130F"
   muted: "#4D4A45"
   grid: "#E6E1DA"
 typography:
@@ -24,6 +28,7 @@ typography:
     fontWeight: 400
     letterSpacing: "0.15em"
 rounded:
+  xs: "4px"
   sm: "8px"
   md: "16px"
   full: "9999px"

@@ -476,7 +476,7 @@ function FlagImg({ code, size = 20 }: { code: string; size?: number }) {
       style={{
         width: size,
         height: size,
-        borderRadius: "3px",
+        borderRadius: "4px",
         display: "inline-block",
         flexShrink: 0,
         backgroundSize: "cover",
@@ -593,7 +593,7 @@ function PhoneField({
                   willChange: "transform, opacity",
                   background: "#161614",
                   boxShadow: "0 16px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06)",
-                  borderRadius: "14px",
+                  borderRadius: "16px",
                   overflow: "hidden",
                   zIndex: 60,
                   width: "220px",
@@ -788,7 +788,7 @@ function Dropdown({
               willChange: "transform, opacity",
               background: "#161614",
               boxShadow: "0 12px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06)",
-              borderRadius: "14px",
+              borderRadius: "16px",
               overflow: "hidden",
             }}
             className="absolute inset-x-0 top-[calc(100%+6px)] z-50"
@@ -1126,7 +1126,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                           whileHover={{ scale: 1.012 }} whileTap={{ scale: 0.978 }}
                           className="mt-6 relative font-sans font-semibold text-[14px] tracking-[0.04em] text-white rounded-2xl px-10 py-[13px] overflow-hidden cursor-pointer"
                           style={{
-                            background: "linear-gradient(135deg,#FF7A2E 0%,#FF5C00 55%,#E84000 100%)",
+                            background: "linear-gradient(135deg,#FF7A2E 0%,#FF5C00 55%,#E65300 100%)",
                             boxShadow: "0 1px 0 rgba(255,255,255,0.18) inset, 0 10px 40px rgba(255,92,0,0.28)",
                           }}
                         >
@@ -1225,7 +1225,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                             transition={{ type: "spring", stiffness: 360, damping: 26 }}
                             className="relative w-full flex items-center justify-center gap-3 rounded-2xl py-[15px] font-sans font-semibold text-[14px] tracking-[0.04em] text-white overflow-hidden disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer"
                             style={{
-                              background: "linear-gradient(135deg,#FF7A2E 0%,#FF5C00 55%,#E84000 100%)",
+                              background: "linear-gradient(135deg,#FF7A2E 0%,#FF5C00 55%,#E65300 100%)",
                               boxShadow: "0 1px 0 rgba(255,255,255,0.18) inset, 0 10px 40px rgba(255,92,0,0.28)",
                             }}
                           >

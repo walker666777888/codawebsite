@@ -1144,7 +1144,7 @@ function DisciplineSpread() {
           />
           <div
             className="absolute bottom-[-15%] right-[-5%] w-[500px] h-[500px] rounded-full blur-[120px] opacity-[0.05]"
-            style={{ background: "radial-gradient(circle, #FF9A3C 0%, transparent 70%)" }}
+            style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 70%)" }}
           />
         </motion.div>
 
@@ -1232,9 +1232,9 @@ function SystemOrbit({ inView }: { inView: boolean }) {
   const SIZE = 520;
 
   const NODES = [
-    { label: "Technology", sub: "Full-stack & AI",  angle: -90, stat: "45%", statLabel: "Visibility", color: "#4F8EF7" },
-    { label: "Design",     sub: "Brand & Motion",   angle:  30, stat: "40%", statLabel: "Engagement", color: "#B87FFF" },
-    { label: "Strategy",   sub: "GTM & Roadmap",     angle: 150, stat: "3×",  statLabel: "Speed",      color: "#F59E0B" },
+    { label: "Technology", sub: "Full-stack & AI",  angle: -90, stat: "45%", statLabel: "Visibility", color: "#FF5C00" },
+    { label: "Design",     sub: "Brand & Motion",   angle:  30, stat: "40%", statLabel: "Engagement", color: "#FF7A1A" },
+    { label: "Strategy",   sub: "GTM & Roadmap",     angle: 150, stat: "3×",  statLabel: "Speed",      color: "#FF9E42" },
   ];
 
   const positions = NODES.map(n => {
@@ -1626,7 +1626,7 @@ function HeaderBlock({
           >
             {/* Top orange hairline */}
             <div className="absolute inset-x-0 top-0 h-[2px]"
-              style={{ background: "linear-gradient(90deg, transparent 5%, #FF5C00 40%, #FF9A3C 60%, transparent 95%)" }} />
+              style={{ background: "linear-gradient(90deg, transparent 5%, #FF5C00 40%, #FF7A1A 60%, transparent 95%)" }} />
 
             <div className="relative grid grid-cols-3 divide-x divide-[#0D0D0B]/[0.07]">
               {[{ n: "3", label: "Disciplines" }, { n: "1", label: "System" }, { n: "∞", label: "Compounds" }].map(({ n, label }, i) => (
@@ -1646,7 +1646,7 @@ function HeaderBlock({
                   {/* Hover top bar */}
                   <motion.div
                     className="absolute top-0 inset-x-0 h-[2px] origin-left"
-                    style={{ background: "linear-gradient(90deg, #FF5C00, rgba(255,154,60,0.4))" }}
+                    style={{ background: "linear-gradient(90deg, #FF5C00, rgba(255,122,26,0.4))" }}
                     variants={{ idle: { scaleX: 0 }, hovered: { scaleX: 1 } }}
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   />
@@ -1763,7 +1763,7 @@ export default function Statement() {
           <div className="absolute top-[-20%] right-[-5%] w-[700px] h-[700px] rounded-full blur-[160px] opacity-[0.045] animate-glow-pulse"
             style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 65%)" }} />
           <div className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] rounded-full blur-[130px] opacity-[0.03]"
-            style={{ background: "radial-gradient(circle, #4F8EF7 0%, transparent 65%)" }} />
+            style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 65%)" }} />
         </motion.div>
 
         {/* Subtle grid — kept very faint */}

@@ -299,9 +299,9 @@ export default function BentoMetrics() {
             </p>
             <h2
               className="font-instrument text-[#14130F] leading-[1.05] tracking-[-0.025em]"
-              style={{ fontSize: "clamp(22px, 3vw, 36px)" }}
+              style={{ fontSize: "clamp(32px, 4.5vw, 56px)" }}
             >
-              Results that compound.
+              Results that <span className="text-[#FF5C00]">compound.</span>
             </h2>
           </div>
           <motion.span

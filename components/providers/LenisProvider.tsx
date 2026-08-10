@@ -66,7 +66,11 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
       typeof window !== "undefined" &&
       ("ontouchstart" in window || navigator.maxTouchPoints > 0);
 
-    if (isTouchDevice) return; // native scroll on mobile — no Lenis needed
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (isTouchDevice || prefersReducedMotion) return; // native scroll on mobile/reduced-motion
 
     // ─── Desktop: full butter-smooth Lenis ─────────────────────────────────
     const lenis = new Lenis({
