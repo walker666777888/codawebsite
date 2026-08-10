@@ -10,7 +10,7 @@ import {
   useInView,
   useReducedMotion,
 } from "motion/react";
-import { useRef, useCallback, useState, type PointerEvent } from "react";
+import { useRef, useCallback, useState, useEffect, type PointerEvent } from "react";
 import AnimatedCounter from "@/components/ui/AnimatedCounter";
 import dynamic from "next/dynamic";
 const HoverCanvas = dynamic(() => import("@/components/ui/HoverCanvas"), { ssr: false });
@@ -76,7 +76,14 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
   const tileRef = useRef<HTMLDivElement>(null);
   const rectRef = useRef<DOMRect | null>(null);
   const reduced = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
   const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    setIsMobile("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
+  }, []);
+
+  const shouldReduce = reduced || isMobile;
 
   /* ── Scroll-scrubbed entrance ── */
   const { scrollYProgress: enterRaw } = useScroll({
@@ -153,8 +160,13 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
       ref={tileRef}
       className={`group relative overflow-hidden rounded-2xl cursor-default select-none gpu ${className}`}
       style={
-        reduced
-          ? { boxShadow: "0 20px 60px -10px rgba(0,0,0,0.15), 0 0 0 1px rgba(13,13,11,0.07)" }
+        shouldReduce
+          ? {
+              opacity: revealOpacity,
+              y: revealY,
+              scale: revealScale,
+              boxShadow: "0 20px 60px -10px rgba(0,0,0,0.15), 0 0 0 1px rgba(13,13,11,0.07)",
+            }
           : {
               opacity: revealOpacity,
               y: revealY,
@@ -164,18 +176,20 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
               transformPerspective: 900,
             }
       }
-      animate={reduced ? {} : {
-        y: [0, -5, 0],
-        boxShadow: "0 24px 60px -10px rgba(210, 120, 80, 0.25), 0 0 0 1px rgba(13,13,11,0.07)",
-      }}
-      transition={hovered ? { duration: 0.3, ease: [0.16, 1, 0.3, 1] } : {
-        y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: FLOAT_DELAY[index] },
-        boxShadow: { duration: 0.4, ease: "easeOut" },
-      }}
+      animate={
+        shouldReduce
+          ? {}
+          : {
+              boxShadow: hovered 
+                ? "0 24px 60px -10px rgba(210, 120, 80, 0.25), 0 0 0 1px rgba(13,13,11,0.07)"
+                : "0 20px 60px -10px rgba(0,0,0,0.15), 0 0 0 1px rgba(13,13,11,0.07)",
+            }
+      }
+      transition={{ duration: 0.3, ease: "easeOut" }}
 
-      onPointerMove={onPointerMove}
-      onPointerEnter={onPointerEnter}
-      onPointerLeave={onPointerLeave}
+      onPointerMove={!shouldReduce ? onPointerMove : undefined}
+      onPointerEnter={!shouldReduce ? onPointerEnter : undefined}
+      onPointerLeave={!shouldReduce ? onPointerLeave : undefined}
     >
       {/* Gradient border via mask */}
       <div
@@ -195,7 +209,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
 
 
       {/* Premium canvas hover effect — fades in behind the text, clipped to radius */}
-      {!reduced && <HoverCanvas effect={effect} active={hovered} />}
+      {!shouldReduce && <HoverCanvas effect={effect} active={hovered} />}
 
       {/* Spotlight fill (above canvas, still behind text) */}
       <motion.div
@@ -234,7 +248,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
         {/* Metric — extra large, gentle parallax + glass plate for legibility */}
         <motion.div
           className="mt-auto mb-3 md:mb-5 pt-8"
-          style={reduced ? undefined : { y: numberY }}
+          style={shouldReduce ? undefined : { y: numberY }}
         >
           <div
             className="font-instrument text-[#14130F] leading-[0.85] tracking-[-0.04em] tabular-nums transition-colors duration-500 group-hover:text-[#FF5C00]"
@@ -263,6 +277,11 @@ export default function BentoMetrics() {
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true });
   const reduced = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
+  }, []);
 
   // Subtle parallax drift on the ambient glow.
   const { scrollYProgress } = useScroll({
@@ -277,7 +296,7 @@ export default function BentoMetrics() {
       <motion.div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[340px] pointer-events-none"
         style={{
-          y: reduced ? 0 : glowY,
+          y: (reduced || isMobile) ? 0 : glowY,
           background:
             "radial-gradient(ellipse at center top, rgba(255,92,0,0.14) 0%, transparent 68%)",
         }}
