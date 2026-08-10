@@ -201,7 +201,7 @@ export default function Hero() {
       {/* ── Mobile Fluid Interact Toggle ── */}
       <button
         onClick={() => setIsInteractMode(!isInteractMode)}
-        className="absolute bottom-6 right-6 z-50 md:hidden flex items-center justify-center w-12 h-12 rounded-full border border-[rgba(255,255,255,0.1)] bg-[rgba(13,13,11,0.6)] backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-colors"
+        className="absolute bottom-6 right-6 z-30 md:hidden flex items-center justify-center w-12 h-12 rounded-full border border-[rgba(255,255,255,0.1)] bg-[rgba(13,13,11,0.6)] backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-colors"
         aria-label={isInteractMode ? "Unlock Screen" : "Lock Screen"}
       >
         {isInteractMode ? (
