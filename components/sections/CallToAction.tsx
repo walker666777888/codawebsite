@@ -171,7 +171,7 @@ export default function CallToAction() {
 
       <section
         ref={sectionRef}
-        className="relative py-28 sm:py-40 px-6 bg-black [&_*::selection]:bg-coda-accent [&_*::selection]:text-white overflow-hidden"
+        className="relative min-h-[90vh] sm:min-h-screen flex flex-col items-center justify-center py-24 sm:py-32 px-6 bg-black [&_*::selection]:bg-coda-accent [&_*::selection]:text-white overflow-hidden"
       >
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="hidden md:flex absolute inset-0 items-center justify-center">
@@ -206,12 +206,11 @@ export default function CallToAction() {
         />
 
         <div className="relative z-10 w-full flex flex-col items-center">
-          {/* Card — 3D tilt on mouse move */}
           <motion.div
             ref={cardRef}
             onMouseMove={onMouseMove}
             onMouseLeave={onMouseLeave}
-            className={`cta-card${visible ?" in" : ""} relative w-full max-w-2xl text-center flex flex-col items-center gap-8 sm:gap-10 px-6 sm:px-10 py-10 sm:py-14 z-10`}
+            className={`cta-card${visible ?" in" : ""} relative w-full max-w-4xl text-center flex flex-col items-center gap-14 sm:gap-20 px-6 sm:px-10 py-10 z-10`}
             style={{
               rotateX,
               rotateY,
@@ -219,16 +218,33 @@ export default function CallToAction() {
               perspective: 800,
             }}
           >
+            {/* Soft backdrop glow to separate text from the noisy starfield */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-0">
+              <div className="absolute w-[800px] h-[500px] bg-black/60 blur-[100px] rounded-full" />
+              <div className="absolute w-[500px] h-[300px] bg-coda-accent/10 blur-[120px] rounded-full" />
+            </div>
 
             {/* Content Group (Headline + Sub-copy) */}
-            <div className="flex flex-col items-center gap-5 sm:gap-6">
+            <div className="flex flex-col items-center gap-6 sm:gap-8 relative z-10">
+              {/* Premium Eyebrow */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={visible ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="px-5 py-2 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md"
+              >
+                <span className="font-mono text-[10px] sm:text-[11px] text-coda-accent tracking-[0.2em] uppercase font-semibold">
+                  Let's Build the Future
+                </span>
+              </motion.div>
+
               {/* Headline */}
-              <motion.div style={{ x: textX, y: textY, textShadow }}>
+              <motion.div style={{ x: textX, y: textY, textShadow }} className="flex flex-col gap-2">
                 <div className="cta-line-wrap">
                   <WaveText
                     text="Ready to"
-                    className={`cta-line${visible ?" in-0" : ""} font-instrument tracking-[-0.04em] leading-[1.0]`}
-                    style={{ fontSize: "clamp(64px, 10vw, 130px)" }}
+                    className={`cta-line${visible ?" in-0" : ""} font-instrument tracking-tight leading-[1.0]`}
+                    style={{ fontSize: "clamp(56px, 9vw, 110px)" }}
                   />
                 </div>
                 <motion.div
@@ -238,45 +254,57 @@ export default function CallToAction() {
                 >
                   <WaveText
                     text="Dominate!"
-                    className="font-instrument tracking-[-0.04em] leading-[1.0]"
-                    style={{ fontSize: "clamp(64px, 10vw, 130px)" }}
+                    className="font-instrument tracking-tight leading-[1.0]"
+                    style={{ fontSize: "clamp(56px, 9vw, 110px)" }}
                   />
                 </motion.div>
               </motion.div>
 
-              {/* Sub-copy */}
+              {/* Sub-copy with gradient */}
               <p
-                className={`cta-sub${visible ?" in" : ""} font-sans text-[12px] sm:text-[17px] text-white/60 max-w-[240px] sm:max-w-md leading-[1.65] sm:leading-[1.7]`}
+                className={`cta-sub${visible ?" in" : ""} font-sans text-[16px] sm:text-[24px] max-w-[320px] sm:max-w-2xl leading-[1.5] sm:leading-[1.6]`}
+                style={{
+                  background: "linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.4) 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
               >
                 Most agencies build features. We build systems that outlast them.
               </p>
             </div>
 
-            {/* CTA button */}
-            <div className={`cta-btn${visible ?" in" : ""} flex flex-col items-center gap-4`}>
-              <MagneticButton variant="accent" onClick={openForm}>
-                <span
-                  className="flex items-center gap-2 sm:gap-3 bg-coda-accent text-white px-5 py-2.5 sm:px-9 sm:py-4 rounded-xl font-sans font-semibold text-[12px] sm:text-[15px] tracking-[-0.01em] relative overflow-hidden"
-                  style={{ boxShadow: "0 8px 24px color-mix(in srgb, var(--color-coda-accent) 40%, transparent)" }}
-                >
-                  <span className="relative z-10 flex items-center gap-2 sm:gap-3">
-                    Start a project
-                    <ArrowRight className="w-4 h-4" />
+            {/* Action Group (Button + Footer Note) */}
+            <div className="flex flex-col items-center gap-6 sm:gap-8 relative z-10">
+              {/* CTA button */}
+              <div className={`cta-btn${visible ?" in" : ""} flex flex-col items-center`}>
+                <MagneticButton variant="accent" onClick={openForm}>
+                  <span
+                    className="flex items-center gap-2 sm:gap-3 text-white px-8 py-3.5 sm:px-10 sm:py-4 rounded-full font-sans font-semibold text-[15px] sm:text-[17px] tracking-tight relative overflow-hidden transition-transform duration-300 hover:scale-105"
+                    style={{ 
+                      background: "linear-gradient(135deg, var(--color-coda-accent) 0%, color-mix(in srgb, var(--color-coda-accent) 80%, black) 100%)",
+                      boxShadow: "0 12px 32px color-mix(in srgb, var(--color-coda-accent) 40%, transparent), inset 0 1px 1px rgba(255,255,255,0.4)",
+                      border: "1px solid rgba(255,255,255,0.15)"
+                    }}
+                  >
+                    <span className="relative z-10 flex items-center gap-2 sm:gap-3">
+                      Start a project
+                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </span>
+                    <div className="cta-btn-shine" />
                   </span>
-                  <div className="cta-btn-shine" />
-                </span>
-              </MagneticButton>
-            </div>
+                </MagneticButton>
+              </div>
 
-            {/* Footer note */}
-            <div
-              className={`cta-note${visible ?" in" : ""} flex items-center gap-4 font-mono text-[10px] text-white/30 tracking-widest uppercase`}
-            >
-              <span>No retainers</span>
-              <span className="w-1 h-1 rounded-full bg-white/20" />
-              <span>No bloat</span>
-              <span className="w-1 h-1 rounded-full bg-white/20" />
-              <span>Just results</span>
+              {/* Footer note */}
+              <div
+                className={`cta-note${visible ?" in" : ""} flex items-center gap-3 sm:gap-4 font-mono text-[10px] sm:text-[12px] text-white/50 tracking-[0.2em] uppercase`}
+              >
+                <span>No retainers</span>
+                <span className="w-1 h-1 rounded-full bg-white/30" />
+                <span>No bloat</span>
+                <span className="w-1 h-1 rounded-full bg-white/30" />
+                <span>Just results</span>
+              </div>
             </div>
           </motion.div>
         </div>
