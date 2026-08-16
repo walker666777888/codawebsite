@@ -236,7 +236,7 @@ export default function Footer() {
               href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 font-mono text-[9px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em]"
+              className="group inline-flex items-center gap-2 font-mono text-[11px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em]"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
