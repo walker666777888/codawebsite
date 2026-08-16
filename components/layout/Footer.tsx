@@ -127,16 +127,17 @@ export default function Footer() {
       {/* ── Nav content ─────────────────────────────────── */}
       <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-16">
 
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_auto_auto] gap-12 md:gap-20 mb-16">
-
-          {/* Brand */}
+        <div className="flex flex-col md:grid md:grid-cols-[1fr_auto_auto_auto] gap-10 md:gap-20 mb-16">
+          
+          {/* Logo (Top on mobile, Col 1 on desktop) */}
           <motion.div
+            className="md:col-start-1 md:row-start-1 md:mb-5"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="flex items-baseline gap-[2px] mb-5">
+            <div className="flex items-baseline gap-[2px]">
               <span className="font-instrument text-[48px] text-white tracking-[-0.04em] leading-none">
                 CODA
               </span>
@@ -146,64 +147,98 @@ export default function Footer() {
                 transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
               >.</motion.span>
             </div>
-            <p className="font-sans text-[14px] text-white/40 max-w-[260px] leading-[1.75]">
-              Engineering high-performance digital ecosystems. Dominate the Digital Age.
-            </p>
-            <motion.a
-              href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 mt-6 font-mono text-[11px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em]"
-              whileHover={{ x: 4 }}
-              transition={{ duration: 0.25 }}
+          </motion.div>
+
+          <div className="flex flex-row justify-between md:justify-start gap-6 md:gap-0 md:contents">
+            
+            {/* Description & Connect (Left vertical on mobile, horizontal on desktop under logo) */}
+            <motion.div
+              className="md:col-start-1 md:row-start-2 flex flex-col justify-end md:block flex-shrink-0 md:pr-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
             >
-              Connect@citizenofdigitalage.com
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
-            </motion.a>
-          </motion.div>
+              <p className="font-sans text-[12px] md:text-[14px] text-white/40 leading-[1.75] md:max-w-[260px] [writing-mode:vertical-rl] rotate-180 md:[writing-mode:horizontal-tb] md:rotate-0 tracking-widest md:tracking-normal whitespace-nowrap md:whitespace-normal">
+                Engineering high-performance digital ecosystems. Dominate the Digital Age.
+              </p>
+              <motion.a
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group hidden md:inline-flex items-center gap-2 mt-6 font-mono text-[11px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em]"
+                whileHover={{ x: 4 }}
+                transition={{ duration: 0.25 }}
+              >
+                Connect@citizenofdigitalage.com
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
+              </motion.a>
+            </motion.div>
 
-          {/* Navigation */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white mb-6">
-              Navigation
-            </p>
-            <ul className="space-y-4">
-              {LINKS.map(({ label, href }, i) => (
-                <motion.li key={label} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.15 + i * 0.07 }}>
-                  <AnimLink href={href}>
-                    {label}
-                  </AnimLink>
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
+            {/* Right side on mobile / Cols 2 & 3 on desktop */}
+            <div className="flex flex-col gap-10 flex-grow md:contents pt-2 md:pt-0">
+              
+              {/* Navigation */}
+              <motion.div
+                className="md:col-start-2 md:row-start-1 md:row-span-2"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white mb-6">
+                  Navigation
+                </p>
+                <ul className="space-y-4">
+                  {LINKS.map(({ label, href }, i) => (
+                    <motion.li key={label} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.15 + i * 0.07 }}>
+                      <AnimLink href={href}>
+                        {label}
+                      </AnimLink>
+                    </motion.li>
+                  ))}
+                </ul>
+              </motion.div>
 
-          {/* Social */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white mb-6">
-              Social
-            </p>
-            <ul className="space-y-4">
-              {SOCIAL.map(({ label, href }, i) => (
-                <motion.li key={label} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 + i * 0.07 }}>
-                  <AnimLink href={href}>
-                    {label}
-                  </AnimLink>
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
+              {/* Social */}
+              <motion.div
+                className="md:col-start-3 md:row-start-1 md:row-span-2"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white mb-6">
+                  Social
+                </p>
+                <ul className="space-y-4">
+                  {SOCIAL.map(({ label, href }, i) => (
+                    <motion.li key={label} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 + i * 0.07 }}>
+                      <AnimLink href={href}>
+                        {label}
+                      </AnimLink>
+                    </motion.li>
+                  ))}
+                </ul>
+              </motion.div>
 
+              {/* Mobile Connect Link */}
+              <motion.a
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group md:hidden inline-flex items-center gap-2 font-mono text-[9px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em]"
+                whileHover={{ x: 4 }}
+                transition={{ duration: 0.25 }}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                Connect@citizenofdigitalage.com
+              </motion.a>
+              
+            </div>
+          </div>
         </div>
 
         {/* Bottom bar */}
