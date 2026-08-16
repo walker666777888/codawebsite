@@ -47,7 +47,7 @@ const CARDS = [
     border: "rgba(140,200,155,0.45)",
     shadow: "0 8px 40px rgba(0,0,0,0.09), 0 1px 0 rgba(255,255,255,0.9) inset",
     rotation: 2.2,
-    x: 396, y: 18, mobileX: 45, mobileY: 290,
+    x: 396, y: 18, mobileX: 45, mobileY: 160,
     pin: true,
     pinColor: "#4A8A5A",
     width: 255,
@@ -63,7 +63,7 @@ const CARDS = [
     border: "rgba(200,190,170,0.4)",
     shadow: "0 6px 32px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.85) inset",
     rotation: -1.4,
-    x: 728, y: 58, mobileX: 15, mobileY: 540,
+    x: 728, y: 58, mobileX: 15, mobileY: 300,
     pin: true,
     pinColor: "#8A7A5A",
     width: 270,
@@ -79,7 +79,7 @@ const CARDS = [
     border: "rgba(140,160,220,0.4)",
     shadow: "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.9) inset",
     rotation: 2.8,
-    x: 1020, y: 30, mobileX: 40, mobileY: 790,
+    x: 1020, y: 30, mobileX: 40, mobileY: 440,
     pin: true,
     pinColor: "#4A72C8",
     width: 248,
@@ -95,7 +95,7 @@ const CARDS = [
     border: "rgba(255,140,80,0.3)",
     shadow: "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.9) inset",
     rotation: -2.1,
-    x: 188, y: 348, mobileX: 25, mobileY: 1040,
+    x: 188, y: 348, mobileX: 25, mobileY: 580,
     pin: true,
     pinColor: "#E05A00",
     width: 262,
@@ -111,7 +111,7 @@ const CARDS = [
     border: "rgba(170,130,210,0.4)",
     shadow: "0 8px 40px rgba(0,0,0,0.09), 0 1px 0 rgba(255,255,255,0.9) inset",
     rotation: 1.6,
-    x: 548, y: 318, mobileX: 50, mobileY: 1290,
+    x: 548, y: 318, mobileX: 50, mobileY: 720,
     pin: true,
     pinColor: "#8A5AC8",
     width: 258,
@@ -395,7 +395,7 @@ export default function Philosophy() {
         .phil-stats.in { animation: phil-fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.45s forwards; }
 
         @media (max-width: 767px) {
-          .board-height { height: 1600px !important; }
+          .board-height { height: 960px !important; }
           .card-position { left: var(--mobile-x) !important; top: var(--mobile-y) !important; }
         }
         @media (min-width: 768px) {
