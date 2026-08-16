@@ -446,23 +446,52 @@ export default function Philosophy() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pb-20 md:pb-28">
           <DraggableBoard />
 
-          {/* Mobile fallback — simple stacked cards */}
-          <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Mobile fallback — stacked sticky notes with pushpins */}
+          <div className="md:hidden flex flex-col items-center gap-8 py-4">
             {CARDS.map((card, i) => (
-              <div key={card.id} className={`rounded-2xl p-6 flex flex-col gap-3${i >= 4 ?" hidden sm:block" : ""}`}
-                style={{ background: card.bg, border: `1px solid ${card.border}`, boxShadow: card.shadow }}>
+              <motion.div
+                key={card.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="relative rounded-2xl flex flex-col gap-4"
+                style={{
+                  width: "100%",
+                  maxWidth: 320,
+                  background: card.bg,
+                  border: `1px solid ${card.border}`,
+                  boxShadow: card.shadow,
+                  padding: "28px 24px 22px",
+                  rotate: card.rotation * 0.7, // Subtle rotation for the messy notepad vibe
+                }}
+              >
+                {card.pin && <Pushpin color={card.pinColor} />}
+                
                 <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: card.dot }} />
-                  <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#6F6A60]">{card.category}</span>
+                  <div
+                    className="w-1.5 h-1.5 rounded-full shrink-0"
+                    style={{ background: card.dot, boxShadow: `0 0 5px ${card.dot}` }}
+                  />
+                  <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#6F6A60]">
+                    {card.category}
+                  </span>
                 </div>
-                <h3 className="font-instrument text-[28px] tracking-[-0.01em] text-[#0D0D0B]">
+                
+                <h3 className="font-instrument tracking-[-0.01em] leading-[1.05] text-[#0D0D0B] text-[26px]">
                   {card.title} <span className="text-[#FF5C00]">{card.accent}</span>
                 </h3>
-                <p className="font-sans text-[15px] text-[#4A463F] leading-relaxed">{card.body}</p>
+                
+                <p className="font-sans text-[15px] text-[#4A463F] leading-relaxed">
+                  {card.body}
+                </p>
+                
                 <div className="border-t pt-3" style={{ borderColor: "rgba(13,13,11,0.08)" }}>
-                  <span className="font-mono text-[8.5px] tracking-[0.18em] text-[#9A9488] uppercase">{card.tags}</span>
+                  <span className="font-mono text-[8.5px] tracking-[0.18em] text-[#9A9488] uppercase">
+                    {card.tags}
+                  </span>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
