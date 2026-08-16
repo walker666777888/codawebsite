@@ -127,11 +127,11 @@ export default function Footer() {
       {/* ── Nav content ─────────────────────────────────── */}
       <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-16">
 
-        <div className="flex flex-col md:grid md:grid-cols-[1fr_auto_auto_auto] gap-10 md:gap-20 mb-16">
+        <div className="flex flex-col md:grid md:grid-cols-[1fr_auto_auto_auto] gap-10 md:gap-x-20 md:gap-y-6 mb-16">
           
           {/* Logo (Top on mobile, Col 1 on desktop) */}
           <motion.div
-            className="md:col-start-1 md:row-start-1 md:mb-5"
+            className="md:col-start-1 md:row-start-1"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
