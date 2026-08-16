@@ -148,10 +148,9 @@ function DraggableCard({
   return (
     <motion.div
       drag
-      dragMomentum={false}
-      dragElastic={0.05}
+      dragElastic={0.2}
       dragConstraints={constraintsRef}
-      dragTransition={{ power: 0, timeConstant: 0 }}
+      dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
       onDragStart={onDragStart}
       className="absolute select-none touch-none card-position"
       style={{
