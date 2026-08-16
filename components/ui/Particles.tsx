@@ -146,15 +146,26 @@ const Particles = ({
     window.addEventListener('resize', resize, false);
     resize();
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handlePointerMove = (clientX: number, clientY: number) => {
       const rect = container.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
+      const x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      const y = -(((clientY - rect.top) / rect.height) * 2 - 1);
       mouseRef.current = { x, y };
     };
 
+    const handleMouseMove = (e: MouseEvent) => {
+      handlePointerMove(e.clientX, e.clientY);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+
     if (moveParticlesOnHover) {
-      container.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('touchmove', handleTouchMove);
     }
 
     const count = particleCount;
@@ -234,7 +245,8 @@ const Particles = ({
     return () => {
       window.removeEventListener('resize', resize);
       if (moveParticlesOnHover) {
-        container.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('touchmove', handleTouchMove);
       }
       cancelAnimationFrame(animationFrameId);
       if (container.contains(gl.canvas)) {
