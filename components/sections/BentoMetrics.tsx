@@ -197,7 +197,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
 
 
       {/* Premium canvas hover effect — fades in behind the text, clipped to radius */}
-      {!shouldReduce && <HoverCanvas effect={effect as CanvasEffect} active={hovered} />}
+      {!reduced && <HoverCanvas effect={effect as CanvasEffect} active={isMobile ? true : hovered} />}
 
       {/* Spotlight fill (above canvas, still behind text) */}
       <motion.div
