@@ -215,7 +215,9 @@ const Particles = ({
     let lastTime = performance.now();
     let elapsed = 0;
 
+    let isVisible = true;
     const update = (t: number) => {
+      if (!isVisible) return;
       animationFrameId = requestAnimationFrame(update);
       const delta = t - lastTime;
       lastTime = t;
@@ -240,7 +242,17 @@ const Particles = ({
       renderer.render({ scene: particles, camera });
     };
 
-    animationFrameId = requestAnimationFrame(update);
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible) {
+        lastTime = performance.now();
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(update);
+      } else {
+        cancelAnimationFrame(animationFrameId);
+      }
+    }, { threshold: 0 });
+    observer.observe(container);
 
     return () => {
       window.removeEventListener('resize', resize);
@@ -249,6 +261,7 @@ const Particles = ({
         window.removeEventListener('touchmove', handleTouchMove);
       }
       cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
       if (container.contains(gl.canvas)) {
         container.removeChild(gl.canvas);
       }

@@ -272,7 +272,9 @@ const LightPillar = ({
     const targetFPS = effectiveQuality === 'low' ? 30 : 60;
     const frameTime = 1000 / targetFPS;
 
+    let isVisible = true;
     const animate = (currentTime: number) => {
+      if (!isVisible) return;
       if (!materialRef.current || !rendererRef.current || !sceneRef.current || !cameraRef.current) return;
 
       const deltaTime = currentTime - lastTime;
@@ -289,7 +291,21 @@ const LightPillar = ({
 
       rafRef.current = requestAnimationFrame(animate);
     };
-    rafRef.current = requestAnimationFrame(animate);
+
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible) {
+        lastTime = performance.now();
+        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        rafRef.current = requestAnimationFrame(animate);
+      } else {
+        if (rafRef.current) {
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = null;
+        }
+      }
+    }, { threshold: 0 });
+    observer.observe(container);
 
     let resizeTimeout: number | null = null;
     const handleResize = () => {
@@ -318,6 +334,7 @@ const LightPillar = ({
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
+      observer.disconnect();
       if (rendererRef.current) {
         rendererRef.current.dispose();
         rendererRef.current.forceContextLoss();
