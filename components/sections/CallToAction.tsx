@@ -2,7 +2,6 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion, useMotionTemplate } from "motion/react";
-import Galaxy from "@/components/ui/Galaxy";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { ArrowRight } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
@@ -189,21 +188,7 @@ export default function CallToAction() {
           />
         </div>
 
-        {/* Galaxy Background for the whole section */}
-        <Galaxy
-          className="!z-0"
-          starSpeed={0.9}
-          density={1.9}
-          hueShift={210}
-          speed={1.8}
-          glowIntensity={0.6}
-          saturation={1}
-          mouseRepulsion={true}
-          repulsionStrength={2}
-          twinkleIntensity={0}
-          rotationSpeed={0.2}
-          transparent={false}
-        />
+        {/* Galaxy removed for performance */}
 
         <div className="relative z-10 w-full flex flex-col items-center">
           <motion.div

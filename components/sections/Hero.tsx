@@ -10,10 +10,7 @@ import { useRef, useEffect, useState } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { useFormModal } from "@/components/providers/FormModalProvider";
 import { useIsLowEndDevice } from "@/hooks/useIsLowEndDevice";
-import dynamic from "next/dynamic";
-const LiquidEther = dynamic(() => import("@/components/ui/LiquidEther"), { ssr: false });
 import TextType from "@/components/ui/TextType";
-import WarpText from "@/components/ui/WarpText";
 
 const PARTICLES = Array.from({ length: 25 }).map((_, i) => ({
   id: i,
@@ -217,25 +214,8 @@ export default function Hero() {
         )}
       </button>
 
-      {/* ── LiquidEther fluid background ── */}
-      {!isLowTier && (
-        <div className={`absolute inset-0 z-[1] ${isInteractMode ? "pointer-events-auto" : "pointer-events-none md:pointer-events-auto"}`}>
-          <LiquidEther
-            colors={["#ffaeae", "#ff9851", "#fed553"]}
-            mouseForce={25}
-            cursorSize={isMobileScreen ? 40 : 100}
-            isViscous={false}
-            viscous={100}
-            iterationsViscous={8} // Drastically reduced from 32
-            iterationsPoisson={8} // Drastically reduced from 32
-            autoDemo={true}
-            autoSpeed={0.4}
-            autoIntensity={1.3}
-            isBounce={true}
-            resolution={0.25} // Reduced from 0.5 to cut pixels calculated by 4x
-          />
-        </div>
-      )}
+      {/* ── Lightweight Static Gradient Background ── */}
+      <div className="absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,rgba(255,92,0,0.15)_0%,transparent_60%)] pointer-events-none" />
 
 
 
@@ -277,31 +257,10 @@ export default function Hero() {
         className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pt-16 sm:pt-20 gap-4 md:gap-6 pointer-events-none"
       >
 
-        {/* Brand name Desktop (WarpText) */}
-        <div className="hidden md:flex w-full justify-center font-instrument pointer-events-auto">
-          <WarpText
-            text="Citizen Of Digital Age."
-            color="#FF5C00"
-            warpStrength={0.05}
-            warpScale={0.8}
-            speed={1.5}
-            pointerInfluence={0.75}
-            pointerStrength={0.57}
-            refraction={0.02}
-            ripple
-            fontSize="clamp(64px, 11vw, 150px)"
-            fontWeight={600}
-            style={{ height: '300px', width: '100%', maxWidth: '1400px' }}
-            fontFamily="inherit"
-            letterSpacing="-0.04em"
-            lineHeight={1.04}
-          />
-        </div>
-
-        {/* Brand name Mobile (Original) */}
+        {/* Brand name */}
         <h1
-          className="md:hidden font-instrument tracking-[-0.04em] leading-[1.04] text-center drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]"
-          style={{ fontSize: "clamp(62px, 10.5vw, 118px)" }}
+          className="font-instrument tracking-[-0.04em] leading-[1.04] text-center drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]"
+          style={{ fontSize: "clamp(62px, 10.5vw, 150px)" }}
         >
           {(["Citizen", "Of", "Digital Age."] as Array<string>).map((word, wi) => (
             <span

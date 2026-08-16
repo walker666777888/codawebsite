@@ -249,11 +249,6 @@ export default function DigitalGap() {
   const visualsRef          = useRef<HTMLDivElement>(null);
   const progressRef         = useRef<HTMLDivElement>(null);
 
-  // ── Mobile refs ───────────────────────────────────────────
-  const mobileContainerRef  = useRef<HTMLDivElement>(null);
-  const mobileTextRef       = useRef<HTMLDivElement>(null);
-  const mobileVisualRef     = useRef<HTMLDivElement>(null);
-
   // ── Desktop GSAP (md+) ────────────────────────────────────
   useEffect(() => {
     if (window.innerWidth < 768) return;
@@ -293,71 +288,7 @@ export default function DigitalGap() {
     return () => ctx.revert();
   }, []);
 
-  // ── Mobile GSAP (<md) ─────────────────────────────────────
-  useEffect(() => {
-    if (window.innerWidth >= 768) return;
-    if (!mobileContainerRef.current || !mobileTextRef.current || !mobileVisualRef.current) return;
 
-    const texts   = Array.from(mobileTextRef.current.children) as HTMLElement[];
-    const visuals = Array.from(mobileVisualRef.current.children) as HTMLElement[];
-
-    // Each h2 has two block spans: [0] = pre text, [1] = em text (italic orange)
-    const pre = texts.map(h2 => h2.children[0] as HTMLElement);
-    const em  = texts.map(h2 => h2.children[1] as HTMLElement);
-
-    // Add hardware acceleration for mobile to prevent layout thrashing
-    gsap.set([...pre, ...em, ...visuals], { willChange: "transform, opacity", transform: "translateZ(0)" });
-
-    // h2 opacity:1 always — child spans control visibility to prevent simultaneous stacking
-    gsap.set(texts, { opacity: 1 });
-    gsap.set([pre[0], em[0]], { opacity: 1, y: 0 });
-    gsap.set([pre[1], em[1], pre[2], em[2]], { opacity: 0, y: 24 });
-    gsap.set(visuals[0], { opacity: 1, y: 0, scale: 1 });
-    gsap.set([visuals[1], visuals[2]], { opacity: 0, y: 40, scale: 0.95 });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: mobileContainerRef.current,
-        start: "top top",
-        end: "+=120%", // Shorter distance so it takes less swiping to progress
-        pin: true,
-        pinSpacing: true,
-        scrub: 0.2, // Very fast response to finger (0.2s) instead of sluggish 1.5s
-        snap: {
-          snapTo: 1 / 2,
-          duration: { min: 0.1, max: 0.35 }, // Punchy, fast snap
-          ease: "power3.out", // Snappy deceleration
-          delay: 0.05 // Almost instant snap when finger lifts
-        },
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-      },
-    });
-
-    tl
-      // Slide 0 → 1
-
-      .to([pre[0], em[0]], { opacity: 0, y: -18, duration: 1 })
-      .to(visuals[0],      { opacity: 0, y: -30, scale: 0.95, duration: 1 }, "<")
-      .to(pre[1],          { opacity: 1, y: 0, duration: 1 })
-      .to(visuals[1],      { opacity: 1, y: 0, scale: 1, duration: 1 }, "<")
-      .to(em[1],           { opacity: 1, y: 0, duration: 1 }, "<0.35")
-      // Slide 1 → 2: exit phrase 1, then enter phrase 2 line-by-line
-      .to([pre[1], em[1]], { opacity: 0, y: -18, duration: 1 })
-      .to(visuals[1],      { opacity: 0, y: -30, scale: 0.95, duration: 1 }, "<")
-      .to(pre[2],          { opacity: 1, y: 0, duration: 1 })
-      .to(visuals[2],      { opacity: 1, y: 0, scale: 1, duration: 1 }, "<")
-      .to(em[2],           { opacity: 1, y: 0, duration: 1 }, "<0.35");
-
-    gsap.delayedCall(0.15, () => ScrollTrigger.refresh());
-
-    return () => {
-      ScrollTrigger.getAll().forEach(st => {
-        if (st.vars.trigger === mobileContainerRef.current) st.kill();
-      });
-      tl.kill();
-    };
-  }, []);
 
   const BG = (
     <div className="absolute inset-0 pointer-events-none" style={{
@@ -418,53 +349,41 @@ export default function DigitalGap() {
     </section>
 
     {/* ═══════════════════════════════════════════════════
-        MOBILE  (<md)  — same scrub animation, stacked
+        MOBILE  (<md)  — Native Stack (No GSAP for performance)
     ═══════════════════════════════════════════════════ */}
-    <section
-      ref={mobileContainerRef}
-      className="md:hidden bg-[#F4F0E8] text-[#0D0D0B] overflow-hidden border-b border-[#E6E1DA] relative"
-      style={{ height: "100svh" }}
-    >
+    <section className="md:hidden bg-[#F4F0E8] text-[#0D0D0B] border-b border-[#E6E1DA] relative py-20 px-5 overflow-hidden">
       {BG}
-
-      <div className="relative z-10 h-full px-5 flex flex-col justify-between pt-20 pb-6">
-
-        {/* Top: Label + Text */}
-        <div className="flex flex-col gap-8">
-          <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full"
-            style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
-          >The Digital Gap</SectionLabel>
-          <div ref={mobileTextRef} className="relative" style={{ height: 120 }}>
-            {TEXTS.map(({ pre, em }, i) => (
-              <h2 key={i} className="absolute inset-x-0 top-3 font-instrument tracking-[-0.03em]"
-                style={{ fontSize: "clamp(30px, 8.5vw, 42px)", opacity: i === 0 ? 1 : 0 }}>
-                <span className="block leading-[1.15]">{pre}</span>
-                <span className="block leading-[1.15] text-[#FF5C00]">{em}</span>
-              </h2>
-            ))}
+      <div className="relative z-10 flex flex-col gap-24">
+        {TEXTS.map(({ pre, em }, i) => (
+          <div key={i} className="flex flex-col gap-8">
+            {i === 0 && (
+              <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full"
+                style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
+              >The Digital Gap</SectionLabel>
+            )}
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="font-instrument tracking-[-0.03em]"
+              style={{ fontSize: "clamp(32px, 9vw, 42px)" }}
+            >
+              <span className="block leading-[1.15]">{pre}</span>
+              <span className="block leading-[1.15] text-[#FF5C00]">{em}</span>
+            </motion.h2>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+              className="w-full rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6" 
+              style={{ height: 280 }}
+            >
+              {VISUALS[i]}
+            </motion.div>
           </div>
-        </div>
-
-        {/* Middle: Visual card */}
-        <div ref={mobileVisualRef} className="relative w-full" style={{ height: 280 }}>
-          {VISUALS.map((v, i) => (
-            <div key={i} className="absolute inset-0 rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6"
-              style={{ opacity: i === 0 ? 1 : 0 }}>
-              {v}
-            </div>
-          ))}
-        </div>
-
-        {/* Bottom: Scroll hint always pinned to bottom */}
-        <div className="flex justify-center pb-2">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(13,13,11,0.08)] bg-[rgba(255,255,255,0.75)] backdrop-blur-md shadow-[0_4px_20px_rgba(13,13,11,0.06)]">
-            <span className="font-mono text-[9px] text-[#3D3A35] font-semibold uppercase tracking-[0.25em]">Scroll to explore</span>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#FF5C00]">
-              <path d="M12 5v14M19 12l-7 7-7-7"/>
-            </svg>
-          </div>
-        </div>
-
+        ))}
       </div>
     </section>
   </>);
