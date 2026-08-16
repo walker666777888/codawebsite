@@ -95,10 +95,10 @@ function VideoText({ shouldLoad }: { shouldLoad: boolean }) {
 
       {/* Multiply blend: black bg + white text = video shows inside letters */}
       <div style={{ background: "#0A0A09", mixBlendMode: "multiply" }}>
-        <div ref={wrapRef} style={{ width: "100%", overflow: "hidden", lineHeight: 0, padding: 0, margin: 0 }}>
+        <div ref={wrapRef} className="w-full overflow-hidden pt-[10%] sm:pt-0 pb-[2%] sm:pb-0" style={{ lineHeight: 0, margin: 0 }}>
           <span
             ref={textRef}
-            className="block whitespace-nowrap text-white uppercase"
+            className="block whitespace-nowrap text-white uppercase scale-y-[1.8] sm:scale-y-100 origin-bottom transition-transform duration-300"
             style={{
               fontFamily: "var(--font-unbounded)",
               fontSize: "6vw",
@@ -106,6 +106,7 @@ function VideoText({ shouldLoad }: { shouldLoad: boolean }) {
               letterSpacing: "-0.02em",
               display: "block",
               textAlign: "center",
+              width: "100%",
             }}
           >
             {TEXT}
