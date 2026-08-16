@@ -15,31 +15,19 @@ const Particles = dynamic(() => import("@/components/ui/Particles"), {
 function WaveText({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
   const [hovered, setHovered] = useState(false);
   const [pulse, setPulse] = useState(false);
-  const ref = useRef<HTMLSpanElement>(null);
-  const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting));
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!inView) return;
     const t = setInterval(() => {
       setPulse(true);
       setTimeout(() => setPulse(false), 1200);
     }, 6000);
     return () => clearInterval(t);
-  }, [inView]);
+  }, []);
 
   const active = hovered || pulse;
 
   return (
     <span
-      ref={ref}
       className={className}
       style={{ ...style, display: "inline-block" }}
       onMouseEnter={() => setHovered(true)}

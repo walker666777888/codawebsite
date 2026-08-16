@@ -105,8 +105,6 @@ function DynamicHex() {
       isVisible = entries[0].isIntersecting;
       if (isVisible && !wasVisible) {
         animationFrameId = requestAnimationFrame(animate);
-      } else if (!isVisible && wasVisible) {
-        cancelAnimationFrame(animationFrameId);
       }
     });
 
