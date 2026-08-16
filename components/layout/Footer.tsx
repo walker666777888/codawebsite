@@ -170,12 +170,12 @@ export default function Footer() {
                   href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2 font-mono text-[9px] md:text-[11px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em] ml-6 md:ml-0 md:mt-6"
+                  className="group hidden md:inline-flex items-center gap-2 font-mono text-[11px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em] md:mt-6"
                   whileHover={{ x: -4, y: 0 }}
                   transition={{ duration: 0.25 }}
                 >
                   Connect@citizenofdigitalage.com
-                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden md:inline">→</span>
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
                 </motion.a>
               </div>
             </motion.div>
@@ -228,6 +228,21 @@ export default function Footer() {
               </motion.div>
               
             </div>
+          </div>
+
+          {/* Mobile Connect Link (Horizontal) */}
+          <div className="md:hidden pt-4">
+            <motion.a
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 font-mono text-[9px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em]"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Connect@citizenofdigitalage.com
+            </motion.a>
           </div>
         </div>
 
