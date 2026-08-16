@@ -179,13 +179,16 @@ export default function CallToAction() {
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Particles
-              particleColors={["#FF5C00", "#FF8A00", "#ffffff"]}
-              particleCount={600}
+              particleCount={1000}
               particleSpread={10}
-              speed={0.2}
-              particleBaseSize={60}
+              speed={0.6}
+              particleColors={["#F97316"]}
               moveParticlesOnHover={true}
+              particleHoverFactor={1}
               alphaParticles={false}
+              particleBaseSize={100}
+              sizeRandomness={1}
+              cameraDistance={20}
               disableRotation={false}
             />
           </div>
