@@ -12,6 +12,9 @@ import {
 } from "motion/react";
 import { useRef, useCallback, useState, useEffect, type PointerEvent } from "react";
 import AnimatedCounter from "@/components/ui/AnimatedCounter";
+import dynamic from "next/dynamic";
+const HoverCanvas = dynamic(() => import("@/components/ui/HoverCanvas"), { ssr: false });
+import type { CanvasEffect } from "@/components/ui/HoverCanvas";
 
 
 interface StatDef {
@@ -65,7 +68,7 @@ interface TileProps {
   /** Parallax travel (px) for the metric — varied per tile to build depth. */
   depth?: number;
   /** Distinct canvas hover effect for this tile. */
-  effect: string;
+  effect: CanvasEffect;
 }
 
 const FLOAT_DELAY = [0, 0.6, 1.2, 1.8]; // stagger idle floats per tile
@@ -206,7 +209,8 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
       </div>
 
 
-      {/* Premium canvas hover effect removed for performance */}
+      {/* Premium canvas hover effect — fades in behind the text, clipped to radius */}
+      {!shouldReduce && <HoverCanvas effect={effect as CanvasEffect} active={hovered} />}
 
       {/* Spotlight fill (above canvas, still behind text) */}
       <motion.div
