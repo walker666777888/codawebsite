@@ -215,15 +215,7 @@ function DraggableCard({
           {card.body}
         </p>
 
-        {/* Divider + tags */}
-        <div
-          className="border-t pt-3"
-          style={{ borderColor: "rgba(13,13,11,0.08)" }}
-        >
-          <span className="font-mono text-[8.5px] tracking-[0.18em] text-[#9A9488] uppercase">
-            {card.tags}
-          </span>
-        </div>
+
       </div>
     </motion.div>
   );
@@ -486,11 +478,7 @@ export default function Philosophy() {
                   {card.body}
                 </p>
                 
-                <div className="border-t pt-3" style={{ borderColor: "rgba(13,13,11,0.08)" }}>
-                  <span className="font-mono text-[8.5px] tracking-[0.18em] text-[#9A9488] uppercase">
-                    {card.tags}
-                  </span>
-                </div>
+
               </motion.div>
             ))}
           </div>
