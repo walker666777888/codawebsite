@@ -160,7 +160,8 @@ export default function Footer() {
             >
               <div className="md:max-w-[260px] [writing-mode:vertical-rl] rotate-180 md:[writing-mode:horizontal-tb] md:rotate-0 tracking-widest md:tracking-normal flex-shrink-0">
                 <p className="font-sans text-base md:text-sm text-white/40 leading-[1.75] whitespace-nowrap md:whitespace-normal">
-                  Engineering high-performance digital ecosystems.
+                  <span className="md:hidden">Engineering high-performance<br/>digital ecosystems.</span>
+                  <span className="hidden md:inline">Engineering high-performance digital ecosystems.</span>
                 </p>
                 <p className="font-sans text-base md:text-sm text-[#FF5C00] leading-[1.75] whitespace-nowrap md:whitespace-normal ml-3 md:ml-0 md:mt-2">
                   Dominate the Digital Age.
