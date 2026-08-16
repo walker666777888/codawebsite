@@ -259,7 +259,7 @@ export default function DigitalGap() {
           trigger: desktopContainerRef.current,
           start: "top top", end: "+=150%",
           pin: true, pinSpacing: true,
-          pinType: "transform", scrub: 1.2,
+          pinType: "transform", scrub: 0.6,
           anticipatePin: 1, invalidateOnRefresh: true,
           onUpdate: (self) => {
             if (progressRef.current)
@@ -362,23 +362,23 @@ export default function DigitalGap() {
               >The Digital Gap</SectionLabel>
             )}
             <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true, margin: "0px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="font-instrument tracking-[-0.03em]"
-              style={{ fontSize: "clamp(32px, 9vw, 42px)" }}
+              style={{ fontSize: "clamp(32px, 9vw, 42px)", willChange: "transform, opacity" }}
             >
               <span className="block leading-[1.15]">{pre}</span>
               <span className="block leading-[1.15] text-[#FF5C00]">{em}</span>
             </motion.h2>
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+              viewport={{ once: true, margin: "0px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
               className="w-full rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6" 
-              style={{ height: 280 }}
+              style={{ height: 280, willChange: "transform, opacity" }}
             >
               {VISUALS[i]}
             </motion.div>

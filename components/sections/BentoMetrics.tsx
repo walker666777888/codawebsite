@@ -86,23 +86,12 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
 
   const shouldReduce = reduced || isMobile;
 
-  /* ── Scroll-scrubbed entrance ── */
-  const { scrollYProgress: enterRaw } = useScroll({
-    target: tileRef,
-    offset: ["start 0.92", "start 0.5"],
-  });
-  const enter = useSpring(enterRaw, { stiffness: 80, damping: 30, mass: 0.5 });
-  const revealOpacity = useTransform(enter, [0, 0.55], [0, 1]);
-  const revealY = useTransform(enter, [0, 1], [60, 0]);
-  const revealScale = useTransform(enter, [0, 1], [0.94, 1]);
-
-  /* ── Parallax (reduced depth for performance) ── */
+  /* ── Parallax (direct compositor transform, no spring lag) ── */
   const { scrollYProgress: passRaw } = useScroll({
     target: tileRef,
     offset: ["start end", "end start"],
   });
-  const pass = useSpring(passRaw, { stiffness: 50, damping: 30, mass: 0.6 });
-  const numberY = useTransform(pass, [0, 1], [depth * 0.6, -depth * 0.6]);
+  const numberY = useTransform(passRaw, [0, 1], [depth * 0.3, -depth * 0.3]);
 
   /* ── Cursor spotlight ── */
   const rawX = useMotionValue(0);
@@ -159,22 +148,21 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
   return (
     <motion.div
       ref={tileRef}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "0px" }}
+      transition={{ duration: 0.65, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       className={`group relative overflow-hidden rounded-2xl cursor-default select-none gpu ${className}`}
       style={
         shouldReduce
           ? {
-              opacity: revealOpacity,
-              y: revealY,
-              scale: revealScale,
               boxShadow: "0 20px 60px -10px rgba(0,0,0,0.15), 0 0 0 1px rgba(13,13,11,0.07)",
             }
           : {
-              opacity: revealOpacity,
-              y: revealY,
-              scale: revealScale,
               rotateX: tiltX,
               rotateY: tiltY,
               transformPerspective: 900,
+              willChange: "transform, opacity",
             }
       }
       animate={
@@ -186,7 +174,6 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
                 : "0 20px 60px -10px rgba(0,0,0,0.15), 0 0 0 1px rgba(13,13,11,0.07)",
             }
       }
-      transition={{ duration: 0.3, ease: "easeOut" }}
 
       onPointerMove={!shouldReduce ? onPointerMove : undefined}
       onPointerEnter={!shouldReduce ? onPointerEnter : undefined}
