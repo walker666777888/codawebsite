@@ -27,13 +27,11 @@ const CARDS = [
     title: "System-first,",
     accent: "always.",
     body: "We never build features in isolation. Every touchpoint is engineered as one compounding system.",
-    tags: "SYSTEMS / THINKING / SCALE",
     bg: "#FEFCF2",
     border: "rgba(220,200,140,0.5)",
     shadow: "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.9) inset",
     rotation: -3,
-    x: 52,
-    y: 48,
+    x: 52, y: 48, mobileX: 20, mobileY: 40,
     pin: true,
     pinColor: "#C4973A",
     width: 268,
@@ -45,13 +43,11 @@ const CARDS = [
     title: "Obsess over",
     accent: "leverage.",
     body: "One great system beats ten mediocre executions. We find the highest-leverage moves to compound advantages over time.",
-    tags: "LEVERAGE / FOCUS / ROI",
     bg: "#F2FAF4",
     border: "rgba(140,200,155,0.45)",
     shadow: "0 8px 40px rgba(0,0,0,0.09), 0 1px 0 rgba(255,255,255,0.9) inset",
     rotation: 2.2,
-    x: 396,
-    y: 18,
+    x: 396, y: 18, mobileX: 45, mobileY: 290,
     pin: true,
     pinColor: "#4A8A5A",
     width: 255,
@@ -63,13 +59,11 @@ const CARDS = [
     title: "Ship with",
     accent: "precision.",
     body: "Speed without craft is noise. We move fast and finish clean with deliberate precision.",
-    tags: "QUALITY / SPEED / DETAIL",
     bg: "#FEFCF8",
     border: "rgba(200,190,170,0.4)",
     shadow: "0 6px 32px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.85) inset",
     rotation: -1.4,
-    x: 728,
-    y: 58,
+    x: 728, y: 58, mobileX: 15, mobileY: 540,
     pin: true,
     pinColor: "#8A7A5A",
     width: 270,
@@ -81,13 +75,11 @@ const CARDS = [
     title: "Truth over",
     accent: "comfort.",
     body: "We say the hard thing. If a strategy won't work, you'll hear it from us first. Honest feedback builds lasting relationships.",
-    tags: "TRUST / CLARITY / HONESTY",
     bg: "#F2F4FC",
     border: "rgba(140,160,220,0.4)",
     shadow: "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.9) inset",
     rotation: 2.8,
-    x: 1020,
-    y: 30,
+    x: 1020, y: 30, mobileX: 40, mobileY: 790,
     pin: true,
     pinColor: "#4A72C8",
     width: 248,
@@ -99,13 +91,11 @@ const CARDS = [
     title: "Digital",
     accent: "ecosystems.",
     body: "We architect interconnected systems where every part amplifies the others, making the whole greater than the sum.",
-    tags: "ECOSYSTEM / GROWTH / FUTURE",
     bg: "#FFF8F2",
     border: "rgba(255,140,80,0.3)",
     shadow: "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.9) inset",
     rotation: -2.1,
-    x: 188,
-    y: 348,
+    x: 188, y: 348, mobileX: 25, mobileY: 1040,
     pin: true,
     pinColor: "#E05A00",
     width: 262,
@@ -117,13 +107,11 @@ const CARDS = [
     title: "Compound",
     accent: "everything.",
     body: "Our systems are designed to outlast trends and compound monthly, giving clients a permanent advantage.",
-    tags: "COMPOUNDING / RETURNS / EDGE",
     bg: "#FAF2FC",
     border: "rgba(170,130,210,0.4)",
     shadow: "0 8px 40px rgba(0,0,0,0.09), 0 1px 0 rgba(255,255,255,0.9) inset",
     rotation: 1.6,
-    x: 548,
-    y: 318,
+    x: 548, y: 318, mobileX: 50, mobileY: 1290,
     pin: true,
     pinColor: "#8A5AC8",
     width: 258,
@@ -164,15 +152,17 @@ function DraggableCard({
       dragConstraints={constraintsRef}
       dragTransition={{ power: 0, timeConstant: 0 }}
       onDragStart={onDragStart}
-      className="absolute select-none"
+      className="absolute select-none card-position"
       style={{
-        left: card.x,
-        top: card.y,
+        "--x": `${card.x}px`,
+        "--y": `${card.y}px`,
+        "--mobile-x": `${card.mobileX}px`,
+        "--mobile-y": `${card.mobileY}px`,
         width: card.width,
         zIndex,
         rotate: card.rotation,
         cursor: "grab",
-      }}
+      } as any}
       whileDrag={{ scale: 1.06, cursor: "grabbing" }}
       whileHover={{ scale: 1.02 }}
       initial={{ opacity: 0, scale: 0.96 }}
@@ -221,7 +211,7 @@ function DraggableCard({
   );
 }
 
-/* ─── Draggable board (desktop only) ─────────────────────── */
+/* ─── Draggable board ─────────────────────── */
 function DraggableBoard() {
   const boardRef = useRef<HTMLDivElement>(null);
   const [order, setOrder] = useState(CARDS.map((c) => c.id));
@@ -231,13 +221,12 @@ function DraggableBoard() {
   );
 
   return (
-    <div className="hidden md:block relative">
+    <div className="block relative">
       {/* Board */}
       <div
         ref={boardRef}
-        className="relative w-full overflow-hidden rounded-3xl"
+        className="relative w-full overflow-hidden rounded-3xl board-height"
         style={{
-          height: 640,
           background: "#F4F0E8",
           backgroundImage:
             "linear-gradient(to right,rgba(13,13,11,0.05) 1px,transparent 1px), linear-gradient(to bottom,rgba(13,13,11,0.05) 1px,transparent 1px)",
@@ -404,6 +393,15 @@ export default function Philosophy() {
         .phil-para.in { animation: phil-fade 0.8s ease 0.35s forwards; }
         .phil-stats { opacity: 0; }
         .phil-stats.in { animation: phil-fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.45s forwards; }
+
+        @media (max-width: 767px) {
+          .board-height { height: 1600px !important; }
+          .card-position { left: var(--mobile-x) !important; top: var(--mobile-y) !important; }
+        }
+        @media (min-width: 768px) {
+          .board-height { height: 640px !important; }
+          .card-position { left: var(--x) !important; top: var(--y) !important; }
+        }
       `}</style>
 
       <section
@@ -434,55 +432,11 @@ export default function Philosophy() {
           </div>
         </div>
 
-        {/* ── Draggable board (desktop only) ── */}
+        {/* ── Draggable board ── */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pb-20 md:pb-28">
           <DraggableBoard />
 
-          {/* Mobile fallback — stacked sticky notes with pushpins */}
-          <div className="md:hidden flex flex-col items-center gap-8 py-4">
-            {CARDS.map((card, i) => (
-              <motion.div
-                key={card.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="relative rounded-2xl flex flex-col gap-4"
-                style={{
-                  width: "100%",
-                  maxWidth: 320,
-                  background: card.bg,
-                  border: `1px solid ${card.border}`,
-                  boxShadow: card.shadow,
-                  padding: "28px 24px 22px",
-                  rotate: card.rotation * 0.7, // Subtle rotation for the messy notepad vibe
-                }}
-              >
-                {card.pin && <Pushpin color={card.pinColor} />}
-                
-                <div className="flex items-center gap-2">
-                  <div
-                    className="w-1.5 h-1.5 rounded-full shrink-0"
-                    style={{ background: card.dot, boxShadow: `0 0 5px ${card.dot}` }}
-                  />
-                  <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#6F6A60]">
-                    {card.category}
-                  </span>
-                </div>
-                
-                <h3 className="font-instrument tracking-[-0.01em] leading-[1.05] text-[#0D0D0B] text-[26px]">
-                  {card.title} <span className="text-[#FF5C00]">{card.accent}</span>
-                </h3>
-                
-                <p className="font-sans text-[15px] text-[#4A463F] leading-relaxed">
-                  {card.body}
-                </p>
-                
-
-              </motion.div>
-            ))}
           </div>
-        </div>
       </section>
     </>
   );
