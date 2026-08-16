@@ -5,6 +5,11 @@ import { motion, useMotionValue, useSpring, useTransform, useReducedMotion, useM
 import MagneticButton from "@/components/ui/MagneticButton";
 import { ArrowRight } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
+import dynamic from "next/dynamic";
+
+const Particles = dynamic(() => import("@/components/ui/Particles"), {
+  ssr: false,
+});
 
 /* ── Wave text — letters cascade up on hover ── */
 function WaveText({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
@@ -171,14 +176,26 @@ export default function CallToAction() {
         ref={sectionRef}
         className="relative min-h-[90vh] sm:min-h-screen flex flex-col items-center justify-center py-24 sm:py-32 px-6 bg-black [&_*::selection]:bg-coda-accent [&_*::selection]:text-white overflow-hidden"
       >
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="hidden md:flex absolute inset-0 items-center justify-center">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 z-0">
+            <Particles
+              particleColors={["#FF5C00", "#FF8A00", "#ffffff"]}
+              particleCount={600}
+              particleSpread={10}
+              speed={0.2}
+              particleBaseSize={60}
+              moveParticlesOnHover={true}
+              alphaParticles={false}
+              disableRotation={false}
+            />
+          </div>
+          <div className="hidden md:flex absolute inset-0 items-center justify-center pointer-events-none z-10">
             {[0, 1, 2, 3].map((i) => (
               <div key={i} className="cta-ring" style={{ animationDelay: `${i}s` }} />
             ))}
           </div>
           <div
-            className="absolute inset-0 opacity-[0.07]"
+            className="absolute inset-0 opacity-[0.07] pointer-events-none z-10"
             style={{
               backgroundImage:
                 "linear-gradient(to right,#0D0D0B 1px,transparent 1px),linear-gradient(to bottom,#0D0D0B 1px,transparent 1px)",
