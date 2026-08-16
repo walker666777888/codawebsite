@@ -3,10 +3,16 @@
   white-space: pre-wrap;
 }
 
+@keyframes textTypeBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 .text-type__cursor {
   margin-left: 0.1rem;
   display: inline-block;
   opacity: 1;
+  animation: textTypeBlink 1s ease-in-out infinite;
 }
 
 .text-type__cursor--hidden {

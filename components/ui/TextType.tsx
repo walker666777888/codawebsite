@@ -82,18 +82,7 @@ const TextType: React.FC<TextTypeProps> = ({
     return () => observer.disconnect();
   }, [startOnVisible]);
 
-  useEffect(() => {
-    if (showCursor && cursorRef.current) {
-      gsap.set(cursorRef.current, { opacity: 1 });
-      gsap.to(cursorRef.current, {
-        opacity: 0,
-        duration: cursorBlinkDuration,
-        repeat: -1,
-        yoyo: true,
-        ease: 'power2.inOut'
-      });
-    }
-  }, [showCursor, cursorBlinkDuration]);
+  // GSAP cursor blink removed in favor of CSS animation (automatically pauses off-screen)
 
   useEffect(() => {
     if (!isVisible || isTypingComplete) return;
@@ -160,6 +149,7 @@ const TextType: React.FC<TextTypeProps> = ({
         <span
           ref={cursorRef}
           className={`text-type__cursor ${cursorClassName} ${shouldHideCursor ? 'text-type__cursor--hidden' : ''}`}
+          style={{ animationDuration: `${cursorBlinkDuration * 2}s` }}
         >
           {cursorCharacter}
         </span>
