@@ -152,7 +152,7 @@ function DraggableCard({
       dragConstraints={constraintsRef}
       dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
       onDragStart={onDragStart}
-      className="absolute select-none touch-none card-position"
+      className="absolute select-none card-position"
       style={{
         "--x": `${card.x}px`,
         "--y": `${card.y}px`,
@@ -160,14 +160,18 @@ function DraggableCard({
         "--mobile-y": `${card.mobileY}px`,
         width: card.width,
         zIndex,
-        rotate: card.rotation,
         cursor: "grab",
+        touchAction: "none",
+        willChange: "transform",
       } as any}
-      whileDrag={{ scale: 1.06, cursor: "grabbing" }}
+      whileDrag={{ scale: 1.06, cursor: "grabbing", zIndex: 999 }}
       whileHover={{ scale: 1.02 }}
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ scale: { type: "spring", stiffness: 300, damping: 24 }, opacity: { duration: 0.3 } }}
+      initial={{ opacity: 0, scale: 0.96, rotate: card.rotation }}
+      animate={{ opacity: 1, scale: 1, rotate: card.rotation }}
+      transition={{ 
+        scale: { type: "spring", stiffness: 400, damping: 25 }, 
+        opacity: { duration: 0.2 } 
+      }}
     >
       {/* Paper card */}
       <div
