@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import Link from "next/link";
 import { clsx, type ClassValue } from "clsx";
@@ -20,8 +20,6 @@ interface MagneticButtonProps {
 
 export default function MagneticButton({ children, variant = "primary", className, href, onClick }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [hovered, setHovered] = useState(false);
-
   // Subtle magnetic pull toward the cursor.
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -33,9 +31,6 @@ export default function MagneticButton({ children, variant = "primary", classNam
   const lx = useTransform(springX, [-100, 100], [-4, 4], { clamp: true });
   const ly = useTransform(springY, [-100, 100], [-4, 4], { clamp: true });
 
-  // Re-trigger the sheen sweep on each hover.
-  const [shimmerKey, setShimmerKey] = useState(0);
-
   const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
     const { clientX, clientY } = e;
@@ -45,14 +40,12 @@ export default function MagneticButton({ children, variant = "primary", classNam
   };
 
   const handleEnter = () => {
-    setHovered(true);
-    setShimmerKey((k) => k + 1);
+    // hover events can be handled here if needed
   };
 
   const handleLeave = () => {
     mx.set(0);
     my.set(0);
-    setHovered(false);
   };
 
   const baseStyles =

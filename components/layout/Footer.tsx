@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import React, { useRef, useEffect } from "react";
-import ScrambleText from "@/components/ui/ScrambleText";
 import { useVideoPreload } from "@/components/providers/VideoPreloadProvider";
 import { lenisScrollTo } from "@/components/providers/LenisProvider";
 

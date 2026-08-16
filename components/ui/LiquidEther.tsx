@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -842,7 +843,7 @@ export default function LiquidEther({
             Common.renderer.dispose();
             Common.renderer.forceContextLoss();
           }
-        } catch (e) { void 0; }
+        } catch { void 0; }
       }
     }
 
@@ -883,12 +884,12 @@ export default function LiquidEther({
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      try { resizeObserverRef.current?.disconnect(); } catch (e) { void 0; }
-      try { intersectionObserverRef.current?.disconnect(); } catch (e) { void 0; }
+      try { resizeObserverRef.current?.disconnect(); } catch { void 0; }
+      try { intersectionObserverRef.current?.disconnect(); } catch { void 0; }
       webglRef.current?.dispose();
       webglRef.current = null;
     };
-  }, [BFECC, cursorSize, dt, isBounce, isViscous, iterationsPoisson, iterationsViscous, mouseForce, resolution, viscous, colors, autoDemo, autoSpeed, autoIntensity, takeoverDuration, autoResumeDelay, autoRampDuration]);
+  }, [BFECC, cursorSize, dt, isBounce, isViscous, iterationsPoisson, iterationsViscous, mouseForce, resolution, viscous, colors, autoDemo, autoSpeed, autoIntensity, takeoverDuration, autoResumeDelay, autoRampDuration, bgColor]);
 
   return <div ref={mountRef} className={`liquid-ether-container ${className ||""}`} style={style} />;
 }

@@ -490,9 +490,9 @@ function FlagImg({ code, size = 20 }: { code: string; size?: number }) {
 
 /* ── phone field with country code picker ───────────────── */
 function PhoneField({
-  dialCode, selectedCode, onSelect, number, onNumberChange,
+  selectedCode, onSelect, number, onNumberChange,
 }: {
-  dialCode: string; selectedCode: string;
+  selectedCode: string;
   onSelect: (dial: string, code: string) => void;
   number: string;   onNumberChange: (n: string) => void;
 }) {
@@ -514,7 +514,10 @@ function PhoneField({
   /* focus search when dropdown opens */
   useEffect(() => {
     if (open) setTimeout(() => searchRef.current?.focus(), 60);
-    else setSearch("");
+    else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSearch("");
+    }
   }, [open]);
 
   /* close on outside click */
@@ -903,12 +906,14 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
 
   useEffect(() => {
     if (!ptype.includes("other")) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOtherPtype("");
     }
   }, [ptype]);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMobile(mq.matches);
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener("change", handler);
@@ -920,7 +925,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
     const h = (e: KeyboardEvent) => { if (e.key === "Escape" && status !== "submitting") onClose(); };
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, status]);
 
   useEffect(() => {
     if (isOpen) return;
@@ -1169,7 +1174,6 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                         {/* phone */}
                         <FadeUp delay={fd(0.31)}>
                           <PhoneField
-                            dialCode={dialCode}
                             selectedCode={selectedCode}
                             onSelect={(dial, code) => { setDialCode(dial); setSelectedCode(code); }}
                             number={phoneNum}

@@ -71,7 +71,7 @@ interface TileProps {
   effect: CanvasEffect;
 }
 
-const FLOAT_DELAY = [0, 0.6, 1.2, 1.8]; // stagger idle floats per tile
+
 
 function SpotlightTile({ stat, index, className = "", large = false, depth = 26, effect }: TileProps) {
   const tileRef = useRef<HTMLDivElement>(null);
@@ -81,6 +81,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
   const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMobile("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
   }, []);
 
@@ -268,6 +269,7 @@ export default function BentoMetrics() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMobile("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
   }, []);
 
@@ -305,8 +307,7 @@ export default function BentoMetrics() {
               Impact Metrics
             </p>
             <h2
-              className="font-instrument text-[#14130F] leading-[1.05] tracking-[-0.025em]"
-              style={{ fontSize: "clamp(32px, 4.5vw, 56px)" }}
+              className="font-instrument text-h2 text-[#14130F] leading-[1.05] tracking-[-0.025em]"
             >
               Results that <span className="text-[#FF5C00]">compound.</span>
             </h2>

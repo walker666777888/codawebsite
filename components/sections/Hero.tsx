@@ -73,18 +73,7 @@ function DataParticles() {
 
 
 
-function LaserScan() {
-  return (
-    /* Pure CSS animation — no JS rAF, no re-renders */
-    <div
-      className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-coda-accent to-transparent z-[15] pointer-events-none opacity-40 mix-blend-screen md:hidden"
-      style={{
-        boxShadow: "0 0 20px 1px rgba(255,92,0,0.4)",
-        animation: "laser-scan-line 6s linear infinite",
-      }}
-    />
-  );
-}
+
 
 function DynamicHex() {
   const hexRef = useRef<HTMLDivElement>(null);
@@ -161,6 +150,7 @@ export default function Hero() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     setIsTouch("ontouchstart" in window || navigator.maxTouchPoints > 0);
     
@@ -186,16 +176,11 @@ export default function Hero() {
 
   /* ── Scroll parallax (desktop only) ──────────────────── */
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y    = useTransform(scrollYProgress, [0, 1], shouldDisableParallax ? ["0%", "0%"] : ["0%", "20%"]);
   const fade = useTransform(scrollYProgress, [0, 0.55], shouldDisableParallax ? [1, 1] : [1, 0]);
   const textY = useTransform(scrollYProgress, [0, 1], shouldDisableParallax ? ["0%", "0%"] : ["0%", "8%"]);
 
 
-  const headlineWords = [
-    { text: "Dominate", white: true },
-    { text: "the", white: true },
-    { text: "Digital Age.", italic: true, accent: true },
-  ];
+
 
   return (
     <section
@@ -300,8 +285,7 @@ export default function Hero() {
 
         {/* Brand name */}
         <h1
-          className="font-instrument tracking-[-0.04em] leading-[1.04] text-center drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]"
-          style={{ fontSize: "clamp(62px, 10.5vw, 150px)" }}
+          className="font-instrument text-display tracking-[-0.04em] leading-[1.04] text-center drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]"
         >
           {(["Citizen", "Of", "Digital Age."] as Array<string>).map((word, wi) => (
             <span

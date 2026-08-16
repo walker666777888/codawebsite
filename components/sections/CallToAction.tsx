@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
-import { motion, useMotionValue, useSpring, useTransform, useReducedMotion, useMotionTemplate } from "motion/react";
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { ArrowRight } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
@@ -63,12 +63,7 @@ export default function CallToAction() {
   const textX = useTransform(spotX, [-1, 1], prefersReducedMotion ? [0, 0] : [-12, 12]);
   const textY = useTransform(spotY, [-1, 1], prefersReducedMotion ? [0, 0] : [-12, 12]);
 
-  const shadowX = useTransform(spotX, [-1, 1], [20, -20]);
-  const shadowY = useTransform(spotY, [-1, 1], [20, -20]);
 
-  const maskX = useTransform(spotX, [-1, 1], ["0%", "100%"]);
-  const maskY = useTransform(spotY, [-1, 1], ["0%", "100%"]);
-  const glowMask = useMotionTemplate`radial-gradient(500px circle at ${maskX} ${maskY}, black, transparent)`;
 
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const rect = cardRef.current?.getBoundingClientRect();
@@ -237,7 +232,7 @@ export default function CallToAction() {
                 className="px-5 py-2 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md"
               >
                 <span className="font-mono text-micro sm:text-label text-coda-accent tracking-[0.2em] uppercase font-semibold">
-                  Let's Build the Future
+                  Let&apos;s Build the Future
                 </span>
               </motion.div>
 

@@ -187,7 +187,7 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
                 }}
                 style={{
                   display: 'inline-block',
-                  fontVariationSettings: interpolatedSettingsRef.current[currentLetterIndex] || fromFontVariationSettings,
+                  fontVariationSettings: fromFontVariationSettings,
                   fontWeight: initialWeight
                 }}
                 aria-hidden="true"
