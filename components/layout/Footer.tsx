@@ -159,20 +159,25 @@ export default function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
             >
-              <p className="font-sans text-[16px] md:text-[14px] text-white/40 leading-[1.75] md:max-w-[260px] [writing-mode:vertical-rl] rotate-180 md:[writing-mode:horizontal-tb] md:rotate-0 tracking-widest md:tracking-normal whitespace-nowrap md:whitespace-normal">
-                Engineering high-performance digital ecosystems. Dominate the Digital Age.
-              </p>
-              <motion.a
-                href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group hidden md:inline-flex items-center gap-2 mt-6 font-mono text-[11px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em]"
-                whileHover={{ x: 4 }}
-                transition={{ duration: 0.25 }}
-              >
-                Connect@citizenofdigitalage.com
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
-              </motion.a>
+              <div className="md:max-w-[260px] [writing-mode:vertical-rl] rotate-180 md:[writing-mode:horizontal-tb] md:rotate-0 tracking-widest md:tracking-normal flex-shrink-0">
+                <p className="font-sans text-[16px] md:text-[14px] text-white/40 leading-[1.75] whitespace-nowrap md:whitespace-normal">
+                  Engineering high-performance digital ecosystems.
+                </p>
+                <p className="font-sans text-[16px] md:text-[14px] text-white/40 leading-[1.75] whitespace-nowrap md:whitespace-normal ml-3 md:ml-0 md:mt-2">
+                  Dominate the Digital Age.
+                </p>
+                <motion.a
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 font-mono text-[9px] md:text-[11px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em] ml-6 md:ml-0 md:mt-6"
+                  whileHover={{ x: -4, y: 0 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  Connect@citizenofdigitalage.com
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden md:inline">→</span>
+                </motion.a>
+              </div>
             </motion.div>
 
             {/* Right side on mobile / Cols 2 & 3 on desktop */}
@@ -221,23 +226,6 @@ export default function Footer() {
                   ))}
                 </ul>
               </motion.div>
-
-              {/* Mobile Connect Link */}
-              <div className="flex justify-end md:hidden">
-                <motion.a
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2 font-mono text-[9px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em] text-right"
-                  whileHover={{ x: -4 }}
-                  transition={{ duration: 0.25 }}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                >
-                  Connect@citizenofdigitalage.com
-                </motion.a>
-              </div>
               
             </div>
           </div>
