@@ -163,7 +163,7 @@ export default function Footer() {
                 <p className="font-sans text-[16px] md:text-[14px] text-white/40 leading-[1.75] whitespace-nowrap md:whitespace-normal">
                   Engineering high-performance digital ecosystems.
                 </p>
-                <p className="font-sans text-[16px] md:text-[14px] text-white/40 leading-[1.75] whitespace-nowrap md:whitespace-normal ml-3 md:ml-0 md:mt-2">
+                <p className="font-sans text-[16px] md:text-[14px] text-[#FF5C00] leading-[1.75] whitespace-nowrap md:whitespace-normal ml-3 md:ml-0 md:mt-2">
                   Dominate the Digital Age.
                 </p>
                 <motion.a
