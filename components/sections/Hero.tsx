@@ -207,7 +207,7 @@ export default function Hero() {
           mouseForce={25}
           cursorSize={90}
           isViscous={false}
-          resolution={0.5}
+          resolution={0.28}
           autoDemo={true}
           autoSpeed={0.4}
           autoIntensity={2.0}
