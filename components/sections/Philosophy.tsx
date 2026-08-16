@@ -153,7 +153,7 @@ function DraggableCard({
       dragConstraints={constraintsRef}
       dragTransition={{ power: 0, timeConstant: 0 }}
       onDragStart={onDragStart}
-      className="absolute select-none card-position"
+      className="absolute select-none touch-none card-position"
       style={{
         "--x": `${card.x}px`,
         "--y": `${card.y}px`,
