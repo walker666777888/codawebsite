@@ -60,7 +60,6 @@ export default function CallToAction() {
 
   const shadowX = useTransform(spotX, [-1, 1], [20, -20]);
   const shadowY = useTransform(spotY, [-1, 1], [20, -20]);
-  const textShadow = useMotionTemplate`${shadowX}px ${shadowY}px 40px rgba(255,92,0,0.35)`;
 
   const maskX = useTransform(spotX, [-1, 1], ["0%", "100%"]);
   const maskY = useTransform(spotY, [-1, 1], ["0%", "100%"]);
@@ -203,10 +202,9 @@ export default function CallToAction() {
               perspective: 800,
             }}
           >
-            {/* Soft backdrop glow to separate text from the noisy starfield */}
+            {/* Soft backdrop to separate text */}
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-0">
               <div className="absolute w-[800px] h-[500px] bg-black/60 blur-[100px] rounded-full" />
-              <div className="absolute w-[500px] h-[300px] bg-coda-accent/10 blur-[120px] rounded-full" />
             </div>
 
             {/* Content Group (Headline + Sub-copy) */}
@@ -224,7 +222,7 @@ export default function CallToAction() {
               </motion.div>
 
               {/* Headline */}
-              <motion.div style={{ x: textX, y: textY, textShadow }} className="flex flex-col gap-2">
+              <motion.div style={{ x: textX, y: textY }} className="flex flex-col gap-2">
                 <div className="cta-line-wrap">
                   <WaveText
                     text="Ready to"
@@ -285,9 +283,9 @@ export default function CallToAction() {
                 className={`cta-note${visible ?" in" : ""} flex items-center gap-3 sm:gap-4 font-mono text-[10px] sm:text-[12px] text-white/50 tracking-[0.2em] uppercase`}
               >
                 <span>No retainers</span>
-                <span className="w-1 h-1 rounded-full bg-white/30" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FF5C00]" />
                 <span>No bloat</span>
-                <span className="w-1 h-1 rounded-full bg-white/30" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FF5C00]" />
                 <span>Just results</span>
               </div>
             </div>
