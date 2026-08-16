@@ -617,7 +617,8 @@ function PhoneField({
                       value={search}
                       onChange={e => setSearch(e.target.value)}
                       placeholder="Search country…"
-                      className="bg-transparent flex-1 text-white text-xs font-sans outline-none placeholder-white/20 min-w-0"
+                      maxLength={60}
+                      className="bg-transparent flex-1 text-white text-base font-sans outline-none placeholder-white/20 min-w-0"
                       style={{ border: "none", boxShadow: "none" }}
                     />
                   </div>
@@ -885,6 +886,7 @@ function FadeUp({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 export default function BuildFormModal({ isOpen, onClose }: Props) {
   const reduced = useReducedMotion();
   const [status, setStatus] = useState<Status>("idle");
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [name,      setName]      = useState("");
   const [email,     setEmail]     = useState("");
   const [dialCode,    setDialCode]    = useState("+91");
@@ -900,6 +902,12 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
   const nameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (!ptype.includes("other")) {
+      setOtherPtype("");
+    }
+  }, [ptype]);
+
+  useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
     setIsMobile(mq.matches);
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
@@ -909,7 +917,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
 
   useEffect(() => {
     if (!isOpen) return;
-    const h = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    const h = (e: KeyboardEvent) => { if (e.key === "Escape" && status !== "submitting") onClose(); };
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
   }, [isOpen, onClose]);
@@ -918,6 +926,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
     if (isOpen) return;
     const t = setTimeout(() => {
       setStatus("idle");
+      setSubmissionError(null);
       setName(""); setEmail(""); setDialCode("+91"); setSelectedCode("IN"); setPhoneNum(""); setBrief(""); setPtype([]); setOtherPtype("");
     }, 600);
     return () => clearTimeout(t);
@@ -930,6 +939,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !phoneNum.trim()) return;
     setStatus("submitting");
+    setSubmissionError(null);
     const fullPhone = `${dialCode} ${phoneNum}`;
     try {
       const typeLabels = PROJECT_TYPES.filter((p) => ptype.includes(p.id)).map(p => p.label);
@@ -956,7 +966,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
     } catch (err) {
       console.error(err);
       setStatus("idle");
-      alert("Something went wrong. Please try emailing us directly.");
+      setSubmissionError("Submission failed. Please check your connection and try again.");
     }
   }, [name, email, dialCode, phoneNum, ptype, otherPtype, brief]);
 
@@ -977,7 +987,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
             className="fixed inset-0 z-[200] bg-black/80"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: E }}
-            onClick={onClose}
+            onClick={() => status !== "submitting" && onClose()}
             aria-hidden
           />
 
@@ -1015,7 +1025,8 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
 
             {/* close btn */}
             <motion.button
-              onClick={onClose}
+              onClick={() => status !== "submitting" && onClose()}
+              disabled={status === "submitting"}
               aria-label="Close"
               className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors duration-200 cursor-pointer"
               style={{ boxShadow: "0 0 0 1px rgba(255,255,255,0.22)", background: "rgba(255,255,255,0.10)" }}
@@ -1194,7 +1205,8 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                                             value={otherPtype}
                                             onChange={(e) => setOtherPtype(e.target.value)}
                                             placeholder="Please specify..."
-                                            className="w-full bg-modal-dark rounded-xl px-3 py-2 text-white text-small font-sans outline-none border border-white/10 focus:border-[#FF5C00]/50 placeholder-white/20"
+                                            maxLength={100}
+                                            className="w-full bg-modal-dark rounded-xl px-3 py-2 text-white text-base font-sans outline-none border border-white/10 focus:border-[#FF5C00]/50 placeholder-white/20"
                                             autoFocus
                                           />
                                         </motion.div>
@@ -1214,6 +1226,25 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                             placeholder="Describe what you're building, the problem you're solving, and what success looks like…"
                           />
                         </FadeUp>
+
+                        {/* error state */}
+                        <AnimatePresence>
+                          {submissionError && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                              animate={{ opacity: 1, height: "auto", marginTop: 12 }}
+                              exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                              className="px-4 py-3 rounded-xl border border-[#FF1500]/30 bg-[#FF1500]/10 flex items-start gap-3 overflow-hidden"
+                            >
+                              <span className="text-[#FF1500] mt-0.5">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                                </svg>
+                              </span>
+                              <p className="font-sans text-sm text-white/90 leading-tight">{submissionError}</p>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
 
                         {/* submit */}
                         <FadeUp delay={fd(0.51)}>
