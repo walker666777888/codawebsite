@@ -7,10 +7,15 @@ import {
   useReducedMotion
 } from "motion/react";
 import { useRef, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { useFormModal } from "@/components/providers/FormModalProvider";
 import { useIsLowEndDevice } from "@/hooks/useIsLowEndDevice";
 import TextType from "@/components/ui/TextType";
+
+const LiquidEther = dynamic(() => import("@/components/ui/LiquidEther"), {
+  ssr: false,
+});
 
 const PARTICLES = Array.from({ length: 25 }).map((_, i) => ({
   id: i,
@@ -195,27 +200,19 @@ export default function Hero() {
       {/* ── Dark base for desktop (LiquidEther sits on top) ── */}
       <div className="absolute inset-0 z-[0] bg-black" />
 
-      {/* ── Mobile Fluid Interact Toggle ── */}
-      <button
-        onClick={() => setIsInteractMode(!isInteractMode)}
-        className="absolute bottom-6 right-6 z-30 md:hidden flex items-center justify-center w-12 h-12 rounded-full border border-[rgba(255,255,255,0.1)] bg-[rgba(13,13,11,0.6)] backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-colors"
-        aria-label={isInteractMode ? "Unlock Screen" : "Lock Screen"}
-      >
-        {isInteractMode ? (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-[#FF5C00]">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-          </svg>
-        ) : (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/70">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0 1 9.9-1" />
-          </svg>
-        )}
-      </button>
-
-      {/* ── Lightweight Static Gradient Background ── */}
-      <div className="absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,rgba(255,92,0,0.15)_0%,transparent_60%)] pointer-events-none" />
+      {/* ── LiquidEther fluid background ── */}
+      <div className="absolute inset-0 z-[1] pointer-events-auto">
+        <LiquidEther
+          colors={["#FF5C00", "#FF8A00", "#1A1A1A"]}
+          mouseForce={25}
+          cursorSize={90}
+          isViscous={false}
+          resolution={0.5}
+          autoDemo={true}
+          autoSpeed={0.4}
+          autoIntensity={2.0}
+        />
+      </div>
 
 
 
