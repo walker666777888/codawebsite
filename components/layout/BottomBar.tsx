@@ -48,11 +48,11 @@ export default function BottomBar() {
                   aria-hidden="true"
                 />
               </div>
-              <span className="font-instrument text-[16px] text-[#0D0D0B]/75 whitespace-nowrap">
+              <span className="font-instrument text-base text-[#0D0D0B]/75 whitespace-nowrap">
                 Start building
               </span>
               {/* Scroll progress badge */}
-              <span className="font-mono text-[9px] text-[#0D0D0B]/35 tracking-[0.15em] tabular-nums ml-1">
+              <span className="font-mono text-micro text-[#0D0D0B]/35 tracking-[0.15em] tabular-nums ml-1">
                 {String(scrollPct).padStart(2, "0")}%
               </span>
             </div>
@@ -62,7 +62,7 @@ export default function BottomBar() {
                 {/* impeccable-variants-start 463a88aa */}
                 {/* Original */}
                 <div data-impeccable-variant="original">
-                  <span className="flex items-center gap-1.5 font-sans font-semibold text-[13px] px-5 py-2.5 whitespace-nowrap tracking-[-0.01em]">
+                  <span className="flex items-center gap-1.5 font-sans font-semibold text-small px-5 py-2.5 whitespace-nowrap tracking-[-0.01em]">
                     Claim your edge
                     <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
                   </span>

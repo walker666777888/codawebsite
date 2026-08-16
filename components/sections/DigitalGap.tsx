@@ -80,7 +80,7 @@ function VisualFragility() {
           }}
         >
           <div className="relative bg-[#FEFCF8] border border-[#E6E1DA] rounded-2xl px-4 py-2.5 shadow-[0_2px_14px_rgba(13,13,11,0.08),0_1px_3px_rgba(13,13,11,0.04)] whitespace-nowrap">
-            <span className="font-mono text-[10px] font-medium tracking-[2px] text-[#3D3A35]">{n.label}</span>
+            <span className="font-mono text-micro font-medium tracking-[2px] text-[#3D3A35]">{n.label}</span>
             {n.hot && (
               <motion.div
                 className="absolute -top-2 -right-2 w-5 h-5 bg-[#FF5C00] rounded-full flex items-center justify-center text-white font-bold shadow-[0_0_8px_rgba(255,92,0,0.55)]"
@@ -158,7 +158,7 @@ function VisualChaos() {
           transition={{ duration: 0.45, delay: i * 0.07, type: "spring", stiffness: 200 }}
         >
           <div className="w-12 h-12 rounded-full bg-[#FEFCF8] border border-[#E6E1DA] shadow-[0_2px_10px_rgba(13,13,11,0.07)] flex items-center justify-center">
-            <span className="font-mono text-[7.5px] font-medium tracking-[1px] text-[#4A463F]">{n.label}</span>
+            <span className="font-mono text-[10px] font-medium tracking-[1px] text-[#4A463F]">{n.label}</span>
           </div>
         </motion.div>
       ))}
@@ -340,7 +340,7 @@ export default function DigitalGap() {
       </div>
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
         <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[rgba(13,13,11,0.08)] bg-[rgba(255,255,255,0.75)] backdrop-blur-md shadow-[0_4px_24px_rgba(13,13,11,0.06)]">
-          <span className="font-mono text-[10px] text-[#3D3A35] font-semibold uppercase tracking-[0.25em]">Scroll to explore</span>
+          <span className="font-mono text-micro text-[#3D3A35] font-semibold uppercase tracking-[0.25em]">Scroll to explore</span>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#FF5C00]">
             <path d="M12 5v14M19 12l-7 7-7-7"/>
           </svg>

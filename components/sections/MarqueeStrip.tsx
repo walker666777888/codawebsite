@@ -34,7 +34,7 @@ function MarqueeRow({ items, reverse = false, speed = 28, dim = false, paused = 
         {doubled.map((item, i) => (
           <span key={i} className="inline-flex items-center gap-5 mx-5">
             <span
-              className={`font-mono text-[10.5px] uppercase tracking-[0.22em] transition-colors duration-400 cursor-default ${ dim ?"text-[#0D0D0B]/40 hover:text-[#0D0D0B]/65"
+              className={`font-mono text-micro uppercase tracking-[0.22em] transition-colors duration-400 cursor-default ${ dim ?"text-[#0D0D0B]/40 hover:text-[#0D0D0B]/65"
                   : "text-[#0D0D0B]/65 hover:text-[#0D0D0B]"
               }`}
             >
@@ -80,7 +80,7 @@ export default function MarqueeStrip() {
         animate={{ opacity: paused ? 1 : 0, scale: paused ? 1 : 0.7 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-[#0D0D0B]/40 bg-[#F4F0E8]/90 backdrop-blur-sm border border-[#0D0D0B]/[0.1] px-4 py-2 rounded-full">
+        <div className="font-mono text-micro uppercase tracking-[0.3em] text-[#0D0D0B]/40 bg-[#F4F0E8]/90 backdrop-blur-sm border border-[#0D0D0B]/[0.1] px-4 py-2 rounded-full">
           Paused
         </div>
       </motion.div>

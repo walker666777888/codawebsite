@@ -73,18 +73,18 @@ export default function Navbar() {
           {/* Logo */}
           <motion.div layout className="relative z-10 flex shrink-0">
             <Link href="/" className="flex items-baseline gap-[1px] group">
-            <span className={`font-instrument text-[20px] tracking-[-0.025em] transition-colors duration-500 group-hover:opacity-60 ${scrolled || mobileMenuOpen ?"text-[#14130F]" : "text-white"}`}>
+            <span className={`font-instrument text-xl tracking-[-0.025em] transition-colors duration-500 group-hover:opacity-60 ${scrolled || mobileMenuOpen ?"text-[#14130F]" : "text-white"}`}>
               CODA
             </span>
             <motion.span
-              className="font-mono text-[#FF5C00] text-[20px] leading-none"
+              className="font-mono text-[#FF5C00] text-xl leading-none"
               whileHover={{ scale: 1.5, rotate: 15 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >.</motion.span>
           </Link>
           </motion.div>
             {/* Desktop nav — absolutely centered */}
-            <motion.nav layout className="hidden sm:flex items-center gap-2 text-[16px] font-instrument absolute left-1/2 -translate-x-1/2">
+            <motion.nav layout className="hidden sm:flex items-center gap-2 text-base font-instrument absolute left-1/2 -translate-x-1/2">
               {NAV_ANCHOR_LINKS.map((link, i) => (
                 <motion.div key={link.label}
                   initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
@@ -108,7 +108,7 @@ export default function Navbar() {
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                className="group relative overflow-hidden inline-flex items-center gap-1.5 text-[13px] font-sans font-semibold tracking-[-0.01em] px-5 py-2 rounded-full bg-[#FF5C00] text-white shadow-[0_2px_16px_rgba(255,92,0,0.35)] hover:shadow-[0_4px_24px_rgba(255,92,0,0.5)] transition-shadow duration-300 cursor-pointer"
+                className="group relative overflow-hidden inline-flex items-center gap-1.5 text-small font-sans font-semibold tracking-[-0.01em] px-5 py-2 rounded-full bg-[#FF5C00] text-white shadow-[0_2px_16px_rgba(255,92,0,0.35)] hover:shadow-[0_4px_24px_rgba(255,92,0,0.5)] transition-shadow duration-300 cursor-pointer"
               >
                 <span className="relative z-10 flex items-center gap-1.5">
                   Start a build
@@ -175,7 +175,7 @@ export default function Navbar() {
                 >
                   <a href={link.href}
                     onClick={(e) => { scrollToSection(e, link.href); setMobileMenuOpen(false); }}
-                    className="block font-instrument text-[52px] leading-[1.15] tracking-[-0.04em] text-[#0D0D0B]/70 hover:text-[#FF5C00] transition-colors duration-200">
+                    className="block font-instrument text-5xl leading-[1.15] tracking-[-0.04em] text-[#0D0D0B]/70 hover:text-[#FF5C00] transition-colors duration-200">
                     {link.label}
                   </a>
                 </motion.div>
@@ -187,7 +187,7 @@ export default function Navbar() {
                 className="mt-12"
               >
                 <MagneticButton variant="primary" onClick={() => { setMobileMenuOpen(false); openForm(); }}>
-                  <span className="flex items-center gap-2 font-sans font-semibold text-[16px] px-8 py-3.5">
+                  <span className="flex items-center gap-2 font-sans font-semibold text-base px-8 py-3.5">
                     Start a build
                     <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
                   </span>

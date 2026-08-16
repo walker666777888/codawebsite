@@ -247,7 +247,7 @@ function DesignGraphic({ active: activeProp }: { active: boolean }) {
             transition={{ duration: 0.65, delay: 0.3 + i * 0.12, ease: [0.16, 1, 0.3, 1] }}
           />
           <motion.text x={b.x + 14} y={100 + 24}
-            fill="rgba(13,13,11,0.4)" fontSize="9" fontFamily="monospace"
+            fill="rgba(13,13,11,0.6)" fontSize="9" fontFamily="monospace"
             initial={{ opacity: 0 }} animate={active ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.3, delay: 0.5 + i * 0.1 }}
           >{b.label}</motion.text>
@@ -332,10 +332,10 @@ function StrategyGraphic({ active: activeProp }: { active: boolean }) {
       <div className="grid grid-cols-3 gap-1">
         {kpis.map((k, i) => (
           <motion.div key={k.label}
-            style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(245,158,11,0.18)", borderRadius: "7px", padding: "3px 4px", textAlign: "center" }}
+            style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(245,158,11,0.18)", borderRadius: "8px", padding: "3px 4px", textAlign: "center" }}
             animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: -5 }}
             transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}>
-            <div style={{ fontFamily: "monospace", fontSize: "6.5px", color: "rgba(13,13,11,0.4)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "1px" }}>{k.label}</div>
+            <div style={{ fontFamily: "monospace", fontSize: "6.5px", color: "rgba(13,13,11,0.6)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "1px" }}>{k.label}</div>
             <div style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: AMBER }}>{k.value}</div>
           </motion.div>
         ))}
@@ -346,7 +346,7 @@ function StrategyGraphic({ active: activeProp }: { active: boolean }) {
         {phases.map((p, i) => (
           <motion.div key={i}
             className="flex items-center gap-2"
-            style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(245,158,11,0.14)", borderRadius: "7px", padding: "4px 7px" }}
+            style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(245,158,11,0.14)", borderRadius: "8px", padding: "4px 7px" }}
             animate={active ? { opacity: 1, x: 0 } : { opacity: 0, x: -12 }}
             transition={{ duration: 0.5, delay: p.delay, ease: [0.16, 1, 0.3, 1] }}>
 
@@ -359,7 +359,7 @@ function StrategyGraphic({ active: activeProp }: { active: boolean }) {
             }} />
 
             {/* Label */}
-            <span style={{ fontFamily: "sans-serif", fontSize: "9px", fontWeight: p.active ? 700 : 500, color: p.done || p.active ? "#14130F" : "rgba(13,13,11,0.4)", minWidth: "58px", flexShrink: 0 }}>{p.label}</span>
+            <span style={{ fontFamily: "sans-serif", fontSize: "9px", fontWeight: p.active ? 700 : 500, color: p.done || p.active ? "#14130F" : "rgba(13,13,11,0.6)", minWidth: "58px", flexShrink: 0 }}>{p.label}</span>
 
             {/* Progress bar */}
             <div style={{ flex: 1, height: "3px", background: "rgba(245,158,11,0.12)", borderRadius: "99px", overflow: "hidden" }}>
@@ -399,7 +399,7 @@ function EcommerceGraphic({ active: activeProp }: { active: boolean }) {
     <div ref={ref} className="w-full h-full flex flex-col justify-center gap-[6px] px-1">
       {/* Header — static once active */}
       <div className="flex items-center justify-between">
-        <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.4)", letterSpacing: "0.12em", textTransform: "uppercase" }}>Marketplace Rankings</span>
+        <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.6)", letterSpacing: "0.12em", textTransform: "uppercase" }}>Marketplace Rankings</span>
         <motion.span style={{ fontFamily: "monospace", fontSize: "8px", color: ORANGE, letterSpacing: "0.1em" }}
           animate={active ? { opacity: [0.4, 1, 0.4] } : { opacity: 0 }}
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>● LIVE</motion.span>
@@ -408,7 +408,7 @@ function EcommerceGraphic({ active: activeProp }: { active: boolean }) {
       {products.map((p, i) => (
         /* Card appears once and stays */
         <motion.div key={i} className="flex items-center gap-3"
-          style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,92,0,0.14)", borderRadius: "10px", padding: "5px 10px" }}
+          style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,92,0,0.14)", borderRadius: "16px", padding: "5px 10px" }}
           animate={active ? { opacity: 1, x: 0 } : { opacity: 0, x: -14 }}
           transition={{ duration: 0.55, delay: p.delay, ease: [0.16, 1, 0.3, 1] }}
         >
@@ -430,7 +430,7 @@ function EcommerceGraphic({ active: activeProp }: { active: boolean }) {
       ))}
 
       <div className="flex items-center justify-between pt-1.5" style={{ borderTop: "1px solid rgba(255,92,0,0.12)" }}>
-        <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.4)", textTransform: "uppercase", letterSpacing: "0.1em" }}>Avg. CVR lift</span>
+        <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.6)", textTransform: "uppercase", letterSpacing: "0.1em" }}>Avg. CVR lift</span>
         <span style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: ORANGE }}>+34%</span>
       </div>
     </div>
@@ -464,22 +464,22 @@ function PerformanceGraphic({ active: activeProp }: { active: boolean }) {
             style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,92,0,0.18)", borderRadius: "8px", padding: "6px 8px", textAlign: "center" }}
             animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: -6 }}
             transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}>
-            <div style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.4)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "2px" }}>{k.label}</div>
+            <div style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.6)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "2px" }}>{k.label}</div>
             <div style={{ fontFamily: "monospace", fontSize: "12px", fontWeight: 700, color: ORANGE }}>{k.value}</div>
           </motion.div>
         ))}
       </div>
 
       {/* Label — static */}
-      <div style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.4)", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: "2px" }}>Conversion Funnel</div>
+      <div style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.6)", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: "2px" }}>Conversion Funnel</div>
 
       {/* Funnel rows — labels static, only bar fills loop */}
       <div className="flex flex-col gap-1.5">
         {stages.map((s, i) => (
           <div key={i} className="flex items-center gap-2">
             <div style={{ fontFamily: "monospace", fontSize: "7.5px", color: "rgba(13,13,11,0.45)", width: "68px", flexShrink: 0 }}>{s.label}</div>
-            <div style={{ flex: 1, height: "18px", background: "rgba(255,92,0,0.06)", borderRadius: "6px", overflow: "hidden" }}>
-              <motion.div style={{ height: "100%", width: `${s.scaleX * 100}%`, borderRadius: "6px", background: s.color, display: "flex", alignItems: "center", paddingLeft: "6px", transformOrigin: "left" }}
+            <div style={{ flex: 1, height: "18px", background: "rgba(255,92,0,0.06)", borderRadius: "8px", overflow: "hidden" }}>
+              <motion.div style={{ height: "100%", width: `${s.scaleX * 100}%`, borderRadius: "8px", background: s.color, display: "flex", alignItems: "center", paddingLeft: "6px", transformOrigin: "left" }}
                 animate={active ? { scaleX: [0, 1, 1, 0] } : { scaleX: 0 }}
                 transition={{ duration: CYCLE, times: [0, 0.25, 0.75, 0.97], delay: s.delay + 0.2, repeat: Infinity, repeatDelay: REPEAT, ease: [0.16, 1, 0.3, 1] }}>
                 <motion.span style={{ fontFamily: "monospace", fontSize: "8px", fontWeight: 700, color: i === 3 ? "#fff" : "#14130F", whiteSpace: "nowrap" }}
@@ -585,14 +585,14 @@ function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; 
           {/* LEFT */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <span className="font-mono text-[11px] tracking-[0.25em] text-[#9A9488]">{tile.num}</span>
-              <span className="font-mono text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 rounded-full"
+              <span className="font-mono text-label tracking-[0.25em] text-[#9A9488]">{tile.num}</span>
+              <span className="font-mono text-micro uppercase tracking-[0.2em] px-2.5 py-1 rounded-full"
                 style={{ color: ORANGE, border: `1px solid ${ORANGE_SOFT}`, background: ORANGE_DIM }}>{tile.tags[0]}</span>
             </div>
             <h3 className="font-instrument tracking-[-0.01em] leading-[1.04] text-[#14130F] text-h3">
               {tile.title}<br /><span className="" style={{ color: ORANGE }}>{tile.subtitle}</span>
             </h3>
-            <p className="font-sans text-[12.5px] text-[#4A463F] leading-[1.65]">{tile.tagline}</p>
+            <p className="font-sans text-xs text-[#4A463F] leading-[1.65]">{tile.tagline}</p>
             <div className="space-y-1.5">
               {tile.capabilities.map((cap, ci) => (
                 <motion.div key={cap} className="flex items-center gap-2.5"
@@ -602,14 +602,14 @@ function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; 
                   <motion.span className="w-3 h-[1.5px] shrink-0 rounded-full" style={{ background: ORANGE }}
                     initial={{ scaleX: 0 }} animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
                     transition={{ duration: 0.4, delay: 0.35 + ci * 0.07 }} />
-                  <span className="font-sans text-[12px] text-[#4A463F]">{cap}</span>
+                  <span className="font-sans text-xs text-[#4A463F]">{cap}</span>
                 </motion.div>
               ))}
             </div>
             <div className="flex flex-wrap gap-2 mt-auto pt-1">
               {tile.tags.map((tag, ti) => (
                 <motion.span key={tag}
-                  className="font-mono text-[9.5px] font-medium uppercase tracking-[0.12em] rounded-full px-3.5 py-1.5"
+                  className="font-mono text-micro font-medium uppercase tracking-[0.12em] rounded-full px-3.5 py-1.5"
                   style={{ color: ORANGE, border: "1.5px solid rgba(255,92,0,0.45)", background: ORANGE_DIM }}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
@@ -774,7 +774,7 @@ function DisciplineStrip({
         {/* ── Number column ── */}
         <div className="flex items-start justify-center pt-10 md:pt-14 border-r border-[#0D0D0B]/[0.08]">
           <motion.span
-            className="font-mono text-[11px] tracking-[0.25em] text-[#6F6A60]"
+            className="font-mono text-label tracking-[0.25em] text-[#6F6A60]"
             initial={{ opacity: 0, y: 12 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
@@ -811,7 +811,7 @@ function DisciplineStrip({
 
             {/* Description */}
             <motion.p
-              className="font-sans text-[15px] text-[#4A463F] leading-relaxed max-w-sm"
+              className="font-sans text-base text-[#4A463F] leading-relaxed max-w-sm"
               initial={{ opacity: 0, y: 14 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
               transition={{ duration: 0.8, delay: 0.35 + index * 0.1 }}
@@ -837,7 +837,7 @@ function DisciplineStrip({
                   animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
                   transition={{ duration: 0.5, delay: 0.55 + index * 0.08 + ci * 0.07, ease: [0.16, 1, 0.3, 1] }}
                 />
-                <span className="font-sans text-[15px] text-[#4A463F] group-hover/cap:text-[#0D0D0B]/75 transition-colors duration-300">
+                <span className="font-sans text-base text-[#4A463F] group-hover/cap:text-[#0D0D0B]/75 transition-colors duration-300">
                   {cap}
                 </span>
               </motion.div>
@@ -849,7 +849,7 @@ function DisciplineStrip({
             {d.tags.map((tag, ti) => (
               <motion.span
                 key={tag}
-                className="font-mono text-[9px] uppercase tracking-widest border rounded-full px-3 py-1"
+                className="font-mono text-micro uppercase tracking-widest border rounded-full px-3 py-1"
                 style={{
                   color: `rgba(${d.accentRgb},0.55)`,
                   borderColor: `rgba(${d.accentRgb},0.18)`,
@@ -953,9 +953,9 @@ function DisciplineCardBody({
       <div className="relative p-5 xl:p-6 flex flex-col gap-3 h-full overflow-hidden">
         {/* Header row */}
         <div className="flex items-center justify-between">
-          <span className="font-mono text-[11px] tracking-[0.25em] text-[#9A9488]">{d.num}</span>
+          <span className="font-mono text-label tracking-[0.25em] text-[#9A9488]">{d.num}</span>
           <span
-            className="font-mono text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 rounded-full transition-colors duration-300"
+            className="font-mono text-micro uppercase tracking-[0.2em] px-2.5 py-1 rounded-full transition-colors duration-300"
             style={{
               color: ORANGE,
               border: `1px solid ${ORANGE_SOFT}`,
@@ -988,14 +988,14 @@ function DisciplineCardBody({
         </div>
 
         {/* Description */}
-        <p className="font-sans text-[12.5px] text-[#4A463F] leading-[1.65]">{d.description}</p>
+        <p className="font-sans text-xs text-[#4A463F] leading-[1.65]">{d.description}</p>
 
         {/* Capabilities — orange dash */}
         <div className="space-y-1.5">
           {d.capabilities.map((cap) => (
             <div key={cap} className="flex items-center gap-2.5">
               <span className="w-3 h-[1.5px] shrink-0 rounded-full" style={{ background: ORANGE }} />
-              <span className="font-sans text-[12px] text-[#4A463F]">{cap}</span>
+              <span className="font-sans text-xs text-[#4A463F]">{cap}</span>
             </div>
           ))}
         </div>
@@ -1005,7 +1005,7 @@ function DisciplineCardBody({
           {d.tags.map((tag) => (
             <span
               key={tag}
-              className="font-mono text-[9.5px] font-medium uppercase tracking-[0.12em] rounded-full px-3.5 py-1.5 transition-all duration-300"
+              className="font-mono text-micro font-medium uppercase tracking-[0.12em] rounded-full px-3.5 py-1.5 transition-all duration-300"
               style={{
                 color: "#FF5C00",
                 border: "1.5px solid rgba(255,92,0,0.45)",
@@ -1154,7 +1154,7 @@ function DisciplineSpread() {
           style={{ opacity: labelOpacity, y: labelY }}
         >
           <div className="h-px w-8 bg-[#FF5C00]" />
-          <span className="font-mono text-[10px] text-[#6F6A60] uppercase tracking-[0.3em] whitespace-nowrap">
+          <span className="font-mono text-micro text-[#6F6A60] uppercase tracking-[0.3em] whitespace-nowrap">
             [ 03 ] — What we do
           </span>
           <div className="h-px w-8 bg-[#FF5C00]" />
@@ -1387,8 +1387,8 @@ function SystemOrbit({ inView }: { inView: boolean }) {
                 transition={{ duration: 2.6, repeat: Infinity, ease: "easeOut", delay: 1.3 }} />
             </>
           )}
-          <span className="font-instrument text-white text-[18px] leading-none tracking-[-0.03em] z-10">CODA</span>
-          <span className="font-mono text-white/50 text-[8px] uppercase tracking-[0.2em] mt-1 z-10">System</span>
+          <span className="font-instrument text-white text-lg leading-none tracking-[-0.03em] z-10">CODA</span>
+          <span className="font-mono text-white/50 text-micro uppercase tracking-[0.2em] mt-1 z-10">System</span>
         </motion.div>
 
         {/* Node pills */}
@@ -1423,8 +1423,8 @@ function SystemOrbit({ inView }: { inView: boolean }) {
                   }}
                   transition={{ duration: 0.3, ease: [0.16,1,0.3,1] }}
                 >
-                  <span className="font-instrument text-[#14130F] text-[16px] leading-tight">{n.label}</span>
-                  <span className="font-mono text-[#9A9488] text-[9px] uppercase tracking-[0.2em]">{n.sub}</span>
+                  <span className="font-instrument text-[#14130F] text-base leading-tight">{n.label}</span>
+                  <span className="font-mono text-[#9A9488] text-micro uppercase tracking-[0.2em]">{n.sub}</span>
                 </motion.div>
 
                 <motion.div
@@ -1438,11 +1438,11 @@ function SystemOrbit({ inView }: { inView: boolean }) {
                   transition={{ duration: 0.3 }}
                 >
                   <motion.span
-                    className="font-instrument text-[15px] leading-none font-semibold"
+                    className="font-instrument text-base leading-none font-semibold"
                     animate={{ color: isHovered ? n.color : "#FF5C00" }}
                     transition={{ duration: 0.3 }}
                   >{n.stat}</motion.span>
-                  <span className="font-mono text-[#9A9488] text-[8px] uppercase tracking-[0.16em]">{n.statLabel}</span>
+                  <span className="font-mono text-[#9A9488] text-micro uppercase tracking-[0.16em]">{n.statLabel}</span>
                 </motion.div>
               </motion.div>
             </motion.div>
@@ -1594,7 +1594,7 @@ function HeaderBlock({
             <div
               className="h-[1px] w-12 bg-[#FF5C00] origin-left"
             />
-            <span className="font-mono text-[10px] text-[#6F6A60] uppercase tracking-[0.32em]">What we do</span>
+            <span className="font-mono text-micro text-[#6F6A60] uppercase tracking-[0.32em]">What we do</span>
             <div className="relative">
               <span className="block w-1.5 h-1.5 rounded-full bg-[#FF5C00]" />
               {/* Pulsing halo — desktop only (one less continuous loop on mobile) */}
@@ -1611,7 +1611,7 @@ function HeaderBlock({
 
           {/* Sub-copy */}
           <p
-            className="font-sans text-[15px] text-[#4A463F] max-w-full sm:max-w-[380px] leading-relaxed">
+            className="font-sans text-base text-[#4A463F] max-w-full sm:max-w-[380px] leading-relaxed">
             Three disciplines Technology, Design, and Growth.  unified into one
             system that compounds over time and gives our clients an unfair advantage.
           </p>
@@ -1673,7 +1673,7 @@ function HeaderBlock({
 
                     {/* Label */}
                     <motion.span
-                      className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.25em]"
+                      className="font-mono text-micro md:text-micro uppercase tracking-[0.25em]"
                       variants={{ idle: { color: "#9A9488" }, hovered: { color: "#14130F" } }}
                       transition={{ duration: 0.3 }}
                     >{label}</motion.span>
@@ -1807,7 +1807,7 @@ export default function Statement() {
       </div>
 
       {/* ── Bottom tagline ───────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-6 pt-8 pb-16 lg:py-16 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 py-16 lg:py-24 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -1815,12 +1815,12 @@ export default function Statement() {
           transition={{ duration: 0.8 }}
           className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-10 border-t border-[#0D0D0B]/[0.1]"
         >
-          <p className="font-mono text-[10px] text-[#6F6A60] uppercase tracking-[0.25em]">
+          <p className="font-mono text-micro text-[#6F6A60] uppercase tracking-[0.25em]">
             Every engagement touches all three disciplines
           </p>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-[#FF5C00] animate-ping-expand" />
-            <span className="font-mono text-[10px] text-[#6F6A60] uppercase tracking-[0.2em]">
+            <span className="font-mono text-micro text-[#6F6A60] uppercase tracking-[0.2em]">
               That&apos;s how systems compound
             </span>
           </div>

@@ -236,7 +236,7 @@ export default function CallToAction() {
                 transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className="px-5 py-2 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md"
               >
-                <span className="font-mono text-[10px] sm:text-[11px] text-coda-accent tracking-[0.2em] uppercase font-semibold">
+                <span className="font-mono text-micro sm:text-label text-coda-accent tracking-[0.2em] uppercase font-semibold">
                   Let's Build the Future
                 </span>
               </motion.div>
@@ -265,7 +265,7 @@ export default function CallToAction() {
 
               {/* Sub-copy with gradient */}
               <p
-                className={`cta-sub${visible ?" in" : ""} font-sans text-[16px] sm:text-[24px] max-w-[320px] sm:max-w-2xl leading-[1.5] sm:leading-[1.6]`}
+                className={`cta-sub${visible ?" in" : ""} font-sans text-base sm:text-2xl max-w-[320px] sm:max-w-2xl leading-[1.5] sm:leading-[1.6]`}
                 style={{
                   background: "linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.4) 100%)",
                   WebkitBackgroundClip: "text",
@@ -282,7 +282,7 @@ export default function CallToAction() {
               <div className={`cta-btn${visible ?" in" : ""} flex flex-col items-center`}>
                 <MagneticButton variant="accent" onClick={openForm}>
                   <span
-                    className="flex items-center gap-2 sm:gap-3 text-white px-8 py-3.5 sm:px-10 sm:py-4 rounded-full font-sans font-semibold text-[15px] sm:text-[17px] tracking-tight relative overflow-hidden transition-transform duration-300 hover:scale-105"
+                    className="flex items-center gap-2 sm:gap-3 text-white px-8 py-3.5 sm:px-10 sm:py-4 rounded-full font-sans font-semibold text-base sm:text-lg tracking-tight relative overflow-hidden transition-transform duration-300 hover:scale-105"
                     style={{ 
                       background: "linear-gradient(135deg, var(--color-coda-accent) 0%, color-mix(in srgb, var(--color-coda-accent) 80%, black) 100%)",
                       boxShadow: "0 12px 32px color-mix(in srgb, var(--color-coda-accent) 40%, transparent), inset 0 1px 1px rgba(255,255,255,0.4)",
@@ -300,7 +300,7 @@ export default function CallToAction() {
 
               {/* Footer note */}
               <div
-                className={`cta-note${visible ?" in" : ""} flex items-center gap-3 sm:gap-4 font-mono text-[10px] sm:text-[12px] text-white/50 tracking-[0.2em] uppercase`}
+                className={`cta-note${visible ?" in" : ""} flex items-center gap-3 sm:gap-4 font-mono text-micro sm:text-xs text-white/50 tracking-[0.2em] uppercase`}
               >
                 <span>No retainers</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-[#FF5C00]" />

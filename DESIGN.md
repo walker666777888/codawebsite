@@ -11,6 +11,24 @@ colors:
   ink-dark: "#14130F"
   muted: "#4D4A45"
   grid: "#E6E1DA"
+  viz-amber: "#F59E0B"
+  viz-yellow: "#FCD34D"
+  viz-green: "#22C55E"
+  glitch-r: "#FF1500"
+  glitch-g: "#00FF88"
+  glitch-b: "#00E5FF"
+  glitch-blue: "#008CFF"
+  dark-overlay: "#3D3A35"
+  modal-dark: "#26160C"
+  modal-darker: "#23140A"
+  philosophy-1: "#DCC88C"
+  philosophy-2: "#8CC89B"
+  philosophy-3: "#C8BEAA"
+  philosophy-4: "#8CA0DC"
+  philosophy-5: "#FF8C50"
+  philosophy-6: "#AA82D2"
+  philosophy-7: "#FF9040"
+  pillar-grey: "#888888"
 typography:
   display:
     fontFamily: "Playfair Display, serif"
@@ -76,20 +94,20 @@ The palette balances the warmth of a creative studio with the sharp precision of
 
 ## Typography
 
-**Display Font:** Playfair Display (serif)
-**Body Font:** Montserrat (sans-serif)
+**Display Font:** Clash Display (sans-serif)
+**Body Font:** Satoshi (sans-serif)
 **Label/Mono Font:** Space Mono (monospace)
 
-**Character:** A high-end editorial gallery meets a terminal interface. The extreme contrast between elegant serifs and utilitarian monospace creates the signature tension of the brand.
+**Character:** A high-end tech ecosystem meets a digital gallery. The high-tech, geometric sans-serifs combine with utilitarian monospace to create the signature sleekness of the brand.
 
 ### Hierarchy
-- **Display** (400, clamp(64px, 11vw, 150px), 1.04): Used exclusively for hero statements and massive section headers. Extremely tight letter-spacing (-0.04em).
-- **Headline** (600, clamp(36px, 5vw, 66px), 1.04): For secondary section headers.
-- **Body** (400, 17px, 1.65): Main reading text. Highly legible and breathable.
-- **Label** (400, 11px, 0.15em, uppercase): Used for metadata, technical readouts, overlines, and tiny navigational elements.
+- **Display** (400-600, clamp(64px, 11vw, 150px), 1.04): Used exclusively for hero statements and massive section headers. Extremely tight letter-spacing (-0.04em).
+- **Headline** (500-600, clamp(36px, 5vw, 66px), 1.04): For secondary section headers.
+- **Body** (400-500, 16px, 1.65): Main reading text. Highly legible and breathable.
+- **Label** (400, 10px - 12px, 0.15em, uppercase): Used for metadata, technical readouts, overlines, and tiny navigational elements.
 
 ### Named Rules
-**The Typographic Tension Rule.** Never use Montserrat (sans-serif) for large expressive headlines. Never use Playfair Display for small UI elements. 
+**The Typographic Tech Rule.** Ensure tight letter-spacing for large expressive headlines to maintain the engineered feel. Use Space Mono strictly for technical UI elements.
 
 ## Layout
 

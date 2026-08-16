@@ -141,7 +141,7 @@ function TechnicalOverlay({
   subtitle?: string; 
 }) {
   return (
-    <div className={`absolute z-20 text-white/40 font-mono text-[10px] tracking-widest block md:hidden ${className}`}>
+    <div className={`absolute z-20 text-white/60 font-mono text-micro tracking-widest block md:hidden ${className}`}>
       <div>{title}</div>
       <DynamicHex />
       <div>{subtitle}</div>
@@ -209,7 +209,7 @@ export default function Hero() {
       {/* ── Mobile Fluid Interact Toggle ── */}
       <button
         onClick={() => setIsInteractMode(!isInteractMode)}
-        className="absolute bottom-8 right-6 z-50 md:hidden flex items-center justify-center w-12 h-12 rounded-full border border-white/10 bg-black/40 backdrop-blur-xl shadow-2xl transition-all duration-300 active:scale-90"
+        className="absolute bottom-8 right-6 z-50 md:hidden flex items-center justify-center w-12 h-12 rounded-full border border-white/10 bg-black/40 backdrop-blur-xl shadow-2xl transition-all duration-300 active:scale-90 focus-visible:ring-2 focus-visible:ring-coda-accent focus-visible:outline-none"
         aria-label={isInteractMode ? "Unlock Screen" : "Lock Screen"}
       >
         {isInteractMode ? (
@@ -376,7 +376,7 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 2.1, ease: [0.16, 1, 0.3, 1] }}
           >
             <span className="h-[1px] w-4 sm:w-10 bg-white/20 block shrink" />
-            <p className="font-instrument text-white/95 text-[18px] min-[390px]:text-[20px] sm:text-[28px] md:text-[40px] tracking-[-0.02em] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+            <p className="font-instrument text-white/95 text-lg min-[390px]:text-xl sm:text-3xl md:text-4xl tracking-[-0.02em] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
               <TextType 
                 text="Engineer your " 
                 as="span" 
@@ -402,7 +402,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
-            className="font-sans text-[14px] sm:text-[16px] text-white/80 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
+            className="font-sans text-sm sm:text-base text-white/80 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
           >
             <TextType 
               text="We unify technology, design, and growth into compounding digital ecosystems that outpace your competition." 
@@ -421,7 +421,7 @@ export default function Hero() {
             className="flex items-center gap-5 pointer-events-auto"
           >
             <MagneticButton variant="primary" onClick={openForm}>
-              <span className="flex items-center gap-2 font-sans font-semibold text-[14px] px-8 py-3.5 tracking-[-0.01em]">
+              <span className="flex items-center gap-2 font-sans font-semibold text-sm px-8 py-3.5 tracking-[-0.01em]">
                 Start a project
                 <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
               </span>

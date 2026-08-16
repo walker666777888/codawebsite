@@ -431,18 +431,18 @@ function Field({
     onBlur:  () => fMv.set(0),
   };
   const inputClass =
-    "w-full bg-transparent rounded-[14px] px-4 py-4 text-white text-[16px] font-sans outline-none focus:outline-none focus:ring-0 border-0 placeholder-white/20 resize-none leading-relaxed";
+    "w-full bg-transparent rounded-2xl px-4 py-4 text-white text-base font-sans outline-none focus:outline-none focus:ring-0 border-0 placeholder-white/20 resize-none leading-relaxed";
 
   const charsLeft = maxLength !== undefined ? maxLength - value.length : null;
 
   return (
     <div>
       <div className="flex items-center justify-between mb-2.5">
-        <label htmlFor={id} className="font-mono text-[12px] uppercase tracking-[0.18em] text-white/75">
+        <label htmlFor={id} className="font-mono text-xs uppercase tracking-[0.18em] text-white/75">
           {label}{required && <span className="text-[#FF5C00] ml-0.5">*</span>}
         </label>
         {charsLeft !== null && (
-          <span className="font-mono text-[9px] text-white/20 tabular-nums">
+          <span className="font-mono text-micro text-white/20 tabular-nums">
             {charsLeft}
           </span>
         )}
@@ -545,7 +545,7 @@ function PhoneField({
   return (
     <div>
       <div className="flex items-center justify-between mb-2.5">
-        <label className="font-mono text-[12px] uppercase tracking-[0.18em] text-white/75">
+        <label className="font-mono text-xs uppercase tracking-[0.18em] text-white/75">
           Phone <span className="text-[#FF5C00] ml-0.5">*</span>
         </label>
       </div>
@@ -557,7 +557,7 @@ function PhoneField({
             type="button"
             onClick={() => setOpen(o => !o)}
             whileTap={{ scale: 0.97 }}
-            className="h-full flex items-center gap-2 rounded-[14px] px-3.5 py-4 cursor-pointer outline-none select-none"
+            className="h-full flex items-center gap-2 rounded-2xl px-3.5 py-4 cursor-pointer outline-none select-none"
             style={{
               background: open ? "rgb(38,22,12)" : "rgb(30,28,24)",
               boxShadow: open
@@ -568,7 +568,7 @@ function PhoneField({
             }}
           >
             <FlagImg code={selected.code} size={20} />
-            <span className="font-mono text-[13px] text-white/80 tabular-nums">{selected.dial}</span>
+            <span className="font-mono text-small text-white/80 tabular-nums">{selected.dial}</span>
             <motion.span
               animate={{ rotate: open ? 180 : 0 }}
               transition={{ type: "spring", stiffness: 320, damping: 24 }}
@@ -591,7 +591,7 @@ function PhoneField({
                 style={{
                   transformOrigin: "top",
                   willChange: "transform, opacity",
-                  background: "#161614",
+                  background: "var(--color-modal-darker)",
                   boxShadow: "0 16px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06)",
                   borderRadius: "16px",
                   overflow: "hidden",
@@ -605,7 +605,7 @@ function PhoneField({
 
                 {/* search */}
                 <div className="px-3 pt-3 pb-2">
-                  <div className="flex items-center gap-2 bg-[#1e1c18] rounded-[10px] px-3 py-2"
+                  <div className="flex items-center gap-2 bg-modal-dark rounded-xl px-3 py-2"
                     style={{ boxShadow: "0 0 0 1px rgba(255,255,255,0.07)" }}>
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none" className="text-white/30 shrink-0">
                       <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.4"/>
@@ -617,7 +617,7 @@ function PhoneField({
                       value={search}
                       onChange={e => setSearch(e.target.value)}
                       placeholder="Search country…"
-                      className="bg-transparent flex-1 text-white text-[12px] font-sans outline-none placeholder-white/20 min-w-0"
+                      className="bg-transparent flex-1 text-white text-xs font-sans outline-none placeholder-white/20 min-w-0"
                       style={{ border: "none", boxShadow: "none" }}
                     />
                   </div>
@@ -626,7 +626,7 @@ function PhoneField({
                 {/* list */}
                 <div className="overflow-y-auto max-h-[220px] [scrollbar-width:thin] [scrollbar-color:rgba(255,92,0,0.3)_transparent]">
                   {filtered.length === 0 && (
-                    <p className="px-4 py-3 font-mono text-[11px] text-white/25 text-center">No results</p>
+                    <p className="px-4 py-3 font-mono text-label text-white/25 text-center">No results</p>
                   )}
                   {filtered.map((c, i) => {
                     const active = c.code === selectedCode;
@@ -645,10 +645,10 @@ function PhoneField({
                       >
                         <FlagImg code={c.code} size={18} />
                         <div className="flex flex-col flex-1 min-w-0">
-                          <span className={`font-sans text-[12px] truncate ${active ?"text-white" : "text-white/60"}`}>{c.name}</span>
-                          {fmt && <span className="font-mono text-[9px] text-white/25 truncate">{fmt}</span>}
+                          <span className={`font-sans text-xs truncate ${active ?"text-white" : "text-white/60"}`}>{c.name}</span>
+                          {fmt && <span className="font-mono text-micro text-white/25 truncate">{fmt}</span>}
                         </div>
-                        <span className="font-mono text-[11px] text-white/30 tabular-nums shrink-0">{c.dial}</span>
+                        <span className="font-mono text-label text-white/30 tabular-nums shrink-0">{c.dial}</span>
                         {active && (
                           <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }}
                             transition={{ type: "spring", stiffness: 400, damping: 20 }}
@@ -680,7 +680,7 @@ function PhoneField({
               placeholder={format}
               onFocus={() => fMv.set(1)}
               onBlur={() => fMv.set(0)}
-              className="w-full bg-transparent rounded-[14px] px-4 py-4 pr-16 text-white text-[15px] font-mono outline-none focus:outline-none focus:ring-0 border-0 placeholder-white/20 leading-relaxed"
+              className="w-full bg-transparent rounded-2xl px-4 py-4 pr-16 text-white text-base font-mono outline-none focus:outline-none focus:ring-0 border-0 placeholder-white/20 leading-relaxed"
               style={{ outline: "none", boxShadow: "none", border: "none" }}
             />
             {/* live digit counter inside input */}
@@ -689,7 +689,7 @@ function PhoneField({
               const full  = typed >= maxDigits;
               return (
                 <span
-                  className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-[10px] tabular-nums pointer-events-none select-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-micro tabular-nums pointer-events-none select-none"
                   style={{ color: full ? "#FF5C00" : "rgba(255,255,255,0.20)" }}
                 >
                   {typed}/{maxDigits}
@@ -737,7 +737,7 @@ function Dropdown({
         type="button"
         onClick={() => setOpen(o => !o)}
         whileTap={{ scale: 0.99 }}
-        className="w-full flex items-center justify-between gap-3 rounded-[14px] px-4 py-3.5 cursor-pointer outline-none text-left"
+        className="w-full flex items-center justify-between gap-3 rounded-2xl px-4 py-3.5 cursor-pointer outline-none text-left"
         style={{
           background: open ? "rgb(38,22,12)" : hasSelected ? "rgb(35,20,10)" : "rgb(30,28,24)",
           boxShadow: open
@@ -751,15 +751,15 @@ function Dropdown({
         <div className="flex flex-col gap-0.5 min-w-0">
           {selectedOptions.length > 0 ? (
             <>
-              <span className="font-sans text-[13px] font-medium text-white leading-tight truncate">
+              <span className="font-sans text-small font-medium text-white leading-tight truncate">
                 {selectedOptions.map(o => o.label).join(", ")}
               </span>
-              <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-[#FF5C00]/60">
+              <span className="font-mono text-micro uppercase tracking-[0.16em] text-[#FF5C00]/60">
                 {selectedOptions.length} Selected
               </span>
             </>
           ) : (
-            <span className="font-sans text-[13px] text-white/35">Select project types…</span>
+            <span className="font-sans text-small text-white/35">Select project types…</span>
           )}
         </div>
 
@@ -786,7 +786,7 @@ function Dropdown({
             style={{
               transformOrigin: "top",
               willChange: "transform, opacity",
-              background: "#161614",
+              background: "var(--color-modal-darker)",
               boxShadow: "0 12px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06)",
               borderRadius: "16px",
               overflow: "hidden",
@@ -823,11 +823,11 @@ function Dropdown({
                       transition={{ duration: 0.15 }}
                     />
                     <div className="flex flex-col gap-0.5 flex-1 min-w-0">
-                      <span className={`font-sans text-[13px] font-medium leading-tight ${on ?"text-white" : "text-white/65"}`}>
+                      <span className={`font-sans text-small font-medium leading-tight ${on ?"text-white" : "text-white/65"}`}>
                         {opt.label}
                       </span>
                       {opt.sub && (
-                        <span className={`font-mono text-[9px] uppercase tracking-[0.16em] ${on ?"text-[#FF5C00]/60" : "text-white/22"}`}>
+                        <span className={`font-mono text-micro uppercase tracking-[0.16em] ${on ?"text-[#FF5C00]/60" : "text-white/22"}`}>
                           {opt.sub}
                         </span>
                       )}
@@ -987,7 +987,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
             role="dialog" aria-modal="true" aria-label="Start a project"
             className="fixed inset-0 z-[201] md:inset-0"
             style={{
-              background: "#0C0C0A",
+              background: "var(--color-modal-bg)",
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
@@ -1040,7 +1040,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                   />
                   <div className="relative">
                     <FadeUp delay={0.22}>
-                      <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#FF5C00]/80">
+                      <span className="font-mono text-micro uppercase tracking-[0.28em] text-[#FF5C00]/80">
                         CODA · Start a project
                       </span>
                     </FadeUp>
@@ -1052,7 +1052,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                       </h2>
                     </FadeUp>
                     <FadeUp delay={0.38}>
-                      <p className="font-sans text-[14px] text-white/40 leading-[1.8] mt-5 max-w-[280px]">
+                      <p className="font-sans text-sm text-white/40 leading-[1.8] mt-5 max-w-[280px]">
                         One focused conversation is all it takes. Tell us what you&apos;re
                         building and we&apos;ll map the system together.
                       </p>
@@ -1061,7 +1061,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
 
                   <div className="relative">
                     <FadeUp delay={0.46}>
-                      <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-white/20 mb-6">
+                      <p className="font-mono text-micro uppercase tracking-[0.22em] text-white/20 mb-6">
                         What happens next
                       </p>
                     </FadeUp>
@@ -1069,8 +1069,8 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                       {NEXT_STEPS.map((s, i) => (
                         <FadeUp key={s.n} delay={0.52 + i * 0.07}>
                           <div className="flex items-start gap-4">
-                            <span className="font-mono text-[10px] text-[#FF5C00]/70 mt-0.5 shrink-0">{s.n}</span>
-                            <p className="font-sans text-[13px] text-white/40 leading-[1.65]">{s.text}</p>
+                            <span className="font-mono text-micro text-[#FF5C00]/70 mt-0.5 shrink-0">{s.n}</span>
+                            <p className="font-sans text-small text-white/40 leading-[1.65]">{s.text}</p>
                           </div>
                         </FadeUp>
                       ))}
@@ -1078,7 +1078,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                     <FadeUp delay={0.74}>
                       <a href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
                         target="_blank" rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 mt-10 font-mono text-[9px] uppercase tracking-[0.2em] text-white/20 hover:text-white/50 transition-colors duration-300">
+                        className="inline-flex items-center gap-2 mt-10 font-mono text-micro uppercase tracking-[0.2em] text-white/20 hover:text-white/50 transition-colors duration-300">
                         Connect@citizenofdigitalage.com <ArrowRight size={9} />
                       </a>
                     </FadeUp>
@@ -1090,10 +1090,10 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
 
                   {/* mobile header */}
                   <div className="lg:hidden mb-8">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#FF5C00]/80">
+                    <span className="font-mono text-micro uppercase tracking-[0.24em] text-[#FF5C00]/80">
                       Start a project
                     </span>
-                    <h2 className="font-instrument text-white text-[28px] tracking-[-0.025em] leading-tight mt-3">
+                    <h2 className="font-instrument text-white text-3xl tracking-[-0.025em] leading-tight mt-3">
                       Let&apos;s build something that{" "}
                       <span className="text-[#FF5C00]">compounds.</span>
                     </h2>
@@ -1113,10 +1113,10 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.65, duration: 0.45, ease: E }}
                         >
-                          <h3 className="font-instrument text-white text-[30px] tracking-[-0.02em] mb-3">
+                          <h3 className="font-instrument text-white text-3xl tracking-[-0.02em] mb-3">
                             We&apos;re on it.
                           </h3>
-                          <p className="font-sans text-[15px] text-white/40 max-w-[260px] leading-[1.75]">
+                          <p className="font-sans text-base text-white/40 max-w-[260px] leading-[1.75]">
                             Expect a reply within 24 hours. We&apos;ll come prepared.
                           </p>
                         </motion.div>
@@ -1124,7 +1124,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                           transition={{ delay: 1.1 }}
                           whileHover={{ scale: 1.012 }} whileTap={{ scale: 0.978 }}
-                          className="mt-6 relative font-sans font-semibold text-[14px] tracking-[0.04em] text-white rounded-2xl px-10 py-[13px] overflow-hidden cursor-pointer"
+                          className="mt-6 relative font-sans font-semibold text-sm tracking-[0.04em] text-white rounded-2xl px-10 py-[13px] overflow-hidden cursor-pointer"
                           style={{
                             background: "linear-gradient(135deg,#FF7A2E 0%,#FF5C00 55%,#E65300 100%)",
                             boxShadow: "0 1px 0 rgba(255,255,255,0.18) inset, 0 10px 40px rgba(255,92,0,0.28)",
@@ -1170,7 +1170,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                         <FadeUp delay={fd(0.37)}>
                           <div className="flex flex-col gap-3">
                             <div>
-                              <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-white/75 mb-2.5">
+                              <p className="font-mono text-xs uppercase tracking-[0.18em] text-white/75 mb-2.5">
                                 What are we building?
                               </p>
                               <Dropdown 
@@ -1194,7 +1194,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                                             value={otherPtype}
                                             onChange={(e) => setOtherPtype(e.target.value)}
                                             placeholder="Please specify..."
-                                            className="w-full bg-[#1e1c18] rounded-[10px] px-3 py-2 text-white text-[13px] font-sans outline-none border border-white/10 focus:border-[#FF5C00]/50 placeholder-white/20"
+                                            className="w-full bg-modal-dark rounded-xl px-3 py-2 text-white text-small font-sans outline-none border border-white/10 focus:border-[#FF5C00]/50 placeholder-white/20"
                                             autoFocus
                                           />
                                         </motion.div>
@@ -1223,7 +1223,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                             whileHover={{ scale: status === "idle" ? 1.012 : 1 }}
                             whileTap={{ scale: status === "idle" ? 0.978 : 1 }}
                             transition={{ type: "spring", stiffness: 360, damping: 26 }}
-                            className="relative w-full flex items-center justify-center gap-3 rounded-2xl py-[15px] font-sans font-semibold text-[14px] tracking-[0.04em] text-white overflow-hidden disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer"
+                            className="relative w-full flex items-center justify-center gap-3 rounded-2xl py-[15px] font-sans font-semibold text-sm tracking-[0.04em] text-white overflow-hidden disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer"
                             style={{
                               background: "linear-gradient(135deg,#FF7A2E 0%,#FF5C00 55%,#E65300 100%)",
                               boxShadow: "0 1px 0 rgba(255,255,255,0.18) inset, 0 10px 40px rgba(255,92,0,0.28)",
@@ -1252,7 +1252,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                             </span>
                           </motion.button>
 
-                          <p className="text-center font-mono text-[9px] uppercase tracking-[0.18em] text-white/18 mt-3.5">
+                          <p className="text-center font-mono text-micro uppercase tracking-[0.18em] text-white/18 mt-3.5">
                             No commitment · We respond within 24 hours
                           </p>
                         </FadeUp>

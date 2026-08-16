@@ -162,7 +162,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
               rotateX: tiltX,
               rotateY: tiltY,
               transformPerspective: 900,
-              willChange: "transform, opacity",
+              willChange: hovered ? "transform, opacity" : "auto",
             }
       }
       animate={
@@ -190,7 +190,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
           style={{ background: borderGlow, opacity: smoothOpacity }}
         />
         <div
-          className="absolute inset-[1px] rounded-[14px]"
+          className="absolute inset-[1px] rounded-2xl"
           style={{ background: "linear-gradient(180deg,#FFFFFF 0%,#FBF9F4 100%)" }}
         />
       </div>
@@ -220,11 +220,11 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
       <div className="relative z-10 flex flex-col h-full p-6 md:p-8">
         {/* Top meta */}
         <div className="flex items-start justify-between gap-2">
-          <span className="font-mono text-[10px] tracking-[0.24em] text-[#9A9488] uppercase">
+          <span className="font-mono text-micro tracking-[0.24em] text-[#9A9488] uppercase">
             {String(index + 1).padStart(2, "0")}
           </span>
           <motion.span
-            className="font-mono text-[9px] tracking-[0.18em] text-[#6F6A60] uppercase border rounded-full px-3 py-1 transition-colors duration-300 group-hover:bg-[#FBF9F4]/60"
+            className="font-mono text-micro tracking-[0.18em] text-[#6F6A60] uppercase border rounded-full px-3 py-1 transition-colors duration-300 group-hover:bg-[#FBF9F4]/60"
             style={{ borderColor: "rgba(13,13,11,0.1)" }}
             animate={{ borderColor: ["rgba(13,13,11,0.1)", "rgba(255,92,0,0.4)", "rgba(13,13,11,0.1)"] }}
             transition={{ duration: 4, repeat: Infinity, delay: index * 0.8 }}
@@ -247,11 +247,11 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
         </motion.div>
 
         {/* Bottom — glass plate keeps copy crisp over the animation */}
-        <div className="flex flex-col gap-2 -mx-2 px-2 py-1.5 rounded-xl transition-colors duration-300 group-hover:bg-[#FBF9F4]/60">
-          <p className="font-sans text-[15px] font-medium text-[#14130F] leading-tight">
+        <div className="flex flex-col gap-2 -mx-2 px-2 py-1.5 rounded-lg transition-colors duration-300 group-hover:bg-[#FBF9F4]/60">
+          <p className="font-sans text-base font-medium text-[#14130F] leading-tight">
             {stat.label}
           </p>
-          <p className="font-sans text-[12px] text-[#6F6A60] leading-relaxed">
+          <p className="font-sans text-xs text-[#6F6A60] leading-relaxed">
             {stat.description}
           </p>
         </div>
@@ -279,7 +279,7 @@ export default function BentoMetrics() {
   const glowY = useTransform(scrollYProgress, [0, 1], [-60, 60]);
 
   return (
-    <section ref={sectionRef} className="relative bg-[#F4F0E8] px-6 py-10 overflow-hidden">
+    <section ref={sectionRef} className="relative bg-[#F4F0E8] px-6 py-24 md:py-32 overflow-hidden">
       {/* Ambient top glow */}
       <motion.div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[340px] pointer-events-none"
@@ -301,7 +301,7 @@ export default function BentoMetrics() {
           className="flex items-end justify-between border-t border-[#0D0D0B]/[0.1] pt-8"
         >
           <div className="flex flex-col gap-3">
-            <p className="font-mono text-[10px] text-[#6F6A60] uppercase tracking-[0.28em]">
+            <p className="font-mono text-micro text-[#6F6A60] uppercase tracking-[0.28em]">
               Impact Metrics
             </p>
             <h2
@@ -312,7 +312,7 @@ export default function BentoMetrics() {
             </h2>
           </div>
           <motion.span
-            className="font-mono text-[10px] text-[#9A9488] uppercase tracking-[0.25em] hidden sm:block"
+            className="font-mono text-micro text-[#9A9488] uppercase tracking-[0.25em] hidden sm:block"
             animate={{ opacity: [0.5, 0.8, 0.5] }}
             transition={{ duration: 5, repeat: Infinity }}
           >

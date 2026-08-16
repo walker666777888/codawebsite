@@ -156,7 +156,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
             <div className="flex flex-col gap-5 sm:gap-6">
               {/* Header row */}
               <div className="flex items-center justify-between">
-                <span className="font-mono text-[11px] text-[#6F6A60] tracking-widest">{card.num}</span>
+                <span className="font-mono text-label text-[#6F6A60] tracking-widest">{card.num}</span>
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center border border-[#0D0D0B]/[0.1] bg-[#0D0D0B]/[0.04] group-hover:border-[#0D0D0B]/30 transition-all duration-400"
                   style={{ boxShadow: hovered ? `0 0 20px ${card.glow}` : "none" }}
@@ -184,7 +184,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
                   border: "1px solid rgba(255,255,255,0.6)",
                 }}
               >
-                <p className="font-sans text-[15px] text-[#4A463F] leading-relaxed group-hover:text-[#0D0D0B]/65 transition-colors duration-500">
+                <p className="font-sans text-base text-[#4A463F] leading-relaxed group-hover:text-[#0D0D0B]/65 transition-colors duration-500">
                   {card.desc}
                 </p>
                 </div>
@@ -200,7 +200,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: 0.3 + index * 0.08 + ti * 0.05 }}
-                  className="font-mono text-[10px] uppercase tracking-widest text-[#6F6A60] border border-[#0D0D0B]/[0.12] rounded-full px-3 py-1 group-hover:border-[#0D0D0B]/20 group-hover:text-[#4A463F] transition-all duration-300"
+                  className="font-mono text-micro uppercase tracking-widest text-[#6F6A60] border border-[#0D0D0B]/[0.12] rounded-full px-3 py-1 group-hover:border-[#0D0D0B]/20 group-hover:text-[#4A463F] transition-all duration-300"
                 >
                   {tag}
                 </motion.span>
@@ -256,7 +256,7 @@ export default function Capabilities() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="font-sans text-[15px] text-[#4A463F] leading-[1.7] max-w-xs"
+            className="font-sans text-base text-[#4A463F] leading-[1.7] max-w-xs"
           >
             No bloat, no fluff. Just the three pillars that actually move the needle.
           </motion.p>

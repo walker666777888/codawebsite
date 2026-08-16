@@ -110,5 +110,5 @@ export default function MagneticButton({ children, variant = "primary", classNam
   if (href) {
     return <Link href={href} passHref legacyBehavior><a>{content}</a></Link>;
   }
-  return <button type="button" onClick={onClick} className="p-0 border-0 bg-transparent">{content}</button>;
+  return <button type="button" onClick={onClick} className="p-0 border-0 bg-transparent focus-visible:ring-2 focus-visible:ring-coda-accent focus-visible:outline-none rounded-full">{content}</button>;
 }

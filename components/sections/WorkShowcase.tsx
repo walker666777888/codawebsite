@@ -62,7 +62,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
         </div>
         {/* Number */}
         <div className="absolute top-5 left-5">
-          <span className="font-mono text-[10px] text-white/30 tracking-[0.15em]">
+          <span className="font-mono text-micro text-white/30 tracking-[0.15em]">
             {String(index + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
           </span>
         </div>
@@ -76,17 +76,17 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
         <div className="absolute inset-x-0 bottom-0 p-5 flex gap-2 flex-wrap"
           style={{ background: "linear-gradient(to top,rgba(0,0,0,0.6),transparent)" }}>
           {project.tags.map((tag) => (
-            <span key={tag} className="font-mono text-[9px] uppercase tracking-widest text-white/45 border border-white/12 rounded-full px-3 py-1 bg-black/20">{tag}</span>
+            <span key={tag} className="font-mono text-micro uppercase tracking-widest text-white/60 border border-white/12 rounded-full px-3 py-1 bg-black/20">{tag}</span>
           ))}
         </div>
       </div>
       {/* Footer */}
       <div className="flex justify-between items-start px-1">
         <div className="flex flex-col gap-1">
-          <h3 className="font-instrument text-[22px] text-[#0D0D0B] tracking-[-0.02em] leading-none">{project.title}</h3>
-          <p className="font-sans text-[15px] text-[#9A9287]">{project.category}</p>
+          <h3 className="font-instrument text-xl text-[#0D0D0B] tracking-[-0.02em] leading-none">{project.title}</h3>
+          <p className="font-sans text-base text-[#9A9287]">{project.category}</p>
         </div>
-        <span className="font-mono text-[11px] tracking-[0.1em] text-[#B0AA9F]">{project.year}</span>
+        <span className="font-mono text-label tracking-[0.1em] text-[#B0AA9F]">{project.year}</span>
       </div>
     </div>
   );

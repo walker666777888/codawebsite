@@ -138,11 +138,11 @@ export default function Footer() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="flex items-baseline gap-[2px]">
-              <span className="font-instrument text-[48px] text-white tracking-[-0.04em] leading-none">
+              <span className="font-instrument text-5xl text-white tracking-[-0.04em] leading-none">
                 CODA
               </span>
               <motion.span
-                className="font-mono text-[#FF5C00] text-[48px] leading-none"
+                className="font-mono text-[#FF5C00] text-5xl leading-none"
                 animate={{ opacity: [1, 0.25, 1] }}
                 transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
               >.</motion.span>
@@ -160,17 +160,17 @@ export default function Footer() {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
             >
               <div className="md:max-w-[260px] [writing-mode:vertical-rl] rotate-180 md:[writing-mode:horizontal-tb] md:rotate-0 tracking-widest md:tracking-normal flex-shrink-0">
-                <p className="font-sans text-[16px] md:text-[14px] text-white/40 leading-[1.75] whitespace-nowrap md:whitespace-normal">
+                <p className="font-sans text-base md:text-sm text-white/40 leading-[1.75] whitespace-nowrap md:whitespace-normal">
                   Engineering high-performance digital ecosystems.
                 </p>
-                <p className="font-sans text-[16px] md:text-[14px] text-[#FF5C00] leading-[1.75] whitespace-nowrap md:whitespace-normal ml-3 md:ml-0 md:mt-2">
+                <p className="font-sans text-base md:text-sm text-[#FF5C00] leading-[1.75] whitespace-nowrap md:whitespace-normal ml-3 md:ml-0 md:mt-2">
                   Dominate the Digital Age.
                 </p>
                 <motion.a
                   href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group hidden md:inline-flex items-center gap-2 font-mono text-[11px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em] md:mt-6"
+                  className="group hidden md:inline-flex items-center gap-2 font-mono text-label text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em] md:mt-6"
                   whileHover={{ x: -4, y: 0 }}
                   transition={{ duration: 0.25 }}
                 >
@@ -191,7 +191,7 @@ export default function Footer() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
               >
-                <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white mb-6">
+                <p className="font-mono text-micro uppercase tracking-[0.25em] text-white mb-6">
                   Navigation
                 </p>
                 <ul className="space-y-4">
@@ -213,7 +213,7 @@ export default function Footer() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
               >
-                <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-white mb-6">
+                <p className="font-mono text-micro uppercase tracking-[0.25em] text-white mb-6">
                   Social
                 </p>
                 <ul className="space-y-4">
@@ -236,7 +236,7 @@ export default function Footer() {
               href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 font-mono text-[11px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em]"
+              className="group inline-flex items-center gap-2 font-mono text-label text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em]"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -248,12 +248,12 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-white/[0.08] pt-7 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-mono text-[9px] text-white/25 uppercase tracking-[0.22em]">
+          <p className="font-mono text-micro text-white/25 uppercase tracking-[0.22em]">
             © {new Date().getFullYear()} CODA. All rights reserved.
           </p>
           <div className="flex gap-7">
             {LEGAL.map(({ label, href }) => (
-              <Link key={label} href={href} className="font-mono text-[9px] text-white/25 hover:text-white/60 uppercase tracking-[0.18em] transition-colors duration-200">
+              <Link key={label} href={href} className="font-mono text-micro text-white/25 hover:text-white/60 uppercase tracking-[0.18em] transition-colors duration-200">
                 {label}
               </Link>
             ))}
