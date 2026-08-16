@@ -240,20 +240,32 @@ const LightPillar = ({
     scene.add(mesh);
 
     let mouseMoveTimeout: number | null = null;
-    const handleMouseMove = (event: MouseEvent) => {
+    const handlePointerMove = (clientX: number, clientY: number) => {
       if (!interactive) return;
       if (mouseMoveTimeout) return;
       mouseMoveTimeout = window.setTimeout(() => {
         mouseMoveTimeout = null;
       }, 16);
       const rect = container.getBoundingClientRect();
-      const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      const x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      const y = -((clientY - rect.top) / rect.height) * 2 + 1;
       mouseRef.current.set(x, y);
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      handlePointerMove(event.clientX, event.clientY);
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      if (event.touches.length > 0) {
+        handlePointerMove(event.touches[0].clientX, event.touches[0].clientY);
+      }
     };
 
     if (interactive) {
       container.addEventListener('mousemove', handleMouseMove as any, { passive: true });
+      container.addEventListener('touchmove', handleTouchMove as any, { passive: true });
+      container.addEventListener('touchstart', handleTouchMove as any, { passive: true });
     }
 
     let lastTime = performance.now();
@@ -300,6 +312,8 @@ const LightPillar = ({
       window.removeEventListener('resize', handleResize);
       if (interactive) {
         container.removeEventListener('mousemove', handleMouseMove as any);
+        container.removeEventListener('touchmove', handleTouchMove as any);
+        container.removeEventListener('touchstart', handleTouchMove as any);
       }
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
