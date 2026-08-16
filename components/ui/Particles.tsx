@@ -146,11 +146,23 @@ const Particles = ({
     window.addEventListener('resize', resize, false);
     resize();
 
+    const targetMouse = { x: 0, y: 0 };
+    mouseRef.current = { x: 0, y: 0 };
+
     const handlePointerMove = (clientX: number, clientY: number) => {
       const rect = container.getBoundingClientRect();
-      const x = ((clientX - rect.left) / rect.width) * 2 - 1;
-      const y = -(((clientY - rect.top) / rect.height) * 2 - 1);
-      mouseRef.current = { x, y };
+      if (
+        clientX >= rect.left &&
+        clientX <= rect.right &&
+        clientY >= rect.top &&
+        clientY <= rect.bottom
+      ) {
+        targetMouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+        targetMouse.y = -(((clientY - rect.top) / rect.height) * 2 - 1);
+      } else {
+        targetMouse.x = 0;
+        targetMouse.y = 0;
+      }
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -226,6 +238,9 @@ const Particles = ({
       program.uniforms.uTime.value = elapsed * 0.001;
 
       if (moveParticlesOnHover) {
+        mouseRef.current.x += (targetMouse.x - mouseRef.current.x) * 0.1;
+        mouseRef.current.y += (targetMouse.y - mouseRef.current.y) * 0.1;
+        
         particles.position.x = -mouseRef.current.x * particleHoverFactor;
         particles.position.y = -mouseRef.current.y * particleHoverFactor;
       } else {
