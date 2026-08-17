@@ -208,6 +208,7 @@ function Terminal() {
     <div 
       className="md:col-start-2 md:col-span-2 md:row-start-1 md:row-span-2 bg-black/40 border border-white/10 rounded-xl p-4 font-mono text-sm overflow-hidden flex flex-col h-[280px] w-full max-w-[600px] shadow-2xl relative group cursor-text"
       onClick={() => inputRef.current?.focus()}
+      data-cursor="terminal_block"
     >
       {/* Mac-like dots for aesthetic */}
       <div className="flex gap-2 mb-4 absolute top-4 right-4 opacity-30">

@@ -138,7 +138,7 @@ const TextType: React.FC<TextTypeProps> = ({
   const shouldHideCursor =
     hideCursorWhileTyping && !isTypingComplete;
 
-  const Comp = Component as React.ElementType;
+  const Comp = Component as any;
 
   return (
     <Comp ref={containerRef} className={`text-type ${className}`} {...props}>

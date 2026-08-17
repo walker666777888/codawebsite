@@ -5,7 +5,7 @@ import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motio
 import { ArrowUpRight, Play } from "lucide-react";
 
 export default function CustomCursor() {
-  const [cursorState, setCursorState] = useState<"default" | "click" | "text" | "video">("default");
+  const [cursorState, setCursorState] = useState<"default" | "click" | "text" | "video" | "text_bracket" | "project_view" | "terminal_block">("default");
   const [cursorText, setCursorText] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -44,15 +44,10 @@ export default function CustomCursor() {
         const type = customCursorEl.getAttribute('data-cursor');
         const text = customCursorEl.getAttribute('data-cursor-text') || "";
         
-        if (type === "video") {
-          setCursorState("video");
-          return;
-        }
-        if (type === "text") {
-          setCursorState("text");
-          setCursorText(text);
-          return;
-        }
+        if (type === "video") { setCursorState("video"); return; }
+        if (type === "text") { setCursorState("text"); setCursorText(text); return; }
+        if (type === "project_view") { setCursorState("project_view"); return; }
+        if (type === "terminal_block") { setCursorState("terminal_block"); return; }
       }
 
       // Check standard interactive elements
@@ -65,6 +60,16 @@ export default function CustomCursor() {
       
       if (isClickable) {
         setCursorState("click");
+        return;
+      }
+      
+      // Auto-detect text elements
+      const computedCursor = window.getComputedStyle(target).cursor;
+      const textTags = ["P", "H1", "H2", "H3", "H4", "H5", "H6", "LI", "SPAN", "STRONG", "EM"];
+      const isText = computedCursor === "text" || (textTags.includes(target.tagName) && target.textContent && target.textContent.trim().length > 0);
+      
+      if (isText) {
+        setCursorState("text_bracket");
       } else {
         setCursorState("default");
       }
@@ -124,6 +129,33 @@ export default function CustomCursor() {
       border: "0px solid transparent",
       backdropFilter: "blur(0px)",
       mixBlendMode: "difference" as any,
+    },
+    text_bracket: {
+      width: 14,
+      height: 32,
+      borderRadius: "0%",
+      backgroundColor: "transparent",
+      border: "0px solid transparent",
+      backdropFilter: "blur(0px)",
+      mixBlendMode: "normal" as any,
+    },
+    project_view: {
+      width: 80,
+      height: 80,
+      borderRadius: "50%",
+      backgroundColor: "rgba(255, 255, 255, 0.1)",
+      border: "1px solid rgba(255, 255, 255, 0.2)",
+      backdropFilter: "blur(8px)",
+      mixBlendMode: "normal" as any,
+    },
+    terminal_block: {
+      width: 10,
+      height: 20,
+      borderRadius: "0%",
+      backgroundColor: "transparent",
+      border: "0px solid transparent",
+      backdropFilter: "blur(0px)",
+      mixBlendMode: "normal" as any,
     }
   };
 
@@ -185,6 +217,40 @@ export default function CustomCursor() {
               {cursorText}
             </motion.div>
           )}
+          {cursorState === "text_bracket" && (
+            <motion.div
+              key="text_bracket"
+              initial={{ opacity: 0, x: -5 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="text-[#FF5C00] font-mono text-3xl font-light leading-none drop-shadow-[0_0_8px_rgba(255,92,0,0.8)]"
+              style={{ transform: 'translateY(-2px)' }}
+            >
+              [
+            </motion.div>
+          )}
+          {cursorState === "project_view" && (
+            <motion.div
+              key="project_view"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.2 }}
+              className="text-white font-sans text-xs font-bold tracking-[0.2em] uppercase"
+            >
+              VIEW
+            </motion.div>
+          )}
+          {cursorState === "terminal_block" && (
+            <motion.div
+              key="terminal_block"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [1, 0, 1] }}
+              transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+              className="w-full h-full bg-[#FF5C00]"
+            />
+          )}
         </AnimatePresence>
       </motion.div>
 
@@ -201,8 +267,8 @@ export default function CustomCursor() {
           height: 5,
         }}
         animate={{
-          scale: cursorState === "default" ? 1 : 0,
-          opacity: cursorState === "default" ? 1 : 0,
+          scale: (cursorState === "default" || cursorState === "text_bracket" || cursorState === "terminal_block") ? 1 : 0,
+          opacity: (cursorState === "default" || cursorState === "text_bracket" || cursorState === "terminal_block") ? 1 : 0,
         }}
         transition={{ duration: 0.2, ease: "easeOut" }}
       />

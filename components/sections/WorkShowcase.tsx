@@ -73,8 +73,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
 
       <motion.div 
         className="aspect-[4/3] rounded-2xl relative overflow-hidden bg-[#0D0D0B]"
-        data-cursor="text"
-        data-cursor-text="VIEW"
+        data-cursor="project_view"
         animate={{ scale: isHovered ? 0.96 : 1 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       >
