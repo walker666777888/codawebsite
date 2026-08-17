@@ -123,11 +123,11 @@ const CARDS = [
 function Pushpin({ color }: { color: string }) {
   return (
     <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10 drop-shadow-md">
-      <svg width="22" height="28" viewBox="0 0 22 28" fill="none">
-        <circle cx="11" cy="10" r="9" fill={color} />
+      <svg width="22" height="28" viewBox="0 0 22 28" fill="none" style={{ '--base-color': color } as React.CSSProperties}>
+        <circle cx="11" cy="10" r="9" style={{ fill: "color-mix(in srgb, transparent 50%, var(--base-color))", stroke: "var(--base-color)", strokeWidth: "1px" }} />
         <circle cx="11" cy="10" r="6" fill="rgba(255,255,255,0.22)" />
         <circle cx="8.5" cy="7.5" r="2.5" fill="rgba(255,255,255,0.45)" />
-        <rect x="10" y="18" width="2.2" height="9" rx="1.1" fill={color} opacity="0.65" />
+        <rect x="10" y="18" width="2.2" height="9" rx="1.1" style={{ fill: "var(--base-color)", opacity: 0.5 }} />
       </svg>
     </div>
   );

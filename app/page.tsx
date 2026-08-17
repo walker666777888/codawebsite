@@ -1,11 +1,13 @@
 import Hero from "@/components/sections/Hero";
 import MarqueeStrip from "@/components/sections/MarqueeStrip";
-import Statement from "@/components/sections/Statement";
-import BentoMetrics from "@/components/sections/BentoMetrics";
-import DigitalGap from "@/components/sections/DigitalGap";
-import Philosophy from "@/components/sections/Philosophy";
-import WorkShowcase from "@/components/sections/WorkShowcase";
-import CallToAction from "@/components/sections/CallToAction";
+import dynamic from "next/dynamic";
+
+const Statement = dynamic(() => import("@/components/sections/Statement"));
+const BentoMetrics = dynamic(() => import("@/components/sections/BentoMetrics"));
+const DigitalGap = dynamic(() => import("@/components/sections/DigitalGap"));
+const Philosophy = dynamic(() => import("@/components/sections/Philosophy"));
+const WorkShowcase = dynamic(() => import("@/components/sections/WorkShowcase"));
+const CallToAction = dynamic(() => import("@/components/sections/CallToAction"));
 
 export default function Home() {
   return (

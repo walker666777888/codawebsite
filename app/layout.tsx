@@ -155,6 +155,8 @@ export default function RootLayout({
       className={`${spaceMono.variable} ${unbounded.variable} antialiased`}
     >
       <head>
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
         <script
           type="application/ld+json"

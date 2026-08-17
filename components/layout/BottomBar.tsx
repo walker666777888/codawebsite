@@ -58,18 +58,10 @@ export default function BottomBar() {
             </div>
 
             <MagneticButton variant="primary">
-              <div data-impeccable-variants="463a88aa" data-impeccable-variant-count="3" style={{ display: "contents" }}>
-                {/* impeccable-variants-start 463a88aa */}
-                {/* Original */}
-                <div data-impeccable-variant="original">
                   <span className="flex items-center gap-1.5 font-sans font-semibold text-small px-5 py-2.5 whitespace-nowrap tracking-[-0.01em]">
                     Claim your edge
                     <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
                   </span>
-                </div>
-                {/* Variants: insert below this line */}
-                {/* impeccable-variants-end 463a88aa */}
-              </div>
             </MagneticButton>
           </motion.div>
         </motion.aside>

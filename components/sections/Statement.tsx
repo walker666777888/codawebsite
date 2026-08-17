@@ -1244,6 +1244,7 @@ function SystemOrbit({ inView }: { inView: boolean }) {
   });
 
   return (
+
     <div
       ref={containerRef}
       onMouseMove={onMouseMove}
@@ -1451,6 +1452,7 @@ function SystemOrbit({ inView }: { inView: boolean }) {
         })}
       </motion.div>
     </div>
+
   );
 }
 

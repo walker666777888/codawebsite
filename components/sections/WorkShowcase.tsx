@@ -45,7 +45,11 @@ const projects = [
 function ProjectCard({ project, index }: { project: (typeof projects)[0]; index: number }) {
   return (
     <div className="shrink-0 w-[78vw] sm:w-[55vw] md:w-[42vw] lg:w-[34vw] group select-none flex flex-col gap-5">
-      <div className={`aspect-[4/3] bg-gradient-to-br ${project.gradient} rounded-2xl relative overflow-hidden`}>
+      <div 
+        className={`aspect-[4/3] bg-gradient-to-br ${project.gradient} rounded-2xl relative overflow-hidden`}
+        data-cursor="text"
+        data-cursor-text="VIEW"
+      >
         {/* Grid */}
         <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
           style={{ backgroundImage: "linear-gradient(to right,#fff 1px,transparent 1px),linear-gradient(to bottom,#fff 1px,transparent 1px)", backgroundSize: "32px 32px" }} />
@@ -201,6 +205,8 @@ export default function WorkShowcase() {
         <div
           className="overflow-hidden rounded-2xl"
           style={{ cursor: "grab" }}
+          data-cursor="text"
+          data-cursor-text="DRAG"
           onMouseDown={e => { e.preventDefault(); onPointerDown(e.clientX); (e.currentTarget as HTMLDivElement).style.cursor = "grabbing"; }}
           onMouseMove={e => onPointerMove(e.clientX)}
           onMouseUp={e => { onPointerUp(); (e.currentTarget as HTMLDivElement).style.cursor = "grab"; }}

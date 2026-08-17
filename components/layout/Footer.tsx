@@ -137,7 +137,23 @@ export default function Footer() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="flex items-baseline gap-[2px]">
-              <span className="font-instrument text-5xl text-white tracking-[-0.04em] leading-none">
+              <style>{`
+                .coda-footer-logo {
+                  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+                  display: inline-block;
+                  cursor: default;
+                  filter: blur(2px);
+                  opacity: 0.8;
+                  transform: scale(0.98);
+                }
+                .coda-footer-logo:hover {
+                  filter: blur(0px);
+                  opacity: 1;
+                  transform: scale(1);
+                  color: #FF5C00;
+                }
+              `}</style>
+              <span className="coda-footer-logo font-instrument text-5xl text-white tracking-[-0.04em] leading-none">
                 CODA
               </span>
               <motion.span

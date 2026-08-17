@@ -225,13 +225,28 @@ export default function CallToAction() {
             {/* Content Group (Headline + Sub-copy) */}
             <div className="flex flex-col items-center gap-6 sm:gap-8 relative z-10">
               {/* Premium Eyebrow */}
+              <style>{`
+                @keyframes sweep105 {
+                  0% { transform: translateX(-100%); }
+                  100% { transform: translateX(200%); }
+                }
+                .coda-sweep-glow {
+                  position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: 9999px;
+                }
+                .coda-sweep-glow::after {
+                  content: ''; position: absolute; inset: 0; width: 50%;
+                  background: linear-gradient(90deg, transparent, rgba(255, 92, 0, 0.4), transparent);
+                  animation: sweep105 4s infinite linear;
+                }
+              `}</style>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={visible ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="px-5 py-2 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md"
+                className="relative px-5 py-2 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md overflow-hidden group"
               >
-                <span className="font-mono text-micro sm:text-label text-coda-accent tracking-[0.2em] uppercase font-semibold">
+                <div className="coda-sweep-glow"></div>
+                <span className="relative z-10 font-mono text-micro sm:text-label text-coda-accent tracking-[0.2em] uppercase font-semibold group-hover:text-white transition-colors duration-300">
                   Let&apos;s Build the Future
                 </span>
               </motion.div>

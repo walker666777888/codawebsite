@@ -1,26 +1,30 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, Play } from "lucide-react";
 
 export default function CustomCursor() {
-  const [isHovering, setIsHovering] = useState(false);
+  const [cursorState, setCursorState] = useState<"default" | "click" | "text" | "video">("default");
+  const [cursorText, setCursorText] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
-  // Use framer-motion values to avoid React re-renders on mousemove
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
-  // Smooth springs for the outer ring
-  const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
+  // Advanced fluid spring physics for the outer shell
+  const springConfig = { damping: 25, stiffness: 400, mass: 0.15 };
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 
+  // Instant physics for the precision dot
+  const dotSpringConfig = { damping: 40, stiffness: 800, mass: 0.02 };
+  const dotX = useSpring(mouseX, dotSpringConfig);
+  const dotY = useSpring(mouseY, dotSpringConfig);
+
   useEffect(() => {
-    // Detect touch devices
     if (window.matchMedia("(hover: none) and (pointer: coarse)").matches) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsTouchDevice(true);
       return;
     }
@@ -33,7 +37,25 @@ export default function CustomCursor() {
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      // Check if we are hovering over something clickable
+      
+      // Look up the DOM tree for our new contextual cursor attributes
+      const customCursorEl = target.closest('[data-cursor]');
+      if (customCursorEl) {
+        const type = customCursorEl.getAttribute('data-cursor');
+        const text = customCursorEl.getAttribute('data-cursor-text') || "";
+        
+        if (type === "video") {
+          setCursorState("video");
+          return;
+        }
+        if (type === "text") {
+          setCursorState("text");
+          setCursorText(text);
+          return;
+        }
+      }
+
+      // Check standard interactive elements
       const isClickable =
         window.getComputedStyle(target).cursor === "pointer" ||
         target.tagName.toLowerCase() === "a" ||
@@ -41,47 +63,75 @@ export default function CustomCursor() {
         target.closest("a") ||
         target.closest("button");
       
-      setIsHovering(!!isClickable);
+      if (isClickable) {
+        setCursorState("click");
+      } else {
+        setCursorState("default");
+      }
     };
 
-    const handleMouseLeave = () => {
-      setIsVisible(false);
-    };
+    const handleMouseLeave = () => setIsVisible(false);
 
     window.addEventListener("mousemove", updateMousePosition);
     window.addEventListener("mouseover", handleMouseOver);
     document.addEventListener("mouseleave", handleMouseLeave);
+    document.documentElement.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
       window.removeEventListener("mousemove", updateMousePosition);
       window.removeEventListener("mouseover", handleMouseOver);
       document.removeEventListener("mouseleave", handleMouseLeave);
+      document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [mouseX, mouseY, isVisible]);
 
   if (isTouchDevice) return null;
 
-  return (
-    <>
-      {/* Inner Dot */}
-      <motion.div
-        className="fixed top-0 left-0 w-[5px] h-[5px] bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference"
-        style={{
-          x: mouseX,
-          y: mouseY,
-          translateX: "-50%",
-          translateY: "-50%",
-          opacity: isVisible ? 1 : 0,
-        }}
-        animate={{
-          scale: isHovering ? 0 : 1,
-        }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-      />
+  // Geometric morphing states
+  const cursorVariants = {
+    default: {
+      width: 32,
+      height: 32,
+      borderRadius: "50%",
+      backgroundColor: "transparent",
+      border: "1px solid rgba(255, 255, 255, 0.4)",
+      backdropFilter: "blur(2px)",
+      mixBlendMode: "normal" as any,
+    },
+    click: {
+      width: 72,
+      height: 72,
+      borderRadius: "50%",
+      backgroundColor: "#FFFFFF",
+      border: "0px solid transparent",
+      backdropFilter: "blur(0px)",
+      mixBlendMode: "difference" as any,
+    },
+    video: {
+      width: 80,
+      height: 80,
+      borderRadius: "50%",
+      backgroundColor: "#FF5C00", // CODA Flame Orange
+      border: "0px solid transparent",
+      backdropFilter: "blur(4px)",
+      mixBlendMode: "normal" as any,
+    },
+    text: {
+      width: "auto",
+      height: 48,
+      borderRadius: 9999,
+      backgroundColor: "#FFFFFF",
+      border: "0px solid transparent",
+      backdropFilter: "blur(0px)",
+      mixBlendMode: "difference" as any,
+    }
+  };
 
-      {/* Outer Ring */}
+  return (
+    <div className="pointer-events-none fixed inset-0 z-[10000] overflow-hidden">
+      {/* Morphing Outer Shell */}
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 border border-white/60 rounded-full pointer-events-none z-[9998] flex items-center justify-center mix-blend-difference"
+        className="absolute top-0 left-0 flex items-center justify-center whitespace-nowrap shadow-2xl overflow-hidden"
         style={{
           x: smoothX,
           y: smoothY,
@@ -89,13 +139,73 @@ export default function CustomCursor() {
           translateY: "-50%",
           opacity: isVisible ? 1 : 0,
         }}
-        animate={{
-          scale: isHovering ? 1.8 : 1,
-          backgroundColor: isHovering ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0)",
-          borderColor: isHovering ? "rgba(255, 255, 255, 0)" : "rgba(255, 255, 255, 0.6)",
+        variants={cursorVariants}
+        animate={cursorState}
+        transition={{ 
+          type: "spring", 
+          stiffness: 300, 
+          damping: 25,
+          mass: 0.15 
         }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
+      >
+        <AnimatePresence mode="wait">
+          {cursorState === "click" && (
+            <motion.div
+              key="click"
+              initial={{ scale: 0.5, opacity: 0, rotate: -45 }}
+              animate={{ scale: 1, opacity: 1, rotate: 0 }}
+              exit={{ scale: 0.5, opacity: 0, rotate: 45 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+            >
+              {/* Black punches a hole in the white difference bubble, revealing true colors underneath */}
+              <ArrowUpRight size={32} color="black" strokeWidth={1.5} />
+            </motion.div>
+          )}
+          {cursorState === "video" && (
+            <motion.div
+              key="video"
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.5, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="ml-1"
+            >
+              <Play size={32} color="white" fill="white" />
+            </motion.div>
+          )}
+          {cursorState === "text" && (
+            <motion.div
+              key="text"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.2 }}
+              className="text-black font-mono font-bold tracking-widest text-sm uppercase px-6"
+            >
+              {cursorText}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* High Precision Tracking Dot */}
+      <motion.div
+        className="absolute top-0 left-0 bg-[#FF5C00] rounded-full mix-blend-normal shadow-[0_0_8px_rgba(255,92,0,0.8)]"
+        style={{
+          x: dotX,
+          y: dotY,
+          translateX: "-50%",
+          translateY: "-50%",
+          opacity: isVisible ? 1 : 0,
+          width: 5,
+          height: 5,
+        }}
+        animate={{
+          scale: cursorState === "default" ? 1 : 0,
+          opacity: cursorState === "default" ? 1 : 0,
+        }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
       />
-    </>
+    </div>
   );
 }
