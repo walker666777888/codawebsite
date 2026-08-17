@@ -416,14 +416,14 @@ function Field({
   const fMv  = useMotionValue(0);
   const fSpr = useSpring(fMv, { stiffness: 260, damping: 28 });
 
-  /* box-shadow encodes border + glow — no overlay div needed */
+  /* ultra-premium transparent border with glowing focus */
   const shadow = useTransform(fSpr, [0, 1], [
-    "0 0 0 1px rgba(255,255,255,0.09), inset 0 1px 0 rgba(255,255,255,0.04)",
-    "0 0 0 1px rgba(255,92,0,0.7), 0 0 28px rgba(255,92,0,0.13), inset 0 1px 0 rgba(255,255,255,0.07)",
+    "0 0 0 1px rgba(255,255,255,0.12)",
+    "0 0 0 1px rgba(255,92,0,0.8), 0 0 24px rgba(255,92,0,0.15)",
   ]);
   const bg = useTransform(fSpr, [0, 1], [
-    "rgb(30,28,24)",
-    "rgb(38,22,12)",
+    "transparent",
+    "rgba(255,92,0,0.02)",
   ]);
 
   const sharedEvents = {
@@ -431,15 +431,15 @@ function Field({
     onBlur:  () => fMv.set(0),
   };
   const inputClass =
-    "w-full bg-transparent rounded-2xl px-4 py-4 text-white text-base font-sans outline-none focus:outline-none focus:ring-0 border-0 placeholder-white/20 resize-none leading-relaxed";
+    "w-full bg-transparent rounded-2xl px-4 py-4 text-white text-base font-sans outline-none focus:outline-none focus:ring-0 border-0 placeholder-white/20 resize-none leading-relaxed transition-colors";
 
   const charsLeft = maxLength !== undefined ? maxLength - value.length : null;
 
   return (
     <div>
       <div className="flex items-center justify-between mb-2.5">
-        <label htmlFor={id} className="font-mono text-xs uppercase tracking-[0.18em] text-white/75">
-          {label}{required && <span className="text-[#FF5C00] ml-0.5">*</span>}
+        <label htmlFor={id} className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+          {label}{required && <span className="text-[#FF5C00] ml-1">*</span>}
         </label>
         {charsLeft !== null && (
           <span className="font-mono text-micro text-white/20 tabular-nums">
@@ -447,7 +447,7 @@ function Field({
           </span>
         )}
       </div>
-      <motion.div className="relative rounded-[14px]" style={{ background: bg, boxShadow: shadow }}>
+      <motion.div className="relative rounded-2xl overflow-hidden backdrop-blur-sm" style={{ background: bg, boxShadow: shadow }}>
         {textarea ? (
           <textarea id={id} value={value} rows={5} placeholder={placeholder}
             maxLength={maxLength}
@@ -537,19 +537,19 @@ function PhoneField({
   const fMv  = useMotionValue(0);
   const fSpr = useSpring(fMv, { stiffness: 260, damping: 28 });
   const shadow = useTransform(fSpr, [0, 1], [
-    "0 0 0 1px rgba(255,255,255,0.09), inset 0 1px 0 rgba(255,255,255,0.04)",
-    "0 0 0 1px rgba(255,92,0,0.7), 0 0 28px rgba(255,92,0,0.13), inset 0 1px 0 rgba(255,255,255,0.07)",
+    "0 0 0 1px rgba(255,255,255,0.12)",
+    "0 0 0 1px rgba(255,92,0,0.8), 0 0 24px rgba(255,92,0,0.15)",
   ]);
   const bg = useTransform(fSpr, [0, 1], [
-    "rgb(30,28,24)",
-    "rgb(38,22,12)",
+    "transparent",
+    "rgba(255,92,0,0.02)",
   ]);
 
   return (
     <div>
       <div className="flex items-center justify-between mb-2.5">
-        <label className="font-mono text-xs uppercase tracking-[0.18em] text-white/75">
-          Phone <span className="text-[#FF5C00] ml-0.5">*</span>
+        <label className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+          Phone <span className="text-[#FF5C00] ml-1">*</span>
         </label>
       </div>
 
@@ -560,12 +560,12 @@ function PhoneField({
             type="button"
             onClick={() => setOpen(o => !o)}
             whileTap={{ scale: 0.97 }}
-            className="h-full flex items-center gap-2 rounded-2xl px-3.5 py-4 cursor-pointer outline-none select-none"
+            className="h-full flex items-center gap-2 rounded-2xl px-3.5 py-4 cursor-pointer outline-none select-none backdrop-blur-sm"
             style={{
-              background: open ? "rgb(38,22,12)" : "rgb(30,28,24)",
+              background: open ? "rgba(255,92,0,0.05)" : "transparent",
               boxShadow: open
-                ? "0 0 0 1px rgba(255,92,0,0.6), 0 0 20px rgba(255,92,0,0.10), inset 0 1px 0 rgba(255,255,255,0.06)"
-                : "0 0 0 1px rgba(255,255,255,0.09), inset 0 1px 0 rgba(255,255,255,0.04)",
+                ? "0 0 0 1px rgba(255,92,0,0.8), 0 0 24px rgba(255,92,0,0.15)"
+                : "0 0 0 1px rgba(255,255,255,0.12)",
               transition: "background 0.2s, box-shadow 0.2s",
               minWidth: "96px",
             }}
@@ -671,7 +671,7 @@ function PhoneField({
 
         {/* ── Number input ── */}
         <div className="flex-1 flex flex-col gap-1">
-          <motion.div className="relative rounded-[14px]" style={{ background: bg, boxShadow: shadow }}>
+          <motion.div className="relative rounded-2xl overflow-hidden backdrop-blur-sm" style={{ background: bg, boxShadow: shadow }}>
             <input
               id="phone"
               type="tel"
@@ -741,14 +741,14 @@ function Dropdown({
         type="button"
         onClick={() => setOpen(o => !o)}
         whileTap={{ scale: 0.99 }}
-        className="w-full flex items-center justify-between gap-3 rounded-2xl px-4 py-3.5 cursor-pointer outline-none text-left"
+        className="w-full flex items-center justify-between gap-3 rounded-2xl px-4 py-3.5 cursor-pointer outline-none text-left backdrop-blur-sm"
         style={{
-          background: open ? "rgb(38,22,12)" : hasSelected ? "rgb(35,20,10)" : "rgb(30,28,24)",
+          background: open ? "rgba(255,92,0,0.05)" : hasSelected ? "rgba(255,92,0,0.02)" : "transparent",
           boxShadow: open
-            ? "0 0 0 1px rgba(255,92,0,0.6), 0 0 28px rgba(255,92,0,0.10), inset 0 1px 0 rgba(255,255,255,0.06)"
+            ? "0 0 0 1px rgba(255,92,0,0.8), 0 0 24px rgba(255,92,0,0.15)"
             : hasSelected
-              ? "0 0 0 1px rgba(255,92,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04)"
-              : "0 0 0 1px rgba(255,255,255,0.09), inset 0 1px 0 rgba(255,255,255,0.04)",
+              ? "0 0 0 1px rgba(255,92,0,0.6)"
+              : "0 0 0 1px rgba(255,255,255,0.12)",
           transition: "background 0.2s, box-shadow 0.2s",
         }}
       >
@@ -975,12 +975,10 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
     }
   }, [name, email, dialCode, phoneNum, ptype, otherPtype, brief]);
 
-  const panelTransition = isMobile
-    ? { type: "tween" as const, duration: 0.40, ease: [0.25, 0.46, 0.45, 0.94] as const }
-    : { type: "tween" as const, duration: 0.65, ease: E };
-  const exitTransition = isMobile
-    ? { type: "tween" as const, duration: 0.28, ease: [0.4, 0, 0.6, 0] as const }
-    : { type: "tween" as const, duration: 0.55, ease: E };
+  /* ultra-premium cinematic bezier (expo-out) */
+  const cinematicEase = [0.16, 1, 0.3, 1] as const;
+  const panelTransition = { type: "tween" as const, duration: 0.85, ease: cinematicEase };
+  const exitTransition = { type: "tween" as const, duration: 0.45, ease: cinematicEase };
 
   return (
     <AnimatePresence>
@@ -989,32 +987,35 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
           {/* backdrop */}
           <motion.div
             key="bd"
-            className="fixed inset-0 z-[200] bg-black/80"
+            className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-2xl"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: E }}
+            transition={{ duration: 0.8, ease: cinematicEase }}
             onClick={() => status !== "submitting" && onClose()}
             aria-hidden
           />
 
-          {/* sheet panel */}
+          {/* sheet / floating panel */}
           <motion.div
             key="panel"
             role="dialog" aria-modal="true" aria-label="Start a project"
-            className="fixed inset-0 z-[201] md:inset-0"
+            className="fixed z-[201] inset-0 md:inset-6 lg:inset-8 md:rounded-[32px] border-0 md:border md:border-white/[0.08]"
             style={{
               background: "var(--color-modal-bg)",
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
-              willChange: "transform",
+              willChange: "transform, opacity",
+              transformPerspective: 1600,
+              transformOrigin: "bottom center",
+              boxShadow: isMobile ? "none" : "0 40px 100px -20px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.4)",
             }}
-            initial={{ y: "100%" }}
-            animate={{ y: "0%" }}
-            exit={{ y: "100%", transition: exitTransition }}
-            transition={reduced ? { duration: 0 } : panelTransition}
+            initial={isMobile ? { y: "100%" } : { opacity: 0, y: 120, scale: 0.85, rotateX: 12 }}
+            animate={isMobile ? { y: "0%" } : { opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+            exit={isMobile ? { y: "100%", transition: exitTransition } : { opacity: 0, scale: 0.94, y: -40, rotateX: -6, transition: exitTransition }}
+            transition={panelTransition}
           >
             {/* subtle graph grid */}
-            <div className="absolute inset-0 pointer-events-none opacity-[0.028]"
+            <div className="absolute inset-0 pointer-events-none opacity-[0.015]"
               style={{
                 backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px)",
                 backgroundSize: "40px 40px",
@@ -1258,7 +1259,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
                             whileHover={{ scale: status === "idle" ? 1.012 : 1 }}
                             whileTap={{ scale: status === "idle" ? 0.978 : 1 }}
                             transition={{ type: "spring", stiffness: 360, damping: 26 }}
-                            className="relative w-full flex items-center justify-center gap-3 rounded-2xl py-[15px] font-sans font-semibold text-sm tracking-[0.04em] text-white overflow-hidden disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer"
+                            className="relative w-full flex items-center justify-center gap-3 rounded-2xl py-[15px] font-sans font-semibold text-sm tracking-[0.04em] text-white overflow-hidden disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed cursor-pointer"
                             style={{
                               background: "linear-gradient(135deg,#FF7A2E 0%,#FF5C00 55%,#E65300 100%)",
                               boxShadow: "0 1px 0 rgba(255,255,255,0.18) inset, 0 10px 40px rgba(255,92,0,0.28)",
