@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
-import React, { useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import React, { useRef, useEffect, useState } from "react";
 import { useVideoPreload } from "@/components/providers/VideoPreloadProvider";
 import { lenisScrollTo } from "@/components/providers/LenisProvider";
 
@@ -19,14 +19,12 @@ function useFitText() {
       if (!wrap || !el) return;
       const W = wrap.getBoundingClientRect().width;
       if (!W) return;
-      // Use scrollWidth — gives real text width even inside overflow:hidden
       el.style.fontSize = "200px";
       const textW = el.scrollWidth;
       if (!textW) return;
       el.style.fontSize = Math.floor((W / textW) * 200) + "px";
     };
 
-    // wait until fonts are ready so measurement is accurate
     document.fonts.ready.then(() => {
       fit();
       roRef.current = new ResizeObserver(fit);
@@ -51,9 +49,7 @@ function AnimLink({ href, children }: { href: string; children: React.ReactNode 
     <motion.a
       href={href}
       onClick={(e) => scrollToSection(e, href)}
-      className="inline-block font-sans text-sm text-white/40 no-underline transition-colors duration-300"
-      whileHover={{ color: "#FF5C00" }}
-      transition={{ duration: 0.25 }}
+      className="inline-block font-sans text-sm text-[#FF5C00] no-underline transition-colors duration-300 hover:text-white"
     >
       {children}
     </motion.a>
@@ -71,18 +67,211 @@ const LINKS = [
   { label: "Contact",      href: "#contact" },
 ];
 
-const LEGAL = [
-  { label: "Privacy Policy",   href: "#" },
-  { label: "Terms of Service", href: "#" },
-];
+/* ── Terminal Component ── */
+function Terminal() {
+  const [history, setHistory] = useState<{ id: number; type: 'cmd' | 'out'; text: React.ReactNode }[]>([
+    { id: 1, type: 'out', text: "CODA_OS v1.0.0 initialized." },
+    { id: 2, type: 'cmd', text: "help" },
+    { id: 3, type: 'out', text: (
+      <div className="flex flex-col gap-4 mt-2 mb-2">
+        <div>
+          <span className="text-white/40 block mb-1">Navigation //</span>
+          <div className="flex gap-4">
+            {LINKS.map(link => (
+              <AnimLink key={link.label} href={link.href}>
+                [{link.label}]
+              </AnimLink>
+            ))}
+          </div>
+        </div>
+        <div>
+          <span className="text-white/40 block mb-1">Social //</span>
+          <div className="flex gap-4">
+            {SOCIAL.map(link => (
+              <AnimLink key={link.label} href={link.href}>
+                [{link.label}]
+              </AnimLink>
+            ))}
+          </div>
+        </div>
+        <div className="text-white/40 mt-2">
+          Other commands: <span className="text-[#FF5C00]">clear</span>, <span className="text-[#FF5C00]">sudo easter_egg</span>
+        </div>
+      </div>
+    )}
+  ]);
+  const [input, setInput] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [cmdId, setCmdId] = useState(4);
 
+  // Auto-scroll to bottom of terminal
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [history]);
+
+  const handleCommand = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cmd = input.trim();
+    if (!cmd) return;
+
+    const lowerCmd = cmd.toLowerCase();
+    let output: React.ReactNode = "";
+    let shouldClear = false;
+
+    switch(lowerCmd) {
+      case "help":
+        output = (
+          <div className="flex flex-col gap-4 mt-2 mb-2">
+            <div>
+              <span className="text-white/40 block mb-1">Navigation //</span>
+              <div className="flex gap-4">
+                {LINKS.map(link => (
+                  <AnimLink key={link.label} href={link.href}>
+                    [{link.label}]
+                  </AnimLink>
+                ))}
+              </div>
+            </div>
+            <div>
+              <span className="text-white/40 block mb-1">Social //</span>
+              <div className="flex gap-4">
+                {SOCIAL.map(link => (
+                  <AnimLink key={link.label} href={link.href}>
+                    [{link.label}]
+                  </AnimLink>
+                ))}
+              </div>
+            </div>
+            <div className="text-white/40 mt-2">
+              Other commands: <span className="text-[#FF5C00]">clear</span>, <span className="text-[#FF5C00]">sudo easter_egg</span>
+            </div>
+          </div>
+        );
+        break;
+      case "run work":
+      case "work":
+        output = "Routing to work module...";
+        setTimeout(() => {
+          const el = document.getElementById("work");
+          if (el) lenisScrollTo(el);
+        }, 500);
+        break;
+      case "run philosophy":
+      case "philosophy":
+        output = "Routing to methodology...";
+        setTimeout(() => {
+          const el = document.getElementById("philosophy");
+          if (el) lenisScrollTo(el);
+        }, 500);
+        break;
+      case "execute contact":
+      case "contact":
+        output = "Opening secure communication channel...";
+        setTimeout(() => {
+          window.open("https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com", "_blank");
+        }, 500);
+        break;
+      case "clear":
+        shouldClear = true;
+        break;
+      case "sudo easter_egg":
+      case "easter_egg":
+        output = (
+          <div className="text-red-500 mt-1">
+            [ACCESS DENIED] Unauthorized access attempt logged to SYS.CORE.
+            <br />
+            <span className="text-white/40 text-[10px] mt-2 block">Just kidding. You found it. Stay engineered.</span>
+          </div>
+        );
+        break;
+      default:
+        output = `Command not recognized: '${cmd}'. Type 'help' for available commands.`;
+    }
+
+    if (shouldClear) {
+      setHistory([]);
+    } else {
+      setHistory(prev => [
+        ...prev, 
+        { id: cmdId, type: 'cmd', text: cmd }, 
+        { id: cmdId + 1, type: 'out', text: output }
+      ]);
+      setCmdId(prev => prev + 2);
+    }
+    setInput("");
+  };
+
+  return (
+    <div 
+      className="md:col-start-2 md:col-span-2 md:row-start-1 md:row-span-2 bg-black/40 border border-white/10 rounded-xl p-4 font-mono text-sm overflow-hidden flex flex-col h-[280px] w-full max-w-[600px] shadow-2xl relative group cursor-text"
+      onClick={() => inputRef.current?.focus()}
+    >
+      {/* Mac-like dots for aesthetic */}
+      <div className="flex gap-2 mb-4 absolute top-4 right-4 opacity-30">
+        <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+        <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+      </div>
+
+      <div className="text-[10px] uppercase tracking-widest text-white/30 border-b border-white/10 pb-2 mb-3">
+        CODA // System Terminal
+      </div>
+
+      <div ref={scrollRef} className="flex-1 overflow-y-auto pr-2 flex flex-col gap-2 scrollbar-hide">
+        <AnimatePresence initial={false}>
+          {history.map((line) => (
+            <motion.div 
+              key={line.id}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.2 }}
+              className={line.type === 'cmd' ? "text-[#FF5C00]" : "text-white/70"}
+            >
+              {line.type === 'cmd' ? (
+                <div className="flex gap-2">
+                  <span className="text-white/40">C:\CODA&gt;</span>
+                  <span>{line.text}</span>
+                </div>
+              ) : (
+                <div>{line.text}</div>
+              )}
+            </motion.div>
+          ))}
+        </AnimatePresence>
+        
+        {/* Active Input Line */}
+        <form onSubmit={handleCommand} className="flex gap-2 mt-2 items-center">
+          <span className="text-white/40">C:\CODA&gt;</span>
+          <input
+            ref={inputRef}
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="bg-transparent border-none outline-none text-[#FF5C00] flex-1 font-mono caret-[#FF5C00] focus:ring-0"
+            autoComplete="off"
+            spellCheck="false"
+          />
+        </form>
+      </div>
+
+      <style>{`
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+    </div>
+  );
+}
+
+/* ── Video-inside-text ── */
 function VideoText({ shouldLoad }: { shouldLoad: boolean }) {
   const TEXT = "CITIZEN OF DIGITAL AGE";
   const { wrapRef, textRef } = useFitText();
 
   return (
     <div className="relative overflow-hidden select-none">
-      {/* Video layer */}
       {shouldLoad && (
         <video
           autoPlay muted loop playsInline aria-hidden
@@ -92,7 +281,6 @@ function VideoText({ shouldLoad }: { shouldLoad: boolean }) {
         />
       )}
 
-      {/* Multiply blend: black bg + white text = video shows inside letters */}
       <div style={{ background: "#0A0A09", mixBlendMode: "multiply" }}>
         <div ref={wrapRef} className="w-full overflow-hidden pt-[10%] sm:pt-0 pb-[2%] sm:pb-0" style={{ lineHeight: 0, margin: 0 }}>
           <span
@@ -128,7 +316,7 @@ export default function Footer() {
 
         <div className="flex flex-col md:grid md:grid-cols-[1fr_auto_auto_auto] gap-10 md:gap-x-20 md:gap-y-6 mb-16">
           
-          {/* Logo (Top on mobile, Col 1 on desktop) */}
+          {/* Logo */}
           <motion.div
             className="md:col-start-1 md:row-start-1"
             initial={{ opacity: 0, y: 20 }}
@@ -164,112 +352,56 @@ export default function Footer() {
             </div>
           </motion.div>
 
-          <div className="flex flex-row justify-between md:justify-start gap-6 md:gap-0 md:contents">
-            
-            {/* Description & Connect (Left vertical on mobile, horizontal on desktop under logo) */}
-            <motion.div
-              className="md:col-start-1 md:row-start-2 flex flex-col justify-end md:block flex-shrink-0 md:pr-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
-            >
-              <div className="md:max-w-[260px] [writing-mode:vertical-rl] rotate-180 md:[writing-mode:horizontal-tb] md:rotate-0 tracking-widest md:tracking-normal flex-shrink-0">
-                <p className="font-sans text-base md:text-sm text-white/40 leading-[1.75] whitespace-nowrap md:whitespace-normal">
-                  <span className="md:hidden">Engineering high-performance<br/>digital ecosystems.</span>
-                  <span className="hidden md:inline">Engineering high-performance digital ecosystems.</span>
-                </p>
-                <p className="font-sans text-base md:text-sm text-[#FF5C00] leading-[1.75] whitespace-nowrap md:whitespace-normal ml-3 md:ml-0 md:mt-2">
-                  Dominate the Digital Age.
-                </p>
-                <motion.a
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group hidden md:inline-flex items-center gap-2 font-mono text-label text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em] md:mt-6"
-                  whileHover={{ x: -4, y: 0 }}
-                  transition={{ duration: 0.25 }}
-                >
-                  Connect@citizenofdigitalage.com
-                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
-                </motion.a>
-              </div>
-            </motion.div>
-
-            {/* Right side on mobile / Cols 2 & 3 on desktop */}
-            <div className="flex flex-col gap-10 flex-grow md:contents pt-2 md:pt-0">
-              
-              {/* Navigation */}
-              <motion.div
-                className="md:col-start-2 md:row-start-1 md:row-span-2 text-right md:text-left"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+          {/* Description & Connect */}
+          <motion.div
+            className="md:col-start-1 md:row-start-2 flex flex-col justify-end md:block flex-shrink-0 md:pr-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
+          >
+            <div className="md:max-w-[260px] tracking-widest md:tracking-normal flex-shrink-0">
+              <p className="font-sans text-base md:text-sm text-white/40 leading-[1.75]">
+                Engineering high-performance digital ecosystems.
+              </p>
+              <p className="font-sans text-base md:text-sm text-[#FF5C00] leading-[1.75] mt-2">
+                Dominate the Digital Age.
+              </p>
+              <motion.a
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 font-mono text-[10px] text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em] mt-6"
+                whileHover={{ x: -4, y: 0 }}
+                transition={{ duration: 0.25 }}
               >
-                <p className="font-mono text-micro uppercase tracking-[0.25em] text-white mb-6">
-                  Navigation
-                </p>
-                <ul className="space-y-4">
-                  {LINKS.map(({ label, href }, i) => (
-                    <motion.li key={label} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.15 + i * 0.07 }}>
-                      <AnimLink href={href}>
-                        {label}
-                      </AnimLink>
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.div>
-
-              {/* Social */}
-              <motion.div
-                className="md:col-start-3 md:row-start-1 md:row-span-2 text-right md:text-left"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <p className="font-mono text-micro uppercase tracking-[0.25em] text-white mb-6">
-                  Social
-                </p>
-                <ul className="space-y-4">
-                  {SOCIAL.map(({ label, href }, i) => (
-                    <motion.li key={label} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 + i * 0.07 }}>
-                      <AnimLink href={href}>
-                        {label}
-                      </AnimLink>
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.div>
-              
+                Connect@citizenofdigitalage.com
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
+              </motion.a>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Mobile Connect Link (Horizontal) */}
-          <div className="md:hidden pt-4">
-            <motion.a
-              href="https://mail.google.com/mail/?view=cm&fs=1&to=Connect@citizenofdigitalage.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 font-mono text-label text-white/35 hover:text-[#FF5C00] transition-colors duration-300 uppercase tracking-[0.18em]"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              Connect@citizenofdigitalage.com
-            </motion.a>
-          </div>
+          {/* Terminal */}
+          <motion.div
+            className="md:col-start-2 md:col-span-2 md:row-start-1 md:row-span-2 flex items-center mt-10 md:mt-0"
+            initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Terminal />
+          </motion.div>
+
         </div>
 
         {/* Bottom bar */}
         <div className="border-t border-white/[0.08] pt-7 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-mono text-micro text-white/25 uppercase tracking-[0.22em]">
+          <p className="font-mono text-[10px] text-white/25 uppercase tracking-[0.22em]">
             © {new Date().getFullYear()} CODA. All rights reserved.
           </p>
           <div className="flex gap-7">
-            {LEGAL.map(({ label, href }) => (
-              <Link key={label} href={href} className="font-mono text-micro text-white/25 hover:text-white/60 uppercase tracking-[0.18em] transition-colors duration-200">
+            {[{ label: "Privacy Policy", href: "#" }, { label: "Terms of Service", href: "#" }].map(({ label, href }) => (
+              <Link key={label} href={href} className="font-mono text-[10px] text-white/25 hover:text-white/60 uppercase tracking-[0.18em] transition-colors duration-200">
                 {label}
               </Link>
             ))}
@@ -277,7 +409,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ── Video-inside-text — true edge to edge, all caps ── */}
       <VideoText shouldLoad={shouldLoad} />
 
     </footer>
