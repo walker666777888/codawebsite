@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "motion/react";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { ArrowUpRight } from "lucide-react";
@@ -43,56 +43,98 @@ const projects = [
 
 /* ── ProjectCard ─────────────────────────────────────────────── */
 function ProjectCard({ project, index }: { project: (typeof projects)[0]; index: number }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const filterId = `liquid-glitch-${index}`;
+
   return (
-    <div className="shrink-0 w-[78vw] sm:w-[55vw] md:w-[42vw] lg:w-[34vw] group select-none flex flex-col gap-5">
-      <div 
-        className={`aspect-[4/3] bg-gradient-to-br ${project.gradient} rounded-2xl relative overflow-hidden`}
+    <motion.div 
+      className="shrink-0 w-[78vw] sm:w-[55vw] md:w-[42vw] lg:w-[34vw] group select-none flex flex-col gap-5"
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      onPointerDown={() => setIsHovered(true)} // Support touch devices
+      onPointerUp={() => setIsHovered(false)}
+    >
+      {/* ── SVG Liquid Distortion Filter ── */}
+      <svg className="hidden absolute w-0 h-0">
+        <filter id={filterId} colorInterpolationFilters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.018 0.03" numOctaves="2" result="noise" />
+          <motion.feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            xChannelSelector="R"
+            yChannelSelector="G"
+            initial={{ scale: 0 }}
+            animate={{ scale: isHovered ? 28 : 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            result="displaced"
+          />
+        </filter>
+      </svg>
+
+      <motion.div 
+        className="aspect-[4/3] rounded-2xl relative overflow-hidden bg-[#0D0D0B]"
         data-cursor="text"
         data-cursor-text="VIEW"
+        animate={{ scale: isHovered ? 0.96 : 1 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* Grid */}
-        <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-          style={{ backgroundImage: "linear-gradient(to right,#fff 1px,transparent 1px),linear-gradient(to bottom,#fff 1px,transparent 1px)", backgroundSize: "32px 32px" }} />
-        {/* Glow */}
-        <div className="absolute top-1/4 left-1/4 w-[200px] h-[200px] rounded-full pointer-events-none opacity-[0.08]"
-          style={{ background: project.accent, filter: "blur(80px)" }} />
-        {/* Top line */}
-        <div className="absolute top-0 inset-x-0 h-[1px] pointer-events-none opacity-20"
-          style={{ background: `linear-gradient(90deg,transparent,${project.accent},transparent)` }} />
-        {/* Watermark */}
-        <div className="absolute inset-0 flex items-center justify-center select-none pointer-events-none">
-          <span className="font-instrument text-white leading-none tracking-[-0.04em] opacity-[0.04] text-h2"
-            >{project.title}</span>
-        </div>
-        {/* Number */}
-        <div className="absolute top-5 left-5">
-          <span className="font-mono text-micro text-white/30 tracking-[0.15em]">
-            {String(index + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
-          </span>
-        </div>
-        {/* CTA */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-            <ArrowUpRight className="w-6 h-6 text-white" />
+        {/* ── MELTING LAYER (Distorted by SVG) ── */}
+        <motion.div 
+          className={`absolute -inset-10 bg-gradient-to-br ${project.gradient} transition-transform duration-700 ease-out`}
+          style={{ 
+            filter: `url(#${filterId})`,
+            transform: isHovered ? 'scale(1.05)' : 'scale(1)' 
+          }}
+        >
+          {/* Grid */}
+          <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
+            style={{ backgroundImage: "linear-gradient(to right,#fff 1px,transparent 1px),linear-gradient(to bottom,#fff 1px,transparent 1px)", backgroundSize: "32px 32px" }} />
+          {/* Glow */}
+          <div className="absolute top-1/4 left-1/4 w-[200px] h-[200px] rounded-full pointer-events-none opacity-[0.08]"
+            style={{ background: project.accent, filter: "blur(80px)" }} />
+          {/* Top line */}
+          <div className="absolute top-0 inset-x-0 h-[1px] pointer-events-none opacity-20"
+            style={{ background: `linear-gradient(90deg,transparent,${project.accent},transparent)` }} />
+          {/* Giant Watermark */}
+          <div className="absolute inset-0 flex items-center justify-center select-none pointer-events-none">
+            <span className="font-instrument text-white leading-none tracking-[-0.04em] opacity-[0.04] text-[clamp(80px,12vw,200px)] whitespace-nowrap"
+              >{project.title}</span>
+          </div>
+        </motion.div>
+
+        {/* ── CLEAN LAYER (Crisp Text & Icons on top) ── */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Number */}
+          <div className="absolute top-5 left-5">
+            <span className="font-mono text-micro text-white/30 tracking-[0.15em]">
+              {String(index + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
+            </span>
+          </div>
+          {/* CTA */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-md">
+              <ArrowUpRight className="w-6 h-6 text-white" />
+            </div>
+          </div>
+          {/* Tags */}
+          <div className="absolute inset-x-0 bottom-0 p-5 flex gap-2 flex-wrap"
+            style={{ background: "linear-gradient(to top,rgba(0,0,0,0.6),transparent)" }}>
+            {project.tags.map((tag) => (
+              <span key={tag} className="font-mono text-micro uppercase tracking-widest text-white/60 border border-white/12 rounded-full px-3 py-1 bg-black/20 backdrop-blur-sm">{tag}</span>
+            ))}
           </div>
         </div>
-        {/* Tags */}
-        <div className="absolute inset-x-0 bottom-0 p-5 flex gap-2 flex-wrap"
-          style={{ background: "linear-gradient(to top,rgba(0,0,0,0.6),transparent)" }}>
-          {project.tags.map((tag) => (
-            <span key={tag} className="font-mono text-micro uppercase tracking-widest text-white/60 border border-white/12 rounded-full px-3 py-1 bg-black/20">{tag}</span>
-          ))}
-        </div>
-      </div>
-      {/* Footer */}
+      </motion.div>
+      
+      {/* Footer Details */}
       <div className="flex justify-between items-start px-1">
         <div className="flex flex-col gap-1">
-          <h3 className="font-instrument text-xl text-[#0D0D0B] tracking-[-0.02em] leading-none">{project.title}</h3>
+          <h3 className="font-instrument text-xl text-[#0D0D0B] tracking-[-0.02em] leading-none group-hover:text-[#FF5C00] transition-colors duration-300">{project.title}</h3>
           <p className="font-sans text-base text-[#9A9287]">{project.category}</p>
         </div>
         <span className="font-mono text-label tracking-[0.1em] text-[#B0AA9F]">{project.year}</span>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
