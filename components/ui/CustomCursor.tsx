@@ -63,16 +63,7 @@ export default function CustomCursor() {
         return;
       }
       
-      // Auto-detect text elements
-      const computedCursor = window.getComputedStyle(target).cursor;
-      const textTags = ["P", "H1", "H2", "H3", "H4", "H5", "H6", "LI", "SPAN", "STRONG", "EM"];
-      const isText = computedCursor === "text" || (textTags.includes(target.tagName) && target.textContent && target.textContent.trim().length > 0);
-      
-      if (isText) {
-        setCursorState("text_bracket");
-      } else {
-        setCursorState("default");
-      }
+      setCursorState("default");
     };
 
     const handleMouseLeave = () => setIsVisible(false);
@@ -99,7 +90,7 @@ export default function CustomCursor() {
       height: 32,
       borderRadius: "50%",
       backgroundColor: "transparent",
-      border: "1px solid rgba(255, 255, 255, 0.4)",
+      border: "1px solid rgba(255, 92, 0, 0.5)", // Brand orange border is visible on both light and dark
       backdropFilter: "blur(2px)",
       mixBlendMode: "normal" as any,
     },
@@ -143,9 +134,9 @@ export default function CustomCursor() {
       width: 80,
       height: 80,
       borderRadius: "50%",
-      backgroundColor: "rgba(255, 255, 255, 0.1)",
-      border: "1px solid rgba(255, 255, 255, 0.2)",
-      backdropFilter: "blur(8px)",
+      backgroundColor: "#FFFFFF",
+      border: "0px solid transparent",
+      backdropFilter: "blur(0px)",
       mixBlendMode: "normal" as any,
     },
     terminal_block: {
@@ -237,7 +228,7 @@ export default function CustomCursor() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.2 }}
-              className="text-white font-sans text-xs font-bold tracking-[0.2em] uppercase"
+              className="text-[#0D0D0B] font-sans text-xs font-bold tracking-[0.2em] uppercase"
             >
               VIEW
             </motion.div>
