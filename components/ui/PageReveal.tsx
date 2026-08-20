@@ -24,7 +24,7 @@ export default function PageReveal() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       document.body.style.overflow = "";
-      setHidden(true);
+      setTimeout(() => setHidden(true), 0);
       return;
     }
 

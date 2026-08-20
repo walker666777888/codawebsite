@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
-import { gsap } from 'gsap';
+
 import './TextType.css';
 
 export interface TextTypeProps extends React.HTMLAttributes<HTMLElement> {
@@ -138,7 +138,7 @@ const TextType: React.FC<TextTypeProps> = ({
   const shouldHideCursor =
     hideCursorWhileTyping && !isTypingComplete;
 
-  const Comp = Component as any;
+  const Comp = Component as React.ElementType;
 
   return (
     <Comp ref={containerRef} className={`text-type ${className}`} {...props}>

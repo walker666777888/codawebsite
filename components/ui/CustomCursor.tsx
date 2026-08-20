@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, Play } from "lucide-react";
+import { ArrowUpRight, Play, RefreshCw } from "lucide-react";
 
 export default function CustomCursor() {
-  const [cursorState, setCursorState] = useState<"default" | "click" | "text" | "video" | "text_bracket" | "project_view" | "terminal_block">("default");
+  const [cursorState, setCursorState] = useState<"default" | "click" | "text" | "video" | "text_bracket" | "project_view" | "terminal_block" | "refresh">("default");
   const [cursorText, setCursorText] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -25,7 +25,7 @@ export default function CustomCursor() {
 
   useEffect(() => {
     if (window.matchMedia("(hover: none) and (pointer: coarse)").matches) {
-      setIsTouchDevice(true);
+      setTimeout(() => setIsTouchDevice(true), 0);
       return;
     }
 
@@ -48,6 +48,7 @@ export default function CustomCursor() {
         if (type === "text") { setCursorState("text"); setCursorText(text); return; }
         if (type === "project_view") { setCursorState("project_view"); return; }
         if (type === "terminal_block") { setCursorState("terminal_block"); return; }
+        if (type === "refresh") { setCursorState("refresh"); return; }
       }
 
       // Check standard interactive elements
@@ -92,7 +93,7 @@ export default function CustomCursor() {
       backgroundColor: "transparent",
       border: "1px solid rgba(255, 92, 0, 0.5)", // Brand orange border is visible on both light and dark
       backdropFilter: "blur(2px)",
-      mixBlendMode: "normal" as any,
+      mixBlendMode: "normal",
     },
     click: {
       width: 72,
@@ -101,7 +102,7 @@ export default function CustomCursor() {
       backgroundColor: "#FFFFFF",
       border: "0px solid transparent",
       backdropFilter: "blur(0px)",
-      mixBlendMode: "difference" as any,
+      mixBlendMode: "difference",
     },
     video: {
       width: 80,
@@ -110,7 +111,7 @@ export default function CustomCursor() {
       backgroundColor: "#FF5C00", // CODA Flame Orange
       border: "0px solid transparent",
       backdropFilter: "blur(4px)",
-      mixBlendMode: "normal" as any,
+      mixBlendMode: "normal",
     },
     text: {
       width: "auto",
@@ -119,7 +120,7 @@ export default function CustomCursor() {
       backgroundColor: "#FFFFFF",
       border: "0px solid transparent",
       backdropFilter: "blur(0px)",
-      mixBlendMode: "difference" as any,
+      mixBlendMode: "difference",
     },
     text_bracket: {
       width: 14,
@@ -128,7 +129,7 @@ export default function CustomCursor() {
       backgroundColor: "transparent",
       border: "0px solid transparent",
       backdropFilter: "blur(0px)",
-      mixBlendMode: "normal" as any,
+      mixBlendMode: "normal",
     },
     project_view: {
       width: 80,
@@ -137,7 +138,7 @@ export default function CustomCursor() {
       backgroundColor: "#FFFFFF",
       border: "0px solid transparent",
       backdropFilter: "blur(0px)",
-      mixBlendMode: "normal" as any,
+      mixBlendMode: "normal",
     },
     terminal_block: {
       width: 10,
@@ -146,7 +147,16 @@ export default function CustomCursor() {
       backgroundColor: "transparent",
       border: "0px solid transparent",
       backdropFilter: "blur(0px)",
-      mixBlendMode: "normal" as any,
+      mixBlendMode: "normal",
+    },
+    refresh: {
+      width: 72,
+      height: 72,
+      borderRadius: "50%",
+      backgroundColor: "#FFFFFF",
+      border: "0px solid transparent",
+      backdropFilter: "blur(0px)",
+      mixBlendMode: "difference",
     }
   };
 
@@ -241,6 +251,17 @@ export default function CustomCursor() {
               transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
               className="w-full h-full bg-[#FF5C00]"
             />
+          )}
+          {cursorState === "refresh" && (
+            <motion.div
+              key="refresh"
+              initial={{ scale: 0.5, opacity: 0, rotate: -180 }}
+              animate={{ scale: 1, opacity: 1, rotate: 0 }}
+              exit={{ scale: 0.5, opacity: 0, rotate: 180 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            >
+              <RefreshCw size={32} color="black" strokeWidth={1.5} />
+            </motion.div>
           )}
         </AnimatePresence>
       </motion.div>
