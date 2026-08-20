@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, RefreshCw } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
 import { lenisScrollTo } from "@/components/providers/LenisProvider";
 
@@ -72,16 +72,39 @@ export default function Navbar() {
 
           {/* Logo */}
           <motion.div layout className="relative z-10 flex shrink-0">
-            <Link href="/" className="flex items-baseline gap-[1px] group">
-            <span className={`font-instrument text-xl tracking-[-0.025em] transition-colors duration-500 group-hover:opacity-60 ${scrolled || mobileMenuOpen ?"text-[#14130F]" : "text-white"}`}>
-              CODA
-            </span>
-            <motion.span
-              className="font-mono text-[#FF5C00] text-xl leading-none"
-              whileHover={{ scale: 1.5, rotate: 15 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            >.</motion.span>
-          </Link>
+            <motion.a 
+              href="/"
+              onClick={(e) => { e.preventDefault(); window.location.reload(); }}
+              initial="rest"
+              whileHover="hover"
+              animate="rest"
+              className="relative flex items-center justify-center w-[60px] h-[28px] cursor-pointer"
+            >
+              <motion.div
+                variants={{
+                  rest: { y: 0, opacity: 1 },
+                  hover: { y: -15, opacity: 0 }
+                }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="absolute inset-0 flex items-baseline justify-center gap-[1px]"
+              >
+                <span className={`font-instrument text-xl tracking-[-0.025em] transition-colors duration-500 ${scrolled || mobileMenuOpen ?"text-[#14130F]" : "text-white"}`}>
+                  CODA
+                </span>
+                <span className="font-mono text-[#FF5C00] text-xl leading-none">.</span>
+              </motion.div>
+              
+              <motion.div
+                variants={{
+                  rest: { y: 15, opacity: 0, rotate: -90 },
+                  hover: { y: 0, opacity: 1, rotate: 0 }
+                }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="absolute inset-0 flex items-center justify-center"
+              >
+                <RefreshCw className={`w-5 h-5 transition-colors duration-500 ${scrolled || mobileMenuOpen ?"text-[#14130F]" : "text-white"}`} />
+              </motion.div>
+            </motion.a>
           </motion.div>
             {/* Desktop nav — absolutely centered */}
             <motion.nav layout className="hidden sm:flex items-center gap-2 text-base font-instrument absolute left-1/2 -translate-x-1/2">
