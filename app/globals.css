@@ -1,12 +1,16 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --color-coda-bg: #F4F0E8;
-  --color-coda-grid: #E6E1DA;
-  --color-coda-ink: #0D0D0B;
-  --color-coda-muted: #4D4A45;
+  --color-coda-bg: var(--coda-bg);
+  --color-coda-surface: var(--coda-surface);
+  --color-coda-surface-2: var(--coda-surface-2);
+  --color-coda-grid: var(--coda-grid);
+  --color-coda-ink: var(--coda-ink);
+  --color-coda-muted: var(--coda-muted);
   --color-coda-accent: #FF5C00;
-  --color-coda-dark: #1a0d00;
+  --color-coda-dark: #090908;
   --color-modal-bg: #0C0C0A;
   --color-modal-darker: #161614;
   --color-modal-dark: #1e1c18;
@@ -99,14 +103,16 @@
 
 @layer base {
   :root {
-    /* ── Premium light surfaces ── */
+    /* ── Premium Light Mode (warm paper & ink) ── */
     --coda-bg: #F4F0E8;            /* warm paper base */
     --coda-surface: #FBF9F4;       /* elevated card */
     --coda-surface-2: #FFFFFF;     /* top elevation */
     --coda-grid: #E6E1DA;
     --coda-hairline: rgba(13, 13, 11, 0.08);
+    --coda-card-bg: #FFFFFF;
+    --coda-card-border: rgba(13, 13, 11, 0.08);
 
-    /* ── Ink tiers (tuned for contrast on paper, not opacity-flipped) ── */
+    /* ── Ink tiers (tuned for contrast on paper) ── */
     --coda-ink: #14130F;           /* headings / primary */
     --coda-ink-2: #4A463F;         /* body — ~8:1 on paper */
     --coda-ink-3: #6F6A60;         /* secondary / labels — ~4.7:1 */
@@ -127,6 +133,33 @@
     --duration-default: 280ms;
     --duration-slow: 700ms;
     --duration-ambient: 4s;
+  }
+
+  .dark {
+    /* ── Premium Dark Mode (Obsidian Carbon & Neon Accent) ── */
+    --coda-bg: #090908;            /* obsidian base */
+    --coda-surface: #151513;       /* distinct elevated dark card */
+    --coda-surface-2: #20201C;     /* top card / pill elevation */
+    --coda-card-bg: #151513;       /* card solid background */
+    --coda-card-border: rgba(255, 255, 255, 0.12);
+    --coda-grid: #1A1A17;
+    --coda-hairline: rgba(255, 255, 255, 0.10);
+
+    /* High contrast ink tiers */
+    --coda-ink: #F5F3EE;           /* primary text — ~18:1 contrast */
+    --coda-ink-2: #B3ADA2;         /* body text — ~8:1 */
+    --coda-ink-3: #7D786E;         /* secondary / labels — ~4.8:1 */
+    --coda-ink-4: #545048;         /* faint meta */
+    --coda-muted: #B3ADA2;
+    --coda-accent: #FF5C00;
+    --coda-accent-soft: rgba(255, 92, 0, 0.18);
+
+    /* Dark elevation scale */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 10px 30px -12px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 8px 20px -10px rgba(0, 0, 0, 0.5);
+    --shadow-accent: 0 16px 40px -12px rgba(255, 92, 0, 0.45);
   }
 
   html {
@@ -162,7 +195,7 @@
 
   /* Match DigitalGap grid so the GSAP pin spacer blends in */
   .pin-spacer {
-    background-color: #F4F0E8;
+    background-color: var(--coda-bg) !important;
   }
 
   /* Lenis smooth scroll specific */

@@ -3,6 +3,7 @@ import { Space_Mono, Unbounded } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/providers/LenisProvider";
 import FormModalProvider from "@/components/providers/FormModalProvider";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { VideoPreloadProvider } from "@/components/providers/VideoPreloadProvider";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -152,9 +153,27 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${spaceMono.variable} ${unbounded.variable} antialiased`}
     >
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var stored = localStorage.getItem('coda_theme');
+                  var isDark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches) || (stored === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                  if (isDark) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
@@ -167,21 +186,23 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"
         />
       </head>
-      <body className="flex flex-col min-h-screen selection:bg-[#FF5C00] selection:text-white">
+      <body className="flex flex-col min-h-screen selection:bg-[#FF5C00] selection:text-white bg-[var(--coda-bg)] text-[var(--coda-ink)] transition-colors duration-300">
         {/* Skip to main — keyboard accessibility */}
         <a href="#main-content" className="skip-link">Skip to main content</a>
-        <LenisProvider>
-          <FormModalProvider>
-            <VideoPreloadProvider>
-              <PageReveal />
-              <GrainOverlay />
-              <CustomCursor />
-              <Navbar />
-              <main id="main-content" className="flex-1">{children}</main>
-              <Footer />
-            </VideoPreloadProvider>
-          </FormModalProvider>
-        </LenisProvider>
+        <ThemeProvider>
+          <LenisProvider>
+            <FormModalProvider>
+              <VideoPreloadProvider>
+                <PageReveal />
+                <GrainOverlay />
+                <CustomCursor />
+                <Navbar />
+                <main id="main-content" className="flex-1">{children}</main>
+                <Footer />
+              </VideoPreloadProvider>
+            </FormModalProvider>
+          </LenisProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

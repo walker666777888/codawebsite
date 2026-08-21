@@ -112,8 +112,8 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
 
         {/* Base card */}
         <div
-          className="relative rounded-2xl border border-[#0D0D0B]/[0.1] overflow-hidden h-full flex flex-col flex-1"
-          style={{ background: "rgba(255,255,255,0.96)" }}
+          className="relative rounded-2xl border border-[var(--coda-hairline)] overflow-hidden h-full flex flex-col flex-1 transition-colors duration-300"
+          style={{ background: "var(--coda-card-bg)" }}
         >
           {/* Top accent line */}
           <div
@@ -121,7 +121,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
             style={{
               background: hovered
                 ? `linear-gradient(to right, transparent, ${card.accent}, transparent)`
-                : "linear-gradient(to right, transparent, rgba(13,13,11,0.12), transparent)",
+                : "linear-gradient(to right, transparent, var(--coda-hairline), transparent)",
             }}
           />
 
@@ -156,19 +156,19 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
             <div className="flex flex-col gap-5 sm:gap-6">
               {/* Header row */}
               <div className="flex items-center justify-between">
-                <span className="font-mono text-label text-[#6F6A60] tracking-widest">{card.num}</span>
+                <span className="font-mono text-label text-[var(--coda-ink-3)] tracking-widest">{card.num}</span>
                 <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center border border-[#0D0D0B]/[0.1] bg-[#0D0D0B]/[0.04] group-hover:border-[#0D0D0B]/30 transition-all duration-400"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center border border-[var(--coda-hairline)] bg-[var(--coda-surface-2)] group-hover:border-[#FF5C00]/40 transition-all duration-400"
                   style={{ boxShadow: hovered ? `0 0 20px ${card.glow}` : "none" }}
                 >
-                  <card.icon className="w-4.5 h-4.5 text-[#4A463F] group-hover:text-[#0D0D0B]/80 transition-colors duration-400" />
+                  <card.icon className="w-4.5 h-4.5 text-[var(--coda-ink-2)] group-hover:text-[#FF5C00] transition-colors duration-400" />
                 </div>
               </div>
 
               {/* Title */}
               <div className="flex flex-col gap-4">
                 <h3
-                  className="font-instrument leading-[1.08] tracking-[-0.01em] text-[#0D0D0B]/80 group-hover:text-[#0D0D0B] transition-colors duration-400 text-h3"
+                  className="font-instrument leading-[1.08] tracking-[-0.01em] text-[var(--coda-ink)] transition-colors duration-400 text-h3"
               >
                 {card.title}
                 <br />
@@ -176,15 +176,15 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
               </h3>
 
               <div
-                className="relative rounded-2xl overflow-hidden p-4"
+                className="relative rounded-2xl overflow-hidden p-4 transition-colors duration-300"
                 style={{
-                  background: "rgba(255,255,255,0.45)",
+                  background: "var(--coda-surface)",
                   backdropFilter: "blur(14px)",
                   WebkitBackdropFilter: "blur(14px)",
-                  border: "1px solid rgba(255,255,255,0.6)",
+                  border: "1px solid var(--coda-hairline)",
                 }}
               >
-                <p className="font-sans text-base text-[#4A463F] leading-relaxed group-hover:text-[#0D0D0B]/65 transition-colors duration-500">
+                <p className="font-sans text-base text-[var(--coda-ink-2)] leading-relaxed transition-colors duration-500">
                   {card.desc}
                 </p>
                 </div>
@@ -200,7 +200,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: 0.3 + index * 0.08 + ti * 0.05 }}
-                  className="font-mono text-micro uppercase tracking-widest text-[#6F6A60] border border-[#0D0D0B]/[0.12] rounded-full px-3 py-1 group-hover:border-[#0D0D0B]/20 group-hover:text-[#4A463F] transition-all duration-300"
+                  className="font-mono text-micro uppercase tracking-widest text-[var(--coda-ink-3)] border border-[var(--coda-hairline)] rounded-full px-3 py-1 group-hover:border-[#FF5C00]/30 group-hover:text-[var(--coda-ink)] transition-all duration-300"
                 >
                   {tag}
                 </motion.span>
@@ -222,9 +222,9 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
 export default function Capabilities() {
 
   return (
-    <section id="capabilities" className="relative py-16 sm:py-24 lg:py-32 px-4 sm:px-6" style={{ background: "#F4F0E8" }}>
+    <section id="capabilities" className="relative py-16 sm:py-24 lg:py-32 px-4 sm:px-6 transition-colors duration-300" style={{ background: "var(--coda-bg)" }}>
       {/* Top line */}
-      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#0D0D0B]/15 to-transparent" />
+      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--coda-hairline)] to-transparent" />
 
       {/* Ambient */}
       <div
@@ -244,7 +244,7 @@ export default function Capabilities() {
           >
             <SectionLabel index={4}>Capabilities</SectionLabel>
             <h2
-              className="font-instrument text-[#0D0D0B] tracking-[-0.03em] leading-[1.05] text-h2"
+              className="font-instrument text-[var(--coda-ink)] tracking-[-0.03em] leading-[1.05] text-h2"
             >
               Your stack.
               <br />
@@ -256,7 +256,7 @@ export default function Capabilities() {
             whileInView={{ opacity: 1, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="font-sans text-base text-[#4A463F] leading-[1.7] max-w-xs"
+            className="font-sans text-base text-[var(--coda-ink-2)] leading-[1.7] max-w-xs"
           >
             No bloat, no fluff. Just the three pillars that actually move the needle.
           </motion.p>

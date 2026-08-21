@@ -128,10 +128,10 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
       {/* Footer Details */}
       <div className="flex justify-between items-start px-1">
         <div className="flex flex-col gap-1">
-          <h3 className="font-instrument text-xl text-[#0D0D0B] tracking-[-0.02em] leading-none group-hover:text-[#FF5C00] transition-colors duration-300">{project.title}</h3>
-          <p className="font-sans text-base text-[#9A9287]">{project.category}</p>
+          <h3 className="font-instrument text-xl text-[var(--coda-ink)] tracking-[-0.02em] leading-none group-hover:text-[#FF5C00] transition-colors duration-300">{project.title}</h3>
+          <p className="font-sans text-base text-[var(--coda-ink-3)]">{project.category}</p>
         </div>
-        <span className="font-mono text-label tracking-[0.1em] text-[#B0AA9F]">{project.year}</span>
+        <span className="font-mono text-label tracking-[0.1em] text-[var(--coda-ink-4)]">{project.year}</span>
       </div>
     </motion.div>
   );
@@ -216,11 +216,11 @@ export default function WorkShowcase() {
   const onPointerUp = () => { isDragging.current = false; };
 
   return (
-    <section id="work" ref={sectionRef} className="py-16 sm:py-24 lg:py-36 bg-[#F4F0E8] overflow-hidden relative flex flex-col gap-14">
+    <section id="work" ref={sectionRef} className="py-16 sm:py-24 lg:py-36 bg-[var(--coda-bg)] overflow-hidden relative flex flex-col gap-14 transition-colors duration-300">
       {/* Separators */}
-      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#D6D1CB] to-transparent" />
+      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--coda-hairline)] to-transparent" />
       <div className="absolute inset-0 pointer-events-none opacity-[0.35]"
-        style={{ backgroundImage: "linear-gradient(to right,#E6E1DA 1px,transparent 1px),linear-gradient(to bottom,#E6E1DA 1px,transparent 1px)", backgroundSize: "60px 60px" }} />
+        style={{ backgroundImage: "linear-gradient(to right,var(--coda-grid) 1px,transparent 1px),linear-gradient(to bottom,var(--coda-grid) 1px,transparent 1px)", backgroundSize: "60px 60px" }} />
 
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -228,7 +228,7 @@ export default function WorkShowcase() {
           viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col gap-5">
           <SectionLabel index={3} className="block">Selected Work</SectionLabel>
-          <h2 className="font-instrument tracking-[-0.03em] text-[#0D0D0B] leading-[1.04] text-h2"
+          <h2 className="font-instrument tracking-[-0.03em] text-[var(--coda-ink)] leading-[1.04] text-h2"
             >
             Digital ecosystems <span className="text-[#FF5C00]">in action.</span>
           </h2>
@@ -239,9 +239,9 @@ export default function WorkShowcase() {
       <div className="max-w-7xl mx-auto px-6 relative">
         {/* Fade masks — desktop only */}
         <div className="absolute left-6 top-0 bottom-0 w-12 z-10 pointer-events-none hidden md:block"
-          style={{ background: "linear-gradient(to right,#F4F0E8 10%,transparent)" }} />
+          style={{ background: "linear-gradient(to right,var(--coda-bg) 10%,transparent)" }} />
         <div className="absolute right-6 top-0 bottom-0 w-12 z-10 pointer-events-none hidden md:block"
-          style={{ background: "linear-gradient(to left,#F4F0E8 10%,transparent)" }} />
+          style={{ background: "linear-gradient(to left,var(--coda-bg) 10%,transparent)" }} />
 
         <div
           className="overflow-hidden rounded-2xl"

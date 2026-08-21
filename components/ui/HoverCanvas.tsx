@@ -35,8 +35,10 @@ const builders: Record<CanvasEffect, Builder> = {
         speeds = Array.from({ length: cols }, () => 0.4 + Math.random() * 0.8);
       }
 
-      // Very light paper wash — longer trails for higher density appearance
-      ctx.fillStyle = "rgba(251,249,244,0.07)";
+      const isDark = typeof document !== "undefined" && document.documentElement.classList.contains("dark");
+
+      // Adaptive wash — fades trails seamlessly into the tile's current background
+      ctx.fillStyle = isDark ? "rgba(17,17,16,0.16)" : "rgba(251,249,244,0.14)";
       ctx.fillRect(0, 0, width, height);
 
       // 900 weight for extra boldness
@@ -51,7 +53,7 @@ const builders: Record<CanvasEffect, Builder> = {
         // Top glyph in each stream is bright white-orange, rest fade down
         const rand = Math.random();
         if (rand > 0.88) {
-          ctx.fillStyle = "rgba(255,255,220,0.98)";   // bright white lead
+          ctx.fillStyle = isDark ? "rgba(255,255,255,0.98)" : "rgba(255,92,0,0.98)";   // bright lead
         } else if (rand > 0.72) {
           ctx.fillStyle = "rgba(255,92,0,0.95)";       // orange
         } else if (rand > 0.50) {
@@ -59,7 +61,7 @@ const builders: Record<CanvasEffect, Builder> = {
         } else if (rand > 0.28) {
           ctx.fillStyle = "rgba(200,100,20,0.65)";     // dark amber
         } else {
-          ctx.fillStyle = "rgba(74,70,63,0.55)";       // muted ink tail
+          ctx.fillStyle = isDark ? "rgba(255,255,255,0.18)" : "rgba(74,70,63,0.45)"; // muted ink tail
         }
         ctx.fillText(ch, x, y);
 
@@ -357,6 +359,7 @@ export default function HoverCanvas({
       if (running) return;
       running = true;
       resize();
+      ctx.clearRect(0, 0, width, height);
       step = builders[effect](ctx, () => ({ width, height }), mouse);
       raf = requestAnimationFrame(loop);
     };

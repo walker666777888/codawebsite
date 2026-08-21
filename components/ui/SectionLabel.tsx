@@ -12,7 +12,7 @@ interface SectionLabelProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export default function SectionLabel({ index, children, className, ...props }: SectionLabelProps) {
   return (
-    <div className={cn("flex items-center text-[#4D4A45] font-mono text-[10px] sm:text-[12px] tracking-[0.18em] uppercase", className)} {...props}>
+    <div className={cn("flex items-center text-[var(--coda-ink-3)] font-mono text-[10px] sm:text-[12px] tracking-[0.18em] uppercase transition-colors duration-300", className)} {...props}>
       {index && (
         <>
           <span className="mr-3">[ {String(index).padStart(2, "0")} ]</span>

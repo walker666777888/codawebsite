@@ -144,7 +144,7 @@ function TechGraphic({ active: activeProp }: { active: boolean }) {
             />
           )}
           <motion.circle cx={n.x} cy={n.y} r="16"
-            fill="rgba(255,255,255,0.92)" stroke="rgba(96,165,250,0.45)" strokeWidth="1.5"
+            fill="var(--coda-surface-2)" stroke="rgba(96,165,250,0.45)" strokeWidth="1.5"
             filter="url(#tg-node-glow)"
             initial={{ scale: 0, opacity: 0 }}
             animate={active ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
@@ -333,10 +333,10 @@ function StrategyGraphic({ active: activeProp }: { active: boolean }) {
       <div className="grid grid-cols-3 gap-1">
         {kpis.map((k, i) => (
           <motion.div key={k.label}
-            style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(245,158,11,0.18)", borderRadius: "8px", padding: "3px 4px", textAlign: "center" }}
+            style={{ background: "var(--coda-surface-2)", border: "1px solid rgba(245,158,11,0.25)", borderRadius: "8px", padding: "3px 4px", textAlign: "center" }}
             animate={active ? { filter: "blur(0px)", opacity: 1 } : { filter: "blur(4px)", opacity: 0 }}
             transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}>
-            <div style={{ fontFamily: "monospace", fontSize: "6.5px", color: "rgba(13,13,11,0.6)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "1px" }}>{k.label}</div>
+            <div style={{ fontFamily: "monospace", fontSize: "6.5px", color: "var(--coda-ink-3)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "1px" }}>{k.label}</div>
             <div style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: AMBER }}>{k.value}</div>
           </motion.div>
         ))}
@@ -347,7 +347,7 @@ function StrategyGraphic({ active: activeProp }: { active: boolean }) {
         {phases.map((p, i) => (
           <motion.div key={i}
             className="flex items-center gap-2"
-            style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(245,158,11,0.14)", borderRadius: "8px", padding: "4px 7px" }}
+            style={{ background: "var(--coda-surface-2)", border: "1px solid rgba(245,158,11,0.2)", borderRadius: "8px", padding: "4px 7px" }}
             animate={active ? { opacity: 1, x: 0 } : { opacity: 0, x: -12 }}
             transition={{ duration: 0.5, delay: p.delay, ease: [0.16, 1, 0.3, 1] }}>
 
@@ -360,7 +360,7 @@ function StrategyGraphic({ active: activeProp }: { active: boolean }) {
             }} />
 
             {/* Label */}
-            <span style={{ fontFamily: "sans-serif", fontSize: "9px", fontWeight: p.active ? 700 : 500, color: p.done || p.active ? "#14130F" : "rgba(13,13,11,0.6)", minWidth: "58px", flexShrink: 0 }}>{p.label}</span>
+            <span style={{ fontFamily: "sans-serif", fontSize: "9px", fontWeight: p.active ? 700 : 500, color: p.done || p.active ? "var(--coda-ink)" : "var(--coda-ink-3)", minWidth: "58px", flexShrink: 0 }}>{p.label}</span>
 
             {/* Progress bar */}
             <div style={{ flex: 1, height: "3px", background: "rgba(245,158,11,0.12)", borderRadius: "99px", overflow: "hidden" }}>
@@ -370,7 +370,7 @@ function StrategyGraphic({ active: activeProp }: { active: boolean }) {
             </div>
 
             {/* Status label */}
-            <span style={{ fontFamily: "monospace", fontSize: "8px", fontWeight: 600, color: p.done ? AMBER : "rgba(13,13,11,0.3)", flexShrink: 0, minWidth: "22px", textAlign: "right" }}>
+            <span style={{ fontFamily: "monospace", fontSize: "8px", fontWeight: 600, color: p.done ? AMBER : "var(--coda-ink-4)", flexShrink: 0, minWidth: "22px", textAlign: "right" }}>
               {p.done ? "✓" : `${Math.round(p.pct * 100)}%`}
             </span>
           </motion.div>
@@ -400,7 +400,7 @@ function EcommerceGraphic({ active: activeProp }: { active: boolean }) {
     <div ref={ref} className="w-full h-full flex flex-col justify-center gap-[6px] px-1">
       {/* Header — static once active */}
       <div className="flex items-center justify-between">
-        <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.6)", letterSpacing: "0.12em", textTransform: "uppercase" }}>Marketplace Rankings</span>
+        <span style={{ fontFamily: "monospace", fontSize: "8px", color: "var(--coda-ink-3)", letterSpacing: "0.12em", textTransform: "uppercase" }}>Marketplace Rankings</span>
         <motion.span style={{ fontFamily: "monospace", fontSize: "8px", color: ORANGE, letterSpacing: "0.1em" }}
           animate={active ? { opacity: [0.4, 1, 0.4] } : { opacity: 0 }}
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>● LIVE</motion.span>
@@ -409,13 +409,13 @@ function EcommerceGraphic({ active: activeProp }: { active: boolean }) {
       {products.map((p, i) => (
         /* Card appears once and stays */
         <motion.div key={i} className="flex items-center gap-3"
-          style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,92,0,0.14)", borderRadius: "16px", padding: "5px 10px" }}
+          style={{ background: "var(--coda-surface-2)", border: "1px solid rgba(255,92,0,0.22)", borderRadius: "16px", padding: "5px 10px" }}
           animate={active ? { opacity: 1, x: 0 } : { opacity: 0, x: -14 }}
           transition={{ duration: 0.55, delay: p.delay, ease: [0.16, 1, 0.3, 1] }}
         >
           <span style={{ fontFamily: "monospace", fontSize: "10px", fontWeight: 700, color: ORANGE, minWidth: "28px", textAlign: "center" }}>{p.rank}</span>
           <div className="flex-1 min-w-0">
-            <div style={{ fontFamily: "sans-serif", fontSize: "10px", fontWeight: 600, color: "#14130F", marginBottom: "4px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.label}</div>
+            <div style={{ fontFamily: "sans-serif", fontSize: "10px", fontWeight: 600, color: "var(--coda-ink)", marginBottom: "4px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.label}</div>
             {/* Only the bar fill loops */}
             <div style={{ height: "3px", background: "rgba(255,92,0,0.12)", borderRadius: "99px", overflow: "hidden" }}>
               <motion.div style={{ height: "100%", borderRadius: "99px", background: `linear-gradient(90deg,${ORANGE},#FF9A3C)`, transformOrigin: "left" }}
@@ -425,13 +425,13 @@ function EcommerceGraphic({ active: activeProp }: { active: boolean }) {
           </div>
           <div className="flex items-center gap-1 shrink-0">
             <span style={{ color: "#22C55E", fontSize: "9px", fontWeight: 700 }}>↑</span>
-            <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.35)", textDecoration: "line-through" }}>{p.old}</span>
+            <span style={{ fontFamily: "monospace", fontSize: "8px", color: "var(--coda-ink-4)", textDecoration: "line-through" }}>{p.old}</span>
           </div>
         </motion.div>
       ))}
 
       <div className="flex items-center justify-between pt-1.5" style={{ borderTop: "1px solid rgba(255,92,0,0.12)" }}>
-        <span style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.6)", textTransform: "uppercase", letterSpacing: "0.1em" }}>Avg. CVR lift</span>
+        <span style={{ fontFamily: "monospace", fontSize: "8px", color: "var(--coda-ink-3)", textTransform: "uppercase", letterSpacing: "0.1em" }}>Avg. CVR lift</span>
         <span style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: ORANGE }}>+34%</span>
       </div>
     </div>
@@ -462,17 +462,17 @@ function PerformanceGraphic({ active: activeProp }: { active: boolean }) {
       <div className="grid grid-cols-3 gap-2 mb-1">
         {kpis.map((k, i) => (
           <motion.div key={k.label}
-            style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,92,0,0.18)", borderRadius: "8px", padding: "6px 8px", textAlign: "center" }}
+            style={{ background: "var(--coda-surface-2)", border: "1px solid rgba(255,92,0,0.22)", borderRadius: "8px", padding: "6px 8px", textAlign: "center" }}
             animate={active ? { filter: "blur(0px)", opacity: 1 } : { filter: "blur(4px)", opacity: 0 }}
             transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}>
-            <div style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.6)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "2px" }}>{k.label}</div>
+            <div style={{ fontFamily: "monospace", fontSize: "8px", color: "var(--coda-ink-3)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "2px" }}>{k.label}</div>
             <div style={{ fontFamily: "monospace", fontSize: "12px", fontWeight: 700, color: ORANGE }}>{k.value}</div>
           </motion.div>
         ))}
       </div>
 
       {/* Label — static */}
-      <div style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.6)", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: "2px" }}>Conversion Funnel</div>
+      <div style={{ fontFamily: "monospace", fontSize: "8px", color: "var(--coda-ink-3)", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: "2px" }}>Conversion Funnel</div>
 
       {/* Funnel rows — labels static, only bar fills loop */}
       <div className="flex flex-col gap-1.5">
@@ -570,9 +570,9 @@ function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; 
         onMouseEnter={onMouseEnter} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}
         style={{
           rotateX: springRotX, rotateY: springRotY, transformStyle: "preserve-3d",
-          background: "linear-gradient(160deg,#FFFFFF 0%,#FFFCF9 60%,#FFF8F4 100%)",
+          background: "linear-gradient(160deg, var(--coda-surface-2) 0%, var(--coda-surface) 100%)",
           border: `1px solid ${ORANGE_SOFT}`,
-          boxShadow: `0 1px 0 rgba(255,255,255,1) inset,0 12px 40px -12px rgba(255,92,0,0.18),0 4px 16px -4px rgba(43,33,20,0.10),0 1px 3px rgba(43,33,20,0.06)`,
+          boxShadow: `0 1px 0 rgba(255,255,255,0.2) inset, 0 12px 40px -12px rgba(255,92,0,0.18), 0 4px 16px -4px rgba(0,0,0,0.15)`,
         }}
         className="group/card relative rounded-[28px] overflow-hidden cursor-default transition-shadow duration-500 h-full"
       >
@@ -586,14 +586,14 @@ function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; 
           {/* LEFT */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <span className="font-mono text-label tracking-[0.25em] text-[#9A9488]">{tile.num}</span>
+              <span className="font-mono text-label tracking-[0.25em] text-[var(--coda-ink-4)]">{tile.num}</span>
               <span className="font-mono text-micro uppercase tracking-[0.2em] px-2.5 py-1 rounded-full"
                 style={{ color: ORANGE, border: `1px solid ${ORANGE_SOFT}`, background: ORANGE_DIM }}>{tile.tags[0]}</span>
             </div>
-            <h3 className="font-instrument tracking-[-0.01em] leading-[1.04] text-[#14130F] text-h3">
+            <h3 className="font-instrument tracking-[-0.01em] leading-[1.04] text-[var(--coda-ink)] text-h3">
               {tile.title}<br /><span className="" style={{ color: ORANGE }}>{tile.subtitle}</span>
             </h3>
-            <p className="font-sans text-xs text-[#4A463F] leading-[1.65]">{tile.tagline}</p>
+            <p className="font-sans text-xs text-[var(--coda-ink-2)] leading-[1.65]">{tile.tagline}</p>
             <div className="space-y-1.5">
               {tile.capabilities.map((cap, ci) => (
                 <motion.div key={cap} className="flex items-center gap-2.5"
@@ -938,9 +938,9 @@ function DisciplineCardBody({
     <div
       className="group/card relative h-full rounded-[28px] overflow-hidden flex flex-col transition-all duration-500"
       style={{
-        background: "linear-gradient(160deg,#FFFFFF 0%,#FFFCF9 60%,#FFF8F4 100%)",
+        background: "linear-gradient(160deg, var(--coda-surface-2) 0%, var(--coda-surface) 100%)",
         border: `1px solid ${ORANGE_SOFT}`,
-        boxShadow: `0 1px 0 rgba(255,255,255,1) inset`,
+        boxShadow: `0 1px 0 rgba(255,255,255,0.2) inset`,
       }}
     >
 
@@ -954,7 +954,7 @@ function DisciplineCardBody({
       <div className="relative p-5 xl:p-6 flex flex-col gap-3 h-full overflow-hidden">
         {/* Header row */}
         <div className="flex items-center justify-between">
-          <span className="font-mono text-label tracking-[0.25em] text-[#9A9488]">{d.num}</span>
+          <span className="font-mono text-label tracking-[0.25em] text-[var(--coda-ink-4)]">{d.num}</span>
           <span
             className="font-mono text-micro uppercase tracking-[0.2em] px-2.5 py-1 rounded-full transition-colors duration-300"
             style={{
@@ -968,7 +968,7 @@ function DisciplineCardBody({
         </div>
 
         <h3
-          className="font-instrument tracking-[-0.01em] leading-[1.04] text-[#14130F] text-h3"
+          className="font-instrument tracking-[-0.01em] leading-[1.04] text-[var(--coda-ink)] text-h3"
         >
           {d.title}
           <br />
@@ -1414,29 +1414,32 @@ function SystemOrbit({ inView }: { inView: boolean }) {
                 transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut" }}
               >
                 <motion.div
-                  className="rounded-2xl px-5 py-3 flex flex-col items-center gap-1 whitespace-nowrap cursor-pointer"
+                  className="rounded-2xl px-5 py-3 flex flex-col items-center gap-1 whitespace-nowrap cursor-pointer transition-colors duration-300"
                   animate={{
-                    background: isHovered ? "#FFFFFF" : "rgba(255,255,255,0.92)",
-                    boxShadow: isHovered
-                      ? `0 12px 40px ${n.color}30, 0 2px 0 rgba(255,255,255,1) inset, 0 0 0 1.5px ${n.color}55`
-                      : "0 6px 24px rgba(255,92,0,0.10), 0 1px 0 rgba(255,255,255,1) inset, 0 0 0 1px rgba(255,92,0,0.18)",
                     scale: isHovered ? 1.06 : 1,
                     y: isHovered ? -3 : 0,
                   }}
+                  style={{
+                    background: isHovered ? "var(--coda-surface-2)" : "var(--coda-surface)",
+                    boxShadow: isHovered
+                      ? `0 12px 40px ${n.color}30, 0 1px 0 rgba(255,255,255,0.12) inset, 0 0 0 1.5px ${n.color}70`
+                      : "0 6px 24px rgba(0,0,0,0.15), 0 1px 0 rgba(255,255,255,0.06) inset, 0 0 0 1px var(--coda-hairline)",
+                  }}
                   transition={{ duration: 0.3, ease: [0.16,1,0.3,1] }}
                 >
-                  <span className="font-instrument text-[#14130F] text-base leading-tight">{n.label}</span>
-                  <span className="font-mono text-[#9A9488] text-micro uppercase tracking-[0.2em]">{n.sub}</span>
+                  <span className="font-instrument text-[var(--coda-ink)] text-base leading-tight">{n.label}</span>
+                  <span className="font-mono text-[var(--coda-ink-3)] text-micro uppercase tracking-[0.2em]">{n.sub}</span>
                 </motion.div>
 
                 <motion.div
-                  className="px-3 py-1 rounded-full flex items-center gap-2 whitespace-nowrap"
+                  className="px-3 py-1 rounded-full flex items-center gap-2 whitespace-nowrap transition-colors duration-300"
                   animate={{
-                    background: isHovered ? `${n.color}18` : "rgba(255,92,0,0.07)",
-                    borderColor: isHovered ? `${n.color}55` : "rgba(255,92,0,0.20)",
                     scale: isHovered ? 1.08 : 1,
                   }}
-                  style={{ border: "1px solid" }}
+                  style={{
+                    background: isHovered ? `${n.color}25` : "var(--coda-surface)",
+                    border: `1px solid ${isHovered ? `${n.color}70` : "var(--coda-hairline)"}`,
+                  }}
                   transition={{ duration: 0.3 }}
                 >
                   <motion.span
@@ -1444,7 +1447,7 @@ function SystemOrbit({ inView }: { inView: boolean }) {
                     animate={{ color: isHovered ? n.color : "#FF5C00" }}
                     transition={{ duration: 0.3 }}
                   >{n.stat}</motion.span>
-                  <span className="font-mono text-[#9A9488] text-micro uppercase tracking-[0.16em]">{n.statLabel}</span>
+                  <span className="font-mono text-[var(--coda-ink-3)] text-micro uppercase tracking-[0.16em]">{n.statLabel}</span>
                 </motion.div>
               </motion.div>
             </motion.div>
@@ -1516,7 +1519,7 @@ function HeadlineBlock({ reduced, mobile }: { reduced: boolean; mobile: boolean 
       {/* Line 1 — "We engineer" — flush left, lighter weight feel */}
       <div className="-mx-3 px-3 pt-[0.04em] pb-[0.08em]">
         <span
-          className="block font-instrument text-[#14130F] leading-[1.0]"
+          className="block font-instrument text-[var(--coda-ink)] leading-[1.0]"
           style={{ fontSize: FS, letterSpacing: "-0.04em" }}
         >
           We engineer
@@ -1533,11 +1536,10 @@ function HeadlineBlock({ reduced, mobile }: { reduced: boolean; mobile: boolean 
         </span>
       </div>
 
-      {/* Line 3 — "that dominate." — simple opacity fade (no clip-reveal mask,
-          so it can never get stranded hidden) */}
+      {/* Line 3 — "that dominate." — simple opacity fade */}
       <div className="overflow-visible pl-0 mt-3 pb-[0.18em] pt-[0.04em]">
         <span
-          className="block font-instrument text-[#C4BDB4] leading-[1.0]"
+          className="block font-instrument text-[var(--coda-ink-3)] leading-[1.0]"
           style={{ fontSize: FS3, letterSpacing: "-0.03em" }}
         >
           that dominate.
@@ -1557,9 +1559,6 @@ function HeaderBlock({
   const reduced = useReducedMotion();
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
-  // ── Mobile / smaller screens (< lg) ──────────────────────────────
-  // Collapse the many per-element scroll animations into ONE simple fade-up
-  // on the whole block. Lighter and less busy than 5+ staggered reveals.
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 1023px)");
@@ -1582,32 +1581,27 @@ function HeaderBlock({
         style={{ willChange: "transform, opacity, filter" }}
       >
 
-        {/* LEFT — label + headline + copy + stats.
-            key={mobile} forces a clean remount when the breakpoint is detected
-            after mount, so children never get stranded at opacity:0 by losing
-            their reveal props mid-life. */}
         <div
           key={mobile ? "mobile" : "desktop"}
           className="overflow-visible flex flex-col gap-10"
         >
-
 
           {/* ── Creative headline ─────────────────────────── */}
           <HeadlineBlock reduced={!!reduced} mobile={mobile} />
 
           {/* Sub-copy */}
           <p
-            className="font-sans text-base text-[#4A463F] max-w-full sm:max-w-[380px] leading-relaxed">
-            Three disciplines Technology, Design, and Growth.  unified into one
+            className="font-sans text-base text-[var(--coda-ink-2)] max-w-full sm:max-w-[380px] leading-relaxed">
+            Three disciplines Technology, Design, and Growth. unified into one
             system that compounds over time and gives our clients an unfair advantage.
           </p>
 
-          {/* Stats — premium light card */}
+          {/* Stats — premium light/dark card */}
           <div
-            className="relative mt-8 rounded-[28px] overflow-hidden"
+            className="relative mt-8 rounded-[28px] overflow-hidden border border-black/5 dark:border-white/10 transition-colors duration-300"
             style={{
-              background: "linear-gradient(160deg, #FFFFFF 0%, #FCFAF7 40%, #F6F2EB 100%)",
-              boxShadow: "0 20px 60px -15px rgba(20, 19, 15, 0.08), 0 0 0 1px rgba(20, 19, 15, 0.05), inset 0 2px 0 rgba(255, 255, 255, 1)",
+              background: "linear-gradient(160deg, var(--coda-surface-2) 0%, var(--coda-surface) 100%)",
+              boxShadow: "0 20px 60px -15px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
             }}
           >
             {/* Grain overlay for tactile premium feel */}
@@ -1615,7 +1609,7 @@ function HeaderBlock({
                  style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")" }} />
 
             {/* Top metallic/orange hairline */}
-            <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white to-transparent opacity-90" />
+            <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-90" />
             <div className="absolute inset-x-0 top-[1px] h-[1px] opacity-70"
               style={{ background: "linear-gradient(90deg, transparent 15%, #FF5C00 50%, transparent 85%)" }} />
 
@@ -1625,7 +1619,7 @@ function HeaderBlock({
                   {/* Divider line that fades out at edges, skip first */}
                   {i !== 0 && (
                     <div className="absolute left-0 top-[15%] bottom-[15%] w-px pointer-events-none"
-                         style={{ background: "linear-gradient(to bottom, transparent, rgba(13,13,11,0.06) 20%, rgba(13,13,11,0.06) 80%, transparent)" }} />
+                         style={{ background: "linear-gradient(to bottom, transparent, var(--coda-hairline) 20%, var(--coda-hairline) 80%, transparent)" }} />
                   )}
                   
                   <motion.div
@@ -1651,16 +1645,16 @@ function HeaderBlock({
 
                     {/* Value */}
                     <motion.span
-                      className="font-instrument leading-none tracking-[-0.03em] tabular-nums"
+                      className="font-instrument leading-none tracking-[-0.03em] tabular-nums text-[var(--coda-ink)]"
                       style={{ fontSize: "clamp(36px, 6vw, 64px)" }}
-                      variants={{ idle: { color: "#14130F", y: 0, scale: 1 }, hovered: { color: "#FF5C00", y: -4, scale: 1.04 } }}
+                      variants={{ idle: { y: 0, scale: 1 }, hovered: { color: "#FF5C00", y: -4, scale: 1.04 } }}
                       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     >{n}</motion.span>
 
                     {/* Label */}
                     <motion.span
-                      className="font-mono text-micro md:text-micro uppercase tracking-[0.25em]"
-                      variants={{ idle: { color: "#9A9488" }, hovered: { color: "#14130F" } }}
+                      className="font-mono text-micro md:text-micro uppercase tracking-[0.25em] text-[var(--coda-ink-3)]"
+                      variants={{ idle: {}, hovered: { color: "#FF5C00" } }}
                       transition={{ duration: 0.3 }}
                     >{label}</motion.span>
 
@@ -1677,8 +1671,7 @@ function HeaderBlock({
           </div>
         </div>
 
-        {/* RIGHT — animated system orbit diagram (desktop only — not mounted on
-            mobile so its many infinite loops never run on touch devices) */}
+        {/* RIGHT — animated system orbit diagram */}
         {!mobile && (
           <div
             className="hidden md:flex relative items-center justify-center w-full"
@@ -1725,13 +1718,11 @@ function MobileDisciplineStack() {
           key={d.num}
           className="sticky"
           style={{
-            top: `calc(8vh + ${i * 12}px)`, // Tighter offset so 5 cards fit elegantly at the top
+            top: `calc(8vh + ${i * 12}px)`,
             zIndex: i,
           }}
         >
-          {/* We wrap DisciplineCardBody in a div with a fixed viewport height to guarantee 
-              all 5 cards are exactly the same height, completely hiding the cards behind them. */}
-          <div className="rounded-[28px] h-[78vh] min-h-[540px] w-full bg-[#FFFCF9]">
+          <div className="rounded-[28px] h-[78vh] min-h-[540px] w-full bg-[var(--coda-card-bg)]">
             <DisciplineCardBody d={d as any} active />
           </div>
         </div>
@@ -1750,16 +1741,14 @@ export default function Statement() {
   const lineW = useTransform(scrollYProgress, [0.05, 0.5], ["0%", "100%"]);
   const bgY   = useTransform(scrollYProgress, [0, 1], ["0%", "8%"]);
 
-  // No `overflow-hidden` on this <section> — it would break the desktop sticky
-  // pin. Decorative layers are clipped by their own wrapper below instead.
   return (
-    <section ref={ref} className="relative" style={{ background: "#F4F0E8" }}>
+    <section ref={ref} className="relative transition-colors duration-300" style={{ background: "var(--coda-bg)" }}>
       {/* Top separator */}
-      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#0D0D0B]/[0.12] to-transparent z-[1]" />
+      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--coda-ink)]/[0.12] to-transparent z-[1]" />
 
-      {/* Decorative layers — clipped here so blur/grid can't cause overflow */}
+      {/* Decorative layers */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Ambient parallax orbs — disabled on mobile to preserve scroll framerate */}
+        {/* Ambient parallax orbs */}
         <motion.div style={{ y: bgY }} className="absolute inset-0 hidden md:block">
           <div className="absolute top-[-20%] right-[-5%] w-[700px] h-[700px] rounded-full blur-[160px] opacity-[0.045] animate-glow-pulse"
             style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 65%)" }} />
@@ -1767,17 +1756,15 @@ export default function Statement() {
             style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 65%)" }} />
         </motion.div>
 
-        {/* Subtle grid — kept very faint */}
+        {/* Subtle grid */}
         <div className="absolute inset-0 opacity-[0.06]"
-          style={{ backgroundImage: "linear-gradient(to right,#0D0D0B 1px,transparent 1px),linear-gradient(to bottom,#0D0D0B 1px,transparent 1px)", backgroundSize: "60px 60px" }} />
+          style={{ backgroundImage: "linear-gradient(to right,var(--coda-ink) 1px,transparent 1px),linear-gradient(to bottom,var(--coda-ink) 1px,transparent 1px)", backgroundSize: "60px 60px" }} />
       </div>
 
       {/* ── Header ───────────────────────────────────────────── */}
       <HeaderBlock lineW={lineW} />
 
-      {/* ── Discipline cards ─────────────────────────────────────
-          Mobile / tablet: Premium sticky stack effect
-          Desktop (lg+): pinned fan-out — cards spread centre → row. */}
+      {/* ── Discipline cards ───────────────────────────────────── */}
       <MobileDisciplineStack />
       <div className="hidden md:block">
         <DisciplineSpread />
@@ -1799,14 +1786,14 @@ export default function Statement() {
           whileInView={{ opacity: 1, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-10 border-t border-[#0D0D0B]/[0.1]"
+          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-10 border-t border-[var(--coda-hairline)]"
         >
-          <p className="font-mono text-micro text-[#6F6A60] uppercase tracking-[0.25em]">
+          <p className="font-mono text-micro text-[var(--coda-ink-3)] uppercase tracking-[0.25em]">
             Every engagement touches all three disciplines
           </p>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-[#FF5C00] animate-ping-expand" />
-            <span className="font-mono text-micro text-[#6F6A60] uppercase tracking-[0.2em]">
+            <span className="font-mono text-micro text-[var(--coda-ink-3)] uppercase tracking-[0.2em]">
               That&apos;s how systems compound
             </span>
           </div>

@@ -73,12 +73,12 @@ export default function BottomBar() {
           className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
         >
           <motion.div
-            className="relative bg-[#F4F0E8]/95 backdrop-blur-xl border border-[#0D0D0B]/[0.12] shadow-[0_8px_40px_rgba(0,0,0,0.12)] rounded-full p-1.5 flex items-center gap-2 pointer-events-auto"
+            className="relative bg-[#F4F0E8]/95 dark:bg-[#121210]/95 backdrop-blur-xl border border-[#0D0D0B]/[0.12] dark:border-white/10 shadow-[0_8px_40px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_40px_rgba(0,0,0,0.6)] rounded-full p-1.5 flex items-center gap-2 pointer-events-auto transition-colors duration-300"
             whileHover={{ boxShadow: "0 14px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(255,92,0,0.25)" }}
             transition={{ duration: 0.3 }}
           >
             {/* Scroll % indicator arc on left */}
-            <div className="hidden sm:flex items-center gap-3 pl-4 pr-3.5 border-r border-[#0D0D0B]/[0.1]">
+            <div className="hidden sm:flex items-center gap-3 pl-4 pr-3.5 border-r border-[#0D0D0B]/[0.1] dark:border-white/10">
               {/* Live dot */}
               <div className="relative flex items-center justify-center shrink-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#39FF14]" />
@@ -89,11 +89,11 @@ export default function BottomBar() {
                   aria-hidden="true"
                 />
               </div>
-              <span className="font-instrument text-base text-[#0D0D0B]/75 whitespace-nowrap">
+              <span className="font-instrument text-base text-[#0D0D0B]/75 dark:text-[#F5F3EE]/85 whitespace-nowrap">
                 Start building
               </span>
               {/* Scroll progress badge */}
-              <span ref={pctRef} className="font-mono text-micro text-[#0D0D0B]/35 tracking-[0.15em] tabular-nums ml-1">
+              <span ref={pctRef} className="font-mono text-micro text-[#0D0D0B]/35 dark:text-[#F5F3EE]/40 tracking-[0.15em] tabular-nums ml-1">
                 00%
               </span>
             </div>

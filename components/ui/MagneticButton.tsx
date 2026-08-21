@@ -51,7 +51,7 @@ export default function MagneticButton({ children, variant = "primary", classNam
   const baseStyles =
     "group inline-block relative rounded-full font-sans font-semibold text-[14px] text-center overflow-hidden " +
     "transition-shadow duration-300 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] " +
-    "focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F0E8]";
+    "focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--coda-bg)]";
 
   const variantStyles = {
     primary:
@@ -62,7 +62,7 @@ export default function MagneticButton({ children, variant = "primary", classNam
       "text-white bg-[linear-gradient(180deg,#2A2A2A_0%,#161616_100%)] " +
       "shadow-[0_6px_20px_-6px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] " +
       "hover:shadow-[0_14px_34px_-8px_rgba(0,0,0,0.5)]",
-    ghost: "bg-transparent text-[#0D0D0B] hover:bg-[#0D0D0B]/[0.05]",
+    ghost: "bg-transparent text-[var(--coda-ink)] hover:bg-[var(--coda-ink)]/[0.05]",
   };
 
   // White sheen for dark fills; warm-dark sheen for the ghost variant.

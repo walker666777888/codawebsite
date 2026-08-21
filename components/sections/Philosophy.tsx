@@ -29,8 +29,10 @@ const CARDS = [
     accent: "always.",
     body: "We never build features in isolation. Every touchpoint is engineered as one compounding system.",
     bg: "#FEFCF2",
+    darkBg: "#1C1914",
     border: "rgba(220,200,140,0.5)",
-    shadow: "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.9) inset",
+    darkBorder: "rgba(255,92,0,0.3)",
+    shadow: "0 8px 40px rgba(0,0,0,0.12), 0 1px 0 rgba(255,255,255,0.08) inset",
     rotation: -3,
     x: 52, y: 48, mobileX: 20, mobileY: 20,
     pin: true,
@@ -45,8 +47,10 @@ const CARDS = [
     accent: "leverage.",
     body: "One great system beats ten mediocre executions. We find the highest-leverage moves to compound advantages over time.",
     bg: "#F2FAF4",
+    darkBg: "#131C15",
     border: "rgba(140,200,155,0.45)",
-    shadow: "0 8px 40px rgba(0,0,0,0.09), 0 1px 0 rgba(255,255,255,0.9) inset",
+    darkBorder: "rgba(58,138,74,0.35)",
+    shadow: "0 8px 40px rgba(0,0,0,0.12), 0 1px 0 rgba(255,255,255,0.08) inset",
     rotation: 2.2,
     x: 396, y: 18, mobileX: 45, mobileY: 130,
     pin: true,
@@ -61,8 +65,10 @@ const CARDS = [
     accent: "precision.",
     body: "Speed without craft is noise. We move fast and finish clean with deliberate precision.",
     bg: "#FEFCF8",
+    darkBg: "#1A1816",
     border: "rgba(200,190,170,0.4)",
-    shadow: "0 6px 32px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.85) inset",
+    darkBorder: "rgba(255,255,255,0.12)",
+    shadow: "0 6px 32px rgba(0,0,0,0.12), 0 1px 0 rgba(255,255,255,0.08) inset",
     rotation: -1.4,
     x: 728, y: 58, mobileX: 15, mobileY: 240,
     pin: true,
@@ -77,8 +83,10 @@ const CARDS = [
     accent: "comfort.",
     body: "We say the hard thing. If a strategy won't work, you'll hear it from us first. Honest feedback builds lasting relationships.",
     bg: "#F2F4FC",
+    darkBg: "#141824",
     border: "rgba(140,160,220,0.4)",
-    shadow: "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.9) inset",
+    darkBorder: "rgba(74,114,200,0.35)",
+    shadow: "0 8px 40px rgba(0,0,0,0.12), 0 1px 0 rgba(255,255,255,0.08) inset",
     rotation: 2.8,
     x: 1020, y: 30, mobileX: 40, mobileY: 350,
     pin: true,
@@ -93,8 +101,10 @@ const CARDS = [
     accent: "ecosystems.",
     body: "We architect interconnected systems where every part amplifies the others, making the whole greater than the sum.",
     bg: "#FFF8F2",
+    darkBg: "#221612",
     border: "rgba(255,140,80,0.3)",
-    shadow: "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.9) inset",
+    darkBorder: "rgba(255,92,0,0.35)",
+    shadow: "0 8px 40px rgba(0,0,0,0.12), 0 1px 0 rgba(255,255,255,0.08) inset",
     rotation: -2.1,
     x: 188, y: 348, mobileX: 25, mobileY: 460,
     pin: true,
@@ -109,8 +119,10 @@ const CARDS = [
     accent: "everything.",
     body: "Our systems are designed to outlast trends and compound monthly, giving clients a permanent advantage.",
     bg: "#FAF2FC",
+    darkBg: "#1E1424",
     border: "rgba(170,130,210,0.4)",
-    shadow: "0 8px 40px rgba(0,0,0,0.09), 0 1px 0 rgba(255,255,255,0.9) inset",
+    darkBorder: "rgba(138,90,200,0.35)",
+    shadow: "0 8px 40px rgba(0,0,0,0.12), 0 1px 0 rgba(255,255,255,0.08) inset",
     rotation: 1.6,
     x: 548, y: 318, mobileX: 50, mobileY: 570,
     pin: true,
@@ -175,10 +187,10 @@ function DraggableCard({
     >
       {/* Paper card */}
       <div
-        className="relative rounded-2xl overflow-visible flex flex-col gap-4"
+        className="relative rounded-2xl overflow-visible flex flex-col gap-4 transition-colors duration-300"
         style={{
-          background: card.bg,
-          border: `1px solid ${card.border}`,
+          backgroundColor: "var(--coda-surface-2)",
+          border: "1px solid var(--coda-hairline)",
           boxShadow: card.shadow,
           padding: "28px 24px 22px",
         }}
@@ -191,21 +203,21 @@ function DraggableCard({
             className="w-1.5 h-1.5 rounded-full shrink-0"
             style={{ background: card.dot, boxShadow: `0 0 5px ${card.dot}` }}
           />
-          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#6F6A60]">
+          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[var(--coda-ink-3)]">
             {card.category}
           </span>
         </div>
 
         {/* Title */}
         <h3
-          className="font-instrument tracking-[-0.01em] leading-[1.05] text-[#0D0D0B] text-h4"
+          className="font-instrument tracking-[-0.01em] leading-[1.05] text-[var(--coda-ink)] text-h4"
         >
           {card.title}{" "}
           <span className="text-[#FF5C00]">{card.accent}</span>
         </h3>
 
         {/* Body */}
-        <p className="font-sans text-[15px] text-[#4A463F] leading-relaxed">
+        <p className="font-sans text-[15px] text-[var(--coda-ink-2)] leading-relaxed">
           {card.body}
         </p>
 
@@ -229,14 +241,14 @@ function DraggableBoard() {
       {/* Board */}
       <div
         ref={boardRef}
-        className="relative w-full overflow-hidden rounded-3xl board-height"
+        className="relative w-full overflow-hidden rounded-3xl board-height transition-colors duration-300"
         style={{
-          background: "#F4F0E8",
+          background: "var(--coda-surface)",
           backgroundImage:
-            "linear-gradient(to right,rgba(13,13,11,0.05) 1px,transparent 1px), linear-gradient(to bottom,rgba(13,13,11,0.05) 1px,transparent 1px)",
+            "linear-gradient(to right,var(--coda-hairline) 1px,transparent 1px), linear-gradient(to bottom,var(--coda-hairline) 1px,transparent 1px)",
           backgroundSize: "48px 48px",
-          border: "1px solid rgba(13,13,11,0.08)",
-          boxShadow: "0 2px 0 rgba(255,255,255,0.6) inset, 0 24px 80px rgba(0,0,0,0.07)",
+          border: "1px solid var(--coda-hairline)",
+          boxShadow: "0 2px 0 rgba(255,255,255,0.06) inset, 0 24px 80px rgba(0,0,0,0.12)",
         }}
       >
         {/* Subtle grid overlay */}
@@ -262,8 +274,8 @@ function DraggableBoard() {
             }}
           >
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <line x1="6" y1="0" x2="6" y2="12" stroke="#0D0D0B" strokeWidth="0.8" />
-              <line x1="0" y1="6" x2="12" y2="6" stroke="#0D0D0B" strokeWidth="0.8" />
+              <line x1="6" y1="0" x2="6" y2="12" stroke="var(--coda-ink)" strokeWidth="0.8" />
+              <line x1="0" y1="6" x2="12" y2="6" stroke="var(--coda-ink)" strokeWidth="0.8" />
             </svg>
           </div>
         ))}
@@ -285,10 +297,10 @@ function DraggableBoard() {
           style={{ opacity: 0.35 }}
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M7 1v12M1 7h12" stroke="#0D0D0B" strokeWidth="1.2" strokeLinecap="round" />
-            <path d="M4 4l-3 3 3 3M10 4l3 3-3 3" stroke="#0D0D0B" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M7 1v12M1 7h12" stroke="var(--coda-ink)" strokeWidth="1.2" strokeLinecap="round" />
+            <path d="M4 4l-3 3 3 3M10 4l3 3-3 3" stroke="var(--coda-ink)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#0D0D0B]">
+          <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--coda-ink)]">
             Drag the cards
           </span>
         </div>
@@ -411,8 +423,8 @@ export default function Philosophy() {
       <section
         id="philosophy"
         ref={sectionRef}
-        className="relative overflow-hidden"
-        style={{ background: "#F4F0E8" }}
+        className="relative overflow-hidden transition-colors duration-300"
+        style={{ background: "var(--coda-bg)" }}
       >
         {/* Background glows */}
         <div className="absolute inset-0 pointer-events-none">
@@ -425,13 +437,13 @@ export default function Philosophy() {
         {/* Fine grid */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.02]"
           style={{
-            backgroundImage: "linear-gradient(to right,#0D0D0B 1px,transparent 1px),linear-gradient(to bottom,#0D0D0B 1px,transparent 1px)",
+            backgroundImage: "linear-gradient(to right,var(--coda-ink) 1px,transparent 1px),linear-gradient(to bottom,var(--coda-ink) 1px,transparent 1px)",
             backgroundSize: "60px 60px",
           }} />
 
         {/* Section label */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 md:pt-28 pb-10">
-          <div ref={heroRef} className={`phil-label${visible ?" in" : ""}`}>
+          <div ref={heroRef} className={`phil-label${visible ? " in" : ""}`}>
             <SectionLabel index={2}>Our Philosophy</SectionLabel>
           </div>
         </div>
@@ -439,8 +451,7 @@ export default function Philosophy() {
         {/* ── Draggable board ── */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pb-20 md:pb-28">
           <DraggableBoard />
-
-          </div>
+        </div>
       </section>
     </>
   );

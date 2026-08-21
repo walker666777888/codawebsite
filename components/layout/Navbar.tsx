@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import MagneticButton from "@/components/ui/MagneticButton";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
@@ -73,7 +74,7 @@ export default function Navbar() {
           {/* ── GPU-Accelerated Pill Background ── */}
           <motion.div 
             layout
-            className="absolute inset-0 rounded-2xl bg-white/75 backdrop-blur-md border border-white/40 shadow-[0_8px_32px_rgba(255,92,0,0.1),0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,1)] pointer-events-none"
+            className="absolute inset-0 rounded-2xl bg-white/80 dark:bg-[#121210]/85 backdrop-blur-md border border-black/5 dark:border-white/10 shadow-[0_8px_32px_rgba(255,92,0,0.08),0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.8)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6),0_2px_8px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] pointer-events-none transition-colors duration-300"
             initial={false}
             animate={{ opacity: scrolled ? 1 : 0 }}
             transition={{ duration: 0.3 }}
@@ -97,7 +98,7 @@ export default function Navbar() {
               onClick={(e) => { e.preventDefault(); window.location.reload(); }}
               data-cursor="refresh"
             >
-              <span className={`font-instrument text-xl tracking-[-0.025em] transition-colors duration-500 group-hover:opacity-60 ${scrolled || mobileMenuOpen ?"text-[#14130F]" : "text-white"}`}>
+              <span className={`font-instrument text-xl tracking-[-0.025em] transition-colors duration-500 group-hover:opacity-60 ${scrolled || mobileMenuOpen ? "text-[#14130F] dark:text-[#F5F3EE]" : "text-white"}`}>
                 CODA
               </span>
               <motion.span
@@ -107,70 +108,72 @@ export default function Navbar() {
               >.</motion.span>
             </Link>
           </motion.div>
-            {/* Desktop nav — absolutely centered */}
-            <motion.nav layout className="hidden sm:flex items-center gap-2 text-base font-instrument absolute left-1/2 -translate-x-1/2">
-              {NAV_ANCHOR_LINKS.map((link, i) => (
-                <motion.div key={link.label}
-                  initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 1.9 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <a href={link.href}
-                    onClick={(e) => scrollToSection(e, link.href)}
-                    className={`relative group px-3 py-1.5 rounded-lg transition-colors duration-200 hover:bg-[#0D0D0B]/[0.04] ${scrolled ?"text-[#6F6A60] hover:text-[#14130F]" : "text-[#6F6A60] md:text-white/60 hover:text-[#14130F] md:hover:text-white"}`}
-                  >
-                    {link.label}
-                    <span className="absolute inset-x-3 bottom-0.5 h-[1.5px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-full bg-[#FF5C00]" />
-                  </a>
-                </motion.div>
-              ))}
-            </motion.nav>
 
-            {/* CTA */}
-            <motion.div layout className="hidden sm:flex items-center gap-3 ml-auto z-10">
-              <motion.button
-                onClick={openForm}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
-                transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                className="group relative overflow-hidden inline-flex items-center gap-1.5 text-small font-sans font-semibold tracking-[-0.01em] px-5 py-2 rounded-full bg-[#FF5C00] text-white shadow-[0_2px_16px_rgba(255,92,0,0.35)] hover:shadow-[0_4px_24px_rgba(255,92,0,0.5)] transition-shadow duration-300 cursor-pointer"
+          {/* Desktop nav — absolutely centered */}
+          <motion.nav layout className="hidden sm:flex items-center gap-2 text-base font-instrument absolute left-1/2 -translate-x-1/2">
+            {NAV_ANCHOR_LINKS.map((link, i) => (
+              <motion.div key={link.label}
+                initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.9 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
               >
-                <span className="relative z-10 flex items-center gap-1.5">
-                  Start a build
-                  <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
-                </span>
-                <motion.span
-                  aria-hidden
-                  className="absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                  initial={{ x: "-120%" }}
-                  whileHover={{ x: "120%" }}
-                  transition={{ duration: 0.55, ease: "easeInOut" }}
-                />
-              </motion.button>
-            </motion.div>
+                <a href={link.href}
+                  onClick={(e) => scrollToSection(e, link.href)}
+                  className={`relative group px-3 py-1.5 rounded-lg transition-colors duration-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] ${scrolled ? "text-[#6F6A60] dark:text-[#B3ADA2] hover:text-[#14130F] dark:hover:text-[#F5F3EE]" : "text-[#6F6A60] dark:text-[#B3ADA2] md:text-white/70 hover:text-[#14130F] md:hover:text-white"}`}
+                >
+                  {link.label}
+                  <span className="absolute inset-x-3 bottom-0.5 h-[1.5px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-full bg-[#FF5C00]" />
+                </a>
+              </motion.div>
+            ))}
+          </motion.nav>
 
-            {/* Mobile hamburger */}
+          {/* CTA & Theme Toggle */}
+          <motion.div layout className="hidden sm:flex items-center gap-3 ml-auto z-10">
+            <ThemeToggle />
             <motion.button
-              layout
-              className={`relative z-10 flex sm:hidden ml-auto min-w-[44px] min-h-[44px] items-center justify-center p-2 transition-colors duration-300 ${scrolled || mobileMenuOpen ? "text-[#14130F]" : "text-white"}`}
-              onClick={() => setMobileMenuOpen((v) => !v)}
-              whileTap={{ scale: 0.88 }}
-              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={mobileMenuOpen}
-              aria-controls="mobile-nav"
+              onClick={openForm}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 300, damping: 22 }}
+              className="group relative overflow-hidden inline-flex items-center gap-1.5 text-small font-sans font-semibold tracking-[-0.01em] px-5 py-2 rounded-full bg-[#FF5C00] text-white shadow-[0_2px_16px_rgba(255,92,0,0.35)] hover:shadow-[0_4px_24px_rgba(255,92,0,0.5)] transition-shadow duration-300 cursor-pointer"
             >
-              <AnimatePresence mode="wait" initial={false}>
-                {mobileMenuOpen ? (
-                  <motion.span key="x" initial={{ rotate: -45, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 45, opacity: 0 }} transition={{ duration: 0.18 }}>
-                    <X size={22} />
-                  </motion.span>
-                ) : (
-                  <motion.span key="menu" initial={{ rotate: 45, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -45, opacity: 0 }} transition={{ duration: 0.18 }}>
-                    <Menu size={22} />
-                  </motion.span>
-                )}
-              </AnimatePresence>
+              <span className="relative z-10 flex items-center gap-1.5">
+                Start a build
+                <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
+              </span>
+              <motion.span
+                aria-hidden
+                className="absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                initial={{ x: "-120%" }}
+                whileHover={{ x: "120%" }}
+                transition={{ duration: 0.55, ease: "easeInOut" }}
+              />
             </motion.button>
           </motion.div>
+
+          {/* Mobile hamburger */}
+          <motion.button
+            layout
+            className={`relative z-10 flex sm:hidden ml-auto min-w-[44px] min-h-[44px] items-center justify-center p-2 transition-colors duration-300 ${scrolled || mobileMenuOpen ? "text-[#14130F] dark:text-[#F5F3EE]" : "text-white"}`}
+            onClick={() => setMobileMenuOpen((v) => !v)}
+            whileTap={{ scale: 0.88 }}
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {mobileMenuOpen ? (
+                <motion.span key="x" initial={{ rotate: -45, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 45, opacity: 0 }} transition={{ duration: 0.18 }}>
+                  <X size={22} />
+                </motion.span>
+              ) : (
+                <motion.span key="menu" initial={{ rotate: 45, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -45, opacity: 0 }} transition={{ duration: 0.18 }}>
+                  <Menu size={22} />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
+        </motion.div>
       </motion.header>
 
       {/* Mobile full-screen menu */}
@@ -182,7 +185,7 @@ export default function Navbar() {
             role="dialog"
             aria-modal="true"
             aria-label="Navigation menu"
-            className="fixed inset-0 z-40 bg-[#F4F0E8] flex flex-col items-center justify-center sm:hidden overflow-hidden"
+            className="fixed inset-0 z-40 bg-[#F4F0E8] dark:bg-[#090908] flex flex-col items-center justify-center sm:hidden overflow-hidden transition-colors duration-300"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } }}
             exit={{ opacity: 0, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1], delay: 0.15 } }}
@@ -199,16 +202,21 @@ export default function Navbar() {
                 >
                   <a href={link.href}
                     onClick={(e) => { scrollToSection(e, link.href); setMobileMenuOpen(false); }}
-                    className="block font-instrument text-5xl leading-[1.15] tracking-[-0.04em] text-[#0D0D0B]/70 hover:text-[#FF5C00] transition-colors duration-200">
+                    className="block font-instrument text-5xl leading-[1.15] tracking-[-0.04em] text-[#0D0D0B]/80 dark:text-[#F5F3EE]/80 hover:text-[#FF5C00] dark:hover:text-[#FF5C00] transition-colors duration-200">
                     {link.label}
                   </a>
                 </motion.div>
               ))}
+              
+              <div className="mt-8">
+                <ThemeToggle showLabel />
+              </div>
+
               <motion.div 
                 initial={{ opacity: 0, y: 20 }} 
                 animate={{ opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] } }} 
                 exit={{ opacity: 0, y: 10, transition: { duration: 0.25, delay: 0.16, ease: "easeOut" } }}
-                className="mt-12"
+                className="mt-8"
               >
                 <MagneticButton variant="primary" onClick={() => { setMobileMenuOpen(false); openForm(); }}>
                   <span className="flex items-center gap-2 font-sans font-semibold text-base px-8 py-3.5">

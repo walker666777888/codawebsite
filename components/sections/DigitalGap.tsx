@@ -79,8 +79,11 @@ function VisualFragility() {
             y: { duration: 3.2 + i * 0.4, delay: i * 0.6 + 0.5, repeat: Infinity, ease: "easeInOut" },
           }}
         >
-          <div className="relative bg-[#FEFCF8] border border-[#E6E1DA] rounded-2xl px-4 py-2.5 shadow-[0_2px_14px_rgba(13,13,11,0.08),0_1px_3px_rgba(13,13,11,0.04)] whitespace-nowrap">
-            <span className="font-mono text-micro font-medium tracking-[2px] text-[#3D3A35]">{n.label}</span>
+          <div
+            className="relative border border-[var(--coda-card-border)] rounded-2xl px-4 py-2.5 shadow-[0_4px_16px_rgba(0,0,0,0.25)] whitespace-nowrap transition-colors duration-300"
+            style={{ backgroundColor: "var(--coda-surface-2)" }}
+          >
+            <span className="font-mono text-micro font-medium tracking-[2px] text-[var(--coda-ink)]">{n.label}</span>
             {n.hot && (
               <motion.div
                 className="absolute -top-2 -right-2 w-5 h-5 bg-[#FF5C00] rounded-full flex items-center justify-center text-white font-bold shadow-[0_0_8px_rgba(255,92,0,0.55)]"
@@ -125,14 +128,14 @@ function VisualChaos() {
           <g key={i}>
             <motion.line
               x1={c.from.x} y1={c.from.y} x2={c.to.x} y2={c.to.y}
-              stroke={c.misfire ? "#C8C3BB" : "#FF5C00"}
+              stroke={c.misfire ? "rgba(180,180,180,0.4)" : "#FF5C00"}
               strokeWidth={c.misfire ? "0.8" : "1.1"}
               strokeDasharray={c.misfire ? "4 4" : undefined}
               animate={{ opacity: c.misfire ? [0.18, 0.38, 0.18] : [0.4, 0.75, 0.4] }}
               transition={{ duration: 1.6 + i * 0.12, delay: i * 0.1, repeat: Infinity }}
             />
             {/* Packet dot */}
-            <motion.circle r="2.8" fill={c.misfire ? "#C8C3BB" : "#FF5C00"}
+            <motion.circle r="2.8" fill={c.misfire ? "rgba(180,180,180,0.6)" : "#FF5C00"}
               animate={{ cx: [c.from.x, c.to.x], cy: [c.from.y, c.to.y], opacity: [0, 1, 0] }}
               transition={{ duration: 1 + i * 0.07, delay: i * 0.15, repeat: Infinity, ease: "linear" }}
             />
@@ -157,8 +160,11 @@ function VisualChaos() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.45, delay: i * 0.07, type: "spring", stiffness: 200 }}
         >
-          <div className="w-12 h-12 rounded-full bg-[#FEFCF8] border border-[#E6E1DA] shadow-[0_2px_10px_rgba(13,13,11,0.07)] flex items-center justify-center">
-            <span className="font-mono text-[10px] font-medium tracking-[1px] text-[#4A463F]">{n.label}</span>
+          <div
+            className="w-12 h-12 rounded-full border border-[var(--coda-card-border)] shadow-[0_4px_16px_rgba(0,0,0,0.25)] flex items-center justify-center transition-colors duration-300"
+            style={{ backgroundColor: "var(--coda-surface-2)" }}
+          >
+            <span className="font-mono text-[10px] font-medium tracking-[1px] text-[var(--coda-ink)]">{n.label}</span>
           </div>
         </motion.div>
       ))}
@@ -230,8 +236,8 @@ function VisualEcosystem() {
       {/* Nodes */}
       {nodes.map((n, i) => (
         <g key={`n${i}`}>
-          <circle cx={n.x} cy={n.y} r="22" fill="#FEFCF8" stroke="#FF5C00" strokeOpacity="0.3" strokeWidth="1" />
-          <text x={n.x} y={n.y + 3.5} textAnchor="middle" fill="#1a1a18"
+          <circle cx={n.x} cy={n.y} r="22" fill="var(--coda-surface-2)" stroke="#FF5C00" strokeOpacity="0.3" strokeWidth="1" />
+          <text x={n.x} y={n.y + 3.5} textAnchor="middle" fill="var(--coda-ink)"
             fontSize="7" fontFamily="monospace" fontWeight="600" letterSpacing="1">
             {n.label}
           </text>
@@ -292,7 +298,7 @@ export default function DigitalGap() {
 
   const BG = (
     <div className="absolute inset-0 pointer-events-none" style={{
-      backgroundImage: "linear-gradient(to right,#E6E1DA 1px,transparent 1px),linear-gradient(to bottom,#E6E1DA 1px,transparent 1px)",
+      backgroundImage: "linear-gradient(to right,var(--coda-grid) 1px,transparent 1px),linear-gradient(to bottom,var(--coda-grid) 1px,transparent 1px)",
       backgroundSize: "40px 40px",
     }} />
   );
@@ -310,15 +316,15 @@ export default function DigitalGap() {
     ═══════════════════════════════════════════════════ */}
     <section
       ref={desktopContainerRef}
-      className="hidden md:block h-screen bg-[#F4F0E8] text-[#0D0D0B] overflow-hidden border-b border-[#E6E1DA] relative"
+      className="hidden md:block h-screen bg-[var(--coda-bg)] text-[var(--coda-ink)] overflow-hidden border-b border-[var(--coda-grid)] relative transition-colors duration-300"
     >
       {BG}
-      <div className="absolute inset-x-0 bottom-0 h-[2px] bg-[#E6E1DA] z-10 overflow-hidden">
+      <div className="absolute inset-x-0 bottom-0 h-[2px] bg-[var(--coda-grid)] z-10 overflow-hidden">
         <div ref={progressRef} className="absolute inset-0 bg-[#FF5C00] origin-left" style={{ transform: "scaleX(0)" }} />
       </div>
       <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-center gap-12">
         <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full"
-          style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
+          style={{ background: "var(--coda-surface-2)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid var(--coda-hairline)", color: "var(--coda-ink)" }}
         >The Digital Gap</SectionLabel>
         <div className="grid grid-cols-2 gap-20 items-center">
           <div ref={textRef} className="space-y-10">
@@ -331,7 +337,13 @@ export default function DigitalGap() {
           </div>
           <div ref={visualsRef} className="relative h-[360px] w-full">
             {VISUALS.map((v, i) => (
-              <div key={i} className="absolute inset-0 rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6">
+              <div
+                key={i}
+                className="absolute inset-0 rounded-2xl border border-[var(--coda-card-border)] shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_12px_40px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.08)_inset] overflow-hidden p-6 transition-colors duration-300"
+                style={{ backgroundColor: "var(--coda-card-bg)" }}
+              >
+                {/* Ambient subtle top highlight */}
+                <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[var(--coda-hairline)] to-transparent pointer-events-none" />
                 {v}
               </div>
             ))}
@@ -339,8 +351,8 @@ export default function DigitalGap() {
         </div>
       </div>
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
-        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[rgba(13,13,11,0.08)] bg-[rgba(255,255,255,0.75)] backdrop-blur-md shadow-[0_4px_24px_rgba(13,13,11,0.06)]">
-          <span className="font-mono text-micro text-[#3D3A35] font-semibold uppercase tracking-[0.25em]">Scroll to explore</span>
+        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[var(--coda-hairline)] bg-[var(--coda-surface-2)]/80 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.12)] transition-colors duration-300">
+          <span className="font-mono text-micro text-[var(--coda-ink)] font-semibold uppercase tracking-[0.25em]">Scroll to explore</span>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#FF5C00]">
             <path d="M12 5v14M19 12l-7 7-7-7"/>
           </svg>
@@ -351,14 +363,14 @@ export default function DigitalGap() {
     {/* ═══════════════════════════════════════════════════
         MOBILE  (<md)  — Native Stack (No GSAP for performance)
     ═══════════════════════════════════════════════════ */}
-    <section className="md:hidden bg-[#F4F0E8] text-[#0D0D0B] border-b border-[#E6E1DA] relative py-20 px-5 overflow-hidden">
+    <section className="md:hidden bg-[var(--coda-bg)] text-[var(--coda-ink)] border-b border-[var(--coda-grid)] relative py-20 px-5 overflow-hidden transition-colors duration-300">
       {BG}
       <div className="relative z-10 flex flex-col gap-24">
         {TEXTS.map(({ pre, em }, i) => (
           <div key={i} className="flex flex-col gap-8">
             {i === 0 && (
               <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full"
-                style={{ background: "rgba(244,240,232,0.92)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(13,13,11,0.12)", color: "#3D3A35" }}
+                style={{ background: "var(--coda-surface-2)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid var(--coda-hairline)", color: "var(--coda-ink)" }}
               >The Digital Gap</SectionLabel>
             )}
             <motion.h2 
@@ -377,9 +389,11 @@ export default function DigitalGap() {
               whileInView={{ opacity: 1, filter: "blur(0px)" }}
               viewport={{ once: true, margin: "0px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
-              className="w-full rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6" 
-              style={{ height: 280, willChange: "transform, opacity, filter" }}
+              className="w-full rounded-2xl border border-[var(--coda-card-border)] shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_12px_40px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.08)_inset] overflow-hidden p-6 transition-colors duration-300" 
+              style={{ height: 280, backgroundColor: "var(--coda-card-bg)", willChange: "transform, opacity, filter" }}
             >
+              {/* Ambient subtle top highlight */}
+              <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[var(--coda-hairline)] to-transparent pointer-events-none" />
               {VISUALS[i]}
             </motion.div>
           </div>

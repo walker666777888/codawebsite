@@ -157,7 +157,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
       style={
         shouldReduce
           ? {
-              boxShadow: "0 20px 60px -10px rgba(0,0,0,0.15), 0 0 0 1px rgba(13,13,11,0.07)",
+              boxShadow: "0 20px 60px -10px rgba(0,0,0,0.2), 0 0 0 1px var(--coda-hairline)",
             }
           : {
               rotateX: tiltX,
@@ -171,8 +171,8 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
           ? {}
           : {
               boxShadow: hovered 
-                ? "0 24px 60px -10px rgba(210, 120, 80, 0.25), 0 0 0 1px rgba(13,13,11,0.07)"
-                : "0 20px 60px -10px rgba(0,0,0,0.15), 0 0 0 1px rgba(13,13,11,0.07)",
+                ? "0 24px 60px -10px rgba(255, 92, 0, 0.2), 0 0 0 1px var(--coda-hairline)"
+                : "0 20px 60px -10px rgba(0,0,0,0.15), 0 0 0 1px var(--coda-hairline)",
             }
       }
 
@@ -183,7 +183,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
       {/* Gradient border via mask */}
       <div
         className="absolute inset-0 rounded-2xl"
-        style={{ padding: "1px", background: "rgba(13,13,11,0.08)" }}
+        style={{ padding: "1px", background: "var(--coda-hairline)" }}
         aria-hidden
       >
         <motion.div
@@ -191,8 +191,8 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
           style={{ background: borderGlow, opacity: smoothOpacity }}
         />
         <div
-          className="absolute inset-[1px] rounded-2xl"
-          style={{ background: "linear-gradient(180deg,#FFFFFF 0%,#FBF9F4 100%)" }}
+          className="absolute inset-[1px] rounded-2xl transition-colors duration-300"
+          style={{ background: "linear-gradient(180deg, var(--coda-surface-2) 0%, var(--coda-surface) 100%)" }}
         />
       </div>
 
@@ -212,7 +212,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
         className="absolute inset-x-0 top-0 h-px rounded-t-2xl opacity-60 z-[3]"
         style={{
           background:
-            "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.9) 50%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)",
         }}
         aria-hidden
       />
@@ -221,13 +221,13 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
       <div className="relative z-10 flex flex-col h-full p-6 md:p-8">
         {/* Top meta */}
         <div className="flex items-start justify-between gap-2">
-          <span className="font-mono text-micro tracking-[0.24em] text-[#9A9488] uppercase">
+          <span className="font-mono text-micro tracking-[0.24em] text-[var(--coda-ink-4)] uppercase">
             {String(index + 1).padStart(2, "0")}
           </span>
           <motion.span
-            className="font-mono text-micro tracking-[0.18em] text-[#6F6A60] uppercase border rounded-full px-3 py-1 transition-colors duration-300 group-hover:bg-[#FBF9F4]/60"
-            style={{ borderColor: "rgba(13,13,11,0.1)" }}
-            animate={{ borderColor: ["rgba(13,13,11,0.1)", "rgba(255,92,0,0.4)", "rgba(13,13,11,0.1)"] }}
+            className="font-mono text-micro tracking-[0.18em] text-[var(--coda-ink-3)] uppercase border rounded-full px-3 py-1 transition-colors duration-300"
+            style={{ borderColor: "var(--coda-hairline)" }}
+            animate={{ borderColor: ["var(--coda-hairline)", "rgba(255,92,0,0.4)", "var(--coda-hairline)"] }}
             transition={{ duration: 4, repeat: Infinity, delay: index * 0.8 }}
           >
             {stat.sub}
@@ -240,19 +240,19 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
           style={shouldReduce ? undefined : { y: numberY }}
         >
           <div
-            className="font-instrument text-[#14130F] leading-[0.85] tracking-[-0.04em] tabular-nums transition-colors duration-500 group-hover:text-[#FF5C00]"
+            className="font-instrument text-[var(--coda-ink)] leading-[0.85] tracking-[-0.04em] tabular-nums transition-colors duration-500 group-hover:text-[#FF5C00]"
             style={{ fontSize: large ? "clamp(48px, 12vw, 120px)" : "clamp(40px, 8vw, 96px)" }}
           >
             <AnimatedCounter value={stat.value} suffix={stat.suffix} />
           </div>
         </motion.div>
 
-        {/* Bottom — glass plate keeps copy crisp over the animation */}
-        <div className="flex flex-col gap-2 -mx-2 px-2 py-1.5 rounded-lg transition-colors duration-300 group-hover:bg-[#FBF9F4]/60">
-          <p className="font-sans text-base font-medium text-[#14130F] leading-tight">
+        {/* Bottom — clean typography floating seamlessly over the animation */}
+        <div className="flex flex-col gap-2">
+          <p className="font-sans text-base font-medium text-[var(--coda-ink)] leading-tight">
             {stat.label}
           </p>
-          <p className="font-sans text-xs text-[#6F6A60] leading-relaxed">
+          <p className="font-sans text-xs text-[var(--coda-ink-3)] leading-relaxed">
             {stat.description}
           </p>
         </div>
@@ -281,7 +281,7 @@ export default function BentoMetrics() {
   const glowY = useTransform(scrollYProgress, [0, 1], [-60, 60]);
 
   return (
-    <section ref={sectionRef} className="relative bg-[#F4F0E8] px-6 py-24 md:py-32 overflow-hidden">
+    <section ref={sectionRef} className="relative bg-[var(--coda-bg)] px-6 py-24 md:py-32 overflow-hidden transition-colors duration-300">
       {/* Ambient top glow */}
       <motion.div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[340px] pointer-events-none"
@@ -292,7 +292,7 @@ export default function BentoMetrics() {
         }}
       />
 
-      {/* Contained to match the rest of the site (no longer edge-to-edge) */}
+      {/* Contained to match the rest of the site */}
       <div className="max-w-7xl mx-auto w-full flex flex-col gap-6">
         {/* Section header */}
         <motion.div
@@ -300,20 +300,20 @@ export default function BentoMetrics() {
           initial={{ opacity: 0, filter: "blur(24px)" }}
           animate={headerInView ? { opacity: 1, filter: "blur(0px)" } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-end justify-between border-t border-[#0D0D0B]/[0.1] pt-8"
+          className="flex items-end justify-between border-t border-[var(--coda-hairline)] pt-8"
         >
           <div className="flex flex-col gap-3">
-            <p className="font-mono text-micro text-[#6F6A60] uppercase tracking-[0.28em]">
+            <p className="font-mono text-micro text-[var(--coda-ink-3)] uppercase tracking-[0.28em]">
               Impact Metrics
             </p>
             <h2
-              className="font-instrument text-h2 text-[#14130F] leading-[1.05] tracking-[-0.025em]"
+              className="font-instrument text-h2 text-[var(--coda-ink)] leading-[1.05] tracking-[-0.025em]"
             >
               Results that <span className="text-[#FF5C00]">compound.</span>
             </h2>
           </div>
           <motion.span
-            className="font-mono text-micro text-[#9A9488] uppercase tracking-[0.25em] hidden sm:block"
+            className="font-mono text-micro text-[var(--coda-ink-4)] uppercase tracking-[0.25em] hidden sm:block"
             animate={{ opacity: [0.5, 0.8, 0.5] }}
             transition={{ duration: 5, repeat: Infinity }}
           >
