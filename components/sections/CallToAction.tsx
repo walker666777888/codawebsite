@@ -37,7 +37,7 @@ function WaveText({ text, className, style }: { text: string; className?: string
         <motion.span
           key={i}
           style={{ display: "inline-block", whiteSpace: ch === " " ? "pre" : undefined }}
-          animate={active ? { y: -10, color: "#FF5C00" } : { y: 0, color: "#ffffff" }}
+          animate={active ? { filter: "blur(4px)", color: "#FF5C00" } : { filter: "blur(0px)", color: "#ffffff" }}
           transition={{ type: "spring", stiffness: 400, damping: 18, delay: i * 0.035 }}
         >{ch}</motion.span>
       ))}
@@ -98,16 +98,16 @@ export default function CallToAction() {
     <>
       <style>{`
         @keyframes cta-rise {
-          from { opacity: 0; transform: translateY(48px); }
-          to   { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; filter: blur(24px); }
+          to   { opacity: 1; filter: blur(0px); }
         }
         @keyframes cta-fade {
-          from { opacity: 0; }
-          to   { opacity: 1; }
+          from { opacity: 0; filter: blur(24px); }
+          to   { opacity: 1; filter: blur(0px); }
         }
         @keyframes cta-slide-up {
-          from { transform: translateY(105%); }
-          to   { transform: translateY(0%); }
+          from { opacity: 0; filter: blur(24px); }
+          to   { opacity: 1; filter: blur(0px); }
         }
         @keyframes cta-ring {
           0%   { transform: scale(0.13); opacity: 0.45; }
@@ -135,24 +135,24 @@ export default function CallToAction() {
           animation: cta-shine 4s infinite;
         }
 
-        .cta-card { opacity: 0; }
+        .cta-card { opacity: 0; will-change: filter, opacity; }
         .cta-card.in { animation: cta-rise 0.75s cubic-bezier(0.16,1,0.3,1) 0.05s forwards; }
 
-        .cta-eyebrow { opacity: 0; }
+        .cta-eyebrow { opacity: 0; will-change: filter, opacity; }
         .cta-eyebrow.in { animation: cta-fade 0.6s ease 0.2s forwards; }
 
         .cta-line-wrap { overflow: hidden; padding-bottom: 0.3em; }
-        .cta-line { display: block; transform: translateY(105%); will-change: transform; }
+        .cta-line { display: block; opacity: 0; filter: blur(24px); will-change: filter, opacity; }
         .cta-line.in-0 { animation: cta-slide-up 0.85s cubic-bezier(0.16,1,0.3,1) 0.25s forwards; }
         .cta-line.in-1 { animation: cta-slide-up 0.85s cubic-bezier(0.16,1,0.3,1) 0.36s forwards; }
 
-        .cta-sub { opacity: 0; }
+        .cta-sub { opacity: 0; will-change: filter, opacity; }
         .cta-sub.in { animation: cta-fade 0.7s ease 0.48s forwards; }
 
-        .cta-btn { opacity: 0; }
+        .cta-btn { opacity: 0; will-change: filter, opacity; }
         .cta-btn.in { animation: cta-fade 0.7s ease 0.58s forwards; }
 
-        .cta-note { opacity: 0; }
+        .cta-note { opacity: 0; will-change: filter, opacity; }
         .cta-note.in { animation: cta-fade 0.7s ease 0.68s forwards; }
 
         @media (min-width: 768px) {
@@ -240,8 +240,8 @@ export default function CallToAction() {
                 }
               `}</style>
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={visible ? { opacity: 1, y: 0 } : {}}
+                initial={{ opacity: 0, filter: "blur(24px)" }}
+                animate={visible ? { opacity: 1, filter: "blur(0px)" } : {}}
                 transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className="relative px-5 py-2 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md overflow-hidden group"
               >
@@ -261,8 +261,8 @@ export default function CallToAction() {
                   />
                 </div>
                 <motion.div
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={visible ? { opacity: 1, y: 0 } : {}}
+                  initial={{ opacity: 0, filter: "blur(24px)" }}
+                  animate={visible ? { opacity: 1, filter: "blur(0px)" } : {}}
                   transition={{ duration: 0.85, delay: 0.36, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <WaveText

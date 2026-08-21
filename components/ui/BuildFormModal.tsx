@@ -593,7 +593,7 @@ function PhoneField({
                 transition={{ type: "spring", stiffness: 360, damping: 28 }}
                 style={{
                   transformOrigin: "top",
-                  willChange: "transform, opacity",
+                  willChange: "transform, opacity, filter",
                   background: "var(--color-modal-darker)",
                   boxShadow: "0 16px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06)",
                   borderRadius: "16px",
@@ -789,7 +789,7 @@ function Dropdown({
             transition={{ type: "spring", stiffness: 360, damping: 28 }}
             style={{
               transformOrigin: "top",
-              willChange: "transform, opacity",
+              willChange: "transform, opacity, filter",
               background: "var(--color-modal-darker)",
               boxShadow: "0 12px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06)",
               borderRadius: "16px",
@@ -1004,7 +1004,7 @@ export default function BuildFormModal({ isOpen, onClose }: Props) {
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
-              willChange: "transform, opacity",
+              willChange: "transform, opacity, filter",
               transformPerspective: 1600,
               transformOrigin: "bottom center",
               boxShadow: isMobile ? "none" : "0 40px 100px -20px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.4)",

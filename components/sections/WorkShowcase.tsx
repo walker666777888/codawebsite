@@ -224,7 +224,7 @@ export default function WorkShowcase() {
 
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <motion.div initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
+        <motion.div initial={{ opacity: 0, filter: "blur(24px)" }} whileInView={{ opacity: 1, filter: "blur(0px)" }}
           viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col gap-5">
           <SectionLabel index={3} className="block">Selected Work</SectionLabel>

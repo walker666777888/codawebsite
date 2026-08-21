@@ -355,8 +355,8 @@ export default function Hero() {
           {/* Tagline */}
           <motion.div
             className="flex items-center gap-2 sm:gap-4 max-w-full"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, filter: "blur(24px)" }}
+            animate={{ opacity: 1, filter: "blur(0px)" }}
             transition={{ duration: 0.9, delay: 2.1, ease: [0.16, 1, 0.3, 1] }}
           >
             <span className="h-[1px] w-4 sm:w-10 bg-white/20 block shrink" />
@@ -383,8 +383,8 @@ export default function Hero() {
           </motion.div>
 
           <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, filter: "blur(24px)" }}
+            animate={{ opacity: 1, filter: "blur(0px)" }}
             transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
             className="font-sans text-sm sm:text-base text-white/80 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
           >
@@ -399,8 +399,8 @@ export default function Hero() {
 
           {/* CTAs */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, filter: "blur(24px)" }}
+            animate={{ opacity: 1, filter: "blur(0px)" }}
             transition={{ duration: 0.9, delay: 2.4, ease: [0.16, 1, 0.3, 1] }}
             className="flex items-center gap-5 pointer-events-auto"
           >

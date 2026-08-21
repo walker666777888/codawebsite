@@ -269,7 +269,7 @@ export default function DigitalGap() {
       });
       const texts   = textRef.current.children;
       const visuals = visualsRef.current.children;
-      gsap.set([...Array.from(texts), ...Array.from(visuals)], { willChange: "transform, opacity", transform: "translateZ(0)" });
+      gsap.set([...Array.from(texts), ...Array.from(visuals)], { willChange: "transform, opacity, filter", transform: "translateZ(0)" });
       gsap.set(texts,      { opacity: 0.15, y: 0 });
       gsap.set(visuals,    { opacity: 0, y: 40, scale: 0.95 });
       gsap.set(visuals[0], { opacity: 1, y: 0, scale: 1 });
@@ -362,23 +362,23 @@ export default function DigitalGap() {
               >The Digital Gap</SectionLabel>
             )}
             <motion.h2 
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, filter: "blur(24px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)" }}
               viewport={{ once: true, margin: "0px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="font-instrument tracking-[-0.03em]"
-              style={{ fontSize: "clamp(32px, 9vw, 42px)", willChange: "transform, opacity" }}
+              style={{ fontSize: "clamp(32px, 9vw, 42px)", willChange: "transform, opacity, filter" }}
             >
               <span className="block leading-[1.15]">{pre}</span>
               <span className="block leading-[1.15] text-[#FF5C00]">{em}</span>
             </motion.h2>
             <motion.div 
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, filter: "blur(24px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)" }}
               viewport={{ once: true, margin: "0px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
               className="w-full rounded-2xl border border-[#E6E1DA] bg-white shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_4px_40px_rgba(0,0,0,0.05)] overflow-hidden p-6" 
-              style={{ height: 280, willChange: "transform, opacity" }}
+              style={{ height: 280, willChange: "transform, opacity, filter" }}
             >
               {VISUALS[i]}
             </motion.div>

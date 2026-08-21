@@ -334,7 +334,7 @@ function StrategyGraphic({ active: activeProp }: { active: boolean }) {
         {kpis.map((k, i) => (
           <motion.div key={k.label}
             style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(245,158,11,0.18)", borderRadius: "8px", padding: "3px 4px", textAlign: "center" }}
-            animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: -5 }}
+            animate={active ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(4px)" }}
             transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}>
             <div style={{ fontFamily: "monospace", fontSize: "6.5px", color: "rgba(13,13,11,0.6)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "1px" }}>{k.label}</div>
             <div style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: AMBER }}>{k.value}</div>
@@ -463,7 +463,7 @@ function PerformanceGraphic({ active: activeProp }: { active: boolean }) {
         {kpis.map((k, i) => (
           <motion.div key={k.label}
             style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,92,0,0.18)", borderRadius: "8px", padding: "6px 8px", textAlign: "center" }}
-            animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: -6 }}
+            animate={active ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(4px)" }}
             transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}>
             <div style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.6)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "2px" }}>{k.label}</div>
             <div style={{ fontFamily: "monospace", fontSize: "12px", fontWeight: 700, color: ORANGE }}>{k.value}</div>
@@ -558,11 +558,11 @@ function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; 
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, filter: "blur(24px)" }}
+      whileInView={{ opacity: 1, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "0px" }}
       transition={{ duration: 0.65, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-      style={{ perspective: 1000, willChange: "transform, opacity" }}
+      style={{ perspective: 1000, willChange: "transform, opacity, filter" }}
       className="h-full"
     >
       <motion.div
@@ -776,8 +776,8 @@ function DisciplineStrip({
         <div className="flex items-start justify-center pt-10 md:pt-14 border-r border-[#0D0D0B]/[0.08]">
           <motion.span
             className="font-mono text-label tracking-[0.25em] text-[#6F6A60]"
-            initial={{ opacity: 0, y: 12 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+            initial={{ opacity: 0, filter: "blur(24px)" }}
+            animate={isInView ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(24px)" }}
             transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
           >
             {d.num}
@@ -813,8 +813,8 @@ function DisciplineStrip({
             {/* Description */}
             <motion.p
               className="font-sans text-base text-[#4A463F] leading-relaxed max-w-sm"
-              initial={{ opacity: 0, y: 14 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+              initial={{ opacity: 0, filter: "blur(24px)" }}
+            animate={isInView ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(24px)" }}
               transition={{ duration: 0.8, delay: 0.35 + index * 0.1 }}
             >
               {d.description}
@@ -1076,7 +1076,7 @@ function SpreadCard({
         rotateX: springTiltX,
         rotateY: springTiltY,
         transformPerspective: 1000,
-        willChange: "transform, opacity",
+        willChange: "transform, opacity, filter",
       }}
     >
       <DisciplineCardBody d={d} active={active} />
@@ -1575,11 +1575,11 @@ function HeaderBlock({
       {/* ── Two-column layout ──────────────────────────────── */}
       <motion.div
         className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center overflow-visible"
-        initial={{ opacity: 0, y: 18 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, filter: "blur(24px)" }}
+        whileInView={{ opacity: 1, filter: "blur(0px)" }}
         viewport={{ once: true, margin: "0px" }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        style={{ willChange: "transform, opacity" }}
+        style={{ willChange: "transform, opacity, filter" }}
       >
 
         {/* LEFT — label + headline + copy + stats.
@@ -1812,8 +1812,8 @@ export default function Statement() {
       {/* ── Bottom tagline ───────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-6 py-16 lg:py-24 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, filter: "blur(24px)" }}
+          whileInView={{ opacity: 1, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
           className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-10 border-t border-[#0D0D0B]/[0.1]"

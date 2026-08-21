@@ -149,8 +149,8 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
   return (
     <motion.div
       ref={tileRef}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, filter: "blur(24px)" }}
+      whileInView={{ opacity: 1, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "0px" }}
       transition={{ duration: 0.65, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       className={`group relative overflow-hidden rounded-2xl cursor-default select-none gpu ${className}`}
@@ -297,8 +297,8 @@ export default function BentoMetrics() {
         {/* Section header */}
         <motion.div
           ref={headerRef}
-          initial={{ opacity: 0, y: 20 }}
-          animate={headerInView ? { opacity: 1, y: 0 } : {}}
+          initial={{ opacity: 0, filter: "blur(24px)" }}
+          animate={headerInView ? { opacity: 1, filter: "blur(0px)" } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="flex items-end justify-between border-t border-[#0D0D0B]/[0.1] pt-8"
         >

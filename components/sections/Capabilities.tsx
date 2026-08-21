@@ -80,11 +80,11 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, filter: "blur(24px)" }}
+      whileInView={{ opacity: 1, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "0px" }}
       transition={{ duration: 0.65, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-      style={{ perspective: 1000, willChange: "transform, opacity" }}
+      style={{ perspective: 1000, willChange: "transform, opacity, filter" }}
       className="h-full flex flex-col"
     >
       <motion.div
@@ -236,8 +236,8 @@ export default function Capabilities() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, filter: "blur(24px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col gap-4"
@@ -252,8 +252,8 @@ export default function Capabilities() {
             </h2>
           </motion.div>
           <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, filter: "blur(24px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.15 }}
             className="font-sans text-base text-[#4A463F] leading-[1.7] max-w-xs"

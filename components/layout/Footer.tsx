@@ -272,7 +272,14 @@ function VideoText({ shouldLoad }: { shouldLoad: boolean }) {
   const { wrapRef, textRef } = useFitText();
 
   return (
-    <div className="relative overflow-hidden select-none">
+    <motion.div 
+      className="relative overflow-hidden select-none"
+      initial={{ opacity: 0, filter: "blur(24px)" }}
+      whileInView={{ opacity: 1, filter: "blur(0px)" }}
+      viewport={{ once: true }}
+      transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+      style={{ willChange: "transform, opacity, filter" }}
+    >
       {shouldLoad && (
         <video
           autoPlay muted loop playsInline aria-hidden
@@ -301,7 +308,7 @@ function VideoText({ shouldLoad }: { shouldLoad: boolean }) {
           </span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -320,8 +327,8 @@ export default function Footer() {
           {/* Logo */}
           <motion.div
             className="md:col-start-1 md:row-start-1"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, filter: "blur(24px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
@@ -356,8 +363,8 @@ export default function Footer() {
           {/* Description & Connect */}
           <motion.div
             className="md:col-start-1 md:row-start-2 flex flex-col justify-end md:block flex-shrink-0 md:pr-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, filter: "blur(24px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
           >
@@ -385,7 +392,7 @@ export default function Footer() {
           {/* Terminal */}
           <motion.div
             className="md:col-start-2 md:col-span-2 md:row-start-1 md:row-span-2 flex items-center mt-10 md:mt-0"
-            initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+            initial={{ opacity: 0, scale: 0.95, filter: "blur(24px)" }}
             whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
@@ -396,7 +403,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/[0.08] pt-7 flex flex-col md:flex-row justify-between items-center gap-4">
+        <motion.div 
+          className="border-t border-white/[0.08] pt-7 flex flex-col md:flex-row justify-between items-center gap-4"
+          initial={{ opacity: 0, filter: "blur(24px)" }}
+          whileInView={{ opacity: 1, filter: "blur(0px)" }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          style={{ willChange: "transform, opacity, filter" }}
+        >
           <p className="font-mono text-[10px] text-white/25 uppercase tracking-[0.22em]">
             © {new Date().getFullYear()} CODA. All rights reserved.
           </p>
@@ -407,7 +421,7 @@ export default function Footer() {
               </Link>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <VideoText shouldLoad={shouldLoad} />
