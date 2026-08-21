@@ -220,14 +220,10 @@
   .elevation-md { box-shadow: var(--shadow-md); }
   .elevation-lg { box-shadow: var(--shadow-lg); }
 
-  /* ── GPU-promote fixed elements ────────────────────────────
-     Fixed elements without their own compositor layer force the
-     browser to repaint the ENTIRE page on every scroll frame.
-     translateZ(0) gives each one an isolated GPU layer \u2014 zero
-     main-thread cost during scroll. Applied to navbar, progress
-     bar, grain overlay, and any other fixed UI chrome. */
-  [style*="position: fixed"],
-  .fixed {
+  /* ── GPU-promote heavy layers ────────────────────────────
+     Promote heavy animated layers and overlays to isolated GPU layers */
+  .gpu,
+  .grain-overlay {
     transform: translateZ(0);
     backface-visibility: hidden;
   }
@@ -382,10 +378,10 @@
 }
 
 @keyframes laser-scan-line {
-  0%   { top: -10%; opacity: 0; }
+  0%   { transform: translateY(-100%); opacity: 0; }
   5%   { opacity: 0.4; }
   95%  { opacity: 0.4; }
-  100% { top: 110%; opacity: 0; }
+  100% { transform: translateY(1100%); opacity: 0; }
 }
 
 /* Liquid glass */

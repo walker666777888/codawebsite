@@ -13,25 +13,34 @@ function useFitText() {
   const roRef   = useRef<ResizeObserver | null>(null);
 
   useEffect(() => {
+    let rafId: number | null = null;
     const fit = () => {
-      const wrap = wrapRef.current;
-      const el   = textRef.current;
-      if (!wrap || !el) return;
-      const W = wrap.getBoundingClientRect().width;
-      if (!W) return;
-      el.style.fontSize = "200px";
-      const textW = el.scrollWidth;
-      if (!textW) return;
-      el.style.fontSize = Math.floor((W / textW) * 200) + "px";
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const wrap = wrapRef.current;
+        const el   = textRef.current;
+        if (!wrap || !el) return;
+        const W = wrap.clientWidth;
+        if (!W) return;
+        el.style.fontSize = "200px";
+        const textW = el.scrollWidth;
+        if (!textW) return;
+        el.style.fontSize = Math.floor((W / textW) * 200) + "px";
+      });
     };
 
     document.fonts.ready.then(() => {
       fit();
-      roRef.current = new ResizeObserver(fit);
-      if (wrapRef.current) roRef.current.observe(document.body);
+      if (wrapRef.current) {
+        roRef.current = new ResizeObserver(fit);
+        roRef.current.observe(wrapRef.current);
+      }
     });
 
-    return () => roRef.current?.disconnect();
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      roRef.current?.disconnect();
+    };
   }, []);
 
   return { wrapRef, textRef };
@@ -274,11 +283,11 @@ function VideoText({ shouldLoad }: { shouldLoad: boolean }) {
   return (
     <motion.div 
       className="relative overflow-hidden select-none"
-      initial={{ opacity: 0, filter: "blur(24px)" }}
-      whileInView={{ opacity: 1, filter: "blur(0px)" }}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-      style={{ willChange: "transform, opacity, filter" }}
+      style={{ willChange: "transform, opacity" }}
     >
       {shouldLoad && (
         <video

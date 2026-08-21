@@ -334,7 +334,7 @@ function StrategyGraphic({ active: activeProp }: { active: boolean }) {
         {kpis.map((k, i) => (
           <motion.div key={k.label}
             style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(245,158,11,0.18)", borderRadius: "8px", padding: "3px 4px", textAlign: "center" }}
-            animate={active ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(4px)" }}
+            animate={active ? { filter: "blur(0px)", opacity: 1 } : { filter: "blur(4px)", opacity: 0 }}
             transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}>
             <div style={{ fontFamily: "monospace", fontSize: "6.5px", color: "rgba(13,13,11,0.6)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "1px" }}>{k.label}</div>
             <div style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: AMBER }}>{k.value}</div>
@@ -463,7 +463,7 @@ function PerformanceGraphic({ active: activeProp }: { active: boolean }) {
         {kpis.map((k, i) => (
           <motion.div key={k.label}
             style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,92,0,0.18)", borderRadius: "8px", padding: "6px 8px", textAlign: "center" }}
-            animate={active ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(4px)" }}
+            animate={active ? { filter: "blur(0px)", opacity: 1 } : { filter: "blur(4px)", opacity: 0 }}
             transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}>
             <div style={{ fontFamily: "monospace", fontSize: "8px", color: "rgba(13,13,11,0.6)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "2px" }}>{k.label}</div>
             <div style={{ fontFamily: "monospace", fontSize: "12px", fontWeight: 700, color: ORANGE }}>{k.value}</div>
@@ -814,7 +814,7 @@ function DisciplineStrip({
             <motion.p
               className="font-sans text-base text-[#4A463F] leading-relaxed max-w-sm"
               initial={{ opacity: 0, filter: "blur(24px)" }}
-            animate={isInView ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(24px)" }}
+              animate={isInView ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(24px)" }}
               transition={{ duration: 0.8, delay: 0.35 + index * 0.1 }}
             >
               {d.description}
@@ -1102,7 +1102,7 @@ function DisciplineSpread() {
     return progress.on("change", (v) => {
       if (barRef.current)      barRef.current.style.transform      = `scaleX(${v})`;
       if (railFillRef.current) railFillRef.current.style.transform  = `scaleY(${v})`;
-      if (dotRef.current)      dotRef.current.style.top             = `${v * 100}%`;
+      if (dotRef.current)      dotRef.current.style.transform       = `translateY(${v * 121}px)`;
     });
   }, [progress]);
 
@@ -1170,8 +1170,8 @@ function DisciplineSpread() {
           />
           <div
             ref={dotRef}
-            className="absolute -left-[3px] w-[7px] h-[7px] rounded-full bg-[#FF5C00]"
-            style={{ top: "0%", willChange: "top" }}
+            className="absolute -left-[3px] top-0 w-[7px] h-[7px] rounded-full bg-[#FF5C00]"
+            style={{ transform: "translateY(0px)", willChange: "transform" }}
           />
         </div>
 

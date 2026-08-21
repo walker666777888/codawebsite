@@ -154,9 +154,10 @@ export default function Hero() {
     setMounted(true);
     setIsTouch("ontouchstart" in window || navigator.maxTouchPoints > 0);
     
-    const handleResize = () => setIsMobileScreen(window.innerWidth < 768);
-    handleResize();
-    window.addEventListener("resize", handleResize);
+    const mq = window.matchMedia("(max-width: 767px)");
+    setIsMobileScreen(mq.matches);
+    const handleMq = (e: MediaQueryListEvent) => setIsMobileScreen(e.matches);
+    mq.addEventListener("change", handleMq);
 
     if (isInteractMode) {
       document.body.style.overflow = "hidden";
@@ -165,7 +166,7 @@ export default function Hero() {
     }
     
     return () => {
-      window.removeEventListener("resize", handleResize);
+      mq.removeEventListener("change", handleMq);
       document.body.style.overflow = "";
     };
   }, [isInteractMode]);

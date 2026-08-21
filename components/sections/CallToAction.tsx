@@ -63,8 +63,6 @@ export default function CallToAction() {
   const textX = useTransform(spotX, [-1, 1], prefersReducedMotion ? [0, 0] : [-12, 12]);
   const textY = useTransform(spotY, [-1, 1], prefersReducedMotion ? [0, 0] : [-12, 12]);
 
-
-
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const rect = cardRef.current?.getBoundingClientRect();
     if (!rect) return;

@@ -1,22 +1,63 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import MagneticButton from "@/components/ui/MagneticButton";
+import { useFormModal } from "@/components/providers/FormModalProvider";
 
 export default function BottomBar() {
   const [visible, setVisible] = useState(false);
-  const [scrollPct, setScrollPct] = useState(0);
+  const pctRef = useRef<HTMLSpanElement>(null);
+  const { open: openForm } = useFormModal();
 
   useEffect(() => {
-    const onScroll = () => {
+    // 1. IntersectionObserver for zero-scroll visibility detection at 400px
+    const sentinel = document.createElement("div");
+    sentinel.style.position = "absolute";
+    sentinel.style.top = "400px";
+    sentinel.style.left = "0";
+    sentinel.style.width = "1px";
+    sentinel.style.height = "1px";
+    sentinel.style.pointerEvents = "none";
+    sentinel.style.visibility = "hidden";
+    document.body.prepend(sentinel);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setVisible(!entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+    observer.observe(sentinel);
+
+    // 2. Strict requestAnimationFrame throttle for scroll progress badge (direct DOM write, 0 React re-renders)
+    let rafId: number | null = null;
+    let ticking = false;
+
+    const updateBadge = () => {
+      ticking = false;
+      if (!pctRef.current) return;
       const y = window.scrollY;
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      setVisible(y > 400);
-      setScrollPct(max > 0 ? Math.round((y / max) * 100) : 0);
+      const pct = max > 0 ? Math.min(100, Math.max(0, Math.round((y / max) * 100))) : 0;
+      pctRef.current.textContent = `${String(pct).padStart(2, "0")}%`;
     };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        rafId = requestAnimationFrame(updateBadge);
+      }
+    };
+
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    return () => {
+      observer.disconnect();
+      sentinel.remove();
+      window.removeEventListener("scroll", onScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (
@@ -52,16 +93,16 @@ export default function BottomBar() {
                 Start building
               </span>
               {/* Scroll progress badge */}
-              <span className="font-mono text-micro text-[#0D0D0B]/35 tracking-[0.15em] tabular-nums ml-1">
-                {String(scrollPct).padStart(2, "0")}%
+              <span ref={pctRef} className="font-mono text-micro text-[#0D0D0B]/35 tracking-[0.15em] tabular-nums ml-1">
+                00%
               </span>
             </div>
 
-            <MagneticButton variant="primary">
-                  <span className="flex items-center gap-1.5 font-sans font-semibold text-small px-5 py-2.5 whitespace-nowrap tracking-[-0.01em]">
-                    Claim your edge
-                    <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
-                  </span>
+            <MagneticButton variant="primary" onClick={openForm}>
+              <span className="flex items-center gap-1.5 font-sans font-semibold text-small px-5 py-2.5 whitespace-nowrap tracking-[-0.01em]">
+                Claim your edge
+                <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
+              </span>
             </MagneticButton>
           </motion.div>
         </motion.aside>

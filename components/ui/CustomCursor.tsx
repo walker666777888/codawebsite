@@ -51,13 +51,16 @@ export default function CustomCursor() {
         if (type === "refresh") { setCursorState("refresh"); return; }
       }
 
-      // Check standard interactive elements
+      // Check standard interactive elements with fast attribute and tag checks (NO getComputedStyle)
       const isClickable =
-        window.getComputedStyle(target).cursor === "pointer" ||
-        target.tagName.toLowerCase() === "a" ||
-        target.tagName.toLowerCase() === "button" ||
-        target.closest("a") ||
-        target.closest("button");
+        target.tagName === "A" ||
+        target.tagName === "BUTTON" ||
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.getAttribute("role") === "button" ||
+        target.getAttribute("role") === "link" ||
+        Boolean(target.closest("a, button, [role='button'], input, textarea, select"));
       
       if (isClickable) {
         setCursorState("click");
