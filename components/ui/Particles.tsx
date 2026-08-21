@@ -169,15 +169,10 @@ const Particles = ({
       handlePointerMove(e.clientX, e.clientY);
     };
 
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length > 0) {
-        handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
-      }
-    };
+    const isFinePointer = typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches;
 
-    if (moveParticlesOnHover) {
+    if (moveParticlesOnHover && isFinePointer) {
       window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('touchmove', handleTouchMove);
     }
 
     const count = particleCount;
@@ -273,7 +268,6 @@ const Particles = ({
       window.removeEventListener('resize', resize);
       if (moveParticlesOnHover) {
         window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('touchmove', handleTouchMove);
       }
       cancelAnimationFrame(animationFrameId);
       observer.disconnect();

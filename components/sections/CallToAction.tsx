@@ -50,25 +50,31 @@ export default function CallToAction() {
   const sectionRef = useRef<HTMLElement>(null);
   const cardRef    = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
-  /* ── 3D tilt on mouse move ── */
+  useEffect(() => {
+    setIsMobile("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
+  }, []);
+
+  /* ── 3D tilt on mouse move (desktop only) ── */
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const rotateX = useSpring(useTransform(mouseY, [-1, 1], prefersReducedMotion ? [0, 0] : [6, -6]),  { stiffness: 200, damping: 28 });
-  const rotateY = useSpring(useTransform(mouseX, [-1, 1], prefersReducedMotion ? [0, 0] : [-6, 6]), { stiffness: 200, damping: 28 });
+  const rotateX = useSpring(useTransform(mouseY, [-1, 1], (prefersReducedMotion || isMobile) ? [0, 0] : [6, -6]),  { stiffness: 200, damping: 28 });
+  const rotateY = useSpring(useTransform(mouseX, [-1, 1], (prefersReducedMotion || isMobile) ? [0, 0] : [-6, 6]), { stiffness: 200, damping: 28 });
   const spotX   = useSpring(mouseX, { stiffness: 200, damping: 25 });
   const spotY   = useSpring(mouseY, { stiffness: 200, damping: 25 });
 
-  const textX = useTransform(spotX, [-1, 1], prefersReducedMotion ? [0, 0] : [-12, 12]);
-  const textY = useTransform(spotY, [-1, 1], prefersReducedMotion ? [0, 0] : [-12, 12]);
+  const textX = useTransform(spotX, [-1, 1], (prefersReducedMotion || isMobile) ? [0, 0] : [-12, 12]);
+  const textY = useTransform(spotY, [-1, 1], (prefersReducedMotion || isMobile) ? [0, 0] : [-12, 12]);
 
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (isMobile) return;
     const rect = cardRef.current?.getBoundingClientRect();
     if (!rect) return;
     mouseX.set(((e.clientX - rect.left) / rect.width  - 0.5) * 2);
     mouseY.set(((e.clientY - rect.top)  / rect.height - 0.5) * 2);
-  }, [mouseX, mouseY]);
+  }, [mouseX, mouseY, isMobile]);
 
   const onMouseLeave = useCallback(() => {
     mouseX.set(0);
@@ -169,14 +175,14 @@ export default function CallToAction() {
         ref={sectionRef}
         className="relative min-h-[90vh] sm:min-h-screen flex flex-col items-center justify-center py-24 sm:py-32 px-6 bg-black [&_*::selection]:bg-coda-accent [&_*::selection]:text-white overflow-hidden"
       >
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute inset-0 z-0">
             <Particles
-              particleCount={1000}
+              particleCount={isMobile ? 350 : 1000}
               particleSpread={10}
               speed={0.6}
               particleColors={["#F97316"]}
-              moveParticlesOnHover={true}
+              moveParticlesOnHover={!isMobile && !prefersReducedMotion}
               particleHoverFactor={1}
               alphaParticles={false}
               particleBaseSize={100}
@@ -205,15 +211,19 @@ export default function CallToAction() {
         <div className="relative z-10 w-full flex flex-col items-center">
           <motion.div
             ref={cardRef}
-            onMouseMove={onMouseMove}
-            onMouseLeave={onMouseLeave}
-            className={`cta-card${visible ?" in" : ""} relative w-full max-w-4xl text-center flex flex-col items-center gap-14 sm:gap-20 px-6 sm:px-10 py-10 z-10`}
-            style={{
-              rotateX,
-              rotateY,
-              transformStyle: "preserve-3d",
-              perspective: 800,
-            }}
+            onMouseMove={!isMobile ? onMouseMove : undefined}
+            onMouseLeave={!isMobile ? onMouseLeave : undefined}
+            className={`cta-card${visible ? " in" : ""} relative w-full max-w-4xl text-center flex flex-col items-center gap-14 sm:gap-20 px-6 sm:px-10 py-10 z-10`}
+            style={
+              isMobile
+                ? undefined
+                : {
+                    rotateX,
+                    rotateY,
+                    transformStyle: "preserve-3d",
+                    perspective: 800,
+                  }
+            }
           >
             {/* Soft backdrop to separate text */}
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-0">
