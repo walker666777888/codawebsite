@@ -1590,24 +1590,7 @@ function HeaderBlock({
           key={mobile ? "mobile" : "desktop"}
           className="overflow-visible flex flex-col gap-10"
         >
-          {/* Label */}
-          <div
-            className="flex items-center gap-4"
-          >
-            <div
-              className="h-[1px] w-12 bg-[#FF5C00] origin-left"
-            />
-            <span className="font-mono text-micro text-[#6F6A60] uppercase tracking-[0.32em]">What we do</span>
-            <div className="relative">
-              <span className="block w-1.5 h-1.5 rounded-full bg-[#FF5C00]" />
-              {/* Pulsing halo — desktop only (one less continuous loop on mobile) */}
-              {!mobile && (
-                <motion.span className="absolute inset-0 rounded-full bg-[#FF5C00]"
-                  animate={{ scale: [1, 2.8, 1], opacity: [0.7, 0, 0.7] }}
-                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut" }} />
-              )}
-            </div>
-          </div>
+
 
           {/* ── Creative headline ─────────────────────────── */}
           <HeadlineBlock reduced={!!reduced} mobile={mobile} />
