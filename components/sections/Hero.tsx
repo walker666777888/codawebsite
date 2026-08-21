@@ -145,7 +145,6 @@ export default function Hero() {
 
   // Detect touch device — disable all JS-driven parallax on mobile
   const [isTouch, setIsTouch] = useState(false);
-  const [isInteractMode, setIsInteractMode] = useState(false);
   const [isMobileScreen, setIsMobileScreen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -158,18 +157,11 @@ export default function Hero() {
     setIsMobileScreen(mq.matches);
     const handleMq = (e: MediaQueryListEvent) => setIsMobileScreen(e.matches);
     mq.addEventListener("change", handleMq);
-
-    if (isInteractMode) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
     
     return () => {
       mq.removeEventListener("change", handleMq);
-      document.body.style.overflow = "";
     };
-  }, [isInteractMode]);
+  }, []);
 
   const isLowTier = useIsLowEndDevice();
   const prefersReducedMotion = useReducedMotion();
@@ -180,39 +172,17 @@ export default function Hero() {
   const fade = useTransform(scrollYProgress, [0, 0.55], shouldDisableParallax ? [1, 1] : [1, 0]);
   const textY = useTransform(scrollYProgress, [0, 1], shouldDisableParallax ? ["0%", "0%"] : ["0%", "8%"]);
 
-
-
-
   return (
     <section
       ref={ref}
       id="hero"
-      className={`relative h-[100svh] overflow-hidden flex flex-col bg-coda-bg ${isInteractMode ? "touch-none" : ""}`}
+      className="relative h-[100svh] overflow-hidden flex flex-col bg-coda-bg"
     >
       {/* ── Dark base for desktop (LiquidEther sits on top) ── */}
       <div className="absolute inset-0 z-[0] bg-black" />
 
-      {/* ── Mobile Fluid Interact Toggle ── */}
-      <button
-        onClick={() => setIsInteractMode(!isInteractMode)}
-        className="absolute bottom-8 right-6 z-50 md:hidden flex items-center justify-center w-12 h-12 rounded-full border border-white/10 bg-black/40 backdrop-blur-xl shadow-2xl transition-all duration-300 active:scale-90 focus-visible:ring-2 focus-visible:ring-coda-accent focus-visible:outline-none"
-        aria-label={isInteractMode ? "Unlock Screen" : "Lock Screen"}
-      >
-        {isInteractMode ? (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-[#FF5C00] drop-shadow-[0_0_8px_rgba(255,92,0,0.4)]">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-          </svg>
-        ) : (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/60">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0 1 9.9-1" />
-          </svg>
-        )}
-      </button>
-
       {/* ── WebGL Backgrounds ── */}
-      <div className={`absolute inset-0 z-[1] ${isInteractMode ? "pointer-events-auto" : "pointer-events-none md:pointer-events-auto"}`}>
+      <div className="absolute inset-0 z-[1] pointer-events-none md:pointer-events-auto">
         {mounted && (
           isMobileScreen ? (
             <LightPillar
@@ -225,7 +195,7 @@ export default function Hero() {
               pillarHeight={0.4}
               noiseIntensity={0}
               pillarRotation={197}
-              interactive={true}
+              interactive={false}
               mixBlendMode="normal"
               quality="medium"
             />
