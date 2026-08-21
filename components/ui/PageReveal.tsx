@@ -18,7 +18,8 @@ export default function PageReveal() {
   const [phase, setPhase] = useState<"show" | "exit">("show");
   const [hidden, setHidden] = useState(false);
   const countRef = useRef<HTMLSpanElement>(null);
-  const logRef = useRef<HTMLDivElement>(null);
+  const logRef = useRef<HTMLSpanElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -31,38 +32,52 @@ export default function PageReveal() {
     document.body.style.overflow = "hidden";
 
     const startTime = performance.now();
-    const duration = 1800; // Total loading time
+    const duration = 1800; // Duration of progress animation in ms
+
+    // Smooth cubic ease-out curve for fluid deceleration
+    const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3);
 
     const tick = (now: number) => {
-      const p = Math.min((now - startTime) / duration, 1);
+      const elapsed = now - startTime;
+      const linearP = Math.min(elapsed / duration, 1);
+      const smoothP = easeOutCubic(linearP);
       
-      // Update percentage counter
+      // Update percentage counter smoothly
       if (countRef.current) {
-        countRef.current.textContent = String(Math.floor(p * 100)).padStart(3, "0");
+        countRef.current.textContent = String(Math.floor(smoothP * 100)).padStart(3, "0");
       }
 
-      // Update terminal log based on percentage
+      // Update hardware-accelerated progress bar smoothly
+      if (progressRef.current) {
+        progressRef.current.style.transform = `scaleX(${smoothP})`;
+      }
+
+      // Update terminal log step
       if (logRef.current) {
-        const logIndex = Math.min(
-          Math.floor(p * BOOT_LOGS.length),
-          BOOT_LOGS.length - 1
-        );
-        logRef.current.textContent = BOOT_LOGS[logIndex];
+        if (linearP >= 1) {
+          logRef.current.textContent = "SYSTEM READY";
+        } else {
+          const logIndex = Math.min(
+            Math.floor(linearP * (BOOT_LOGS.length - 1)),
+            BOOT_LOGS.length - 2
+          );
+          logRef.current.textContent = BOOT_LOGS[logIndex];
+        }
       }
 
-      if (p < 1) {
+      if (linearP < 1) {
         rafRef.current = requestAnimationFrame(tick);
-      } else {
-        if (logRef.current) logRef.current.textContent = "SYSTEM READY_";
       }
     };
+
     rafRef.current = requestAnimationFrame(tick);
 
+    // Brief hold upon reaching 100% / SYSTEM READY, then initiate smooth exit
     const t1 = setTimeout(() => setPhase("exit"), 2100);
     const t2 = setTimeout(() => {
       setHidden(true);
       document.body.style.overflow = "";
-    }, 3400);
+    }, 3100);
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -74,125 +89,143 @@ export default function PageReveal() {
 
   if (hidden) return null;
 
-  // Intense, heavy snapping physical motion
+  // Ultra-smooth physical easing curve
   const panelEase = [0.86, 0, 0.07, 1] as const;
 
   return (
-    <div className="fixed inset-0 z-[10000] pointer-events-none overflow-hidden">
+    <div className="fixed inset-0 z-[10000] pointer-events-none overflow-hidden select-none">
       
-      {/* ── Background Jaws (Horizontal split, cinematic opening) ── */}
+      {/* ── Background Shutter Panels (Smooth split exit) ── */}
       <motion.div
-        className="absolute top-0 left-0 right-0 h-[50.1%] bg-[#060605]"
-        animate={phase === "exit" ? { y: "-100%" } : { y: 0 }}
-        transition={phase === "exit" ? { duration: 1.1, ease: panelEase, delay: 0 } : {}}
+        className="absolute top-0 left-0 right-0 h-[50.1%] bg-[#060605] will-change-transform"
+        animate={phase === "exit" ? { y: "-100%" } : { y: "0%" }}
+        transition={phase === "exit" ? { duration: 0.95, ease: panelEase, delay: 0 } : {}}
       />
       <motion.div
-        className="absolute bottom-0 left-0 right-0 h-[50.1%] bg-[#060605]"
-        animate={phase === "exit" ? { y: "100%" } : { y: 0 }}
-        transition={phase === "exit" ? { duration: 1.1, ease: panelEase, delay: 0.05 } : {}}
+        className="absolute bottom-0 left-0 right-0 h-[50.1%] bg-[#060605] will-change-transform"
+        animate={phase === "exit" ? { y: "100%" } : { y: "0%" }}
+        transition={phase === "exit" ? { duration: 0.95, ease: panelEase, delay: 0.04 } : {}}
       />
 
-      {/* ── Central Glow Line (Loads, then flashes bright orange on open) ── */}
+      {/* ── Main Center Content ── */}
       <AnimatePresence>
         {phase === "show" && (
           <motion.div
-            className="absolute top-[calc(50%-0.5px)] left-0 right-0 origin-left z-20 flex"
-            initial={{ scaleX: 0, height: 1, backgroundColor: "rgba(255,255,255,0.1)", boxShadow: "none" }} 
-            animate={{ scaleX: 1 }}
+            className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4"
             exit={{ 
-              height: [1, 4, 0], 
-              backgroundColor: ["rgba(255,255,255,0.1)", "rgba(255,92,0,1)", "rgba(255,92,0,0)"],
-              boxShadow: ["none", "0 0 40px 4px #FF5C00", "none"],
-              opacity: [1, 1, 0],
-              transition: { duration: 0.8, ease: "easeOut" } 
-            }}
-            transition={{ duration: 1.8, ease: "linear" }}
-          >
-            {/* Blinking playhead at the edge */}
-            <motion.div 
-              className="absolute inset-y-0 right-0 w-[6px] bg-[#FF5C00] shadow-[0_0_12px_#FF5C00]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 1, 0.2, 1] }}
-              transition={{ duration: 0.4, repeat: Infinity }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
 
-      {/* ── Main Typography & Logs ── */}
-      <AnimatePresence>
-        {phase === "show" && (
-          <motion.div
-            className="absolute inset-0 flex flex-col items-center justify-center z-10"
-            exit={{ opacity: 0, scale: 1.1, filter: "blur(12px)", transition: { duration: 0.45, ease: panelEase } }}
+              opacity: 0, 
+              y: -10, 
+              scale: 0.98,
+              transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } 
+            }}
           >
-            <div className="flex items-baseline gap-[2px] select-none overflow-hidden pb-4">
+            {/* Brand Logo Display */}
+            <div className="flex items-baseline gap-[2px] overflow-hidden pb-1">
               {"CODA".split("").map((char, i) => (
-                <motion.span key={i}
-                  className="font-instrument text-[clamp(64px,12vw,140px)] text-white tracking-[-0.04em] leading-none block"
+                <motion.span 
+                  key={i}
+                  className="font-instrument text-[clamp(64px,11vw,130px)] text-white tracking-[-0.04em] leading-none block font-semibold"
                   initial={{ opacity: 0, y: "100%" }} 
                   animate={{ opacity: 1, y: "0%" }}
-                  transition={{ duration: 0.8, delay: 0.2 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                >{char}</motion.span>
+                  transition={{ duration: 0.7, delay: 0.15 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {char}
+                </motion.span>
               ))}
               <motion.span
-                className="font-mono text-[clamp(64px,12vw,140px)] text-[#FF5C00] leading-none block"
+                className="font-mono text-[clamp(64px,11vw,130px)] text-[#FF5C00] leading-none block font-bold"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.7, type: "spring", stiffness: 200, damping: 15 }}
-              >.</motion.span>
+                transition={{ duration: 0.5, delay: 0.55, type: "spring", stiffness: 220, damping: 18 }}
+              >
+                .
+              </motion.span>
             </div>
-            
-            {/* Terminal logs below logo */}
+
+            {/* Smooth Slim Progress Bar Track */}
             <motion.div 
-              className="mt-2 font-mono text-xs sm:text-sm text-[#FF5C00] tracking-widest uppercase h-4 shadow-[0_0_10px_rgba(255,92,0,0.4)]"
+              className="mt-6 w-48 sm:w-60 h-[2px] bg-white/10 rounded-full overflow-hidden relative"
+              initial={{ opacity: 0, scaleX: 0.8 }}
+              animate={{ opacity: 1, scaleX: 1 }}
+              transition={{ delay: 0.4, duration: 0.4 }}
+            >
+              <div 
+                ref={progressRef}
+                className="absolute inset-0 bg-[#FF5C00] origin-left rounded-full will-change-transform"
+                style={{ transform: "scaleX(0)" }}
+              />
+            </motion.div>
+            
+            {/* Terminal status line (Clean, simple, no box glow/shadow) */}
+            <motion.div 
+              className="mt-4 font-mono text-[11px] sm:text-xs text-[#FF5C00] tracking-[0.2em] uppercase flex items-center justify-center gap-1 min-h-[20px]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
+              transition={{ delay: 0.5, duration: 0.3 }}
             >
               <span ref={logRef}>INITIALIZING...</span>
               <motion.span 
                 animate={{ opacity: [1, 0] }} 
-                transition={{ repeat: Infinity, duration: 0.4 }}
-              >_</motion.span>
+                transition={{ repeat: Infinity, duration: 0.5, ease: "easeInOut" }}
+                className="inline-block text-[#FF5C00] font-bold"
+              >
+                _
+              </motion.span>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ── System Variables (Corners) ── */}
-      <AnimatePresence>
-        {phase === "show" && (
-          <motion.p
-            className="absolute bottom-12 left-8 font-mono text-[10px] text-white/30 uppercase tracking-[0.3em] z-10 hidden sm:block"
-            initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-          >SYS.REQ.001</motion.p>
-        )}
-      </AnimatePresence>
-
+      {/* ── System Variables (Top Left) ── */}
       <AnimatePresence>
         {phase === "show" && (
           <motion.div
-            className="absolute bottom-8 right-8 flex items-baseline gap-1 z-10"
-            initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, delay: 0.4 }}
+            className="absolute top-8 left-8 font-mono text-[10px] text-white/30 uppercase tracking-[0.25em] z-10 hidden sm:flex items-center gap-2"
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, delay: 0.6 }}
           >
-            <span ref={countRef} className="font-mono text-[32px] sm:text-[48px] font-bold text-white tracking-[0.05em] tabular-nums drop-shadow-[0_0_12px_rgba(255,255,255,0.3)]">
-              000
-            </span>
-            <span className="font-mono text-[#FF5C00] text-lg">%</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#FF5C00]/80 animate-pulse inline-block" />
+            <span>NODE_ENV // PRODUCTION</span>
           </motion.div>
         )}
       </AnimatePresence>
 
+      {/* ── Bottom Left Label ── */}
       <AnimatePresence>
         {phase === "show" && (
           <motion.p
-            className="absolute top-10 left-8 font-mono text-[10px] text-white/30 uppercase tracking-[0.25em] z-10 hidden sm:block"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, delay: 0.9 }}
-          >NODE_ENV: PRODUCTION</motion.p>
+            className="absolute bottom-8 left-8 font-mono text-[10px] text-white/30 uppercase tracking-[0.3em] z-10 hidden sm:block"
+            initial={{ opacity: 0, x: -10 }} 
+            animate={{ opacity: 1, x: 0 }} 
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, delay: 0.6 }}
+          >
+            SYS.STATUS // OK
+          </motion.p>
+        )}
+      </AnimatePresence>
+
+      {/* ── Percentage Counter (Bottom Right, Crisp, No Glow) ── */}
+      <AnimatePresence>
+        {phase === "show" && (
+          <motion.div
+            className="absolute bottom-8 right-8 flex items-baseline gap-1 z-10"
+            initial={{ opacity: 0, x: 10 }} 
+            animate={{ opacity: 1, x: 0 }} 
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+          >
+            <span 
+              ref={countRef} 
+              className="font-mono text-3xl sm:text-5xl font-bold text-white tracking-[0.04em] tabular-nums"
+            >
+              000
+            </span>
+            <span className="font-mono text-[#FF5C00] text-sm sm:text-lg font-semibold">%</span>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
