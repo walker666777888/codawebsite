@@ -256,7 +256,7 @@ function DraggableBoard() {
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage:
-              "linear-gradient(to right,rgba(13,13,11,0.04) 1px,transparent 1px), linear-gradient(to bottom,rgba(13,13,11,0.04) 1px,transparent 1px)",
+              "linear-gradient(to right,var(--coda-hairline) 1px,transparent 1px), linear-gradient(to bottom,var(--coda-hairline) 1px,transparent 1px)",
             backgroundSize: "48px 48px",
           }}
         />

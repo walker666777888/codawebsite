@@ -130,25 +130,17 @@ export default function Navbar() {
           {/* CTA & Theme Toggle */}
           <motion.div layout className="hidden sm:flex items-center gap-3 ml-auto z-10">
             <ThemeToggle />
-            <motion.button
+            <MagneticButton
+              variant="primary"
+              size="sm"
               onClick={openForm}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              transition={{ type: "spring", stiffness: 300, damping: 22 }}
-              className="group relative overflow-hidden inline-flex items-center gap-1.5 text-small font-sans font-semibold tracking-[-0.01em] px-5 py-2 rounded-full bg-[#FF5C00] text-white shadow-[0_2px_16px_rgba(255,92,0,0.35)] hover:shadow-[0_4px_24px_rgba(255,92,0,0.5)] transition-shadow duration-300 cursor-pointer"
+              className="px-4.5 py-2"
             >
-              <span className="relative z-10 flex items-center gap-1.5">
-                Start a build
+              <span className="flex items-center gap-2 font-sans font-semibold text-[13px] tracking-[-0.01em]">
+                <span>Start a build</span>
                 <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
               </span>
-              <motion.span
-                aria-hidden
-                className="absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                initial={{ x: "-120%" }}
-                whileHover={{ x: "120%" }}
-                transition={{ duration: 0.55, ease: "easeInOut" }}
-              />
-            </motion.button>
+            </MagneticButton>
           </motion.div>
 
           {/* Mobile hamburger */}

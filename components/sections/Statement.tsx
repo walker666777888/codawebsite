@@ -55,15 +55,16 @@ function TechGraphic({ active: activeProp }: { active: boolean }) {
     <svg ref={ref} viewBox={`0 0 ${W} ${H}`} fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
       <defs>
         <radialGradient id="tg-hub" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#60A5FA" />
-          <stop offset="100%" stopColor="#2563EB" />
+          <stop offset="0%" stopColor="#93C5FD" />
+          <stop offset="45%" stopColor="#3B82F6" />
+          <stop offset="100%" stopColor="#1D4ED8" />
         </radialGradient>
         <filter id="tg-hub-glow" x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur stdDeviation="6" result="b" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b" />
           <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
         <filter id="tg-node-glow" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur stdDeviation="3" result="b" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="b" />
           <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
       </defs>
@@ -71,19 +72,19 @@ function TechGraphic({ active: activeProp }: { active: boolean }) {
       {/* Faint dot grid */}
       {[0,1,2,3,4].map(i => [0,1,2,3].map(j => (
         <circle key={`d${i}${j}`} cx={i * 75} cy={j * 88} r="1.2"
-          fill="rgba(96,165,250,0.12)" />
+          fill="rgba(96,165,250,0.18)" />
       )))}
 
       {/* Rotating dashed orbit ellipse */}
       <motion.ellipse cx={CX} cy={CY} rx={RX} ry={RY}
-        stroke="rgba(96,165,250,0.18)" strokeWidth="1" strokeDasharray="5 9" fill="none"
+        stroke="rgba(96,165,250,0.25)" strokeWidth="1" strokeDasharray="5 9" fill="none"
         animate={active ? { rotate: 360 } : {}}
         style={{ transformOrigin: `${CX}px ${CY}px` }}
         transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
       />
       {/* Counter-rotating inner ring */}
       <motion.ellipse cx={CX} cy={CY} rx={RX * 0.5} ry={RY * 0.5}
-        stroke="rgba(96,165,250,0.1)" strokeWidth="1" strokeDasharray="3 7" fill="none"
+        stroke="rgba(96,165,250,0.16)" strokeWidth="1" strokeDasharray="3 7" fill="none"
         animate={active ? { rotate: -360 } : {}}
         style={{ transformOrigin: `${CX}px ${CY}px` }}
         transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
@@ -94,7 +95,7 @@ function TechGraphic({ active: activeProp }: { active: boolean }) {
         <g key={i}>
           <motion.line
             x1={c.x1} y1={c.y1} x2={c.x2} y2={c.y2}
-            stroke={c.cross ? "rgba(96,165,250,0.1)" : "rgba(96,165,250,0.25)"}
+            stroke={c.cross ? "rgba(96,165,250,0.15)" : "rgba(96,165,250,0.35)"}
             strokeWidth={c.cross ? "0.8" : "1.2"}
             strokeDasharray={c.cross ? "3 6" : undefined}
             initial={{ pathLength: 0, opacity: 0 }}
@@ -113,8 +114,8 @@ function TechGraphic({ active: activeProp }: { active: boolean }) {
       {/* Hub pulse rings */}
       {active && [38, 28, 18].map((r, i) => (
         <motion.circle key={i} cx={CX} cy={CY} r={r}
-          fill="rgba(59,130,246,0.06)" stroke="rgba(96,165,250,0.22)" strokeWidth="1"
-          animate={{ r: [r, r * 1.55, r], opacity: [0.5, 0, 0.5] }}
+          fill="rgba(59,130,246,0.08)" stroke="rgba(96,165,250,0.3)" strokeWidth="1"
+          animate={{ r: [r, r * 1.55, r], opacity: [0.6, 0, 0.6] }}
           transition={{ duration: 2.8 + i * 0.4, delay: i * 0.7, repeat: Infinity, ease: "easeOut" }}
         />
       ))}
@@ -138,21 +139,22 @@ function TechGraphic({ active: activeProp }: { active: boolean }) {
         <g key={i}>
           {active && (
             <motion.circle cx={n.x} cy={n.y} r="14"
-              fill="none" stroke="rgba(96,165,250,0.35)" strokeWidth="1"
-              animate={{ r: [14, 26, 14], opacity: [0.4, 0, 0.4] }}
+              fill="none" stroke="rgba(96,165,250,0.4)" strokeWidth="1"
+              animate={{ r: [14, 26, 14], opacity: [0.5, 0, 0.5] }}
               transition={{ duration: 3.5, delay: i * 0.55, repeat: Infinity, ease: "easeOut" }}
             />
           )}
           <motion.circle cx={n.x} cy={n.y} r="16"
-            fill="var(--coda-surface-2)" stroke="rgba(96,165,250,0.45)" strokeWidth="1.5"
+            fill="var(--coda-surface-2)" stroke="rgba(96,165,250,0.55)" strokeWidth="1.5"
             filter="url(#tg-node-glow)"
             initial={{ scale: 0, opacity: 0 }}
             animate={active ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
             style={{ transformOrigin: `${n.x}px ${n.y}px` }}
             transition={{ duration: 0.55, delay: 0.15 + n.delay, ease: [0.34, 1.56, 0.64, 1] }}
           />
-          <motion.text x={n.x} y={n.y + 4} textAnchor="middle"
-            fill="rgba(37,99,235,0.85)" fontSize="8" fontFamily="monospace" fontWeight="700"
+          <motion.text x={n.x} y={n.y + 3.5} textAnchor="middle"
+            className="fill-[#2563EB] dark:fill-[#93C5FD]"
+            fontSize="8" fontFamily="monospace" fontWeight="700"
             letterSpacing="0.5"
             initial={{ opacity: 0 }} animate={active ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.35, delay: 0.5 + n.delay }}
@@ -242,13 +244,13 @@ function DesignGraphic({ active: activeProp }: { active: boolean }) {
       ].map((b, i) => (
         <g key={i}>
           <motion.rect x={b.x} y={100} height={38} rx={7}
-            fill="rgba(13,13,11,0.06)"
+            fill="var(--coda-hairline)"
             initial={{ width: 0, opacity: 0 }}
             animate={active ? { width: b.w, opacity: 1 } : { width: 0, opacity: 0 }}
             transition={{ duration: 0.65, delay: 0.3 + i * 0.12, ease: [0.16, 1, 0.3, 1] }}
           />
           <motion.text x={b.x + 14} y={100 + 24}
-            fill="rgba(13,13,11,0.6)" fontSize="9" fontFamily="monospace"
+            fill="var(--coda-ink-2)" fontSize="9" fontFamily="monospace"
             initial={{ opacity: 0 }} animate={active ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.3, delay: 0.5 + i * 0.1 }}
           >{b.label}</motion.text>
@@ -258,7 +260,7 @@ function DesignGraphic({ active: activeProp }: { active: boolean }) {
       {/* Wireframe rows — full width */}
       {wireRows.map((r, i) => (
         <motion.rect key={i} x={startX} y={r.y} height={r.h} rx={4}
-          fill="rgba(13,13,11,0.6)"
+          fill="var(--coda-ink-4)"
           initial={{ width: 0, opacity: 0 }}
           animate={active ? { width: r.w, opacity: r.opacity } : { width: 0, opacity: 0 }}
           transition={{ duration: 0.8, delay: 0.45 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -478,12 +480,12 @@ function PerformanceGraphic({ active: activeProp }: { active: boolean }) {
       <div className="flex flex-col gap-1.5">
         {stages.map((s, i) => (
           <div key={i} className="flex items-center gap-2">
-            <div style={{ fontFamily: "monospace", fontSize: "7.5px", color: "rgba(13,13,11,0.45)", width: "68px", flexShrink: 0 }}>{s.label}</div>
+            <div style={{ fontFamily: "monospace", fontSize: "7.5px", color: "var(--coda-ink-3)", width: "68px", flexShrink: 0 }}>{s.label}</div>
             <div style={{ flex: 1, height: "18px", background: "rgba(255,92,0,0.06)", borderRadius: "8px", overflow: "hidden" }}>
               <motion.div style={{ height: "100%", width: `${s.scaleX * 100}%`, borderRadius: "8px", background: s.color, display: "flex", alignItems: "center", paddingLeft: "6px", transformOrigin: "left" }}
                 animate={active ? { scaleX: [0, 1, 1, 0] } : { scaleX: 0 }}
                 transition={{ duration: CYCLE, times: [0, 0.25, 0.75, 0.97], delay: s.delay + 0.2, repeat: Infinity, repeatDelay: REPEAT, ease: [0.16, 1, 0.3, 1] }}>
-                <motion.span style={{ fontFamily: "monospace", fontSize: "8px", fontWeight: 700, color: i === 3 ? "#fff" : "#14130F", whiteSpace: "nowrap" }}
+                <motion.span style={{ fontFamily: "monospace", fontSize: "8px", fontWeight: 700, color: i === 3 ? "#fff" : "var(--coda-ink)", whiteSpace: "nowrap" }}
                   animate={active ? { opacity: [0, 0, 1, 1, 0] } : { opacity: 0 }}
                   transition={{ duration: CYCLE, times: [0, 0.28, 0.38, 0.75, 0.96], delay: s.delay + 0.2, repeat: Infinity, repeatDelay: REPEAT }}>
                   {s.value}
@@ -603,7 +605,7 @@ function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; 
                   <motion.span className="w-3 h-[1.5px] shrink-0 rounded-full" style={{ background: ORANGE }}
                     initial={{ scaleX: 0 }} animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
                     transition={{ duration: 0.4, delay: 0.35 + ci * 0.07 }} />
-                  <span className="font-sans text-xs text-[#4A463F]">{cap}</span>
+                  <span className="font-sans text-xs text-[var(--coda-ink-2)]">{cap}</span>
                 </motion.div>
               ))}
             </div>
@@ -773,9 +775,9 @@ function DisciplineStrip({
       <div className="relative grid grid-cols-1 md:grid-cols-[80px_1fr_1fr] lg:grid-cols-[80px_1fr_420px] gap-0 min-h-[300px]">
 
         {/* ── Number column ── */}
-        <div className="flex items-start justify-center pt-10 md:pt-14 border-r border-[#0D0D0B]/[0.08]">
+        <div className="flex items-start justify-center pt-10 md:pt-14 border-r border-[var(--coda-hairline)]">
           <motion.span
-            className="font-mono text-label tracking-[0.25em] text-[#6F6A60]"
+            className="font-mono text-label tracking-[0.25em] text-[var(--coda-ink-3)]"
             initial={{ opacity: 0, filter: "blur(24px)" }}
             animate={isInView ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(24px)" }}
             transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
@@ -785,12 +787,12 @@ function DisciplineStrip({
         </div>
 
         {/* ── Text column ── */}
-        <div className="py-10 md:py-14 px-7 md:px-10 flex flex-col justify-between gap-6 md:gap-8 border-r border-[#0D0D0B]/[0.08]">
+        <div className="py-10 md:py-14 px-7 md:px-10 flex flex-col justify-between gap-6 md:gap-8 border-r border-[var(--coda-hairline)]">
           {/* Title */}
           <div className="flex flex-col gap-6">
             <div className="overflow-hidden mb-0.5">
               <motion.h3
-                className="font-instrument tracking-[-0.03em] leading-[1.05] text-[#0D0D0B] text-h2"
+                className="font-instrument tracking-[-0.03em] leading-[1.05] text-[var(--coda-ink)] text-h2"
                 initial={{ y: "105%" }}
                 animate={isInView ? { y: "0%" } : { y: "105%" }}
                 transition={{ duration: 0.85, delay: 0.15 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -812,7 +814,7 @@ function DisciplineStrip({
 
             {/* Description */}
             <motion.p
-              className="font-sans text-base text-[#4A463F] leading-relaxed max-w-sm"
+              className="font-sans text-base text-[var(--coda-ink-2)] leading-relaxed max-w-sm"
               initial={{ opacity: 0, filter: "blur(24px)" }}
               animate={isInView ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(24px)" }}
               transition={{ duration: 0.8, delay: 0.35 + index * 0.1 }}
@@ -838,7 +840,7 @@ function DisciplineStrip({
                   animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
                   transition={{ duration: 0.5, delay: 0.55 + index * 0.08 + ci * 0.07, ease: [0.16, 1, 0.3, 1] }}
                 />
-                <span className="font-sans text-base text-[#4A463F] group-hover/cap:text-[#0D0D0B]/75 transition-colors duration-300">
+                <span className="font-sans text-base text-[var(--coda-ink-2)] group-hover/cap:text-[var(--coda-ink)] transition-colors duration-300">
                   {cap}
                 </span>
               </motion.div>
@@ -989,14 +991,14 @@ function DisciplineCardBody({
         </div>
 
         {/* Description */}
-        <p className="font-sans text-xs text-[#4A463F] leading-[1.65]">{d.description}</p>
+        <p className="font-sans text-xs text-[var(--coda-ink-2)] leading-[1.65]">{d.description}</p>
 
         {/* Capabilities — orange dash */}
         <div className="space-y-1.5">
           {d.capabilities.map((cap) => (
             <div key={cap} className="flex items-center gap-2.5">
               <span className="w-3 h-[1.5px] shrink-0 rounded-full" style={{ background: ORANGE }} />
-              <span className="font-sans text-xs text-[#4A463F]">{cap}</span>
+              <span className="font-sans text-xs text-[var(--coda-ink-2)]">{cap}</span>
             </div>
           ))}
         </div>
@@ -1155,14 +1157,14 @@ function DisciplineSpread() {
           style={{ opacity: labelOpacity, y: labelY }}
         >
           <div className="h-px w-8 bg-[#FF5C00]" />
-          <span className="font-mono text-micro text-[#6F6A60] uppercase tracking-[0.3em] whitespace-nowrap">
+          <span className="font-mono text-micro text-[var(--coda-ink-3)] uppercase tracking-[0.3em] whitespace-nowrap">
             [ 03 ] — What we do
           </span>
           <div className="h-px w-8 bg-[#FF5C00]" />
         </motion.div>
 
         {/* ── Vertical scroll-progress rail (right edge) ────── */}
-        <div className="absolute right-6 top-1/2 -translate-y-1/2 h-32 w-[1px] bg-[#0D0D0B]/10 z-20">
+        <div className="absolute right-6 top-1/2 -translate-y-1/2 h-32 w-[1px] bg-[var(--coda-hairline)] z-20">
           <div
             ref={railFillRef}
             className="absolute left-0 top-0 w-full bg-[#FF5C00] origin-top rounded-full"
@@ -1187,7 +1189,7 @@ function DisciplineSpread() {
           </div>
 
           {/* ── Scroll-driven progress bar under the grid ───── */}
-          <div className="mt-5 h-[2px] bg-[#0D0D0B]/[0.08] relative overflow-hidden rounded-full">
+          <div className="mt-5 h-[2px] bg-[var(--coda-hairline)] relative overflow-hidden rounded-full">
             <div
               ref={barRef}
               className="absolute inset-y-0 left-0 right-0 bg-gradient-to-r from-[#FF5C00] to-[#FF9A3C] rounded-full origin-left"

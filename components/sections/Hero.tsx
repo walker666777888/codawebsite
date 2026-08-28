@@ -235,7 +235,7 @@ export default function Hero() {
       <div
         className="absolute inset-0 pointer-events-none z-[2] opacity-[0.4]"
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(13,13,11,0.07) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)",
           backgroundSize: "44px 44px",
           maskImage: "radial-gradient(ellipse 75% 70% at 50% 45%, #000 25%, transparent 75%)",
           WebkitMaskImage: "radial-gradient(ellipse 75% 70% at 50% 45%, #000 25%, transparent 75%)",
@@ -375,10 +375,12 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 2.4, ease: [0.16, 1, 0.3, 1] }}
             className="flex items-center gap-5 pointer-events-auto"
           >
-            <MagneticButton variant="primary" onClick={openForm}>
-              <span className="flex items-center gap-2 font-sans font-semibold text-sm px-8 py-3.5 tracking-[-0.01em]">
-                Start a project
-                <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
+            <MagneticButton variant="primary" size="md" onClick={openForm} className="px-6 py-3 sm:px-8 sm:py-3.5">
+              <span className="flex items-center gap-2.5 sm:gap-3 font-sans font-semibold tracking-[-0.01em]">
+                <span className="text-[14px] sm:text-[15px] text-white">Start a project</span>
+                <span className="w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full bg-white/20 flex items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 group-hover:bg-white/30">
+                  <span className="text-xs sm:text-sm font-bold leading-none text-white">→</span>
+                </span>
               </span>
             </MagneticButton>
           </motion.div>

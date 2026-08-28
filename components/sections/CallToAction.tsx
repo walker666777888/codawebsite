@@ -165,7 +165,7 @@ export default function CallToAction() {
             width: 900px;
             height: 900px;
             border-radius: 9999px;
-            border: 1px solid rgba(13,13,11,0.07);
+            border: 1px solid rgba(255,255,255,0.08);
             animation: cta-ring 4s ease-out infinite;
           }
         }
@@ -200,7 +200,7 @@ export default function CallToAction() {
             className="absolute inset-0 opacity-[0.07] pointer-events-none z-10"
             style={{
               backgroundImage:
-                "linear-gradient(to right,#0D0D0B 1px,transparent 1px),linear-gradient(to bottom,#0D0D0B 1px,transparent 1px)",
+                "linear-gradient(to right,rgba(255,255,255,0.2) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,0.2) 1px,transparent 1px)",
               backgroundSize: "40px 40px",
             }}
           />
@@ -272,21 +272,18 @@ export default function CallToAction() {
             {/* Action Group (Button + Footer Note) */}
             <div className="flex flex-col items-center gap-6 sm:gap-8 relative z-10">
               {/* CTA button */}
-              <div className={`cta-btn${visible ?" in" : ""} flex flex-col items-center`}>
-                <MagneticButton variant="accent" onClick={openForm}>
-                  <span
-                    className="flex items-center gap-2 sm:gap-3 text-white px-8 py-3.5 sm:px-10 sm:py-4 rounded-full font-sans font-semibold text-base sm:text-lg tracking-tight relative overflow-hidden transition-transform duration-300 hover:scale-105"
-                    style={{ 
-                      background: "linear-gradient(135deg, var(--color-coda-accent) 0%, color-mix(in srgb, var(--color-coda-accent) 80%, black) 100%)",
-                      boxShadow: "0 12px 32px color-mix(in srgb, var(--color-coda-accent) 40%, transparent), inset 0 1px 1px rgba(255,255,255,0.4)",
-                      border: "1px solid rgba(255,255,255,0.15)"
-                    }}
-                  >
-                    <span className="relative z-10 flex items-center gap-2 sm:gap-3">
-                      Start a project
-                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              <div className={`cta-btn${visible ? " in" : ""} flex flex-col items-center`}>
+                <MagneticButton
+                  variant="primary"
+                  size="lg"
+                  onClick={openForm}
+                  className="px-7 py-3.5 sm:px-10 sm:py-4.5"
+                >
+                  <span className="flex items-center gap-2.5 sm:gap-3.5 font-sans font-semibold tracking-[-0.01em]">
+                    <span className="text-[15px] sm:text-[17px] text-white">Start a project</span>
+                    <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/20 flex items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 group-hover:bg-white/30">
+                      <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" strokeWidth={2.4} />
                     </span>
-                    <div className="cta-btn-shine" />
                   </span>
                 </MagneticButton>
               </div>
