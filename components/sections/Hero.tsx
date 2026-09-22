@@ -21,6 +21,10 @@ const LightPillar = dynamic(() => import("@/components/ui/LightPillar"), {
   ssr: false,
 });
 
+const PremiumHeroBackdrop = dynamic(() => import("@/components/ui/PremiumHeroBackdrop"), {
+  ssr: false,
+});
+
 const PARTICLES = Array.from({ length: 25 }).map((_, i) => ({
   id: i,
   left: `${(i * 33.7) % 100}%`,
@@ -200,16 +204,7 @@ export default function Hero() {
               quality="medium"
             />
           ) : (
-            <LiquidEther
-              colors={["#FF5C00", "#FF8A00", "#1A1A1A"]}
-              mouseForce={25}
-              cursorSize={90}
-              isViscous={false}
-              resolution={0.28}
-              autoDemo={true}
-              autoSpeed={0.4}
-              autoIntensity={2.0}
-            />
+            <PremiumHeroBackdrop />
           )
         )}
       </div>
