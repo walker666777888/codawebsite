@@ -2,7 +2,6 @@
 
 import {
   motion,
-  useScroll,
   useTransform,
   useReducedMotion
 } from "motion/react";
@@ -12,10 +11,8 @@ import MagneticButton from "@/components/ui/MagneticButton";
 import { useFormModal } from "@/components/providers/FormModalProvider";
 import { useIsLowEndDevice } from "@/hooks/useIsLowEndDevice";
 import TextType from "@/components/ui/TextType";
-
-const LiquidEther = dynamic(() => import("@/components/ui/LiquidEther"), {
-  ssr: false,
-});
+import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
+import { useScrollProgress } from "@/hooks/useScrollProgress";
 
 const LightPillar = dynamic(() => import("@/components/ui/LightPillar"), {
   ssr: false,
@@ -167,12 +164,16 @@ export default function Hero() {
     };
   }, []);
 
+  // Freeze the hero's infinite CSS loops (glitch layers, chromatic shadow,
+  // particles, scroll cue) while it is off-screen.
+  usePauseOffscreen(ref, "0px");
+
   const isLowTier = useIsLowEndDevice();
   const prefersReducedMotion = useReducedMotion();
   const shouldDisableParallax = isTouch || isLowTier || prefersReducedMotion;
 
   /* ── Scroll parallax (desktop only) ──────────────────── */
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const scrollYProgress = useScrollProgress(ref, ["start start", "end start"]);
   const fade = useTransform(scrollYProgress, [0, 0.55], shouldDisableParallax ? [1, 1] : [1, 0]);
   const textY = useTransform(scrollYProgress, [0, 1], shouldDisableParallax ? ["0%", "0%"] : ["0%", "8%"]);
 
@@ -245,7 +246,7 @@ export default function Hero() {
 
       {/* ── Main content ─────────────────────────────────── */}
       <motion.div
-        style={{ y: textY, opacity: fade }}
+        style={{ y: textY, opacity: fade, willChange: "transform, opacity" }}
         className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pt-16 sm:pt-20 gap-4 md:gap-6 pointer-events-none"
       >
 
@@ -392,10 +393,9 @@ export default function Hero() {
       >
         <div className="w-[1px] h-10 overflow-hidden relative">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-coda-ink/20 md:via-white/20 to-transparent" />
-          <motion.div
+          <div
             className="w-full h-[35%] bg-coda-ink/50 md:bg-white/50"
-            animate={{ y: ["0%", "230%"] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.3 }}
+            style={{ animation: "coda-scroll-cue 2.3s linear infinite" }}
           />
         </div>
       </motion.div>

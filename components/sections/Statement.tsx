@@ -4,7 +4,6 @@
 import {
   motion,
   AnimatePresence,
-  useScroll,
   useTransform,
   useInView,
   useMotionValue,
@@ -13,6 +12,8 @@ import {
   type MotionValue,
 } from "motion/react";
 import { useRef, useState, useEffect, useCallback } from "react";
+import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
+import { useScrollProgress } from "@/hooks/useScrollProgress";
 
 /* ═══════════════════════════════════════════════════════════
    MOTION GRAPHICS — one per discipline
@@ -1078,7 +1079,7 @@ function SpreadCard({
         rotateX: springTiltX,
         rotateY: springTiltY,
         transformPerspective: 1000,
-        willChange: "transform, opacity, filter",
+        willChange: "transform, opacity",
       }}
     >
       <DisciplineCardBody d={d} active={active} />
@@ -1093,10 +1094,7 @@ function DisciplineSpread() {
   const dotRef      = useRef<HTMLDivElement>(null);
   const reduced     = useReducedMotion();
 
-  const { scrollYProgress: progress } = useScroll({
-    target: trackRef,
-    offset: ["start start", "end end"],
-  });
+  const progress = useScrollProgress(trackRef, ["start start", "end end"]);
   const inView = useInView(trackRef, { margin: "-120px" });
 
   /* Direct DOM writes — zero React re-renders, zero JS frame budget */
@@ -1139,7 +1137,7 @@ function DisciplineSpread() {
         {/* ── Parallax warm-glow backdrop ───────────────────── */}
         <motion.div
           className="absolute inset-0 pointer-events-none"
-          style={{ y: bgY }}
+          style={{ y: bgY, willChange: "transform" }}
         >
           <div
             className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full blur-[140px] opacity-[0.07]"
@@ -1154,7 +1152,7 @@ function DisciplineSpread() {
         {/* ── Floating section label — fades as spread opens ─ */}
         <motion.div
           className="absolute top-[80px] left-1/2 -translate-x-1/2 flex items-center gap-3 z-20 pointer-events-none"
-          style={{ opacity: labelOpacity, y: labelY }}
+          style={{ opacity: labelOpacity, y: labelY, willChange: "transform, opacity" }}
         >
           <div className="h-px w-8 bg-[#FF5C00]" />
           <span className="font-mono text-micro text-[var(--coda-ink-3)] uppercase tracking-[0.3em] whitespace-nowrap">
@@ -1739,7 +1737,8 @@ function MobileDisciplineStack() {
 
 export default function Statement() {
   const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  usePauseOffscreen(ref);
+  const scrollYProgress = useScrollProgress(ref, ["start end", "end start"]);
   const lineW = useTransform(scrollYProgress, [0.05, 0.5], ["0%", "100%"]);
   const bgY   = useTransform(scrollYProgress, [0, 1], ["0%", "8%"]);
 
@@ -1751,7 +1750,7 @@ export default function Statement() {
       {/* Decorative layers */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Ambient parallax orbs */}
-        <motion.div style={{ y: bgY }} className="absolute inset-0 hidden md:block">
+        <motion.div style={{ y: bgY, willChange: "transform" }} className="absolute inset-0 hidden md:block">
           <div className="absolute top-[-20%] right-[-5%] w-[700px] h-[700px] rounded-full blur-[160px] opacity-[0.045] animate-glow-pulse"
             style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 65%)" }} />
           <div className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] rounded-full blur-[130px] opacity-[0.03]"

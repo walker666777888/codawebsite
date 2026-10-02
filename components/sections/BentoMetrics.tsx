@@ -5,13 +5,14 @@ import {
   useMotionValue,
   useMotionTemplate,
   useSpring,
-  useScroll,
   useTransform,
   useInView,
   useReducedMotion,
 } from "motion/react";
 import { useRef, useCallback, useState, useEffect, type PointerEvent } from "react";
 import AnimatedCounter from "@/components/ui/AnimatedCounter";
+import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
+import { useScrollProgress } from "@/hooks/useScrollProgress";
 import dynamic from "next/dynamic";
 const HoverCanvas = dynamic(() => import("@/components/ui/HoverCanvas"), { ssr: false });
 import type { CanvasEffect } from "@/components/ui/HoverCanvas";
@@ -88,10 +89,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
   const shouldReduce = reduced || isMobile;
 
   /* ── Parallax (direct compositor transform, no spring lag) ── */
-  const { scrollYProgress: passRaw } = useScroll({
-    target: tileRef,
-    offset: ["start end", "end start"],
-  });
+  const passRaw = useScrollProgress(tileRef, ["start end", "end start"]);
   const numberY = useTransform(passRaw, [0, 1], [depth * 0.3, -depth * 0.3]);
 
   /* ── Cursor spotlight ── */
@@ -224,20 +222,21 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
           <span className="font-mono text-micro tracking-[0.24em] text-[var(--coda-ink-4)] uppercase">
             {String(index + 1).padStart(2, "0")}
           </span>
-          <motion.span
+          <span
             className="font-mono text-micro tracking-[0.18em] text-[var(--coda-ink-3)] uppercase border rounded-full px-3 py-1 transition-colors duration-300"
-            style={{ borderColor: "var(--coda-hairline)" }}
-            animate={{ borderColor: ["var(--coda-hairline)", "rgba(255,92,0,0.4)", "var(--coda-hairline)"] }}
-            transition={{ duration: 4, repeat: Infinity, delay: index * 0.8 }}
+            style={{
+              borderColor: "var(--coda-hairline)",
+              animation: `coda-border-pulse 4s ease-in-out ${index * 0.8}s infinite`,
+            }}
           >
             {stat.sub}
-          </motion.span>
+          </span>
         </div>
 
         {/* Metric — extra large, gentle parallax + glass plate for legibility */}
         <motion.div
           className="mt-auto mb-3 md:mb-5 pt-8"
-          style={shouldReduce ? undefined : { y: numberY }}
+          style={shouldReduce ? undefined : { y: numberY, willChange: "transform" }}
         >
           <div
             className="font-instrument text-[var(--coda-ink)] leading-[0.85] tracking-[-0.04em] tabular-nums transition-colors duration-500 group-hover:text-[#FF5C00]"
@@ -263,6 +262,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
 
 export default function BentoMetrics() {
   const sectionRef = useRef<HTMLElement>(null);
+  usePauseOffscreen(sectionRef);
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true });
   const reduced = useReducedMotion();
@@ -274,10 +274,7 @@ export default function BentoMetrics() {
   }, []);
 
   // Subtle parallax drift on the ambient glow.
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  const scrollYProgress = useScrollProgress(sectionRef, ["start end", "end start"]);
   const glowY = useTransform(scrollYProgress, [0, 1], [-60, 60]);
 
   return (
@@ -287,6 +284,7 @@ export default function BentoMetrics() {
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[340px] pointer-events-none"
         style={{
           y: (reduced || isMobile) ? 0 : glowY,
+          willChange: "transform",
           background:
             "radial-gradient(ellipse at center top, rgba(255,92,0,0.14) 0%, transparent 68%)",
         }}
@@ -312,13 +310,16 @@ export default function BentoMetrics() {
               Results that <span className="text-[#FF5C00]">compound.</span>
             </h2>
           </div>
-          <motion.span
+          <span
             className="font-mono text-micro text-[var(--coda-ink-4)] uppercase tracking-[0.25em] hidden sm:block"
-            animate={{ opacity: [0.5, 0.8, 0.5] }}
-            transition={{ duration: 5, repeat: Infinity }}
+            style={{
+              "--pulse-from": 0.5,
+              "--pulse-to": 0.8,
+              animation: "coda-pulse-opacity 5s ease-in-out infinite",
+            } as React.CSSProperties}
           >
             CODA / Performance
-          </motion.span>
+          </span>
         </motion.div>
 
         {/* Bento grid */}

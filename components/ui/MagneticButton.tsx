@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import Link from "next/link";
 import { clsx, type ClassValue } from "clsx";
@@ -28,7 +28,8 @@ export default function MagneticButton({
   onClick,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [spotlight, setSpotlight] = useState({ x: 0, y: 0, opacity: 0 });
+  // Spotlight is written straight to the DOM — no React re-render per mousemove.
+  const spotRef = useRef<HTMLSpanElement>(null);
 
   // Subtle magnetic pull toward the cursor (desktop)
   const mx = useMotionValue(0);
@@ -51,13 +52,17 @@ export default function MagneticButton({
     
     mx.set(clientX - (left + width / 2));
     my.set(clientY - (top + height / 2));
-    setSpotlight({ x: relX, y: relY, opacity: 1 });
+    const spot = spotRef.current;
+    if (spot) {
+      spot.style.background = `radial-gradient(circle 80px at ${relX}px ${relY}px, rgba(255,255,255,0.32), transparent 70%)`;
+      spot.style.opacity = "1";
+    }
   };
 
   const handleLeave = () => {
     mx.set(0);
     my.set(0);
-    setSpotlight(prev => ({ ...prev, opacity: 0 }));
+    if (spotRef.current) spotRef.current.style.opacity = "0";
   };
 
   const baseStyles =
@@ -107,11 +112,12 @@ export default function MagneticButton({
     >
       {/* Interactive cursor spotlight (desktop) */}
       <span
+        ref={spotRef}
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none transition-opacity duration-300"
         style={{
-          opacity: spotlight.opacity,
-          background: `radial-gradient(circle 80px at ${spotlight.x}px ${spotlight.y}px, rgba(255,255,255,0.32), transparent 70%)`,
+          opacity: 0,
+          background: "radial-gradient(circle 80px at 0px 0px, rgba(255,255,255,0.32), transparent 70%)",
         }}
       />
 
@@ -122,13 +128,16 @@ export default function MagneticButton({
       />
 
       {/* Ambient sweeping light sheen */}
-      <motion.span
+      {/* 1.6s sweep + 3.8s rest, on the compositor (see coda-sheen in globals.css) */}
+      <span
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none"
-        initial={{ x: "-150%", skewX: "-20deg" }}
-        animate={{ x: "250%" }}
-        transition={{ duration: 1.6, repeat: Infinity, repeatDelay: 3.8, ease: [0.16, 1, 0.3, 1] }}
-        style={{ background: sheenGradient, width: "60%" }}
+        style={{
+          background: sheenGradient,
+          width: "60%",
+          transform: "translateX(-150%) skewX(-20deg)",
+          animation: "coda-sheen 5.4s linear infinite",
+        }}
       />
 
       {/* Parallax inner content */}

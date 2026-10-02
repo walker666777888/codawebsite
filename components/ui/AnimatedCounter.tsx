@@ -3,6 +3,8 @@
 import { useInView, useMotionValue, useSpring } from "motion/react";
 import { useEffect, useRef } from "react";
 
+const numberFormat = new Intl.NumberFormat("en-US");
+
 interface AnimatedCounterProps {
   value: number;
   suffix?: string;
@@ -38,7 +40,7 @@ export default function AnimatedCounter({
   useEffect(() => {
     return springValue.on("change", (latest) => {
       if (ref.current) {
-        ref.current.textContent = `${prefix}${Intl.NumberFormat("en-US").format(
+        ref.current.textContent = `${prefix}${numberFormat.format(
           Math.round(latest)
         )}${suffix}`;
       }

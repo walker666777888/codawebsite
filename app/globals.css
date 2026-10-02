@@ -1,4 +1,10 @@
-@import "tailwindcss";
+/* Only scan the site's own source for class names. Automatic detection also
+   crawled .agents/, .claude/, docs and test HTML in this repo, shipping CSS
+   for hundreds of classes the site never uses. */
+@import "tailwindcss" source(none);
+@source "../app";
+@source "../components";
+@source "../hooks";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -437,6 +443,66 @@
 
 
 
+
+/* ── Compositor-driven ambient loops ───────────────────────
+   These replace always-on Framer Motion `repeat: Infinity` loops, which
+   ticked on the main thread every frame (even off-screen / display:none)
+   and competed with scrolling. CSS animations are paused by the browser
+   when not rendered, and transform/opacity run on the compositor.
+   Per-element values are passed in via custom properties. */
+@keyframes coda-pulse-opacity {
+  0%, 100% { opacity: var(--pulse-from); }
+  50%      { opacity: var(--pulse-to); }
+}
+@keyframes coda-pulse-scale {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(var(--pulse-scale)); }
+}
+@keyframes coda-pulse-ring {
+  0%, 100% { transform: scale(1); opacity: var(--pulse-from); }
+  50%      { transform: scale(var(--pulse-scale)); opacity: var(--pulse-to); }
+}
+@keyframes coda-float-y {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(var(--float-y)); }
+}
+@keyframes coda-packet {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  50%  { opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+}
+@keyframes coda-packet-hold {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+}
+@keyframes coda-border-pulse {
+  0%, 100% { border-color: var(--coda-hairline); }
+  50%      { border-color: rgba(255, 92, 0, 0.4); }
+}
+/* 1.6s sweep + 3.8s rest = 5.4s cycle (29.63% moving) */
+@keyframes coda-sheen {
+  0%      { transform: translateX(-150%) skewX(-20deg); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  29.63%, 100% { transform: translateX(250%) skewX(-20deg); }
+}
+/* 2s travel + 0.3s rest = 2.3s cycle */
+@keyframes coda-scroll-cue {
+  0%      { transform: translateY(0); animation-timing-function: ease-in-out; }
+  86.96%, 100% { transform: translateY(230%); }
+}
+.svg-fill-origin {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Freeze every CSS animation inside a subtree while it is off-screen. */
+.anim-paused,
+.anim-paused *,
+.anim-paused *::before,
+.anim-paused *::after {
+  animation-play-state: paused !important;
+}
 
 /* ── Marquee pause on hover ────────────────────────────── */
 .marquee-track {
