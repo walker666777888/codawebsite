@@ -10,6 +10,10 @@ export default function GrainOverlay() {
         backgroundRepeat: "repeat",
         backgroundSize: "200px 200px",
         opacity: 0.08,
+        // Own compositor layer: the noise tile is rasterized once and simply
+        // blended each frame instead of being repainted over scrolling content.
+        transform: "translateZ(0)",
+        contain: "strict",
       }}
     />
   );

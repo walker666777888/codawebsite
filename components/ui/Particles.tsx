@@ -166,13 +166,17 @@ const Particles = ({
     };
 
     const handleMouseMove = (e: MouseEvent) => {
+      // Skip the layout read entirely while the canvas is off-screen.
+      if (!isVisible) return;
       handlePointerMove(e.clientX, e.clientY);
     };
+
+    let isVisible = true;
 
     const isFinePointer = typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches;
 
     if (moveParticlesOnHover && isFinePointer) {
-      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mousemove', handleMouseMove, { passive: true });
     }
 
     const count = particleCount;
@@ -222,7 +226,6 @@ const Particles = ({
     let lastTime = performance.now();
     let elapsed = 0;
 
-    let isVisible = true;
     const update = (t: number) => {
       if (!isVisible) return;
       animationFrameId = requestAnimationFrame(update);
@@ -274,6 +277,9 @@ const Particles = ({
       if (container.contains(gl.canvas)) {
         container.removeChild(gl.canvas);
       }
+      // Free the GPU context right away instead of waiting for GC — browsers
+      // cap live WebGL contexts and a leaked one keeps its buffers resident.
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

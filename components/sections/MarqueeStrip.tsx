@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useRef, useState } from "react";
+import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
 
 const ROW1 = [
   "Technology Solutions", "Brand Systems", "Growth Engineering",
@@ -58,6 +59,7 @@ function MarqueeRow({ items, reverse = false, speed = 28, dim = false, paused = 
 export default function MarqueeStrip() {
   const [paused, setPaused] = useState(false);
   const stripRef = useRef<HTMLDivElement>(null);
+  usePauseOffscreen(stripRef);
 
   return (
     <div

@@ -175,16 +175,14 @@ export default function RootLayout({
           }}
         />
         <link rel="preconnect" href="https://api.fontshare.com" />
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="anonymous" />
         <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"
-        />
+        {/* flag-icons (phone picker in the build form) is loaded after page
+            load by FormModalProvider — it no longer blocks first paint. */}
       </head>
       <body className="flex flex-col min-h-screen selection:bg-[#FF5C00] selection:text-white bg-[var(--coda-bg)] text-[var(--coda-ink)] transition-colors duration-300">
         {/* Skip to main — keyboard accessibility */}

@@ -5,6 +5,7 @@ import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } fro
 import MagneticButton from "@/components/ui/MagneticButton";
 import { ArrowRight } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
+import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
 import dynamic from "next/dynamic";
 
 const Particles = dynamic(() => import("@/components/ui/Particles"), {
@@ -15,19 +16,39 @@ const Particles = dynamic(() => import("@/components/ui/Particles"), {
 function WaveText({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
   const [hovered, setHovered] = useState(false);
   const [pulse, setPulse] = useState(false);
+  const wrapRef = useRef<HTMLSpanElement>(null);
 
+  // The periodic letter wave only ticks while the text is on screen — it
+  // animates a blur filter on every letter, which is wasted work off-screen.
   useEffect(() => {
-    const t = setInterval(() => {
-      setPulse(true);
-      setTimeout(() => setPulse(false), 1200);
-    }, 6000);
-    return () => clearInterval(t);
+    const el = wrapRef.current;
+    if (!el) return;
+    let interval: ReturnType<typeof setInterval> | null = null;
+    let reset: ReturnType<typeof setTimeout> | null = null;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !interval) {
+        interval = setInterval(() => {
+          setPulse(true);
+          reset = setTimeout(() => setPulse(false), 1200);
+        }, 6000);
+      } else if (!entry.isIntersecting && interval) {
+        clearInterval(interval);
+        interval = null;
+      }
+    });
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      if (interval) clearInterval(interval);
+      if (reset) clearTimeout(reset);
+    };
   }, []);
 
   const active = hovered || pulse;
 
   return (
     <span
+      ref={wrapRef}
       className={className}
       style={{ ...style, display: "inline-block" }}
       onMouseEnter={() => setHovered(true)}
@@ -48,13 +69,19 @@ function WaveText({ text, className, style }: { text: string; className?: string
 export default function CallToAction() {
   const { open: openForm } = useFormModal();
   const sectionRef = useRef<HTMLElement>(null);
+  usePauseOffscreen(sectionRef);
   const cardRef    = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  // Particles mount only once the device type is known; otherwise phones
+  // built the 1,000-particle desktop scene and immediately rebuilt it.
+  const [deviceKnown, setDeviceKnown] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMobile("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
+    setDeviceKnown(true);
   }, []);
 
   /* ── 3D tilt on mouse move (desktop only) ── */
@@ -177,7 +204,7 @@ export default function CallToAction() {
       >
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute inset-0 z-0">
-            <Particles
+            {deviceKnown && <Particles
               particleCount={isMobile ? 350 : 1000}
               particleSpread={10}
               speed={0.6}
@@ -189,7 +216,7 @@ export default function CallToAction() {
               sizeRandomness={1}
               cameraDistance={20}
               disableRotation={false}
-            />
+            />}
           </div>
           <div className="hidden md:flex absolute inset-0 items-center justify-center pointer-events-none z-10">
             {[0, 1, 2, 3].map((i) => (

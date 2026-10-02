@@ -76,26 +76,14 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
     const lenis = new Lenis({
       /**
        * lerp: linear interpolation factor per frame (0–1).
-       * 0.05 → exceptionally silky glide. Adds a premium "weight" to the scroll
-       * that feels highly polished on desktop without being overly sluggish.
+       * 0.1 is Lenis' tuned default — still a smooth glide, but the page
+       * tracks the wheel closely. 0.05 trailed the input by ~1s, which read
+       * as input lag and kept every scroll-linked animation running twice
+       * as long per wheel tick.
        */
-      lerp: 0.05,
+      lerp: 0.1,
 
-      /**
-       * Easing: smooth cubic — organic deceleration, no abrupt stop.
-       */
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-
-      /**
-       * wheelMultiplier: 0.9 — slightly reduces the aggressive jump of mouse wheels
-       * to complement the heavier lerp.
-       */
-      wheelMultiplier: 0.9,
-
-      /**
-       * touchMultiplier: 1.5 — makes trackpads feel slightly more responsive
-       * to counteract the heavy lerp.
-       */
+      wheelMultiplier: 1,
       touchMultiplier: 1.5,
 
       /** Smooth wheel scrolling (mouse wheel / trackpad) */

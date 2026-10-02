@@ -5,6 +5,16 @@ import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionLabel from "@/components/ui/SectionLabel";
+import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
+
+type CSSVars = React.CSSProperties & Record<`--${string}`, string | number>;
+
+/** Opacity ping-pong (a -> b -> a), run by CSS instead of a JS loop. */
+const pulse = (from: number, to: number, duration: number, delay: number): CSSVars => ({
+  "--pulse-from": from,
+  "--pulse-to": to,
+  animation: `coda-pulse-opacity ${duration}s ease-in-out ${delay}s infinite`,
+});
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -39,11 +49,10 @@ function VisualFragility() {
       {/* Lines — preserveAspectRatio none: coords match % positions */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" fill="none">
         {links.map((l, i) => (
-          <motion.line key={i}
+          <line key={i}
             x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
             stroke="#FF5C00" strokeWidth="0.3" strokeDasharray="1.4 2"
-            animate={{ opacity: [0.4, 0.08, 0.4] }}
-            transition={{ duration: 2.6, delay: i * 0.45, repeat: Infinity }}
+            style={pulse(0.4, 0.08, 2.6, i * 0.45)}
           />
         ))}
       </svg>
@@ -53,17 +62,15 @@ function VisualFragility() {
         const mx = (l.x1 + l.x2) / 2;
         const my = (l.y1 + l.y2) / 2;
         return (
-          <motion.div key={i}
+          <div key={i}
             className="absolute z-10"
-            style={{ left: `${mx}%`, top: `${my}%`, transform: "translate(-50%,-50%)" }}
-            animate={{ opacity: [0.9, 0.3, 0.9] }}
-            transition={{ duration: 2, delay: i * 0.4 + 0.5, repeat: Infinity }}
+            style={{ left: `${mx}%`, top: `${my}%`, transform: "translate(-50%,-50%)", ...pulse(0.9, 0.3, 2, i * 0.4 + 0.5) }}
           >
             <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
               <line x1="1.5" y1="1.5" x2="9.5" y2="9.5" stroke="#FF5C00" strokeWidth="1.8" strokeLinecap="round"/>
               <line x1="9.5" y1="1.5" x2="1.5" y2="9.5" stroke="#FF5C00" strokeWidth="1.8" strokeLinecap="round"/>
             </svg>
-          </motion.div>
+          </div>
         );
       })}
 
@@ -71,13 +78,17 @@ function VisualFragility() {
       {nodes.map((n, i) => (
         <motion.div key={i}
           className="absolute z-20 -translate-x-1/2 -translate-y-1/2"
-          style={{ left: `${n.cx}%`, top: `${n.cy}%` }}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: [0, -4, 0] }}
-          transition={{
-            opacity: { duration: 0.5, delay: i * 0.1 },
-            y: { duration: 3.2 + i * 0.4, delay: i * 0.6 + 0.5, repeat: Infinity, ease: "easeInOut" },
-          }}
+          style={{
+            left: `${n.cx}%`,
+            top: `${n.cy}%`,
+            // Rests 10px low until its float loop kicks in (same as before)
+            transform: "translateY(10px)",
+            "--float-y": "-4px",
+            animation: `coda-float-y ${3.2 + i * 0.4}s ease-in-out ${i * 0.6 + 0.5}s infinite`,
+          } as CSSVars}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: i * 0.1 }}
         >
           <div
             className="relative border border-[var(--coda-card-border)] rounded-2xl px-4 py-2.5 shadow-[0_4px_16px_rgba(0,0,0,0.25)] whitespace-nowrap transition-colors duration-300"
@@ -85,12 +96,14 @@ function VisualFragility() {
           >
             <span className="font-mono text-micro font-medium tracking-[2px] text-[var(--coda-ink)]">{n.label}</span>
             {n.hot && (
-              <motion.div
+              <div
                 className="absolute -top-2 -right-2 w-5 h-5 bg-[#FF5C00] rounded-full flex items-center justify-center text-white font-bold shadow-[0_0_8px_rgba(255,92,0,0.55)]"
-                style={{ fontSize: "8px" }}
-                animate={{ scale: [1, 1.32, 1] }}
-                transition={{ duration: 1.8, delay: i * 0.5, repeat: Infinity }}
-              >!</motion.div>
+                style={{
+                  fontSize: "8px",
+                  "--pulse-scale": 1.32,
+                  animation: `coda-pulse-scale 1.8s ease-in-out ${i * 0.5}s infinite`,
+                } as CSSVars}
+              >!</div>
             )}
           </div>
         </motion.div>
@@ -126,27 +139,34 @@ function VisualChaos() {
       <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox={`0 0 ${W} ${H}`} fill="none">
         {connections.map((c, i) => (
           <g key={i}>
-            <motion.line
+            <line
               x1={c.from.x} y1={c.from.y} x2={c.to.x} y2={c.to.y}
               stroke={c.misfire ? "rgba(180,180,180,0.4)" : "#FF5C00"}
               strokeWidth={c.misfire ? "0.8" : "1.1"}
               strokeDasharray={c.misfire ? "4 4" : undefined}
-              animate={{ opacity: c.misfire ? [0.18, 0.38, 0.18] : [0.4, 0.75, 0.4] }}
-              transition={{ duration: 1.6 + i * 0.12, delay: i * 0.1, repeat: Infinity }}
+              style={c.misfire ? pulse(0.18, 0.38, 1.6 + i * 0.12, i * 0.1) : pulse(0.4, 0.75, 1.6 + i * 0.12, i * 0.1)}
             />
-            {/* Packet dot */}
-            <motion.circle r="2.8" fill={c.misfire ? "rgba(180,180,180,0.6)" : "#FF5C00"}
-              animate={{ cx: [c.from.x, c.to.x], cy: [c.from.y, c.to.y], opacity: [0, 1, 0] }}
-              transition={{ duration: 1 + i * 0.07, delay: i * 0.15, repeat: Infinity, ease: "linear" }}
+            {/* Packet dot - travels via transform on the compositor */}
+            <circle r="2.8" cx={c.from.x} cy={c.from.y} fill={c.misfire ? "rgba(180,180,180,0.6)" : "#FF5C00"}
+              style={{
+                "--dx": `${c.to.x - c.from.x}px`,
+                "--dy": `${c.to.y - c.from.y}px`,
+                animation: `coda-packet ${1 + i * 0.07}s linear ${i * 0.15}s infinite backwards`,
+              } as CSSVars}
             />
           </g>
         ))}
 
         {/* Overloaded centre rings — fast, erratic */}
         {[46, 30, 16].map((r, i) => (
-          <motion.circle key={i} cx={hcx} cy={hcy} r={r} fill="#FF5C00"
-            animate={{ r: [r, r * 1.3, r], opacity: [0.06 + i * 0.04, 0.22 + i * 0.06, 0.06 + i * 0.04] }}
-            transition={{ duration: 0.6 + i * 0.18, repeat: Infinity }}
+          <circle key={i} cx={hcx} cy={hcy} r={r} fill="#FF5C00"
+            className="svg-fill-origin"
+            style={{
+              "--pulse-scale": 1.3,
+              "--pulse-from": 0.06 + i * 0.04,
+              "--pulse-to": 0.22 + i * 0.06,
+              animation: `coda-pulse-ring ${0.6 + i * 0.18}s ease-in-out infinite`,
+            } as CSSVars}
           />
         ))}
         <circle cx={hcx} cy={hcy} r="8" fill="#FF5C00" opacity="0.75" />
@@ -206,22 +226,17 @@ function VisualEcosystem() {
 
       {/* Animated Data Packets */}
       {nodes.map((n, i) => (
-        <motion.circle
+        <circle
           key={`p${i}`}
           r="2.5"
+          cx={hcx}
+          cy={hcy}
           fill="#FF5C00"
-          animate={{
-            cx: [hcx, n.x],
-            cy: [hcy, n.y],
-            opacity: [0, 1, 1, 0],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "linear",
-            delay: i * 0.35,
-            times: [0, 0.15, 0.85, 1],
-          }}
+          style={{
+            "--dx": `${n.x - hcx}px`,
+            "--dy": `${n.y - hcy}px`,
+            animation: `coda-packet-hold 2s linear ${i * 0.35}s infinite backwards`,
+          } as CSSVars}
         />
       ))}
 
@@ -254,6 +269,12 @@ export default function DigitalGap() {
   const textRef             = useRef<HTMLDivElement>(null);
   const visualsRef          = useRef<HTMLDivElement>(null);
   const progressRef         = useRef<HTMLDivElement>(null);
+  const mobileSectionRef    = useRef<HTMLElement>(null);
+
+  // Both layouts are mounted; freeze each one's SVG loops while it is
+  // hidden (display:none) or scrolled out of view.
+  usePauseOffscreen(desktopContainerRef);
+  usePauseOffscreen(mobileSectionRef);
 
   // ── Desktop GSAP (md+) ────────────────────────────────────
   useEffect(() => {
@@ -264,8 +285,10 @@ export default function DigitalGap() {
         scrollTrigger: {
           trigger: desktopContainerRef.current,
           start: "top top", end: "+=150%",
+          // Default "fixed" pinning: the browser holds the section in place,
+          // so it can't lag a frame behind the scroll like transform-pinning.
           pin: true, pinSpacing: true,
-          pinType: "transform", scrub: 0.6,
+          scrub: 0.6,
           anticipatePin: 1, invalidateOnRefresh: true,
           onUpdate: (self) => {
             if (progressRef.current)
@@ -275,7 +298,7 @@ export default function DigitalGap() {
       });
       const texts   = textRef.current.children;
       const visuals = visualsRef.current.children;
-      gsap.set([...Array.from(texts), ...Array.from(visuals)], { willChange: "transform, opacity, filter", transform: "translateZ(0)" });
+      gsap.set([...Array.from(texts), ...Array.from(visuals)], { willChange: "transform, opacity", transform: "translateZ(0)" });
       gsap.set(texts,      { opacity: 0.15, y: 0 });
       gsap.set(visuals,    { opacity: 0, y: 40, scale: 0.95 });
       gsap.set(visuals[0], { opacity: 1, y: 0, scale: 1 });
@@ -363,7 +386,7 @@ export default function DigitalGap() {
     {/* ═══════════════════════════════════════════════════
         MOBILE  (<md)  — Native Stack (No GSAP for performance)
     ═══════════════════════════════════════════════════ */}
-    <section className="md:hidden bg-[var(--coda-bg)] text-[var(--coda-ink)] border-b border-[var(--coda-grid)] relative py-20 px-5 overflow-hidden transition-colors duration-300">
+    <section ref={mobileSectionRef} className="md:hidden bg-[var(--coda-bg)] text-[var(--coda-ink)] border-b border-[var(--coda-grid)] relative py-20 px-5 overflow-hidden transition-colors duration-300">
       {BG}
       <div className="relative z-10 flex flex-col gap-24">
         {TEXTS.map(({ pre, em }, i) => (
@@ -379,7 +402,7 @@ export default function DigitalGap() {
               viewport={{ once: true, margin: "0px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="font-instrument tracking-[-0.03em]"
-              style={{ fontSize: "clamp(32px, 9vw, 42px)", willChange: "transform, opacity, filter" }}
+              style={{ fontSize: "clamp(32px, 9vw, 42px)" }}
             >
               <span className="block leading-[1.15]">{pre}</span>
               <span className="block leading-[1.15] text-[#FF5C00]">{em}</span>
@@ -390,7 +413,7 @@ export default function DigitalGap() {
               viewport={{ once: true, margin: "0px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
               className="w-full rounded-2xl border border-[var(--coda-card-border)] shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_12px_40px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.08)_inset] overflow-hidden p-6 transition-colors duration-300" 
-              style={{ height: 280, backgroundColor: "var(--coda-card-bg)", willChange: "transform, opacity, filter" }}
+              style={{ height: 280, backgroundColor: "var(--coda-card-bg)" }}
             >
               {/* Ambient subtle top highlight */}
               <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[var(--coda-hairline)] to-transparent pointer-events-none" />

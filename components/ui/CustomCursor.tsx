@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Play, RefreshCw } from "lucide-react";
 
@@ -9,6 +9,7 @@ export default function CustomCursor() {
   const [cursorText, setCursorText] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const visibleRef = useRef(false);
 
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
@@ -30,7 +31,10 @@ export default function CustomCursor() {
     }
 
     const updateMousePosition = (e: MouseEvent) => {
-      if (!isVisible) setIsVisible(true);
+      if (!visibleRef.current) {
+        visibleRef.current = true;
+        setIsVisible(true);
+      }
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
     };
@@ -70,10 +74,13 @@ export default function CustomCursor() {
       setCursorState("default");
     };
 
-    const handleMouseLeave = () => setIsVisible(false);
+    const handleMouseLeave = () => {
+      visibleRef.current = false;
+      setIsVisible(false);
+    };
 
-    window.addEventListener("mousemove", updateMousePosition);
-    window.addEventListener("mouseover", handleMouseOver);
+    window.addEventListener("mousemove", updateMousePosition, { passive: true });
+    window.addEventListener("mouseover", handleMouseOver, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
     document.documentElement.addEventListener("mouseleave", handleMouseLeave);
 
@@ -83,7 +90,9 @@ export default function CustomCursor() {
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [mouseX, mouseY, isVisible]);
+    // Listeners are registered once — visibility is tracked in a ref so the
+    // effect no longer tears down and re-binds on every show/hide.
+  }, [mouseX, mouseY]);
 
   if (isTouchDevice) return null;
 

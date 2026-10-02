@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import React, { useRef, useEffect, useState } from "react";
 import { useVideoPreload } from "@/components/providers/VideoPreloadProvider";
 import { lenisScrollTo } from "@/components/providers/LenisProvider";
+import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
 
 /* ── Fit-text: waits for font load then fills container exactly ── */
 function useFitText() {
@@ -323,6 +324,7 @@ function VideoText({ shouldLoad }: { shouldLoad: boolean }) {
 
 export default function Footer() {
   const containerRef = useRef<HTMLElement>(null);
+  usePauseOffscreen(containerRef);
   const { shouldLoad } = useVideoPreload();
 
   return (
@@ -361,11 +363,14 @@ export default function Footer() {
               <span className="coda-footer-logo font-instrument text-5xl text-white tracking-[-0.04em] leading-none">
                 CODA
               </span>
-              <motion.span
+              <span
                 className="font-mono text-[#FF5C00] text-5xl leading-none"
-                animate={{ opacity: [1, 0.25, 1] }}
-                transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              >.</motion.span>
+                style={{
+                  "--pulse-from": 1,
+                  "--pulse-to": 0.25,
+                  animation: "coda-pulse-opacity 2.8s ease-in-out 1s infinite",
+                } as React.CSSProperties}
+              >.</span>
             </div>
           </motion.div>
 

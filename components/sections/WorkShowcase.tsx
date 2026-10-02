@@ -46,13 +46,29 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
   const [isHovered, setIsHovered] = useState(false);
   const filterId = `liquid-glitch-${index}`;
 
+  // The turbulence/displacement filter is rasterized on the CPU. At rest its
+  // displacement scale is 0 (a visual no-op), so only attach it while the
+  // card is hovered or easing back out — otherwise every card re-rasterizes
+  // it as the marquee slides new tiles into view.
+  const [filterOn, setFilterOn] = useState(false);
+  const filterOffTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (filterOffTimer.current) clearTimeout(filterOffTimer.current); }, []);
+
+  const setHover = (hovered: boolean) => {
+    setIsHovered(hovered);
+    if (filterOffTimer.current) clearTimeout(filterOffTimer.current);
+    if (hovered) setFilterOn(true);
+    // Keep the filter until the 0.6s displacement ease-out has finished
+    else filterOffTimer.current = setTimeout(() => setFilterOn(false), 700);
+  };
+
   return (
-    <motion.div 
+    <motion.div
       className="shrink-0 w-[78vw] sm:w-[55vw] md:w-[42vw] lg:w-[34vw] group select-none flex flex-col gap-5"
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      onPointerDown={() => setIsHovered(true)} // Support touch devices
-      onPointerUp={() => setIsHovered(false)}
+      onHoverStart={() => setHover(true)}
+      onHoverEnd={() => setHover(false)}
+      onPointerDown={() => setHover(true)} // Support touch devices
+      onPointerUp={() => setHover(false)}
     >
       {/* ── SVG Liquid Distortion Filter ── */}
       <svg className="hidden absolute w-0 h-0">
@@ -81,7 +97,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
         <motion.div 
           className={`absolute -inset-10 bg-gradient-to-br ${project.gradient} transition-transform duration-700 ease-out`}
           style={{ 
-            filter: `url(#${filterId})`,
+            filter: filterOn ? `url(#${filterId})` : undefined,
             transform: isHovered ? 'scale(1.05)' : 'scale(1)' 
           }}
         >
