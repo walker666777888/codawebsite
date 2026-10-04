@@ -337,7 +337,7 @@ export default function Footer() {
           
           {/* Logo */}
           <motion.div
-            className="md:col-start-1 md:row-start-1"
+            className="reveal-blur md:col-start-1 md:row-start-1"
             initial={{ opacity: 0, filter: "blur(24px)" }}
             whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
             viewport={{ once: true }}
@@ -376,7 +376,7 @@ export default function Footer() {
 
           {/* Description & Connect */}
           <motion.div
-            className="md:col-start-1 md:row-start-2 flex flex-col justify-end md:block flex-shrink-0 md:pr-12"
+            className="reveal-blur md:col-start-1 md:row-start-2 flex flex-col justify-end md:block flex-shrink-0 md:pr-12"
             initial={{ opacity: 0, filter: "blur(24px)" }}
             whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
             viewport={{ once: true }}
@@ -405,7 +405,7 @@ export default function Footer() {
 
           {/* Terminal */}
           <motion.div
-            className="md:col-start-2 md:col-span-2 md:row-start-1 md:row-span-2 flex items-center mt-10 md:mt-0"
+            className="reveal-blur md:col-start-2 md:col-span-2 md:row-start-1 md:row-span-2 flex items-center mt-10 md:mt-0"
             initial={{ opacity: 0, scale: 0.95, filter: "blur(24px)" }}
             whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
             viewport={{ once: true }}
@@ -418,7 +418,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <motion.div 
-          className="border-t border-white/[0.08] pt-7 flex flex-col md:flex-row justify-between items-center gap-4"
+          className="reveal-blur border-t border-white/[0.08] pt-7 flex flex-col md:flex-row justify-between items-center gap-4"
           initial={{ opacity: 0, filter: "blur(24px)" }}
           whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
           viewport={{ once: true }}

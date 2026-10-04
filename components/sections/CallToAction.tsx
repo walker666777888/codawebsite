@@ -287,7 +287,7 @@ export default function CallToAction() {
                     style={{ fontSize: "clamp(56px, 9vw, 110px)" }}
                   />
                 </div>
-                <motion.div
+                <motion.div className="reveal-blur"
                   initial={{ opacity: 0, filter: "blur(24px)" }}
                   animate={visible ? { opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } } : {}}
                   transition={{ duration: 0.85, delay: 0.36, ease: [0.16, 1, 0.3, 1] }}

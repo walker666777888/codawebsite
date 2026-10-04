@@ -14,6 +14,7 @@ import {
 import { useRef, useState, useEffect, useCallback } from "react";
 import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 import { CARD_HOVER_GLOW, SPREAD_GLOW_A, SPREAD_GLOW_B, STATEMENT_GLOW_A, STATEMENT_GLOW_B } from "@/lib/glows";
 
 /* ═══════════════════════════════════════════════════════════
@@ -567,7 +568,7 @@ function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; 
       viewport={{ once: true, margin: "0px" }}
       transition={{ duration: 0.65, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       style={{ perspective: 1000, willChange: "transform, opacity, filter" }}
-      className="h-full"
+      className="reveal-blur h-full"
     >
       <motion.div
         ref={cardRef}
@@ -779,7 +780,7 @@ function DisciplineStrip({
         {/* ── Number column ── */}
         <div className="flex items-start justify-center pt-10 md:pt-14 border-r border-[var(--coda-hairline)]">
           <motion.span
-            className="font-mono text-label tracking-[0.25em] text-[var(--coda-ink-3)]"
+            className="reveal-blur font-mono text-label tracking-[0.25em] text-[var(--coda-ink-3)]"
             initial={{ opacity: 0, filter: "blur(24px)" }}
             animate={isInView ? { opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } } : { opacity: 0, filter: "blur(24px)" }}
             transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
@@ -816,7 +817,7 @@ function DisciplineStrip({
 
             {/* Description */}
             <motion.p
-              className="font-sans text-base text-[var(--coda-ink-2)] leading-relaxed max-w-sm"
+              className="reveal-blur font-sans text-base text-[var(--coda-ink-2)] leading-relaxed max-w-sm"
               initial={{ opacity: 0, filter: "blur(24px)" }}
               animate={isInView ? { opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } } : { opacity: 0, filter: "blur(24px)" }}
               transition={{ duration: 0.8, delay: 0.35 + index * 0.1 }}
@@ -1575,7 +1576,7 @@ function HeaderBlock({
 
       {/* ── Two-column layout ──────────────────────────────── */}
       <motion.div
-        className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center overflow-visible"
+        className="reveal-blur grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center overflow-visible"
         initial={{ opacity: 0, filter: "blur(24px)" }}
         whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
         viewport={{ once: true, margin: "0px" }}
@@ -1788,6 +1789,8 @@ function MobileDisciplineStack() {
 
 export default function Statement() {
   const ref = useRef<HTMLElement>(null);
+  // Only keep the layout variant that can actually be seen (see useIsDesktop)
+  const isDesktop = useIsDesktop();
   usePauseOffscreen(ref);
   const scrollYProgress = useScrollProgress(ref, ["start end", "end start"]);
   const lineW = useTransform(scrollYProgress, [0.05, 0.5], ["0%", "100%"]);
@@ -1818,19 +1821,23 @@ export default function Statement() {
       <HeaderBlock lineW={lineW} />
 
       {/* ── Discipline cards ───────────────────────────────────── */}
-      <MobileDisciplineStack />
-      <div className="hidden md:block">
-        <DisciplineSpread />
-      </div>
+      {isDesktop !== true && <MobileDisciplineStack />}
+      {isDesktop !== false && (
+        <div className="hidden md:block">
+          <DisciplineSpread />
+        </div>
+      )}
 
       {/* ── Landscape tiles ─────────────────────────────────── */}
-      <div className="hidden md:block max-w-7xl mx-auto px-6 pb-10 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
-          {LANDSCAPE_TILES.map((tile, i) => (
-            <LandscapeTile key={tile.num} tile={tile} index={i} />
-          ))}
+      {isDesktop !== false && (
+        <div className="hidden md:block max-w-7xl mx-auto px-6 pb-10 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
+            {LANDSCAPE_TILES.map((tile, i) => (
+              <LandscapeTile key={tile.num} tile={tile} index={i} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── Bottom tagline ───────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-6 py-16 lg:py-24 relative z-10">
@@ -1839,7 +1846,7 @@ export default function Statement() {
           whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-10 border-t border-[var(--coda-hairline)]"
+          className="reveal-blur flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-10 border-t border-[var(--coda-hairline)]"
         >
           <p className="font-mono text-micro text-[var(--coda-ink-3)] uppercase tracking-[0.25em]">
             Every engagement touches all three disciplines

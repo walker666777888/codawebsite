@@ -527,6 +527,21 @@
 @keyframes coda-header-in    { from { opacity: 0; transform: translateY(-80px); } to { opacity: 1; transform: none; } }
 @keyframes coda-drop-in      { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
 
+/* ── Mobile: scroll reveals fade in without the blur ───────
+   A 24px blur on whole cards/sections is one of the most expensive things
+   a phone GPU can be asked to animate. On phones and touch tablets the
+   scroll reveals keep their exact fade (opacity timing unchanged) but skip
+   the blur. Done in CSS so server-rendered HTML is identical everywhere;
+   !important outranks both the inline motion styles and running
+   animations. Desktop is untouched. */
+@media (max-width: 767px), (pointer: coarse) {
+  .reveal-blur,
+  .cta-card, .cta-eyebrow, .cta-line, .cta-sub, .cta-btn, .cta-note {
+    filter: none !important;
+    will-change: auto !important;
+  }
+}
+
 /* Freeze every CSS animation inside a subtree while it is off-screen. */
 .anim-paused,
 .anim-paused *,

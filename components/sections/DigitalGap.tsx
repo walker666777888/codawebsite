@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { onRevealDone } from "@/lib/reveal";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
 
 type CSSVars = React.CSSProperties & Record<`--${string}`, string | number>;
@@ -271,6 +272,8 @@ export default function DigitalGap() {
   const visualsRef          = useRef<HTMLDivElement>(null);
   const progressRef         = useRef<HTMLDivElement>(null);
   const mobileSectionRef    = useRef<HTMLElement>(null);
+  // Only keep the layout variant that can actually be seen (see useIsDesktop)
+  const isDesktop = useIsDesktop();
 
   // Both layouts are mounted; freeze each one's SVG loops while it is
   // hidden (display:none) or scrolled out of view.
@@ -352,6 +355,7 @@ export default function DigitalGap() {
     {/* ═══════════════════════════════════════════════════
         DESKTOP  (md+)  — original side-by-side animation
     ═══════════════════════════════════════════════════ */}
+    {isDesktop !== false && (
     <section
       ref={desktopContainerRef}
       className="hidden md:block h-screen bg-[var(--coda-bg)] text-[var(--coda-ink)] overflow-hidden border-b border-[var(--coda-grid)] relative transition-colors duration-300"
@@ -397,10 +401,12 @@ export default function DigitalGap() {
         </div>
       </div>
     </section>
+    )}
 
     {/* ═══════════════════════════════════════════════════
         MOBILE  (<md)  — Native Stack (No GSAP for performance)
     ═══════════════════════════════════════════════════ */}
+    {isDesktop !== true && (
     <section ref={mobileSectionRef} className="md:hidden bg-[var(--coda-bg)] text-[var(--coda-ink)] border-b border-[var(--coda-grid)] relative py-20 px-5 overflow-hidden transition-colors duration-300">
       {BG}
       <div className="relative z-10 flex flex-col gap-24">
@@ -416,7 +422,7 @@ export default function DigitalGap() {
               whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
               viewport={{ once: true, margin: "0px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="font-instrument tracking-[-0.03em]"
+              className="reveal-blur font-instrument tracking-[-0.03em]"
               style={{ fontSize: "clamp(32px, 9vw, 42px)" }}
             >
               <span className="block leading-[1.15]">{pre}</span>
@@ -427,7 +433,7 @@ export default function DigitalGap() {
               whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
               viewport={{ once: true, margin: "0px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
-              className="w-full rounded-2xl border border-[var(--coda-card-border)] shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_12px_40px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.08)_inset] overflow-hidden p-6 transition-colors duration-300" 
+              className="reveal-blur w-full rounded-2xl border border-[var(--coda-card-border)] shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_12px_40px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.08)_inset] overflow-hidden p-6 transition-colors duration-300" 
               style={{ height: 280, backgroundColor: "var(--coda-card-bg)" }}
             >
               {/* Ambient subtle top highlight */}
@@ -438,5 +444,6 @@ export default function DigitalGap() {
         ))}
       </div>
     </section>
+    )}
   </>);
 }

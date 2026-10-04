@@ -243,7 +243,7 @@ export default function WorkShowcase() {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.div initial={{ opacity: 0, filter: "blur(24px)" }} whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
           viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col gap-5">
+          className="reveal-blur flex flex-col gap-5">
           <SectionLabel index={3} className="block">Selected Work</SectionLabel>
           <h2 className="font-instrument tracking-[-0.03em] text-[var(--coda-ink)] leading-[1.04] text-h2"
             >
