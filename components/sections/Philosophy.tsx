@@ -11,6 +11,7 @@ import {
 } from "motion/react";
 import { useRef, useState, useCallback, useEffect } from "react";
 import SectionLabel from "@/components/ui/SectionLabel";
+import { PHILOSOPHY_GLOW_A, PHILOSOPHY_GLOW_B } from "@/lib/glows";
 
 /* ─── stats data ──────────────────────────────────────────── */
 const STATS = [
@@ -428,10 +429,11 @@ export default function Philosophy() {
       >
         {/* Background glows */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -right-[10%] top-[20%] w-[700px] h-[700px] rounded-full blur-[160px] opacity-[0.11]"
-            style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 65%)" }} />
-          <div className="absolute -left-[5%] -top-[5%] w-[500px] h-[500px] rounded-full blur-[130px] opacity-[0.05]"
-            style={{ background: "radial-gradient(circle, #FF9040 0%, transparent 65%)" }} />
+          {/* Pre-blurred gradients (lib/glows) — same look, no blur filter */}
+          <div className="absolute -right-[10%] top-[20%] w-[700px] h-[700px] opacity-[0.11]"
+            style={PHILOSOPHY_GLOW_A} />
+          <div className="absolute -left-[5%] -top-[5%] w-[500px] h-[500px] opacity-[0.05]"
+            style={PHILOSOPHY_GLOW_B} />
         </div>
 
         {/* Fine grid */}

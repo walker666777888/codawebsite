@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "motion/react";
 import SectionLabel from "@/components/ui/SectionLabel";
+import { workGlow } from "@/lib/glows";
 import { ArrowUpRight } from "lucide-react";
 import { useVideoPreload } from "@/components/providers/VideoPreloadProvider";
 
@@ -105,8 +106,8 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
           <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
             style={{ backgroundImage: "linear-gradient(to right,#fff 1px,transparent 1px),linear-gradient(to bottom,#fff 1px,transparent 1px)", backgroundSize: "32px 32px" }} />
           {/* Glow */}
-          <div className="absolute top-1/4 left-1/4 w-[200px] h-[200px] rounded-full pointer-events-none opacity-[0.08]"
-            style={{ background: project.accent, filter: "blur(80px)" }} />
+          <div className="absolute top-1/4 left-1/4 w-[200px] h-[200px] pointer-events-none opacity-[0.08]"
+            style={workGlow(project.accent)} />
           {/* Top line */}
           <div className="absolute top-0 inset-x-0 h-[1px] pointer-events-none opacity-20"
             style={{ background: `linear-gradient(90deg,transparent,${project.accent},transparent)` }} />
@@ -135,7 +136,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
           <div className="absolute inset-x-0 bottom-0 p-5 flex gap-2 flex-wrap"
             style={{ background: "linear-gradient(to top,rgba(0,0,0,0.6),transparent)" }}>
             {project.tags.map((tag) => (
-              <span key={tag} className="font-mono text-micro uppercase tracking-widest text-white/60 border border-white/12 rounded-full px-3 py-1 bg-black/20 backdrop-blur-sm">{tag}</span>
+              <span key={tag} className="font-mono text-micro uppercase tracking-widest text-white/60 border border-white/12 rounded-full px-3 py-1 bg-black/20">{tag}</span>
             ))}
           </div>
         </div>
@@ -240,7 +241,7 @@ export default function WorkShowcase() {
 
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <motion.div initial={{ opacity: 0, filter: "blur(24px)" }} whileInView={{ opacity: 1, filter: "blur(0px)" }}
+        <motion.div initial={{ opacity: 0, filter: "blur(24px)" }} whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
           viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col gap-5">
           <SectionLabel index={3} className="block">Selected Work</SectionLabel>

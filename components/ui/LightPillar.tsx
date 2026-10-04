@@ -3,6 +3,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import './LightPillar.css';
+import { onRevealOpen } from '@/lib/reveal';
 
 /* ─────────────────────────────────────────────────────────────────
    Light pillar — a single full-screen ray-marched fragment shader.
@@ -295,9 +296,12 @@ const LightPillar = ({
     const targetFPS = effectiveQuality === 'low' ? 30 : 60;
     const frameTime = 1000 / targetFPS;
 
-    let isVisible = true;
+    // Draws only while on screen AND once the intro shutters open — before
+    // that it is fully covered, and rendering only competed with page load.
+    let isVisible = false;
+    let revealed = false;
     const animate = (currentTime: number) => {
-      if (!isVisible) return;
+      if (!isVisible || !revealed) return;
       const deltaTime = currentTime - lastTime;
       if (deltaTime >= frameTime) {
         time += 0.016 * rotationSpeedRef.current;
@@ -311,16 +315,23 @@ const LightPillar = ({
       rafId = requestAnimationFrame(animate);
     };
 
-    const observer = new IntersectionObserver(([entry]) => {
-      isVisible = entry.isIntersecting;
+    const sync = () => {
       if (rafId) cancelAnimationFrame(rafId);
       rafId = null;
-      if (isVisible) {
+      if (isVisible && revealed) {
         lastTime = performance.now();
         rafId = requestAnimationFrame(animate);
       }
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      sync();
     }, { threshold: 0 });
     observer.observe(container);
+    const unsubReveal = onRevealOpen(() => {
+      revealed = true;
+      sync();
+    });
 
     let resizeTimeout: number | null = null;
     const handleResize = () => {
@@ -336,6 +347,7 @@ const LightPillar = ({
         container.removeEventListener('touchmove', handleTouchMove);
         container.removeEventListener('touchstart', handleTouchMove);
       }
+      unsubReveal();
       if (rafId) cancelAnimationFrame(rafId);
       if (resizeTimeout) clearTimeout(resizeTimeout);
       observer.disconnect();

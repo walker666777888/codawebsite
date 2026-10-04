@@ -5,6 +5,8 @@ import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } fro
 import MagneticButton from "@/components/ui/MagneticButton";
 import { ArrowRight } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
+import { onRevealDone } from "@/lib/reveal";
+import { CTA_TEXT_BACKDROP } from "@/lib/glows";
 import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
 import dynamic from "next/dynamic";
 
@@ -58,7 +60,7 @@ function WaveText({ text, className, style }: { text: string; className?: string
         <motion.span
           key={i}
           style={{ display: "inline-block", whiteSpace: ch === " " ? "pre" : undefined }}
-          animate={active ? { filter: "blur(4px)", color: "#FF5C00" } : { filter: "blur(0px)", color: "#ffffff" }}
+          animate={active ? { filter: "blur(4px)", color: "#FF5C00" } : { filter: "blur(0px)", color: "#ffffff", transitionEnd: { filter: "none" } }}
           transition={{ type: "spring", stiffness: 400, damping: 18, delay: i * 0.035 }}
         >{ch}</motion.span>
       ))}
@@ -79,9 +81,23 @@ export default function CallToAction() {
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMobile("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
-    setDeviceKnown(true);
+    const mobile = "ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768;
+    // The WebGL particle scene (context + shader compile + 1,000 points) is
+    // far below the fold: build it in idle time right after the intro
+    // instead of during page load.
+    let idleId: number | null = null;
+    const unsubReveal = onRevealDone(() => {
+      const mount = () => {
+        setIsMobile(mobile);
+        setDeviceKnown(true);
+      };
+      if ("requestIdleCallback" in window) idleId = window.requestIdleCallback(mount, { timeout: 1500 });
+      else mount();
+    });
+    return () => {
+      unsubReveal();
+      if (idleId !== null) window.cancelIdleCallback(idleId);
+    };
   }, []);
 
   /* ── 3D tilt on mouse move (desktop only) ── */
@@ -130,15 +146,15 @@ export default function CallToAction() {
       <style>{`
         @keyframes cta-rise {
           from { opacity: 0; filter: blur(24px); }
-          to   { opacity: 1; filter: blur(0px); }
+          to   { opacity: 1; filter: none; }
         }
         @keyframes cta-fade {
           from { opacity: 0; filter: blur(24px); }
-          to   { opacity: 1; filter: blur(0px); }
+          to   { opacity: 1; filter: none; }
         }
         @keyframes cta-slide-up {
           from { opacity: 0; filter: blur(24px); }
-          to   { opacity: 1; filter: blur(0px); }
+          to   { opacity: 1; filter: none; }
         }
         @keyframes cta-ring {
           0%   { transform: scale(0.13); opacity: 0.45; }
@@ -166,24 +182,24 @@ export default function CallToAction() {
           animation: cta-shine 4s infinite;
         }
 
-        .cta-card { opacity: 0; will-change: filter, opacity; }
+        .cta-card { opacity: 0; }
         .cta-card.in { animation: cta-rise 0.75s cubic-bezier(0.16,1,0.3,1) 0.05s forwards; }
 
-        .cta-eyebrow { opacity: 0; will-change: filter, opacity; }
+        .cta-eyebrow { opacity: 0; }
         .cta-eyebrow.in { animation: cta-fade 0.6s ease 0.2s forwards; }
 
         .cta-line-wrap { overflow: hidden; padding-bottom: 0.3em; }
-        .cta-line { display: block; opacity: 0; filter: blur(24px); will-change: filter, opacity; }
+        .cta-line { display: block; opacity: 0; filter: blur(24px); }
         .cta-line.in-0 { animation: cta-slide-up 0.85s cubic-bezier(0.16,1,0.3,1) 0.25s forwards; }
         .cta-line.in-1 { animation: cta-slide-up 0.85s cubic-bezier(0.16,1,0.3,1) 0.36s forwards; }
 
-        .cta-sub { opacity: 0; will-change: filter, opacity; }
+        .cta-sub { opacity: 0; }
         .cta-sub.in { animation: cta-fade 0.7s ease 0.48s forwards; }
 
-        .cta-btn { opacity: 0; will-change: filter, opacity; }
+        .cta-btn { opacity: 0; }
         .cta-btn.in { animation: cta-fade 0.7s ease 0.58s forwards; }
 
-        .cta-note { opacity: 0; will-change: filter, opacity; }
+        .cta-note { opacity: 0; }
         .cta-note.in { animation: cta-fade 0.7s ease 0.68s forwards; }
 
         @media (min-width: 768px) {
@@ -254,7 +270,8 @@ export default function CallToAction() {
           >
             {/* Soft backdrop to separate text */}
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-0">
-              <div className="absolute w-[800px] h-[500px] bg-black/60 blur-[100px] rounded-full" />
+              {/* Pre-blurred gradient (lib/glows) — same look, no blur filter */}
+              <div className="absolute w-[800px] h-[500px]" style={CTA_TEXT_BACKDROP} />
             </div>
 
             {/* Content Group (Headline + Sub-copy) */}
@@ -272,7 +289,7 @@ export default function CallToAction() {
                 </div>
                 <motion.div
                   initial={{ opacity: 0, filter: "blur(24px)" }}
-                  animate={visible ? { opacity: 1, filter: "blur(0px)" } : {}}
+                  animate={visible ? { opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } } : {}}
                   transition={{ duration: 0.85, delay: 0.36, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <WaveText

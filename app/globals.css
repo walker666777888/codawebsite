@@ -496,6 +496,37 @@
   transform-origin: center;
 }
 
+/* ── Intro + entrance choreography (compositor-driven) ─────
+   These were Framer Motion animations that only start after React
+   hydrates and then run on the main thread — exactly while the page is
+   loading, so the intro stuttered. As CSS they start with the first paint
+   and run on the compositor, staying smooth under load. Timings, delays
+   and curves are the original motion values (motion's implicit default
+   easing is cubic-bezier(0, 0, 0.58, 1)). */
+:root {
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-motion-out: cubic-bezier(0, 0, 0.58, 1);
+  /* stiffness 220 / damping 18 spring, sampled */
+  --ease-reveal-spring: linear(0 0%, 0.0269 2.5%, 0.0968 5%, 0.1951 7.5%, 0.3095 10%, 0.4299 12.5%, 0.5488 15%, 0.6603 17.5%, 0.7606 20%, 0.8475 22.5%, 0.92 25%, 0.978 27.5%, 1.0222 30%, 1.054 32.5%, 1.0748 35%, 1.0865 37.5%, 1.0908 40%, 1.0893 42.5%, 1.0836 45%, 1.0751 47.5%, 1.0649 50%, 1.054 52.5%, 1.0431 55%, 1.0328 57.5%, 1.0235 60%, 1.0153 62.5%, 1.0085 65%, 1.0029 67.5%, 0.9987 70%, 0.9956 72.5%, 0.9935 75%, 0.9923 77.5%, 0.9918 80%, 0.9918 82.5%, 0.9923 85%, 0.993 87.5%, 0.9939 90%, 0.9949 92.5%, 0.9959 95%, 0.9968 97.5%, 1 100%);
+}
+@keyframes coda-fade-in      { from { opacity: 0; } to { opacity: 1; } }
+@keyframes coda-fade-out     { from { opacity: 1; } to { opacity: 0; } }
+@keyframes coda-blink        { from { opacity: 1; } to { opacity: 0; } }
+@keyframes coda-rise-full    { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: none; } }
+@keyframes coda-pop          { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+@keyframes coda-track-in     { from { opacity: 0; transform: scaleX(0.8); } to { opacity: 1; transform: scaleX(1); } }
+@keyframes coda-progress     { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes coda-slide-in-l   { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+@keyframes coda-slide-in-r   { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: none; } }
+@keyframes coda-content-out  { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(-10px) scale(0.98); } }
+@keyframes coda-shutter-up   { from { transform: translateY(0); } to { transform: translateY(-100%); } }
+@keyframes coda-shutter-down { from { transform: translateY(0); } to { transform: translateY(100%); } }
+@keyframes coda-word-rise    { from { transform: translateY(108%) skewY(4deg); } to { transform: none; } }
+/* ends on filter:none (not blur(0)) so no filter is left on the element */
+@keyframes coda-blur-in      { from { opacity: 0; filter: blur(24px); } to { opacity: 1; filter: none; } }
+@keyframes coda-header-in    { from { opacity: 0; transform: translateY(-80px); } to { opacity: 1; transform: none; } }
+@keyframes coda-drop-in      { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
 /* Freeze every CSS animation inside a subtree while it is off-screen. */
 .anim-paused,
 .anim-paused *,

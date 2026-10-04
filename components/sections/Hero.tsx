@@ -5,7 +5,7 @@ import {
   useTransform,
   useReducedMotion
 } from "motion/react";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { useFormModal } from "@/components/providers/FormModalProvider";
@@ -13,6 +13,7 @@ import { useIsLowEndDevice } from "@/hooks/useIsLowEndDevice";
 import TextType from "@/components/ui/TextType";
 import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
+import { introDelay } from "@/lib/reveal";
 
 const LightPillar = dynamic(() => import("@/components/ui/LightPillar"), {
   ssr: false,
@@ -147,6 +148,11 @@ export default function Hero() {
   // Detect touch device — disable all JS-driven parallax on mobile
   const [isTouch, setIsTouch] = useState(false);
   const [isMobileScreen, setIsMobileScreen] = useState(false);
+  // "unfair advantage." continues the moment "Engineer your " finishes —
+  // chained rather than on a separate timer that could overtake it when
+  // the per-letter timers run late on a busy main thread.
+  const [taglineLeadDone, setTaglineLeadDone] = useState(false);
+  const onTaglineLeadDone = useCallback(() => setTaglineLeadDone(true), []);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -260,11 +266,9 @@ export default function Hero() {
               className={["inline-block mr-[0.2em] last:mr-0", wi === 2 ? "block -mt-7" : ""].join(" ")}
             >
               <div className="overflow-hidden -mx-3 px-3 pb-[0.18em] pt-[0.05em] relative">
-                <motion.span
+                <span
                   className={["inline-block relative", wi === 2 ? "text-coda-accent animate-chromatic" : "text-white"].join(" ")}
-                  initial={{ y: "108%", skewY: 4 }}
-                  animate={{ y: "0%", skewY: 0 }}
-                  transition={{ duration: 1.05, delay: 1.6 + wi * 0.13, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ animation: `coda-word-rise 1.05s var(--ease-expo) ${1.6 + wi * 0.13}s both` }}
                 >
                   {word}
                   {wi === 2 && (
@@ -312,7 +316,7 @@ export default function Hero() {
                         style={{ color: "#00FF88", animation: "glitch-g 2s linear infinite", animationDelay: "0.07s" }}>{word}</span>
                     </>
                   )}
-                </motion.span>
+                </span>
               </div>
             </span>
           ))}
@@ -320,11 +324,9 @@ export default function Hero() {
 
         <div className="flex flex-col items-center gap-5 sm:gap-7 md:-mt-12">
           {/* Tagline */}
-          <motion.div
+          <div
             className="flex items-center gap-2 sm:gap-4 max-w-full"
-            initial={{ opacity: 0, filter: "blur(24px)" }}
-            animate={{ opacity: 1, filter: "blur(0px)" }}
-            transition={{ duration: 0.9, delay: 2.1, ease: [0.16, 1, 0.3, 1] }}
+            style={{ animation: "coda-blur-in 0.9s var(--ease-expo) 2.1s both" }}
           >
             <span className="h-[1px] w-4 sm:w-10 bg-white/20 block shrink" />
             <p className="font-instrument text-white/95 text-lg min-[390px]:text-xl sm:text-3xl md:text-4xl tracking-[-0.02em] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
@@ -332,43 +334,42 @@ export default function Hero() {
                 text="Engineer your " 
                 as="span" 
                 showCursor={false} 
-                initialDelay={2600} 
+                initialDelay={introDelay(2600)} 
                 typingSpeed={50} 
+                onSentenceComplete={onTaglineLeadDone}
               />
               <span className="text-coda-accent">
-                <TextType 
-                  text="unfair advantage." 
-                  as="span" 
-                  showCursor={false} 
-                  initialDelay={2600 + (14 * 50)} 
-                  typingSpeed={50} 
-                  cursorClassName="bg-coda-accent" 
-                />
+                {taglineLeadDone && (
+                  <TextType 
+                    text="unfair advantage." 
+                    as="span" 
+                    showCursor={false} 
+                    initialDelay={0} 
+                    typingSpeed={50} 
+                    cursorClassName="bg-coda-accent" 
+                  />
+                )}
               </span>
             </p>
             <span className="h-[1px] w-4 sm:w-10 bg-white/20 block shrink" />
-          </motion.div>
+          </div>
 
-          <motion.p
-            initial={{ opacity: 0, filter: "blur(24px)" }}
-            animate={{ opacity: 1, filter: "blur(0px)" }}
-            transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
+          <p
+            style={{ animation: "coda-blur-in 1s var(--ease-expo) 2.2s both" }}
             className="font-sans text-sm sm:text-base text-white/80 max-w-[340px] sm:max-w-[480px] leading-[1.65] sm:leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
           >
             <TextType 
               text="We unify technology, design, and growth into compounding digital ecosystems that outpace your competition." 
               as="span" 
               showCursor={false} 
-              initialDelay={4200} 
+              initialDelay={introDelay(4200)} 
               typingSpeed={10} 
             />
-          </motion.p>
+          </p>
 
           {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, filter: "blur(24px)" }}
-            animate={{ opacity: 1, filter: "blur(0px)" }}
-            transition={{ duration: 0.9, delay: 2.4, ease: [0.16, 1, 0.3, 1] }}
+          <div
+            style={{ animation: "coda-blur-in 0.9s var(--ease-expo) 2.4s both" }}
             className="flex items-center gap-5 pointer-events-auto"
           >
             <MagneticButton variant="primary" size="md" onClick={openForm} className="px-6 py-3 sm:px-8 sm:py-3.5">
@@ -379,17 +380,15 @@ export default function Hero() {
                 </span>
               </span>
             </MagneticButton>
-          </motion.div>
+          </div>
         </div>
       </motion.div>
 
 
       {/* ── Scroll indicator — pinned to very bottom ─────── */}
-      <motion.div
+      <div
         className="absolute left-1/2 -translate-x-1/2 bottom-6 flex flex-col items-center gap-2 z-10 pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 3.4, duration: 1.2 }}
+        style={{ animation: "coda-fade-in 1.2s var(--ease-motion-out) 3.4s both" }}
       >
         <div className="w-[1px] h-10 overflow-hidden relative">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-coda-ink/20 md:via-white/20 to-transparent" />
@@ -398,7 +397,7 @@ export default function Hero() {
             style={{ animation: "coda-scroll-cue 2.3s linear infinite" }}
           />
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

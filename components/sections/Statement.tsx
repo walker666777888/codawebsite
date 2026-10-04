@@ -14,6 +14,7 @@ import {
 import { useRef, useState, useEffect, useCallback } from "react";
 import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
+import { CARD_HOVER_GLOW, SPREAD_GLOW_A, SPREAD_GLOW_B, STATEMENT_GLOW_A, STATEMENT_GLOW_B } from "@/lib/glows";
 
 /* ═══════════════════════════════════════════════════════════
    MOTION GRAPHICS — one per discipline
@@ -337,7 +338,7 @@ function StrategyGraphic({ active: activeProp }: { active: boolean }) {
         {kpis.map((k, i) => (
           <motion.div key={k.label}
             style={{ background: "var(--coda-surface-2)", border: "1px solid rgba(245,158,11,0.25)", borderRadius: "8px", padding: "3px 4px", textAlign: "center" }}
-            animate={active ? { filter: "blur(0px)", opacity: 1 } : { filter: "blur(4px)", opacity: 0 }}
+            animate={active ? { filter: "blur(0px)", opacity: 1, transitionEnd: { filter: "none" } } : { filter: "blur(4px)", opacity: 0 }}
             transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}>
             <div style={{ fontFamily: "monospace", fontSize: "6.5px", color: "var(--coda-ink-3)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "1px" }}>{k.label}</div>
             <div style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: AMBER }}>{k.value}</div>
@@ -466,7 +467,7 @@ function PerformanceGraphic({ active: activeProp }: { active: boolean }) {
         {kpis.map((k, i) => (
           <motion.div key={k.label}
             style={{ background: "var(--coda-surface-2)", border: "1px solid rgba(255,92,0,0.22)", borderRadius: "8px", padding: "6px 8px", textAlign: "center" }}
-            animate={active ? { filter: "blur(0px)", opacity: 1 } : { filter: "blur(4px)", opacity: 0 }}
+            animate={active ? { filter: "blur(0px)", opacity: 1, transitionEnd: { filter: "none" } } : { filter: "blur(4px)", opacity: 0 }}
             transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}>
             <div style={{ fontFamily: "monospace", fontSize: "8px", color: "var(--coda-ink-3)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "2px" }}>{k.label}</div>
             <div style={{ fontFamily: "monospace", fontSize: "12px", fontWeight: 700, color: ORANGE }}>{k.value}</div>
@@ -562,7 +563,7 @@ function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; 
   return (
     <motion.div
       initial={{ opacity: 0, filter: "blur(24px)" }}
-      whileInView={{ opacity: 1, filter: "blur(0px)" }}
+      whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
       viewport={{ once: true, margin: "0px" }}
       transition={{ duration: 0.65, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       style={{ perspective: 1000, willChange: "transform, opacity, filter" }}
@@ -582,8 +583,8 @@ function LandscapeTile({ tile, index }: { tile: typeof LANDSCAPE_TILES[number]; 
 
         <motion.div className="absolute inset-0 pointer-events-none z-[2] rounded-[28px]"
           style={{ opacity: hovered ? 1 : 0, background: `radial-gradient(circle at ${glowX}% ${glowY}%,rgba(255,92,0,0.08) 0%,transparent 60%)`, transition: "opacity 0.5s ease" }} />
-        <div className="absolute -top-16 -left-16 w-48 h-48 rounded-full blur-[60px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 pointer-events-none"
-          style={{ background: "radial-gradient(circle,rgba(255,92,0,0.22),transparent 70%)" }} />
+        <div className="absolute -top-16 -left-16 w-48 h-48 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 pointer-events-none"
+          style={CARD_HOVER_GLOW} />
 
         <div className="relative z-[10] p-5 xl:p-6 grid grid-cols-1 md:grid-cols-[1fr_1.15fr] gap-5 h-full items-stretch" style={{ transform: "translateZ(18px)" }}>
           {/* LEFT */}
@@ -780,7 +781,7 @@ function DisciplineStrip({
           <motion.span
             className="font-mono text-label tracking-[0.25em] text-[var(--coda-ink-3)]"
             initial={{ opacity: 0, filter: "blur(24px)" }}
-            animate={isInView ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(24px)" }}
+            animate={isInView ? { opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } } : { opacity: 0, filter: "blur(24px)" }}
             transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
           >
             {d.num}
@@ -817,7 +818,7 @@ function DisciplineStrip({
             <motion.p
               className="font-sans text-base text-[var(--coda-ink-2)] leading-relaxed max-w-sm"
               initial={{ opacity: 0, filter: "blur(24px)" }}
-              animate={isInView ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(24px)" }}
+              animate={isInView ? { opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } } : { opacity: 0, filter: "blur(24px)" }}
               transition={{ duration: 0.8, delay: 0.35 + index * 0.1 }}
             >
               {d.description}
@@ -950,8 +951,8 @@ function DisciplineCardBody({
 
       {/* Subtle warm corner glow, reveals on hover */}
       <div
-        className="absolute -top-16 -left-16 w-48 h-48 rounded-full blur-[60px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 pointer-events-none"
-        style={{ background: `radial-gradient(circle, rgba(255,92,0,0.22), transparent 70%)` }}
+        className="absolute -top-16 -left-16 w-48 h-48 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 pointer-events-none"
+        style={CARD_HOVER_GLOW}
       />
 
       <div className="relative p-5 xl:p-6 flex flex-col gap-3 h-full overflow-hidden">
@@ -1139,13 +1140,14 @@ function DisciplineSpread() {
           className="absolute inset-0 pointer-events-none"
           style={{ y: bgY, willChange: "transform" }}
         >
+          {/* Pre-blurred gradients (lib/glows) — same look, no blur filter */}
           <div
-            className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full blur-[140px] opacity-[0.07]"
-            style={{ background: "radial-gradient(ellipse, #FF5C00 0%, transparent 70%)" }}
+            className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] opacity-[0.07]"
+            style={SPREAD_GLOW_A}
           />
           <div
-            className="absolute bottom-[-15%] right-[-5%] w-[500px] h-[500px] rounded-full blur-[120px] opacity-[0.05]"
-            style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 70%)" }}
+            className="absolute bottom-[-15%] right-[-5%] w-[500px] h-[500px] opacity-[0.05]"
+            style={SPREAD_GLOW_B}
           />
         </motion.div>
 
@@ -1575,7 +1577,7 @@ function HeaderBlock({
       <motion.div
         className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center overflow-visible"
         initial={{ opacity: 0, filter: "blur(24px)" }}
-        whileInView={{ opacity: 1, filter: "blur(0px)" }}
+        whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
         viewport={{ once: true, margin: "0px" }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         style={{ willChange: "transform, opacity, filter" }}
@@ -1711,11 +1713,60 @@ function MobileDisciplineStack() {
     }))
   ];
 
+  // Only animate the graphics you can actually see. Every card in this
+  // sticky stack stays "on screen" while it is stuck, so all five graphics
+  // used to animate at once even though the cards above fully cover them —
+  // the single biggest per-frame cost on phones. A card's graphic now runs
+  // only while it isn't covered by the next card sliding over it.
+  const stackRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [shown, setShown] = useState<boolean[]>(() => allCards.map(() => false));
+
+  useEffect(() => {
+    const stack = stackRef.current;
+    if (!stack) return;
+    // Next card's top has passed this card's header → its graphic is hidden
+    const COVER_PX = 140;
+    let raf = 0;
+    const measure = () => {
+      raf = 0;
+      const rects = cardRefs.current.map((el) => el?.getBoundingClientRect());
+      const next = rects.map((r, i) => {
+        if (!r) return false;
+        const onScreen = r.top < window.innerHeight && r.bottom > 0;
+        const below = rects[i + 1];
+        const covered = !!below && below.top <= r.top + COVER_PX;
+        return onScreen && !covered;
+      });
+      setShown((prev) => (prev.every((v, i) => v === next[i]) ? prev : next));
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(measure); };
+    let listening = false;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !listening) {
+        listening = true;
+        window.addEventListener("scroll", onScroll, { passive: true });
+        measure();
+      } else if (!entry.isIntersecting && listening) {
+        listening = false;
+        window.removeEventListener("scroll", onScroll);
+        setShown((prev) => (prev.some(Boolean) ? prev.map(() => false) : prev));
+      }
+    });
+    io.observe(stack);
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
-    <div className="md:hidden max-w-7xl mx-auto px-5 pb-8 flex flex-col relative z-10" style={{ gap: "35vh" }}>
+    <div ref={stackRef} className="md:hidden max-w-7xl mx-auto px-5 pb-8 flex flex-col relative z-10" style={{ gap: "35vh" }}>
       {allCards.map((d, i) => (
         <div
           key={d.num}
+          ref={(el) => { cardRefs.current[i] = el; }}
           className="sticky"
           style={{
             top: `calc(8vh + ${i * 12}px)`,
@@ -1723,7 +1774,7 @@ function MobileDisciplineStack() {
           }}
         >
           <div className="rounded-[28px] h-[78vh] min-h-[540px] w-full bg-[var(--coda-card-bg)]">
-            <DisciplineCardBody d={d as any} active />
+            <DisciplineCardBody d={d as any} active={shown[i]} />
           </div>
         </div>
       ))}
@@ -1751,10 +1802,11 @@ export default function Statement() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Ambient parallax orbs */}
         <motion.div style={{ y: bgY, willChange: "transform" }} className="absolute inset-0 hidden md:block">
-          <div className="absolute top-[-20%] right-[-5%] w-[700px] h-[700px] rounded-full blur-[160px] opacity-[0.045] animate-glow-pulse"
-            style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 65%)" }} />
-          <div className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] rounded-full blur-[130px] opacity-[0.03]"
-            style={{ background: "radial-gradient(circle, #FF5C00 0%, transparent 65%)" }} />
+          {/* Pre-blurred gradients (lib/glows) — same look, no blur filter */}
+          <div className="absolute top-[-20%] right-[-5%] w-[700px] h-[700px] opacity-[0.045] animate-glow-pulse"
+            style={STATEMENT_GLOW_A} />
+          <div className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] opacity-[0.03]"
+            style={STATEMENT_GLOW_B} />
         </motion.div>
 
         {/* Subtle grid */}
@@ -1784,7 +1836,7 @@ export default function Statement() {
       <div className="max-w-7xl mx-auto px-6 py-16 lg:py-24 relative z-10">
         <motion.div
           initial={{ opacity: 0, filter: "blur(24px)" }}
-          whileInView={{ opacity: 1, filter: "blur(0px)" }}
+          whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
           className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-10 border-t border-[var(--coda-hairline)]"

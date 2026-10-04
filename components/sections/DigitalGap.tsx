@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionLabel from "@/components/ui/SectionLabel";
+import { onRevealDone } from "@/lib/reveal";
 import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
 
 type CSSVars = React.CSSProperties & Record<`--${string}`, string | number>;
@@ -13,7 +14,7 @@ type CSSVars = React.CSSProperties & Record<`--${string}`, string | number>;
 const pulse = (from: number, to: number, duration: number, delay: number): CSSVars => ({
   "--pulse-from": from,
   "--pulse-to": to,
-  animation: `coda-pulse-opacity ${duration}s ease-in-out ${delay}s infinite`,
+  animation: `coda-pulse-opacity ${duration}s cubic-bezier(0, 0, 0.58, 1) ${delay}s infinite`,
 });
 
 if (typeof window !== "undefined") {
@@ -101,7 +102,7 @@ function VisualFragility() {
                 style={{
                   fontSize: "8px",
                   "--pulse-scale": 1.32,
-                  animation: `coda-pulse-scale 1.8s ease-in-out ${i * 0.5}s infinite`,
+                  animation: `coda-pulse-scale 1.8s cubic-bezier(0, 0, 0.58, 1) ${i * 0.5}s infinite`,
                 } as CSSVars}
               >!</div>
             )}
@@ -165,7 +166,7 @@ function VisualChaos() {
               "--pulse-scale": 1.3,
               "--pulse-from": 0.06 + i * 0.04,
               "--pulse-to": 0.22 + i * 0.06,
-              animation: `coda-pulse-ring ${0.6 + i * 0.18}s ease-in-out infinite`,
+              animation: `coda-pulse-ring ${0.6 + i * 0.18}s cubic-bezier(0, 0, 0.58, 1) infinite`,
             } as CSSVars}
           />
         ))}
@@ -279,7 +280,13 @@ export default function DigitalGap() {
   // ── Desktop GSAP (md+) ────────────────────────────────────
   useEffect(() => {
     if (window.innerWidth < 768) return;
-    const ctx = gsap.context(() => {
+    // Pinning measures the whole page (forced layouts + a refresh). The
+    // section is far below the fold and scroll is locked during the intro,
+    // so set it up once the intro is done and the main thread is idle
+    // instead of in the middle of page load.
+    let ctx: gsap.Context | null = null;
+    let idleId: number | null = null;
+    const setup = () => { ctx = gsap.context(() => {
       if (!desktopContainerRef.current || !textRef.current || !visualsRef.current) return;
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -313,8 +320,16 @@ export default function DigitalGap() {
         .to(texts[2],   { opacity: 1, y: 0, duration: 1 }, "<")
         .to(visuals[2], { opacity: 1, y: 0, scale: 1, duration: 1 }, "<");
       gsap.delayedCall(0.15, () => ScrollTrigger.refresh());
-    }, desktopContainerRef);
-    return () => ctx.revert();
+    }, desktopContainerRef); };
+    const unsubReveal = onRevealDone(() => {
+      if ("requestIdleCallback" in window) idleId = window.requestIdleCallback(setup, { timeout: 600 });
+      else setup();
+    });
+    return () => {
+      unsubReveal();
+      if (idleId !== null) window.cancelIdleCallback(idleId);
+      ctx?.revert();
+    };
   }, []);
 
 
@@ -347,7 +362,7 @@ export default function DigitalGap() {
       </div>
       <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-center gap-12">
         <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full"
-          style={{ background: "var(--coda-surface-2)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid var(--coda-hairline)", color: "var(--coda-ink)" }}
+          style={{ background: "var(--coda-surface-2)", border: "1px solid var(--coda-hairline)", color: "var(--coda-ink)" }}
         >The Digital Gap</SectionLabel>
         <div className="grid grid-cols-2 gap-20 items-center">
           <div ref={textRef} className="space-y-10">
@@ -374,7 +389,7 @@ export default function DigitalGap() {
         </div>
       </div>
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
-        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[var(--coda-hairline)] bg-[var(--coda-surface-2)]/80 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.12)] transition-colors duration-300">
+        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[var(--coda-hairline)] bg-[var(--coda-surface-2)]/80 shadow-[0_4px_24px_rgba(0,0,0,0.12)] transition-colors duration-300">
           <span className="font-mono text-micro text-[var(--coda-ink)] font-semibold uppercase tracking-[0.25em]">Scroll to explore</span>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#FF5C00]">
             <path d="M12 5v14M19 12l-7 7-7-7"/>
@@ -393,12 +408,12 @@ export default function DigitalGap() {
           <div key={i} className="flex flex-col gap-8">
             {i === 0 && (
               <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full"
-                style={{ background: "var(--coda-surface-2)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid var(--coda-hairline)", color: "var(--coda-ink)" }}
+                style={{ background: "var(--coda-surface-2)", border: "1px solid var(--coda-hairline)", color: "var(--coda-ink)" }}
               >The Digital Gap</SectionLabel>
             )}
             <motion.h2 
               initial={{ opacity: 0, filter: "blur(24px)" }}
-              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
               viewport={{ once: true, margin: "0px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="font-instrument tracking-[-0.03em]"
@@ -409,7 +424,7 @@ export default function DigitalGap() {
             </motion.h2>
             <motion.div 
               initial={{ opacity: 0, filter: "blur(24px)" }}
-              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
               viewport={{ once: true, margin: "0px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
               className="w-full rounded-2xl border border-[var(--coda-card-border)] shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_12px_40px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.08)_inset] overflow-hidden p-6 transition-colors duration-300" 

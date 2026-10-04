@@ -148,7 +148,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
     <motion.div
       ref={tileRef}
       initial={{ opacity: 0, filter: "blur(24px)" }}
-      whileInView={{ opacity: 1, filter: "blur(0px)" }}
+      whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
       viewport={{ once: true, margin: "0px" }}
       transition={{ duration: 0.65, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       className={`group relative overflow-hidden rounded-2xl cursor-default select-none gpu ${className}`}
@@ -226,7 +226,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
             className="font-mono text-micro tracking-[0.18em] text-[var(--coda-ink-3)] uppercase border rounded-full px-3 py-1 transition-colors duration-300"
             style={{
               borderColor: "var(--coda-hairline)",
-              animation: `coda-border-pulse 4s ease-in-out ${index * 0.8}s infinite`,
+              animation: `coda-border-pulse 4s cubic-bezier(0, 0, 0.58, 1) ${index * 0.8}s infinite`,
             }}
           >
             {stat.sub}
@@ -296,7 +296,7 @@ export default function BentoMetrics() {
         <motion.div
           ref={headerRef}
           initial={{ opacity: 0, filter: "blur(24px)" }}
-          animate={headerInView ? { opacity: 1, filter: "blur(0px)" } : {}}
+          animate={headerInView ? { opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="flex items-end justify-between border-t border-[var(--coda-hairline)] pt-8"
         >
@@ -315,7 +315,7 @@ export default function BentoMetrics() {
             style={{
               "--pulse-from": 0.5,
               "--pulse-to": 0.8,
-              animation: "coda-pulse-opacity 5s ease-in-out infinite",
+              animation: "coda-pulse-opacity 5s cubic-bezier(0, 0, 0.58, 1) infinite",
             } as React.CSSProperties}
           >
             CODA / Performance

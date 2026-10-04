@@ -53,6 +53,17 @@ export function lenisScrollTo(
   }
 }
 
+/* ─────────────────────────────────────────────────────────────────
+   Native scrolling is used everywhere. Lenis moves the page from a
+   main-thread requestAnimationFrame loop, so on this page (which does a
+   lot of per-frame paint/layer work) every frame that ran over budget
+   froze the scroll itself — measured ~50–60% of frames stalling while
+   wheel-scrolling. Native scroll runs on the compositor thread and stays
+   smooth regardless; the browser still smooths mouse-wheel input itself.
+   Flip this to re-enable the Lenis glide on desktop.
+───────────────────────────────────────────────────────────────── */
+const USE_LENIS = false;
+
 export default function LenisProvider({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
 
@@ -70,7 +81,7 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (isTouchDevice || prefersReducedMotion) return; // native scroll on mobile/reduced-motion
+    if (!USE_LENIS || isTouchDevice || prefersReducedMotion) return; // native scroll
 
     // ─── Desktop: full butter-smooth Lenis ─────────────────────────────────
     const lenis = new Lenis({
@@ -117,9 +128,17 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
     };
   }, []);
 
+  // With native scrolling, "stop" (e.g. while the build-form modal is open)
+  // simply locks the page scroll.
   const ctrl: LenisCtx = {
-    stop:  () => lenisRef.current?.stop(),
-    start: () => lenisRef.current?.start(),
+    stop:  () => {
+      if (lenisRef.current) lenisRef.current.stop();
+      else document.documentElement.style.overflow = "hidden";
+    },
+    start: () => {
+      if (lenisRef.current) lenisRef.current.start();
+      else document.documentElement.style.overflow = "";
+    },
     lenis: () => lenisRef.current,
   };
 

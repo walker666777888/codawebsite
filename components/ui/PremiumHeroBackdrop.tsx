@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { onRevealOpen } from "@/lib/reveal";
 
 /* ─────────────────────────────────────────────────────────────────────────
    OPTION C: 3D High-Contrast Morphing Topography & Liquid CAD Wireframe
@@ -292,14 +293,24 @@ export default function PremiumHeroBackdrop({ className = "" }: PremiumHeroBackd
       cancelAnimationFrame(rafId);
     };
 
-    // Fully stop the loop (not just skip drawing) once the hero leaves view.
+    // Fully stop the loop (not just skip drawing) once the hero leaves view,
+    // and don't start until the intro shutters open — before that the canvas
+    // is completely covered and drawing it only slowed down page load.
+    let inView = false;
+    let revealed = false;
+    const sync = () => (inView && revealed ? start() : stop());
     const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) start();
-      else stop();
+      inView = entry.isIntersecting;
+      sync();
     });
     io.observe(container);
+    const unsubReveal = onRevealOpen(() => {
+      revealed = true;
+      sync();
+    });
 
     return () => {
+      unsubReveal();
       stop();
       window.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseleave", onMouseLeave);
