@@ -226,7 +226,7 @@ function SpotlightTile({ stat, index, className = "", large = false, depth = 26,
             className="font-mono text-micro tracking-[0.18em] text-[var(--coda-ink-3)] uppercase border rounded-full px-3 py-1 transition-colors duration-300"
             style={{
               borderColor: "var(--coda-hairline)",
-              animation: `coda-border-pulse 4s ease-in-out ${index * 0.8}s infinite`,
+              animation: `coda-border-pulse 4s cubic-bezier(0, 0, 0.58, 1) ${index * 0.8}s infinite`,
             }}
           >
             {stat.sub}
@@ -315,7 +315,7 @@ export default function BentoMetrics() {
             style={{
               "--pulse-from": 0.5,
               "--pulse-to": 0.8,
-              animation: "coda-pulse-opacity 5s ease-in-out infinite",
+              animation: "coda-pulse-opacity 5s cubic-bezier(0, 0, 0.58, 1) infinite",
             } as React.CSSProperties}
           >
             CODA / Performance

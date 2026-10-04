@@ -58,11 +58,11 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.9, delay: 1.7, ease: [0.16, 1, 0.3, 1] }}
+      {/* Entrance is a CSS animation (globals.css) so it plays smoothly from
+          first paint instead of waiting for hydration on a busy main thread */}
+      <header
         className="fixed z-50 top-0 left-0 right-0 w-full flex justify-center pointer-events-none"
+        style={{ animation: "coda-header-in 0.9s var(--ease-expo) 1.7s both" }}
       >
         <motion.div 
           layout
@@ -112,9 +112,8 @@ export default function Navbar() {
           {/* Desktop nav — absolutely centered */}
           <motion.nav layout className="hidden sm:flex items-center gap-2 text-base font-instrument absolute left-1/2 -translate-x-1/2">
             {NAV_ANCHOR_LINKS.map((link, i) => (
-              <motion.div key={link.label}
-                initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 1.9 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+              <div key={link.label}
+                style={{ animation: `coda-drop-in 0.5s var(--ease-expo) ${1.9 + i * 0.07}s both` }}
               >
                 <a href={link.href}
                   onClick={(e) => scrollToSection(e, link.href)}
@@ -123,7 +122,7 @@ export default function Navbar() {
                   {link.label}
                   <span className="absolute inset-x-3 bottom-0.5 h-[1.5px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-full bg-[#FF5C00]" />
                 </a>
-              </motion.div>
+              </div>
             ))}
           </motion.nav>
 
@@ -166,7 +165,7 @@ export default function Navbar() {
             </AnimatePresence>
           </motion.button>
         </motion.div>
-      </motion.header>
+      </header>
 
       {/* Mobile full-screen menu */}
       <AnimatePresence>

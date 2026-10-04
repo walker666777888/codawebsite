@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { markReveal, introElapsedMs } from "@/lib/reveal";
 
 const BOOT_LOGS = [
   "SYS.CORE.INIT [OK]",
@@ -14,73 +14,64 @@ const BOOT_LOGS = [
   "SYSTEM READY_"
 ];
 
+/* Timeline (ms from first paint) — unchanged from the original motion version */
+const PROGRESS_MS = 1800; // counter + bar fill
+const EXIT_AT = 2100;     // shutters start opening
+const DONE_AT = 3100;     // overlay removed, scroll unlocked
+
+/* ─────────────────────────────────────────────────────────────────
+   Every visual here is a CSS animation (keyframes in globals.css), so the
+   intro runs on the compositor from the very first paint and stays smooth
+   while React hydrates and the page lays out underneath. JS only updates
+   the counter/log text — synced to the progress bar's own animation clock
+   — and removes the overlay when it is finished.
+───────────────────────────────────────────────────────────────── */
 export default function PageReveal() {
-  const [phase, setPhase] = useState<"show" | "exit">("show");
   const [hidden, setHidden] = useState(false);
   const countRef = useRef<HTMLSpanElement>(null);
   const logRef = useRef<HTMLSpanElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       document.body.style.overflow = "";
+      markReveal("done");
       setTimeout(() => setHidden(true), 0);
       return;
     }
 
     document.body.style.overflow = "hidden";
 
-    const startTime = performance.now();
-    const duration = 1800; // Duration of progress animation in ms
+    // The CSS timeline started at first paint, possibly well before
+    // hydration — read where it actually is instead of assuming 0.
+    const startOffset = introElapsedMs();
+    const elapsed = introElapsedMs;
 
-    // Smooth cubic ease-out curve for fluid deceleration
     const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3);
-
-    const tick = (now: number) => {
-      const elapsed = now - startTime;
-      const linearP = Math.min(elapsed / duration, 1);
-      const smoothP = easeOutCubic(linearP);
-      
-      // Update percentage counter smoothly
+    let raf = 0;
+    const tick = () => {
+      const linearP = Math.min(elapsed() / PROGRESS_MS, 1);
       if (countRef.current) {
-        countRef.current.textContent = String(Math.floor(smoothP * 100)).padStart(3, "0");
+        countRef.current.textContent = String(Math.floor(easeOutCubic(linearP) * 100)).padStart(3, "0");
       }
-
-      // Update hardware-accelerated progress bar smoothly
-      if (progressRef.current) {
-        progressRef.current.style.transform = `scaleX(${smoothP})`;
-      }
-
-      // Update terminal log step
       if (logRef.current) {
-        if (linearP >= 1) {
-          logRef.current.textContent = "SYSTEM READY";
-        } else {
-          const logIndex = Math.min(
-            Math.floor(linearP * (BOOT_LOGS.length - 1)),
-            BOOT_LOGS.length - 2
-          );
-          logRef.current.textContent = BOOT_LOGS[logIndex];
-        }
+        logRef.current.textContent = linearP >= 1
+          ? "SYSTEM READY"
+          : BOOT_LOGS[Math.min(Math.floor(linearP * (BOOT_LOGS.length - 1)), BOOT_LOGS.length - 2)];
       }
-
-      if (linearP < 1) {
-        rafRef.current = requestAnimationFrame(tick);
-      }
+      if (linearP < 1) raf = requestAnimationFrame(tick);
     };
+    raf = requestAnimationFrame(tick);
 
-    rafRef.current = requestAnimationFrame(tick);
-
-    // Brief hold upon reaching 100% / SYSTEM READY, then initiate smooth exit
-    const t1 = setTimeout(() => setPhase("exit"), 2100);
+    const t1 = setTimeout(() => markReveal("open"), Math.max(0, EXIT_AT - startOffset));
     const t2 = setTimeout(() => {
+      markReveal("done");
       setHidden(true);
       document.body.style.overflow = "";
-    }, 3100);
+    }, Math.max(0, DONE_AT - startOffset));
 
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      cancelAnimationFrame(raf);
       clearTimeout(t1);
       clearTimeout(t2);
       document.body.style.overflow = "";
@@ -89,145 +80,105 @@ export default function PageReveal() {
 
   if (hidden) return null;
 
-  // Ultra-smooth physical easing curve
-  const panelEase = [0.86, 0, 0.07, 1] as const;
+  const anim = (name: string, durationS: number, delayS: number, ease = "var(--ease-expo)", fill = "both") =>
+    `${name} ${durationS}s ${ease} ${delayS}s ${fill}`;
+  const exitAt = EXIT_AT / 1000;
 
   return (
     <div className="fixed inset-0 z-[10000] pointer-events-none overflow-hidden select-none">
-      
+
       {/* ── Background Shutter Panels (Smooth split exit) ── */}
-      <motion.div
+      <div
         className="absolute top-0 left-0 right-0 h-[50.1%] bg-[#060605] will-change-transform"
-        animate={phase === "exit" ? { y: "-100%" } : { y: "0%" }}
-        transition={phase === "exit" ? { duration: 0.95, ease: panelEase, delay: 0 } : {}}
+        style={{ animation: anim("coda-shutter-up", 0.95, exitAt, "cubic-bezier(0.86, 0, 0.07, 1)", "forwards") }}
       />
-      <motion.div
+      <div
         className="absolute bottom-0 left-0 right-0 h-[50.1%] bg-[#060605] will-change-transform"
-        animate={phase === "exit" ? { y: "100%" } : { y: "0%" }}
-        transition={phase === "exit" ? { duration: 0.95, ease: panelEase, delay: 0.04 } : {}}
+        style={{ animation: anim("coda-shutter-down", 0.95, exitAt + 0.04, "cubic-bezier(0.86, 0, 0.07, 1)", "forwards") }}
       />
 
       {/* ── Main Center Content ── */}
-      <AnimatePresence>
-        {phase === "show" && (
-          <motion.div
-            className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4"
-            exit={{ 
-
-              opacity: 0, 
-              y: -10, 
-              scale: 0.98,
-              transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } 
-            }}
+      <div
+        className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4"
+        style={{ animation: anim("coda-content-out", 0.4, exitAt, "var(--ease-expo)", "forwards") }}
+      >
+        {/* Brand Logo Display */}
+        <div className="flex items-baseline gap-[2px] overflow-hidden pb-1">
+          {"CODA".split("").map((char, i) => (
+            <span
+              key={i}
+              className="font-instrument text-[clamp(64px,11vw,130px)] text-white tracking-[-0.04em] leading-none block font-semibold"
+              style={{ animation: anim("coda-rise-full", 0.7, 0.15 + i * 0.07) }}
+            >
+              {char}
+            </span>
+          ))}
+          <span
+            className="font-mono text-[clamp(64px,11vw,130px)] text-[#FF5C00] leading-none block font-bold"
+            style={{ animation: `coda-pop 0.658s var(--ease-reveal-spring) 0.55s both` }}
           >
-            {/* Brand Logo Display */}
-            <div className="flex items-baseline gap-[2px] overflow-hidden pb-1">
-              {"CODA".split("").map((char, i) => (
-                <motion.span 
-                  key={i}
-                  className="font-instrument text-[clamp(64px,11vw,130px)] text-white tracking-[-0.04em] leading-none block font-semibold"
-                  initial={{ opacity: 0, y: "100%" }} 
-                  animate={{ opacity: 1, y: "0%" }}
-                  transition={{ duration: 0.7, delay: 0.15 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  {char}
-                </motion.span>
-              ))}
-              <motion.span
-                className="font-mono text-[clamp(64px,11vw,130px)] text-[#FF5C00] leading-none block font-bold"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.55, type: "spring", stiffness: 220, damping: 18 }}
-              >
-                .
-              </motion.span>
-            </div>
+            .
+          </span>
+        </div>
 
-            {/* Smooth Slim Progress Bar Track */}
-            <motion.div 
-              className="mt-6 w-48 sm:w-60 h-[2px] bg-white/10 rounded-full overflow-hidden relative"
-              initial={{ opacity: 0, scaleX: 0.8 }}
-              animate={{ opacity: 1, scaleX: 1 }}
-              transition={{ delay: 0.4, duration: 0.4 }}
-            >
-              <div 
-                ref={progressRef}
-                className="absolute inset-0 bg-[#FF5C00] origin-left rounded-full will-change-transform"
-                style={{ transform: "scaleX(0)" }}
-              />
-            </motion.div>
-            
-            {/* Terminal status line (Clean, simple, no box glow/shadow) */}
-            <motion.div 
-              className="mt-4 font-mono text-[11px] sm:text-xs text-[#FF5C00] tracking-[0.2em] uppercase flex items-center justify-center gap-1 min-h-[20px]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.3 }}
-            >
-              <span ref={logRef}>INITIALIZING...</span>
-              <motion.span 
-                animate={{ opacity: [1, 0] }} 
-                transition={{ repeat: Infinity, duration: 0.5, ease: "easeInOut" }}
-                className="inline-block text-[#FF5C00] font-bold"
-              >
-                _
-              </motion.span>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Smooth Slim Progress Bar Track */}
+        <div
+          className="mt-6 w-48 sm:w-60 h-[2px] bg-white/10 rounded-full overflow-hidden relative"
+          style={{ animation: anim("coda-track-in", 0.4, 0.4, "var(--ease-motion-out)") }}
+        >
+          <div
+            ref={progressRef}
+            className="absolute inset-0 bg-[#FF5C00] origin-left rounded-full will-change-transform"
+            style={{ transform: "scaleX(0)", animation: `coda-progress ${PROGRESS_MS / 1000}s cubic-bezier(0.33, 1, 0.68, 1) 0s forwards` }}
+          />
+        </div>
+
+        {/* Terminal status line (Clean, simple, no box glow/shadow) */}
+        <div
+          className="mt-4 font-mono text-[11px] sm:text-xs text-[#FF5C00] tracking-[0.2em] uppercase flex items-center justify-center gap-1 min-h-[20px]"
+          style={{ animation: anim("coda-fade-in", 0.3, 0.5, "var(--ease-motion-out)") }}
+        >
+          <span ref={logRef}>INITIALIZING...</span>
+          <span
+            data-intro-clock
+            className="inline-block text-[#FF5C00] font-bold"
+            style={{ animation: "coda-blink 0.5s cubic-bezier(0.42, 0, 0.58, 1) infinite" }}
+          >
+            _
+          </span>
+        </div>
+      </div>
 
       {/* ── System Variables (Top Left) ── */}
-      <AnimatePresence>
-        {phase === "show" && (
-          <motion.div
-            className="absolute top-8 left-8 font-mono text-[10px] text-white/30 uppercase tracking-[0.25em] z-10 hidden sm:flex items-center gap-2"
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, delay: 0.6 }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#FF5C00]/80 animate-pulse inline-block" />
-            <span>NODE_ENV // PRODUCTION</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div
+        className="absolute top-8 left-8 font-mono text-[10px] text-white/30 uppercase tracking-[0.25em] z-10 hidden sm:flex items-center gap-2"
+        style={{ animation: `${anim("coda-fade-in", 0.4, 0.6, "var(--ease-motion-out)")}, ${anim("coda-fade-out", 0.4, exitAt + 0.6, "var(--ease-motion-out)", "forwards")}` }}
+      >
+        <span className="w-1.5 h-1.5 rounded-full bg-[#FF5C00]/80 animate-pulse inline-block" />
+        <span>NODE_ENV // PRODUCTION</span>
+      </div>
 
       {/* ── Bottom Left Label ── */}
-      <AnimatePresence>
-        {phase === "show" && (
-          <motion.p
-            className="absolute bottom-8 left-8 font-mono text-[10px] text-white/30 uppercase tracking-[0.3em] z-10 hidden sm:block"
-            initial={{ opacity: 0, x: -10 }} 
-            animate={{ opacity: 1, x: 0 }} 
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, delay: 0.6 }}
-          >
-            SYS.STATUS // OK
-          </motion.p>
-        )}
-      </AnimatePresence>
+      <p
+        className="absolute bottom-8 left-8 font-mono text-[10px] text-white/30 uppercase tracking-[0.3em] z-10 hidden sm:block"
+        style={{ animation: `${anim("coda-slide-in-l", 0.4, 0.6, "var(--ease-motion-out)")}, ${anim("coda-fade-out", 0.4, exitAt + 0.6, "var(--ease-motion-out)", "forwards")}` }}
+      >
+        SYS.STATUS // OK
+      </p>
 
       {/* ── Percentage Counter (Bottom Right, Crisp, No Glow) ── */}
-      <AnimatePresence>
-        {phase === "show" && (
-          <motion.div
-            className="absolute bottom-8 right-8 flex items-baseline gap-1 z-10"
-            initial={{ opacity: 0, x: 10 }} 
-            animate={{ opacity: 1, x: 0 }} 
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, delay: 0.4 }}
-          >
-            <span 
-              ref={countRef} 
-              className="font-mono text-3xl sm:text-5xl font-bold text-white tracking-[0.04em] tabular-nums"
-            >
-              000
-            </span>
-            <span className="font-mono text-[#FF5C00] text-sm sm:text-lg font-semibold">%</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div
+        className="absolute bottom-8 right-8 flex items-baseline gap-1 z-10"
+        style={{ animation: `${anim("coda-slide-in-r", 0.4, 0.4, "var(--ease-motion-out)")}, ${anim("coda-fade-out", 0.4, exitAt + 0.4, "var(--ease-motion-out)", "forwards")}` }}
+      >
+        <span
+          ref={countRef}
+          className="font-mono text-3xl sm:text-5xl font-bold text-white tracking-[0.04em] tabular-nums"
+        >
+          000
+        </span>
+        <span className="font-mono text-[#FF5C00] text-sm sm:text-lg font-semibold">%</span>
+      </div>
     </div>
   );
 }

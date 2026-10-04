@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionLabel from "@/components/ui/SectionLabel";
+import { onRevealDone } from "@/lib/reveal";
 import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
 
 type CSSVars = React.CSSProperties & Record<`--${string}`, string | number>;
@@ -13,7 +14,7 @@ type CSSVars = React.CSSProperties & Record<`--${string}`, string | number>;
 const pulse = (from: number, to: number, duration: number, delay: number): CSSVars => ({
   "--pulse-from": from,
   "--pulse-to": to,
-  animation: `coda-pulse-opacity ${duration}s ease-in-out ${delay}s infinite`,
+  animation: `coda-pulse-opacity ${duration}s cubic-bezier(0, 0, 0.58, 1) ${delay}s infinite`,
 });
 
 if (typeof window !== "undefined") {
@@ -101,7 +102,7 @@ function VisualFragility() {
                 style={{
                   fontSize: "8px",
                   "--pulse-scale": 1.32,
-                  animation: `coda-pulse-scale 1.8s ease-in-out ${i * 0.5}s infinite`,
+                  animation: `coda-pulse-scale 1.8s cubic-bezier(0, 0, 0.58, 1) ${i * 0.5}s infinite`,
                 } as CSSVars}
               >!</div>
             )}
@@ -165,7 +166,7 @@ function VisualChaos() {
               "--pulse-scale": 1.3,
               "--pulse-from": 0.06 + i * 0.04,
               "--pulse-to": 0.22 + i * 0.06,
-              animation: `coda-pulse-ring ${0.6 + i * 0.18}s ease-in-out infinite`,
+              animation: `coda-pulse-ring ${0.6 + i * 0.18}s cubic-bezier(0, 0, 0.58, 1) infinite`,
             } as CSSVars}
           />
         ))}
@@ -279,7 +280,13 @@ export default function DigitalGap() {
   // ── Desktop GSAP (md+) ────────────────────────────────────
   useEffect(() => {
     if (window.innerWidth < 768) return;
-    const ctx = gsap.context(() => {
+    // Pinning measures the whole page (forced layouts + a refresh). The
+    // section is far below the fold and scroll is locked during the intro,
+    // so set it up once the intro is done and the main thread is idle
+    // instead of in the middle of page load.
+    let ctx: gsap.Context | null = null;
+    let idleId: number | null = null;
+    const setup = () => { ctx = gsap.context(() => {
       if (!desktopContainerRef.current || !textRef.current || !visualsRef.current) return;
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -313,8 +320,16 @@ export default function DigitalGap() {
         .to(texts[2],   { opacity: 1, y: 0, duration: 1 }, "<")
         .to(visuals[2], { opacity: 1, y: 0, scale: 1, duration: 1 }, "<");
       gsap.delayedCall(0.15, () => ScrollTrigger.refresh());
-    }, desktopContainerRef);
-    return () => ctx.revert();
+    }, desktopContainerRef); };
+    const unsubReveal = onRevealDone(() => {
+      if ("requestIdleCallback" in window) idleId = window.requestIdleCallback(setup, { timeout: 600 });
+      else setup();
+    });
+    return () => {
+      unsubReveal();
+      if (idleId !== null) window.cancelIdleCallback(idleId);
+      ctx?.revert();
+    };
   }, []);
 
 

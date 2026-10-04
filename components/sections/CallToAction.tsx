@@ -5,6 +5,7 @@ import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } fro
 import MagneticButton from "@/components/ui/MagneticButton";
 import { ArrowRight } from "lucide-react";
 import { useFormModal } from "@/components/providers/FormModalProvider";
+import { onRevealDone } from "@/lib/reveal";
 import { usePauseOffscreen } from "@/hooks/usePauseOffscreen";
 import dynamic from "next/dynamic";
 
@@ -79,9 +80,23 @@ export default function CallToAction() {
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMobile("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
-    setDeviceKnown(true);
+    const mobile = "ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768;
+    // The WebGL particle scene (context + shader compile + 1,000 points) is
+    // far below the fold: build it in idle time right after the intro
+    // instead of during page load.
+    let idleId: number | null = null;
+    const unsubReveal = onRevealDone(() => {
+      const mount = () => {
+        setIsMobile(mobile);
+        setDeviceKnown(true);
+      };
+      if ("requestIdleCallback" in window) idleId = window.requestIdleCallback(mount, { timeout: 1500 });
+      else mount();
+    });
+    return () => {
+      unsubReveal();
+      if (idleId !== null) window.cancelIdleCallback(idleId);
+    };
   }, []);
 
   /* ── 3D tilt on mouse move (desktop only) ── */
