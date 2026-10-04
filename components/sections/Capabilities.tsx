@@ -81,7 +81,7 @@ function TiltCard({ card, index }: { card: typeof cards[0]; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, filter: "blur(24px)" }}
-      whileInView={{ opacity: 1, filter: "blur(0px)" }}
+      whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
       viewport={{ once: true, margin: "0px" }}
       transition={{ duration: 0.65, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       style={{ perspective: 1000, willChange: "transform, opacity, filter" }}
@@ -237,7 +237,7 @@ export default function Capabilities() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <motion.div
             initial={{ opacity: 0, filter: "blur(24px)" }}
-            whileInView={{ opacity: 1, filter: "blur(0px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col gap-4"
@@ -253,7 +253,7 @@ export default function Capabilities() {
           </motion.div>
           <motion.p
             initial={{ opacity: 0, filter: "blur(24px)" }}
-            whileInView={{ opacity: 1, filter: "blur(0px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.15 }}
             className="font-sans text-base text-[var(--coda-ink-2)] leading-[1.7] max-w-xs"

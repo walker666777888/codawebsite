@@ -362,7 +362,7 @@ export default function DigitalGap() {
       </div>
       <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-center gap-12">
         <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full"
-          style={{ background: "var(--coda-surface-2)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid var(--coda-hairline)", color: "var(--coda-ink)" }}
+          style={{ background: "var(--coda-surface-2)", border: "1px solid var(--coda-hairline)", color: "var(--coda-ink)" }}
         >The Digital Gap</SectionLabel>
         <div className="grid grid-cols-2 gap-20 items-center">
           <div ref={textRef} className="space-y-10">
@@ -389,7 +389,7 @@ export default function DigitalGap() {
         </div>
       </div>
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
-        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[var(--coda-hairline)] bg-[var(--coda-surface-2)]/80 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.12)] transition-colors duration-300">
+        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[var(--coda-hairline)] bg-[var(--coda-surface-2)]/80 shadow-[0_4px_24px_rgba(0,0,0,0.12)] transition-colors duration-300">
           <span className="font-mono text-micro text-[var(--coda-ink)] font-semibold uppercase tracking-[0.25em]">Scroll to explore</span>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#FF5C00]">
             <path d="M12 5v14M19 12l-7 7-7-7"/>
@@ -408,12 +408,12 @@ export default function DigitalGap() {
           <div key={i} className="flex flex-col gap-8">
             {i === 0 && (
               <SectionLabel index={1} className="inline-flex w-fit px-3 py-1.5 rounded-full"
-                style={{ background: "var(--coda-surface-2)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid var(--coda-hairline)", color: "var(--coda-ink)" }}
+                style={{ background: "var(--coda-surface-2)", border: "1px solid var(--coda-hairline)", color: "var(--coda-ink)" }}
               >The Digital Gap</SectionLabel>
             )}
             <motion.h2 
               initial={{ opacity: 0, filter: "blur(24px)" }}
-              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
               viewport={{ once: true, margin: "0px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="font-instrument tracking-[-0.03em]"
@@ -424,7 +424,7 @@ export default function DigitalGap() {
             </motion.h2>
             <motion.div 
               initial={{ opacity: 0, filter: "blur(24px)" }}
-              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
               viewport={{ once: true, margin: "0px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
               className="w-full rounded-2xl border border-[var(--coda-card-border)] shadow-[0_0_40px_8px_rgba(255,92,0,0.09),0_12px_40px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.08)_inset] overflow-hidden p-6 transition-colors duration-300" 
